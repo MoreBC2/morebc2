@@ -8,7 +8,7 @@
 
 This page maps the reviewed BitcoinII Core block-validation path from `src/validation.cpp`.
 
-It is intentionally partial. The reviewed path now covers header acceptance, context-free block checks, contextual block checks, UTXO-dependent connection checks in `ConnectBlock`, disk storage, and best-chain activation entry points. It does not yet fully document chain selection or reorganization handling.
+It is intentionally partial. The reviewed path now covers header acceptance, context-free block checks, contextual block checks, UTXO-dependent connection checks in `ConnectBlock`, best-chain candidate selection, chain activation steps, disk storage, and tip notification paths. It does not yet fully document disconnection internals or mempool reorg behavior.
 
 ## Simplified reviewed flow
 
@@ -25,7 +25,11 @@ ProcessNewBlock
        -> ReceivedBlockTransactions
   -> NotifyHeaderTip
   -> ActivateBestChain
-       -> ConnectBlock during chain connection path
+       -> FindMostWorkChain
+       -> ActivateBestChainStep
+            -> DisconnectTip, if needed
+            -> ConnectTip
+                 -> ConnectBlock
 ```
 
 ## Entry point reviewed
@@ -127,7 +131,56 @@ Reviewed behavior:
 - Raises block validity to `BLOCK_VALID_SCRIPTS` when appropriate.
 - Sets the coins view best block to the connected block hash.
 
-## Storage and activation path reviewed
+## Best-chain activation path reviewed
+
+### `FindMostWorkChain`
+
+Reviewed behavior:
+
+- Chooses the highest-work candidate from `setBlockIndexCandidates`.
+- Walks backward toward the active chain.
+- Rejects chains with failed ancestors.
+- Rejects chains missing required block data.
+- Returns a usable most-work candidate when one is found.
+
+### `ActivateBestChainStep`
+
+Reviewed behavior:
+
+- Finds the fork point between the current active chain and the most-work candidate.
+- Disconnects blocks until the current tip reaches that fork point.
+- Builds a list of blocks to connect toward the candidate tip.
+- Connects blocks with `ConnectTip`.
+- Marks invalid chains when a connected block fails consensus validation.
+- Updates the mempool after blocks are disconnected.
+- Checks fork-warning conditions.
+
+### `ConnectTip`
+
+Reviewed behavior:
+
+- Reads the block from disk unless a cached block is available.
+- Calls `ConnectBlock` with a coins-view cache.
+- Flushes the cache after successful connection.
+- Flushes chainstate to disk if needed.
+- Removes confirmed transactions from the mempool.
+- Sets the active chain tip to the new block.
+- Calls `UpdateTip`.
+- Records the connected block in `connectTrace`.
+
+### `ActivateBestChain`
+
+Reviewed behavior:
+
+- Uses a chainstate mutex so only one activation runs at a time.
+- Calls `FindMostWorkChain` and `ActivateBestChainStep`.
+- Emits `BlockConnected` signals.
+- Emits tip-update notifications when the active tip changes.
+- Handles initial-block-download exit behavior.
+- Checks the block index after activation.
+- Periodically flushes state to disk.
+
+## Storage path reviewed
 
 ### `AcceptBlock`
 
@@ -141,19 +194,13 @@ Reviewed behavior:
 - Calls `ReceivedBlockTransactions`.
 - Flushes state to disk with `FlushStateMode::NONE`.
 
-### `ActivateBestChain`
-
-`ProcessNewBlock` calls `ActivateBestChain` after `AcceptBlock` succeeds.
-
-The internals of `ActivateBestChain` still need deeper review before MoreBC2 documents chain selection or reorganization behavior in detail.
-
 ## What is not fully reviewed yet
 
-- `ActivateBestChain`
-- Chain selection logic
-- Reorganization handling
-- UTXO disconnection
-- Mempool transaction removal during block connection
+- `DisconnectTip`
+- `MaybeUpdateMempoolForReorg`
+- Full reorganization cleanup path
+- UTXO disconnection internals
+- Mempool re-add policy for disconnected transactions
 
 ## Related pages
 
@@ -172,4 +219,4 @@ The internals of `ActivateBestChain` still need deeper review before MoreBC2 doc
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a partial flow map based on reviewed validation code. It should be expanded after deeper review of best-chain activation and reorganization handling.
+**Notes:** This is a partial flow map based on reviewed validation code. It should be expanded after deeper review of disconnection and mempool reorganization behavior.
