@@ -6,9 +6,17 @@
 
 ## Summary
 
-This section tracks BitcoinII (BC2) ecosystem resources such as wallets, explorers, pools, exchanges, tools, services, and community projects.
+This section tracks BitcoinII (BC2) ecosystem resources such as wallets, explorers, mining pools, exchanges, resources, services, and community projects.
 
 Nothing should be listed as active until it has been directly checked.
+
+## Current pages
+
+- [Wallets](wallets.md)
+- [Explorers](explorers.md)
+- [Mining pools](mining-pools.md)
+- [Exchanges](exchanges.md)
+- [Resources](resources.md)
 
 ## Resource categories
 
@@ -19,7 +27,7 @@ Nothing should be listed as active until it has been directly checked.
 - Mining software
 - Libraries
 - APIs
-- Community tools
+- Community resources
 - Merchants
 - Educational resources
 
@@ -28,7 +36,7 @@ Nothing should be listed as active until it has been directly checked.
 ```md
 ### Name
 
-**Category:** Wallet / Explorer / Pool / Exchange / Tool / Other
+**Category:** Wallet / Explorer / Pool / Exchange / Resource / Other
 **Status:** Active / Needs Review / Offline / Historical
 **Official:** Yes / No / Unknown
 **URL:** 
@@ -46,14 +54,11 @@ Nothing should be listed as active until it has been directly checked.
 - Mark uncertain listings as Needs Review.
 - Market data and exchange data are time-sensitive.
 
-## Pages to create
+## Pages still to create
 
-- `wallets.md`
-- `explorers.md`
-- `pools.md`
-- `exchanges.md`
-- `tools.md`
 - `community-projects.md`
+- `merchants.md`
+- `apis.md`
 
 ## Verification
 
