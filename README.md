@@ -26,7 +26,16 @@ Document reality. Explore possibilities. Clearly separate the two.
 
 For example, if a difficulty adjustment algorithm such as Dark Gravity Wave is discussed by community members but is not implemented in BitcoinII, it belongs in Research or Discussion, not Documentation.
 
-## Proposed structure
+## Start here
+
+- [Founding principles](FOUNDING_PRINCIPLES.md)
+- [Contributing guide](CONTRIBUTING.md)
+- [Editorial style guide](STYLE_GUIDE.md)
+- [Governance](GOVERNANCE.md)
+- [Roadmap](ROADMAP.md)
+- [Docs index](docs/README.md)
+
+## Repository structure
 
 ```text
 morebc2/
@@ -44,6 +53,7 @@ morebc2/
 ├── templates/
 ├── assets/
 ├── branding/
+├── .github/
 └── README.md
 ```
 
