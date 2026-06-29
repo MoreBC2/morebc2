@@ -6,6 +6,7 @@ This directory holds the working documentation for MoreBC2.
 
 - [Documentation](documentation/README.md) — current verified BitcoinII behavior.
 - [Architecture](architecture/README.md) — conceptual maps of BitcoinII Core components and flows.
+- [Configuration](configuration/README.md) — BitcoinII Core configuration concepts and option references.
 - [Research](research/README.md) — technical explainers and analysis.
 - [Discussion](discussion/README.md) — community ideas, proposals, and opinions.
 - [History](history/README.md) — past events and milestones.
