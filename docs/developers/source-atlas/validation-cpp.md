@@ -111,6 +111,69 @@ Reviewed behavior:
 - Raises block validity to `BLOCK_VALID_SCRIPTS` when appropriate.
 - Sets the coins view best block to the connected block hash.
 
+### `ConnectTip`
+
+Reviewed behavior:
+
+- Requires the new block index to build on the current chain tip.
+- Reads the block from disk unless a cached block pointer is provided.
+- Creates a coins-view cache over the current coins tip.
+- Calls `ConnectBlock`.
+- Emits `BlockChecked` validation signals.
+- Flushes the coins-view cache after a successful connection.
+- Calls `FlushStateToDisk` with `FlushStateMode::IF_NEEDED`.
+- Removes transactions confirmed by the connected block from the mempool.
+- Removes confirmed transactions from the disconnected-transaction pool.
+- Sets the active chain tip to the new block.
+- Calls `UpdateTip`.
+- Adds the connected block to `connectTrace`.
+
+### `FindMostWorkChain`
+
+Reviewed behavior:
+
+- Selects the candidate tip with the most work from `setBlockIndexCandidates`.
+- Walks backward from that candidate until reaching the active chain.
+- Rejects candidate chains with failed blocks.
+- Rejects candidate chains missing block data.
+- Tracks best invalid chain work when a failed chain has more work.
+- Re-adds missing-data descendants to `m_blocks_unlinked`.
+- Returns a candidate only when its path is usable.
+
+### `ActivateBestChainStep`
+
+Reviewed behavior:
+
+- Finds the fork point between the current active chain and the most-work candidate.
+- Disconnects active blocks until the active tip reaches the fork point.
+- Uses `DisconnectTip` during disconnection.
+- Updates the mempool after failed disconnect attempts to keep it consistent.
+- Treats failure to disconnect during normal operation as fatal.
+- Builds a list of new blocks to connect toward the most-work candidate.
+- Connects blocks with `ConnectTip`.
+- Marks invalid chains when connection fails due to consensus invalidity.
+- Updates the mempool after any blocks were disconnected.
+- Checks the mempool against the resulting chain tip.
+- Checks fork warning conditions.
+
+### `ActivateBestChain`
+
+Reviewed behavior:
+
+- Uses `m_chainstate_mutex` so only one caller executes activation at a time.
+- Refuses to operate if the chainstate is disabled.
+- Drains/limits the validation-interface queue to avoid callback buildup.
+- Locks `cs_main` and the mempool while connecting blocks.
+- Calls `FindMostWorkChain` when no cached most-work candidate is available.
+- Calls `ActivateBestChainStep` to make progress toward the best candidate.
+- Clears the cached candidate when an invalid block is found.
+- Emits `BlockConnected` signals from the connect trace.
+- Emits `UpdatedBlockTip` and block-tip notifications for active-chain tip changes.
+- Handles initial-block-download exit cache rebalancing.
+- Stops if the chainstate becomes disabled, such as when background snapshot validation completes.
+- Calls `CheckBlockIndex` after activation loop completion.
+- Calls `FlushStateToDisk` with `FlushStateMode::PERIODIC`.
+
 ### `GetBlockScriptFlags`
 
 Reviewed behavior:
@@ -194,10 +257,14 @@ ProcessNewBlock
        -> save block to disk
        -> ReceivedBlockTransactions
   -> ActivateBestChain
-       -> ConnectBlock during chain connection path
+       -> FindMostWorkChain
+       -> ActivateBestChainStep
+            -> DisconnectTip, if needed
+            -> ConnectTip
+                 -> ConnectBlock
 ```
 
-This diagram is intentionally simplified. MoreBC2 still needs deeper review of `ActivateBestChain`, chain selection, and reorganization handling.
+This diagram is intentionally simplified. MoreBC2 still needs deeper review of `DisconnectTip`, `MaybeUpdateMempoolForReorg`, and full reorganization handling.
 
 ## Related MoreBC2 pages
 
@@ -211,8 +278,8 @@ This diagram is intentionally simplified. MoreBC2 still needs deeper review of `
 ## Open questions
 
 - Review `validation.h` for public declarations and comments.
-- Review `ActivateBestChain` in detail.
-- Review chain selection and reorganization code paths.
+- Review `DisconnectTip` in detail.
+- Review `MaybeUpdateMempoolForReorg` in detail.
 - Confirm whether any BitcoinII-specific validation behavior differs from Bitcoin Core beyond visible naming and parameter changes.
 - Decide whether validation should be split into separate atlas pages later.
 
@@ -225,4 +292,4 @@ This diagram is intentionally simplified. MoreBC2 still needs deeper review of `
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a partial source audit of validation flow anchors and `ConnectBlock`. It should not be treated as a complete validation review yet.
+**Notes:** This is a partial source audit of validation flow anchors, `ConnectBlock`, and best-chain activation. It should not be treated as a complete reorganization review yet.
