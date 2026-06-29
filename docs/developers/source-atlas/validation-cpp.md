@@ -158,6 +158,27 @@ Reviewed behavior:
 - Calls `UpdateTip` on the previous block.
 - Emits `BlockDisconnected` signals so wallets can learn that transactions moved from confirmed to unconfirmed or conflicted.
 
+### `MaybeUpdateMempoolForReorg`
+
+Reviewed behavior:
+
+- Returns immediately if no mempool is attached to the chainstate.
+- Requires `cs_main` and the mempool lock.
+- Drains the disconnected-transaction pool with `disconnectpool.take()`.
+- Iterates disconnected transactions in reverse queue order so earlier previously-confirmed transactions are processed first.
+- If re-adding is disabled, removes the transaction and descendants from the mempool using reorg removal reason.
+- Skips coinbase transactions.
+- Attempts to re-add eligible disconnected transactions to the mempool using `AcceptToMemoryPool` with `bypass_limits=true` and `test_accept=false`.
+- Ignores validation errors for resurrected transactions.
+- Removes failed resurrected transactions and descendants from the mempool.
+- Records successfully re-added transaction hashes for later descendant cleanup.
+- Calls `UpdateTransactionsFromBlock` so descendants of re-added transactions have corrected mempool state.
+- Removes transactions that are no longer final for the next block on the new chain.
+- Recalculates and updates lock points when cached lock points are no longer valid.
+- Removes transactions spending immature coinbase outputs after the reorg.
+- Calls `removeForReorg` with the finality/maturity filter.
+- Calls `LimitMempoolSize` after reorg processing.
+
 ### `ConnectTip`
 
 Reviewed behavior:
@@ -372,10 +393,14 @@ ActivateBestChain
                  -> restore spent inputs from undo data
                  -> move coins view best block backward
        -> ConnectTip new branch blocks
-       -> MaybeUpdateMempoolForReorg after disconnections
+       -> MaybeUpdateMempoolForReorg
+            -> drain disconnected transaction pool
+            -> re-add eligible non-coinbase transactions
+            -> remove invalid/non-final/immature descendants
+            -> re-limit mempool size
 ```
 
-This diagram is intentionally simplified. MoreBC2 still needs deeper review of `DisconnectedBlockTransactions` and the full mempool re-add policy.
+This diagram is intentionally simplified. MoreBC2 still needs a broader mempool policy review before making operator recommendations.
 
 ## Related MoreBC2 pages
 
@@ -385,12 +410,12 @@ This diagram is intentionally simplified. MoreBC2 still needs deeper review of `
 - [Block validation flow](../../architecture/block-validation-flow.md)
 - [Reorganizations](../../encyclopedia/reorganizations.md)
 - [Proof-of-work](../../encyclopedia/proof-of-work.md)
+- [Disconnected transactions](disconnected-transactions.md)
 
 ## Open questions
 
 - Review `validation.h` for public declarations and comments.
-- Review `DisconnectedBlockTransactions` in detail.
-- Review `MaybeUpdateMempoolForReorg` in detail once exact source location is captured.
+- Review broader mempool policy before making service-provider recommendations.
 - Confirm whether any BitcoinII-specific validation behavior differs from Bitcoin Core beyond visible naming and parameter changes.
 - Decide whether validation should be split into separate atlas pages later.
 
@@ -399,9 +424,11 @@ This diagram is intentionally simplified. MoreBC2 still needs deeper review of `
 - `src/validation.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/validation.cpp
 - `src/validation.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/validation.h
 - `src/pow.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/pow.cpp
+- `src/kernel/disconnected_transactions.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/kernel/disconnected_transactions.h
+- `src/kernel/disconnected_transactions.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/kernel/disconnected_transactions.cpp
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a partial source audit of validation flow anchors, `ConnectBlock`, `DisconnectBlock`, best-chain activation, and reorganization entry points. It should not be treated as a complete mempool reorganization review yet.
+**Notes:** This is a partial source audit of validation flow anchors, `ConnectBlock`, `DisconnectBlock`, best-chain activation, and mempool reorg handling. It should not be treated as a complete mempool policy review yet.
