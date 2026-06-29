@@ -29,11 +29,19 @@ For example, if a difficulty adjustment algorithm such as Dark Gravity Wave is d
 ## Start here
 
 - [Founding principles](FOUNDING_PRINCIPLES.md)
+- [Documentation philosophy](DOCUMENTATION_PHILOSOPHY.md)
 - [Contributing guide](CONTRIBUTING.md)
 - [Editorial style guide](STYLE_GUIDE.md)
+- [Style conventions](STYLE_CONVENTIONS.md)
+- [Writing checklist](WRITING_CHECKLIST.md)
+- [Evidence scale](EVIDENCE_SCALE.md)
+- [Source registry](SOURCE_REGISTRY.md)
+- [Documentation taxonomy](DOCUMENTATION_TAXONOMY.md)
+- [Glossary](GLOSSARY.md)
 - [Governance](GOVERNANCE.md)
 - [Roadmap](ROADMAP.md)
 - [Docs index](docs/README.md)
+- [Verification queue](docs/verification/README.md)
 
 ## Repository structure
 
@@ -49,7 +57,8 @@ morebc2/
 │   ├── mining/
 │   ├── wallets/
 │   ├── nodes/
-│   └── developers/
+│   ├── developers/
+│   └── verification/
 ├── templates/
 ├── assets/
 ├── branding/
