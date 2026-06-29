@@ -8,7 +8,7 @@
 
 This page maps the reviewed BitcoinII Core block-validation path from `src/validation.cpp`.
 
-It is intentionally partial. The reviewed path now covers header acceptance, context-free block checks, contextual block checks, UTXO-dependent connection checks in `ConnectBlock`, best-chain candidate selection, chain activation steps, block disconnection entry points, disk storage, and tip notification paths. It does not yet fully document `DisconnectBlock` internals or mempool re-add policy.
+It is intentionally partial. The reviewed path now covers header acceptance, context-free block checks, contextual block checks, UTXO-dependent connection checks in `ConnectBlock`, UTXO rollback in `DisconnectBlock`, best-chain candidate selection, chain activation steps, disk storage, and tip notification paths. It does not yet fully document disconnected-transaction handling or mempool re-add policy.
 
 ## Simplified reviewed flow
 
@@ -41,6 +41,9 @@ ActivateBestChain
        -> find fork point
        -> DisconnectTip until active tip reaches fork point
             -> DisconnectBlock
+                 -> spend outputs created by disconnected block
+                 -> restore spent inputs from undo data
+                 -> move coins view best block backward
             -> update disconnected-transaction pool
             -> move active chain tip backward
        -> ConnectTip new branch blocks
@@ -148,6 +151,32 @@ Reviewed behavior:
 
 ## UTXO disconnection path reviewed
 
+### `ApplyTxInUndo`
+
+`ApplyTxInUndo` restores one spent output from undo data.
+
+Reviewed behavior:
+
+- Marks the disconnect unclean if restoring would overwrite an existing unspent output.
+- Recovers older undo metadata from an alternate output when possible.
+- Fails if required undo metadata cannot be recovered.
+- Adds the restored coin back to the coins view.
+
+### `DisconnectBlock`
+
+`DisconnectBlock` rolls back a block's UTXO effects.
+
+Reviewed behavior:
+
+- Reads block undo data from disk.
+- Fails on missing or inconsistent undo data.
+- Walks transactions in reverse order.
+- Spends outputs created by the disconnected block.
+- Checks that removed outputs match block transaction outputs, height, and coinbase status.
+- Restores non-coinbase inputs from undo data with `ApplyTxInUndo`.
+- Sets the coins view best block to the disconnected block's parent hash.
+- Returns `DISCONNECT_OK`, `DISCONNECT_UNCLEAN`, or `DISCONNECT_FAILED`.
+
 ### `DisconnectTip`
 
 `DisconnectTip` rolls the active chain tip backward by one block.
@@ -231,7 +260,6 @@ Reviewed behavior:
 
 ## What is not fully reviewed yet
 
-- `DisconnectBlock`
 - `MaybeUpdateMempoolForReorg`
 - Full mempool re-add policy for disconnected transactions
 - `DisconnectedBlockTransactions` implementation details
@@ -253,4 +281,4 @@ Reviewed behavior:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a partial flow map based on reviewed validation code. It should be expanded after deeper review of `DisconnectBlock`, disconnected transaction handling, and mempool reorganization behavior.
+**Notes:** This is a partial flow map based on reviewed validation code. It should be expanded after deeper review of disconnected transaction handling and mempool reorganization behavior.
