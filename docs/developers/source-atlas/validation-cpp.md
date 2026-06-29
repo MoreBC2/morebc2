@@ -85,6 +85,43 @@ Reviewed behavior:
 - Validates witness commitments when SegWit is active.
 - Checks final block weight after witness commitment validation.
 
+### `ConnectBlock`
+
+Reviewed behavior:
+
+- Applies the effects of a block to the UTXO set represented by a coins view.
+- Performs UTXO-dependent validity checks.
+- Re-runs `CheckBlock` before connecting the block.
+- Verifies that the coins view best block matches the block's previous hash.
+- Special-cases the genesis block by setting best block and skipping transaction connection.
+- Uses assumed-valid logic to determine whether script checks may be skipped for sufficiently buried assumed-valid history.
+- Enforces BIP30 duplicate-transaction-output protection where applicable.
+- Enables BIP68 sequence lock checking when CSV is active.
+- Gets block script verification flags from `GetBlockScriptFlags`.
+- Builds undo data for non-coinbase transactions.
+- Calls `Consensus::CheckTxInputs` for non-coinbase transactions.
+- Accumulates transaction fees and checks fee range with `MoneyRange`.
+- Checks BIP68 sequence locks using previous output heights.
+- Counts signature operation cost with `GetTransactionSigOpCost`.
+- Runs input script checks with `CheckInputScripts` when script checking is enabled.
+- Updates the coins view with `UpdateCoins`.
+- Checks the coinbase output value against fees plus block subsidy.
+- Waits for queued script checks to complete.
+- Writes undo data when not in just-check mode.
+- Raises block validity to `BLOCK_VALID_SCRIPTS` when appropriate.
+- Sets the coins view best block to the connected block hash.
+
+### `GetBlockScriptFlags`
+
+Reviewed behavior:
+
+- Starts with P2SH, witness, and taproot verification flags.
+- Applies script-flag exceptions from consensus parameters when present.
+- Adds DERSIG when that deployment is active.
+- Adds CHECKLOCKTIMEVERIFY when CLTV is active.
+- Adds CHECKSEQUENCEVERIFY when CSV is active.
+- Adds NULLDUMMY when SegWit is active.
+
 ### `AcceptBlockHeader`
 
 Reviewed behavior:
@@ -157,9 +194,10 @@ ProcessNewBlock
        -> save block to disk
        -> ReceivedBlockTransactions
   -> ActivateBestChain
+       -> ConnectBlock during chain connection path
 ```
 
-This diagram is intentionally simplified. MoreBC2 still needs deeper review of `ConnectBlock`, `ActivateBestChain`, chain selection, and reorganization handling.
+This diagram is intentionally simplified. MoreBC2 still needs deeper review of `ActivateBestChain`, chain selection, and reorganization handling.
 
 ## Related MoreBC2 pages
 
@@ -173,7 +211,6 @@ This diagram is intentionally simplified. MoreBC2 still needs deeper review of `
 ## Open questions
 
 - Review `validation.h` for public declarations and comments.
-- Review `ConnectBlock` in detail.
 - Review `ActivateBestChain` in detail.
 - Review chain selection and reorganization code paths.
 - Confirm whether any BitcoinII-specific validation behavior differs from Bitcoin Core beyond visible naming and parameter changes.
@@ -188,4 +225,4 @@ This diagram is intentionally simplified. MoreBC2 still needs deeper review of `
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a partial source audit of validation flow anchors. It should not be treated as a complete validation review yet.
+**Notes:** This is a partial source audit of validation flow anchors and `ConnectBlock`. It should not be treated as a complete validation review yet.
