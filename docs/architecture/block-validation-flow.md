@@ -8,7 +8,7 @@
 
 This page maps the reviewed BitcoinII Core block-validation path from `src/validation.cpp`.
 
-It is intentionally partial. The reviewed path now covers header acceptance, context-free block checks, contextual block checks, UTXO-dependent connection checks in `ConnectBlock`, UTXO rollback in `DisconnectBlock`, best-chain candidate selection, chain activation steps, disk storage, and tip notification paths. It does not yet fully document disconnected-transaction handling or mempool re-add policy.
+It is intentionally partial. The reviewed path now covers header acceptance, context-free block checks, contextual block checks, UTXO-dependent connection checks in `ConnectBlock`, UTXO rollback in `DisconnectBlock`, best-chain candidate selection, chain activation steps, disconnected-transaction handling, mempool reorg update flow, disk storage, and tip notification paths.
 
 ## Simplified reviewed flow
 
@@ -47,7 +47,11 @@ ActivateBestChain
             -> update disconnected-transaction pool
             -> move active chain tip backward
        -> ConnectTip new branch blocks
-       -> MaybeUpdateMempoolForReorg after disconnections
+       -> MaybeUpdateMempoolForReorg
+            -> drain disconnected transaction pool
+            -> re-add eligible non-coinbase transactions
+            -> remove invalid/non-final/immature descendants
+            -> re-limit mempool size
 ```
 
 ## Entry point reviewed
@@ -195,6 +199,23 @@ Reviewed behavior:
 - Calls `UpdateTip`.
 - Emits `BlockDisconnected` signals.
 
+## Mempool reorg update path reviewed
+
+### `MaybeUpdateMempoolForReorg`
+
+Reviewed behavior:
+
+- Drains the disconnected-transaction pool.
+- Processes disconnected transactions in reverse queue order so earlier previously-confirmed transactions are considered first.
+- Skips coinbase transactions.
+- Attempts to re-add eligible transactions to the mempool.
+- Removes failed resurrected transactions and descendants.
+- Updates descendants of successfully re-added transactions.
+- Removes transactions that are no longer final.
+- Recalculates and updates invalidated lock points where possible.
+- Removes transactions that would spend immature coinbase outputs.
+- Re-limits mempool size after reorg processing.
+
 ## Best-chain activation path reviewed
 
 ### `FindMostWorkChain`
@@ -260,13 +281,14 @@ Reviewed behavior:
 
 ## What is not fully reviewed yet
 
-- `MaybeUpdateMempoolForReorg`
-- Full mempool re-add policy for disconnected transactions
-- `DisconnectedBlockTransactions` implementation details
+- Broader mempool policy beyond reorg handling
+- Full `txmempool` implementation details
+- Package mempool behavior beyond currently reviewed anchors
 
 ## Related pages
 
 - [Source atlas: validation.cpp](../developers/source-atlas/validation-cpp.md)
+- [Disconnected transactions](../developers/source-atlas/disconnected-transactions.md)
 - [Consensus overview](../documentation/consensus-overview.md)
 - [Checkpoints](../documentation/checkpoints.md)
 - [Reorganizations](../encyclopedia/reorganizations.md)
@@ -276,9 +298,11 @@ Reviewed behavior:
 
 - `src/validation.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/validation.cpp
 - `src/pow.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/pow.cpp
+- `src/kernel/disconnected_transactions.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/kernel/disconnected_transactions.h
+- `src/kernel/disconnected_transactions.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/kernel/disconnected_transactions.cpp
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a partial flow map based on reviewed validation code. It should be expanded after deeper review of disconnected transaction handling and mempool reorganization behavior.
+**Notes:** This is a partial flow map based on reviewed validation and disconnected-transaction code. It should be expanded after deeper review of broader mempool policy.
