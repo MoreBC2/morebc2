@@ -12,11 +12,23 @@ Values should not be copied here from Discord, memory, explorer pages, or third-
 
 ## Mainnet values checked from source
 
-Source file checked: `src/kernel/chainparams.cpp`
+Source files checked:
+
+- `src/kernel/chainparams.cpp`
+- `src/pow.cpp`
+- `src/primitives/block.cpp`
+- `src/hash.h`
+- `src/consensus/amount.h`
+- `share/examples/bitcoinII.conf`
 
 ### Chain type
 
 - Mainnet chain type: `ChainType::MAIN`
+
+### Supply and units
+
+- `COIN = 100000000`, meaning 1 BC2 is represented as 100,000,000 base units in source.
+- `MAX_MONEY = 21000000 * COIN`, a consensus-critical money-range sanity check.
 
 ### Subsidy and block timing
 
@@ -26,15 +38,37 @@ Source file checked: `src/kernel/chainparams.cpp`
 - Miner confirmation window: `2016` blocks
 - Rule-change activation threshold: `1815` blocks, noted in source as 90% of 2016
 
-### Proof-of-work / difficulty flags
+### Proof-of-work and difficulty behavior
 
-- `fPowAllowMinDifficultyBlocks = false`
-- `fPowNoRetargeting = false`
+`src/pow.cpp` shows Bitcoin-style retarget behavior:
+
+- Difficulty only changes when `(pindexLast->nHeight + 1) % params.DifficultyAdjustmentInterval() == 0`.
+- Non-adjustment blocks return the previous block's `nBits` on mainnet.
+- Retargeting uses the actual timespan between the first and last block in the adjustment window.
+- The adjustment step is bounded to one quarter or four times the target timespan.
+- `fPowAllowMinDifficultyBlocks = false` on mainnet.
+- `fPowNoRetargeting = false` on mainnet.
+
+This page does **not** claim that BitcoinII currently uses Dark Gravity Wave.
+
+### Proof-of-work hash path
+
+`CBlockHeader::GetHash()` returns `(HashWriter{} << *this).GetHash()`.
+
+`HashWriter::GetHash()` finalizes SHA-256 once, resets, writes that first SHA-256 output, and finalizes SHA-256 again. The source comments describe this as double-SHA256.
+
+Because of that, the verified wording for now is:
+
+- Block header hashing path: double-SHA256 via `HashWriter::GetHash()`.
 
 ### Network identity
 
 - Message start bytes: `0x42 0x49 0x49 0x21`
 - Default P2P port: `8338`
+- Default RPC port from generated example config: `8332`
+- Testnet RPC port from generated example config: `18332`
+- Signet RPC port from generated example config: `38332`
+- Regtest RPC port from generated example config: `18443`
 
 ### Genesis block
 
@@ -63,24 +97,26 @@ Source file checked: `src/kernel/chainparams.cpp`
 
 ## Current interpretation
 
-Based on the checked source values, BitcoinII mainnet currently appears to use Bitcoin-like 10-minute block spacing, a 2016-block retarget window, and a 210,000-block subsidy halving interval.
-
-This page does **not** claim that BitcoinII currently uses Dark Gravity Wave.
+Based on the checked source values, BitcoinII mainnet currently appears to use Bitcoin-like 10-minute block spacing, a 2016-block retarget window, a 210,000-block subsidy halving interval, and double-SHA256 block header hashing.
 
 ## Open items
 
 These still need verification before the page can be marked Verified:
 
-- Exact proof-of-work hash algorithm name from source.
-- Whether wallet/RPC ports differ from P2P port and where those are defined.
 - Current release version tied to these parameters.
 - Current recommended exchange deposit confirmation count.
 - Current recommended withdrawal confirmation count.
 - Whether any later branch or release changes these values.
+- Whether the phrase `SHA-256d` or `double-SHA256` is preferred by the BitcoinII maintainers for public docs.
 
 ## Sources
 
 - `src/kernel/chainparams.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/kernel/chainparams.cpp
+- `src/pow.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/pow.cpp
+- `src/primitives/block.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/primitives/block.cpp
+- `src/hash.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/hash.h
+- `src/consensus/amount.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/consensus/amount.h
+- `share/examples/bitcoinII.conf`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/share/examples/bitcoinII.conf
 - Public release page: https://github.com/BitcoinII-Dev/BitcoinII/releases
 
 ## Verification
