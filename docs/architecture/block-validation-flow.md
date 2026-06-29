@@ -8,7 +8,7 @@
 
 This page maps the reviewed BitcoinII Core block-validation path from `src/validation.cpp`.
 
-It is intentionally partial. The reviewed path covers header acceptance, context-free block checks, contextual block checks, disk storage, and best-chain activation entry points. It does not yet fully document `ConnectBlock`, chain selection, or reorganization handling.
+It is intentionally partial. The reviewed path now covers header acceptance, context-free block checks, contextual block checks, UTXO-dependent connection checks in `ConnectBlock`, disk storage, and best-chain activation entry points. It does not yet fully document chain selection or reorganization handling.
 
 ## Simplified reviewed flow
 
@@ -25,6 +25,7 @@ ProcessNewBlock
        -> ReceivedBlockTransactions
   -> NotifyHeaderTip
   -> ActivateBestChain
+       -> ConnectBlock during chain connection path
 ```
 
 ## Entry point reviewed
@@ -98,6 +99,34 @@ Reviewed behavior:
 - Checks witness commitments when SegWit is active.
 - Checks block weight after witness commitment validation.
 
+## UTXO connection path reviewed
+
+### `ConnectBlock`
+
+`ConnectBlock` applies a block's effects to the UTXO set represented by a coins view and performs UTXO-dependent validation checks.
+
+Reviewed behavior:
+
+- Re-runs `CheckBlock` before connecting the block.
+- Verifies the coins view best block equals the previous block hash.
+- Special-cases the genesis block.
+- Applies assumed-valid script-check behavior when applicable.
+- Enforces BIP30 duplicate-output protection where applicable.
+- Enables BIP68 sequence locks when CSV is active.
+- Gets script verification flags with `GetBlockScriptFlags`.
+- Builds undo data for non-coinbase transactions.
+- Checks non-coinbase transaction inputs with `Consensus::CheckTxInputs`.
+- Accumulates fees and checks fee range with `MoneyRange`.
+- Checks BIP68 sequence locks using previous output heights.
+- Counts transaction signature operation cost.
+- Runs input script checks when script checking is enabled.
+- Updates the coins view with `UpdateCoins`.
+- Checks that the coinbase does not pay more than fees plus subsidy.
+- Waits for queued script checks.
+- Writes undo data when not in just-check mode.
+- Raises block validity to `BLOCK_VALID_SCRIPTS` when appropriate.
+- Sets the coins view best block to the connected block hash.
+
 ## Storage and activation path reviewed
 
 ### `AcceptBlock`
@@ -120,12 +149,10 @@ The internals of `ActivateBestChain` still need deeper review before MoreBC2 doc
 
 ## What is not fully reviewed yet
 
-- `ConnectBlock`
 - `ActivateBestChain`
 - Chain selection logic
 - Reorganization handling
-- Script verification pipeline
-- UTXO connection and disconnection
+- UTXO disconnection
 - Mempool transaction removal during block connection
 
 ## Related pages
@@ -145,4 +172,4 @@ The internals of `ActivateBestChain` still need deeper review before MoreBC2 doc
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a partial flow map based on reviewed validation code. It should be expanded after deeper review of chain connection and best-chain activation.
+**Notes:** This is a partial flow map based on reviewed validation code. It should be expanded after deeper review of best-chain activation and reorganization handling.
