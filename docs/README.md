@@ -14,7 +14,9 @@ This directory holds the working documentation for MoreBC2.
 - [Wallets](wallets/README.md) — wallet resources and user guides.
 - [Nodes](nodes/README.md) — node operation and network resources.
 - [Ecosystem](ecosystem/README.md) — wallets, explorers, pools, exchanges, tools, and services.
+- [Encyclopedia](encyclopedia/README.md) — concept explainers and cross-linked background pages.
 - [Verification](verification/README.md) — open verification work, known unknowns, and source-backed status tracking.
+- [Site](site/README.md) — public website planning.
 
 ## Rule of thumb
 
