@@ -10,9 +10,13 @@ The architecture section explains how BitcoinII Core components fit together at 
 
 Architecture pages should stay conservative. If a relationship has not been verified from source code, documentation, or tested behavior, mark it as an open question.
 
-## Planned pages
+## Current pages
 
 - [Architecture overview](architecture-overview.md)
+- [Block validation flow](block-validation-flow.md)
+
+## Planned pages
+
 - Network stack
 - Node lifecycle
 - Data flow
