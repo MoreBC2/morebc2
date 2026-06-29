@@ -4,10 +4,14 @@ This section is for current, verifiable information about BitcoinII (BC2).
 
 Use this section for facts that can be verified against current source code, release notes, official project resources, or live network behavior.
 
+## Current drafts
+
+- [Project overview](project-overview.md)
+- [Network specifications](network-specifications.md)
+- [Releases](releases.md)
+
 ## Draft pages to create
 
-- What is BitcoinII?
-- Network specifications
 - Consensus overview
 - Wallet installation
 - Running a node
