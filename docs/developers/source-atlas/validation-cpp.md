@@ -111,6 +111,35 @@ Reviewed behavior:
 - Raises block validity to `BLOCK_VALID_SCRIPTS` when appropriate.
 - Sets the coins view best block to the connected block hash.
 
+### `ApplyTxInUndo`
+
+Reviewed behavior:
+
+- Restores a spent coin at a specific previous output.
+- Marks the disconnect as unclean if restoring would overwrite an existing unspent output.
+- Handles older undo metadata cases by looking up alternate transaction output metadata.
+- Returns failed if missing undo metadata cannot be recovered.
+- Adds the restored coin back to the coins view.
+- Returns `DISCONNECT_OK` or `DISCONNECT_UNCLEAN` depending on whether the restore was clean.
+
+### `DisconnectBlock`
+
+Reviewed behavior:
+
+- Reads block undo data from disk.
+- Fails if undo data cannot be read.
+- Fails if undo transaction count is inconsistent with the block transaction count.
+- Applies BIP30 duplicate-transaction-output exception logic for historical duplicate coinbase cases.
+- Walks block transactions in reverse order.
+- Spends each output created by the block from the coins view.
+- Checks that removed outputs match the transaction outputs, block height, and coinbase status.
+- Marks the disconnect as unclean on output mismatch, except for the configured BIP30 exception cases.
+- Restores non-coinbase transaction inputs using undo data.
+- Fails if transaction undo record sizes do not match transaction input counts.
+- Calls `ApplyTxInUndo` for each restored input in reverse input order.
+- Sets the coins view best block to the disconnected block's previous block hash.
+- Returns `DISCONNECT_OK`, `DISCONNECT_UNCLEAN`, or `DISCONNECT_FAILED`.
+
 ### `DisconnectTip`
 
 Reviewed behavior:
@@ -322,6 +351,8 @@ ProcessNewBlock
        -> FindMostWorkChain
        -> ActivateBestChainStep
             -> DisconnectTip, if needed
+            -> DisconnectBlock
+                 -> ApplyTxInUndo
             -> ConnectTip
                  -> ConnectBlock
 ```
@@ -336,11 +367,15 @@ ActivateBestChain
   -> ActivateBestChainStep
        -> find fork point
        -> DisconnectTip until active tip reaches fork point
+            -> DisconnectBlock
+                 -> spend outputs created by disconnected block
+                 -> restore spent inputs from undo data
+                 -> move coins view best block backward
        -> ConnectTip new branch blocks
        -> MaybeUpdateMempoolForReorg after disconnections
 ```
 
-This diagram is intentionally simplified. MoreBC2 still needs deeper review of `DisconnectBlock`, `DisconnectedBlockTransactions`, and the full mempool re-add policy.
+This diagram is intentionally simplified. MoreBC2 still needs deeper review of `DisconnectedBlockTransactions` and the full mempool re-add policy.
 
 ## Related MoreBC2 pages
 
@@ -354,7 +389,6 @@ This diagram is intentionally simplified. MoreBC2 still needs deeper review of `
 ## Open questions
 
 - Review `validation.h` for public declarations and comments.
-- Review `DisconnectBlock` in detail.
 - Review `DisconnectedBlockTransactions` in detail.
 - Review `MaybeUpdateMempoolForReorg` in detail once exact source location is captured.
 - Confirm whether any BitcoinII-specific validation behavior differs from Bitcoin Core beyond visible naming and parameter changes.
@@ -370,4 +404,4 @@ This diagram is intentionally simplified. MoreBC2 still needs deeper review of `
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a partial source audit of validation flow anchors, `ConnectBlock`, best-chain activation, and disconnection/reorg entry points. It should not be treated as a complete reorganization review yet.
+**Notes:** This is a partial source audit of validation flow anchors, `ConnectBlock`, `DisconnectBlock`, best-chain activation, and reorganization entry points. It should not be treated as a complete mempool reorganization review yet.
