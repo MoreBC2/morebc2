@@ -1,0 +1,44 @@
+# Source atlas
+
+**Category:** Documentation
+**Status:** Draft
+**Last reviewed:** 2026-06-29
+
+## Summary
+
+The source atlas is a file-by-file companion to the BitcoinII Core codebase.
+
+Each page should explain one important source file in plain language, link it to related MoreBC2 documentation, and record open questions.
+
+## Current atlas entries
+
+- [chainparams.cpp](chainparams-cpp.md)
+- [pow.cpp](pow-cpp.md)
+- [hash.h](hash-h.md)
+- [block primitives](block-primitives.md)
+
+## Entry standard
+
+Each source atlas page should include:
+
+- Purpose
+- Why it matters
+- Key classes/functions/constants
+- BitcoinII-specific notes
+- Related MoreBC2 pages
+- Open questions
+- Sources
+- Verification block
+
+## Rules
+
+- Do not claim more than the file review supports.
+- Quote sparingly, summarize carefully.
+- Prefer source links and line references when available.
+- Mark uncertain items as Needs Review.
+
+## Verification
+
+**Status:** Draft
+**Primary sources checked:** Partially
+**Notes:** The atlas starts with files already reviewed for MoreBC2 core technical pages.
