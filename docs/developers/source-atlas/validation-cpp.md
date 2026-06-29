@@ -111,6 +111,24 @@ Reviewed behavior:
 - Raises block validity to `BLOCK_VALID_SCRIPTS` when appropriate.
 - Sets the coins view best block to the connected block hash.
 
+### `DisconnectTip`
+
+Reviewed behavior:
+
+- Requires `cs_main` and, when present, the mempool lock.
+- Reads the current chain tip block from disk.
+- Creates a coins-view cache over the current coins tip.
+- Verifies that the coins view best block is the tip being disconnected.
+- Calls `DisconnectBlock` to roll back the tip's UTXO effects.
+- Flushes the coins-view cache after a successful disconnect.
+- Moves prune locks backward when needed so they have a chance to reorg.
+- Calls `FlushStateToDisk` with `FlushStateMode::IF_NEEDED`.
+- Adds disconnected block transactions to the disconnected-transaction pool when available.
+- Removes evicted disconnected transactions and descendants from the mempool when disconnected-pool limits are exceeded.
+- Sets the active chain tip to the disconnected block's previous block.
+- Calls `UpdateTip` on the previous block.
+- Emits `BlockDisconnected` signals so wallets can learn that transactions moved from confirmed to unconfirmed or conflicted.
+
 ### `ConnectTip`
 
 Reviewed behavior:
@@ -173,6 +191,50 @@ Reviewed behavior:
 - Stops if the chainstate becomes disabled, such as when background snapshot validation completes.
 - Calls `CheckBlockIndex` after activation loop completion.
 - Calls `FlushStateToDisk` with `FlushStateMode::PERIODIC`.
+
+### `InvalidateBlock`
+
+Reviewed behavior:
+
+- Does not allow invalidating the genesis block.
+- Prevents `ActivateBestChain` from running at the same time by taking the chainstate mutex.
+- Disconnects blocks from the active chain when needed.
+- Calls `DisconnectTip` while walking back from the current tip.
+- Uses `MaybeUpdateMempoolForReorg` after disconnecting blocks.
+- Marks disconnected blocks invalid with `BLOCK_FAILED_VALID` or `BLOCK_FAILED_CHILD` as appropriate.
+- Updates candidate sets so alternate equal-or-more-work blocks can be considered.
+- Records failed blocks in `m_failed_blocks`.
+- Calls `InvalidChainFound` for the marked invalid chain.
+- Emits block-tip notification if the active chain changed.
+
+### `ResetBlockFailureFlags`
+
+Reviewed behavior:
+
+- Removes invalidity flags from a block and its descendants.
+- Removes invalidity flags from ancestors too.
+- Re-adds valid candidates when appropriate.
+- Clears `m_best_invalid` if it pointed at a reset block.
+- Removes reset blocks from `m_failed_blocks`.
+
+### `TryAddBlockIndexCandidate`
+
+Reviewed behavior:
+
+- Adds a block index candidate only if it is not worse than the current tip.
+- Always allows the active chainstate to add entries with more work than the tip.
+- For background chainstate, only considers blocks toward the snapshot base while not disabled.
+
+### `ReceivedBlockTransactions`
+
+Reviewed behavior:
+
+- Marks a block as having transaction data.
+- Records block file position and data position.
+- Adds witness-data status when SegWit is active for that block.
+- Raises validity to `BLOCK_VALID_TRANSACTIONS`.
+- Recursively processes descendant blocks that may now be eligible for candidate consideration.
+- Calls `TryAddBlockIndexCandidate` for eligible blocks across chainstates.
 
 ### `GetBlockScriptFlags`
 
@@ -264,7 +326,21 @@ ProcessNewBlock
                  -> ConnectBlock
 ```
 
-This diagram is intentionally simplified. MoreBC2 still needs deeper review of `DisconnectTip`, `MaybeUpdateMempoolForReorg`, and full reorganization handling.
+## High-level reviewed reorg path
+
+Based on the reviewed code, a simplified reorganization path is:
+
+```text
+ActivateBestChain
+  -> FindMostWorkChain
+  -> ActivateBestChainStep
+       -> find fork point
+       -> DisconnectTip until active tip reaches fork point
+       -> ConnectTip new branch blocks
+       -> MaybeUpdateMempoolForReorg after disconnections
+```
+
+This diagram is intentionally simplified. MoreBC2 still needs deeper review of `DisconnectBlock`, `DisconnectedBlockTransactions`, and the full mempool re-add policy.
 
 ## Related MoreBC2 pages
 
@@ -278,18 +354,20 @@ This diagram is intentionally simplified. MoreBC2 still needs deeper review of `
 ## Open questions
 
 - Review `validation.h` for public declarations and comments.
-- Review `DisconnectTip` in detail.
-- Review `MaybeUpdateMempoolForReorg` in detail.
+- Review `DisconnectBlock` in detail.
+- Review `DisconnectedBlockTransactions` in detail.
+- Review `MaybeUpdateMempoolForReorg` in detail once exact source location is captured.
 - Confirm whether any BitcoinII-specific validation behavior differs from Bitcoin Core beyond visible naming and parameter changes.
 - Decide whether validation should be split into separate atlas pages later.
 
 ## Sources
 
 - `src/validation.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/validation.cpp
+- `src/validation.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/validation.h
 - `src/pow.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/pow.cpp
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a partial source audit of validation flow anchors, `ConnectBlock`, and best-chain activation. It should not be treated as a complete reorganization review yet.
+**Notes:** This is a partial source audit of validation flow anchors, `ConnectBlock`, best-chain activation, and disconnection/reorg entry points. It should not be treated as a complete reorganization review yet.
