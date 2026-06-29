@@ -8,11 +8,11 @@ Use this section for facts that can be verified against current source code, rel
 
 - [Project overview](project-overview.md)
 - [Network specifications](network-specifications.md)
+- [Consensus overview](consensus-overview.md)
 - [Releases](releases.md)
 
 ## Draft pages to create
 
-- Consensus overview
 - Wallet installation
 - Running a node
 - Mining overview
