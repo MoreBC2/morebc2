@@ -10,6 +10,8 @@ Create a clear integration package that reduces back-and-forth and helps service
 
 - [Exchange integration package](integration-package.md)
 - [Exchange operator guide](operator-guide.md)
+- [Deposit monitoring](deposit-monitoring.md)
+- [Service integration checklist](service-integration-checklist.md)
 
 ## Related pages
 
@@ -19,6 +21,8 @@ Create a clear integration package that reduces back-and-forth and helps service
 - [RPC configuration](../configuration/rpc-configuration.md)
 - [Node configuration](../configuration/node-configuration.md)
 - [Release process guide](../developers/release-process.md)
+- [Confirmations](../encyclopedia/confirmations.md)
+- [Reorganizations](../encyclopedia/reorganizations.md)
 - [Known unknowns](../verification/known-unknowns.md)
 
 ## Draft checklist
