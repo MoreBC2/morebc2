@@ -22,6 +22,14 @@ BitcoinII mainnet is configured for:
 
 `src/pow.cpp` shows that difficulty changes only at the configured adjustment interval. On mainnet, blocks between adjustment intervals keep the previous `nBits` value.
 
+### Difficulty adjustment calculation
+
+`GetNextWorkRequired()` checks whether the next block height falls on the configured difficulty adjustment interval.
+
+If it does not, and min-difficulty blocks are not allowed, the previous block's `nBits` value is reused.
+
+At an adjustment interval, the function finds the first block in the adjustment window and calls `CalculateNextWorkRequired()`.
+
 ### Difficulty adjustment limits
 
 `CalculateNextWorkRequired()` limits the actual timespan used for retargeting:
@@ -29,7 +37,31 @@ BitcoinII mainnet is configured for:
 - Minimum actual timespan: target timespan divided by 4.
 - Maximum actual timespan: target timespan multiplied by 4.
 
+It then scales the old target by actual timespan divided by target timespan and caps the result at `powLimit`.
+
 This means a single retarget step is bounded in either direction.
+
+### Difficulty transition checks
+
+`PermittedDifficultyTransition()` checks whether an observed transition is within permitted bounds.
+
+Source-backed behavior:
+
+- If min-difficulty blocks are allowed, it returns true.
+- At adjustment heights, it checks the new target against the 1/4x to 4x permitted range.
+- Away from adjustment heights, it rejects changes where `old_nbits` and `new_nbits` differ.
+
+### Proof-of-work target checks
+
+`CheckProofOfWork()` verifies that a block hash satisfies the target encoded by `nBits`.
+
+Source-backed behavior:
+
+- It rejects negative targets.
+- It rejects zero targets.
+- It rejects overflowed targets.
+- It rejects targets above `powLimit`.
+- It rejects hashes greater than the target.
 
 ### No Dark Gravity Wave claim
 
@@ -58,6 +90,7 @@ The source comments call `MAX_MONEY` a consensus-critical money-range sanity che
 - Verify current block subsidy schedule from the subsidy calculation code, not just halving interval.
 - Verify activation status and behavior for SegWit/Taproot from chain state or release notes.
 - Confirm any BitcoinII-specific consensus changes outside `chainparams`, `pow`, `block`, `hash`, and `amount` files.
+- Review validation code to document where proof-of-work checks are called.
 
 ## Sources
 
