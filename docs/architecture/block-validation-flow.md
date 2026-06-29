@@ -8,7 +8,7 @@
 
 This page maps the reviewed BitcoinII Core block-validation path from `src/validation.cpp`.
 
-It is intentionally partial. The reviewed path now covers header acceptance, context-free block checks, contextual block checks, UTXO-dependent connection checks in `ConnectBlock`, best-chain candidate selection, chain activation steps, disk storage, and tip notification paths. It does not yet fully document disconnection internals or mempool reorg behavior.
+It is intentionally partial. The reviewed path now covers header acceptance, context-free block checks, contextual block checks, UTXO-dependent connection checks in `ConnectBlock`, best-chain candidate selection, chain activation steps, block disconnection entry points, disk storage, and tip notification paths. It does not yet fully document `DisconnectBlock` internals or mempool re-add policy.
 
 ## Simplified reviewed flow
 
@@ -30,6 +30,21 @@ ProcessNewBlock
             -> DisconnectTip, if needed
             -> ConnectTip
                  -> ConnectBlock
+```
+
+## Simplified reviewed reorg flow
+
+```text
+ActivateBestChain
+  -> FindMostWorkChain
+  -> ActivateBestChainStep
+       -> find fork point
+       -> DisconnectTip until active tip reaches fork point
+            -> DisconnectBlock
+            -> update disconnected-transaction pool
+            -> move active chain tip backward
+       -> ConnectTip new branch blocks
+       -> MaybeUpdateMempoolForReorg after disconnections
 ```
 
 ## Entry point reviewed
@@ -131,6 +146,26 @@ Reviewed behavior:
 - Raises block validity to `BLOCK_VALID_SCRIPTS` when appropriate.
 - Sets the coins view best block to the connected block hash.
 
+## UTXO disconnection path reviewed
+
+### `DisconnectTip`
+
+`DisconnectTip` rolls the active chain tip backward by one block.
+
+Reviewed behavior:
+
+- Reads the current tip block from disk.
+- Creates a coins-view cache over the current coins tip.
+- Verifies that the coins view best block is the tip being disconnected.
+- Calls `DisconnectBlock` to roll back the tip's UTXO effects.
+- Flushes the coins-view cache.
+- Moves prune locks backward when needed.
+- Flushes state to disk if needed.
+- Adds disconnected transactions to the disconnected-transaction pool when available.
+- Moves the active chain tip back to the disconnected block's parent.
+- Calls `UpdateTip`.
+- Emits `BlockDisconnected` signals.
+
 ## Best-chain activation path reviewed
 
 ### `FindMostWorkChain`
@@ -196,11 +231,10 @@ Reviewed behavior:
 
 ## What is not fully reviewed yet
 
-- `DisconnectTip`
+- `DisconnectBlock`
 - `MaybeUpdateMempoolForReorg`
-- Full reorganization cleanup path
-- UTXO disconnection internals
-- Mempool re-add policy for disconnected transactions
+- Full mempool re-add policy for disconnected transactions
+- `DisconnectedBlockTransactions` implementation details
 
 ## Related pages
 
@@ -219,4 +253,4 @@ Reviewed behavior:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a partial flow map based on reviewed validation code. It should be expanded after deeper review of disconnection and mempool reorganization behavior.
+**Notes:** This is a partial flow map based on reviewed validation code. It should be expanded after deeper review of `DisconnectBlock`, disconnected transaction handling, and mempool reorganization behavior.
