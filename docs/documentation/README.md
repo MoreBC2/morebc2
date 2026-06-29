@@ -10,6 +10,7 @@ Use this section for facts that can be verified against current source code, rel
 - [Project overview](project-overview.md)
 - [Network specifications](network-specifications.md)
 - [Consensus overview](consensus-overview.md)
+- [Checkpoints](checkpoints.md)
 - [Releases](releases.md)
 - [Explorer resources](explorer-resources.md)
 
