@@ -6,18 +6,26 @@ Use this section for facts that can be verified against current source code, rel
 
 ## Current drafts
 
+- [What is BitcoinII?](what-is-bitcoinii.md)
 - [Project overview](project-overview.md)
 - [Network specifications](network-specifications.md)
 - [Consensus overview](consensus-overview.md)
 - [Releases](releases.md)
+- [Explorer resources](explorer-resources.md)
+
+## Related section drafts
+
+- [Wallet guide](../wallets/wallet-guide.md)
+- [Node guide](../nodes/node-guide.md)
+- [Mining overview](../mining/mining-overview.md)
+- [RPC overview](../developers/rpc-overview.md)
+- [Exchange integration package](../exchange/integration-package.md)
 
 ## Draft pages to create
 
-- Wallet installation
-- Running a node
-- Mining overview
-- RPC basics
-- Explorer resources
+- Release verification guide
+- Configuration reference
+- FAQ
 
 ## Not for this section
 
