@@ -92,6 +92,7 @@ Currently reviewed or partially reviewed files:
 - `src/rpc/mining.cpp`
 - `src/rpc/blockchain.cpp`
 - `src/rpc/rawtransaction.cpp`
+- `src/rpc/mempool.cpp`
 
 Known use from review:
 
@@ -109,19 +110,22 @@ Known use from review:
 - Unsigned transaction construction RPCs.
 - Explicit-key signing RPCs.
 - PSBT creation, update, joining, finalization, and analysis RPCs.
+- Raw transaction broadcast and dry-run acceptance RPCs.
+- Mempool entry, ancestor, descendant, prevout-spend, and summary RPCs.
+- Mempool save/import, orphan-inspection, and package-submission RPCs.
 
 Related pages:
 
 - [Source atlas: mining RPC](source-atlas/rpc-mining.md)
 - [Source atlas: blockchain RPC](source-atlas/rpc-blockchain.md)
 - [Source atlas: raw transaction RPC](source-atlas/rpc-rawtransaction.md)
+- [Source atlas: mempool and transaction broadcast RPC](source-atlas/rpc-mempool.md)
 - [Source atlas: block template assembly](source-atlas/miner.md)
 - [Mining overview](../mining/mining-overview.md)
 - [RPC overview](rpc-overview.md)
 
 Still needed:
 
-- Mempool RPC files.
 - Network RPC files.
 - Remaining RPC examples tested against a local node.
 - Service-safe RPC command recommendations.
