@@ -11,13 +11,18 @@ This section is for developer-focused BitcoinII (BC2) resources.
 - [Repository map](repository-map.md)
 - [Source tree guide](source-tree.md)
 
+## Developer workflow guides
+
+- [Local development environment](local-development.md)
+- [Build system guide](build-system.md)
+- [Testing guide](testing.md)
+- [Release process guide](release-process.md)
+- [Release verification guide](release-verification.md)
+
 ## Current drafts
 
 - [Architecture overview](../architecture/architecture-overview.md)
 - [RPC overview](rpc-overview.md)
-- [Build system guide](build-system.md)
-- [Testing guide](testing.md)
-- [Release process guide](release-process.md)
 
 ## Source-backed architecture pages
 
@@ -29,9 +34,7 @@ This section is for developer-focused BitcoinII (BC2) resources.
 
 ## Draft topics still to create
 
-- Local development environment guide
 - Configuration examples
-- Release verification guide
 - Explorer API notes
 - Exchange integration support examples
 
