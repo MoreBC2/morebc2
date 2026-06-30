@@ -2,13 +2,15 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Summary
 
 BitcoinII Core can be configured with command-line options and a configuration file.
 
 The generated example configuration file is `share/examples/bitcoinII.conf`.
+
+This page is source-observed from configuration material. It is not a tested platform setup guide yet.
 
 ## What is verified from the generated config
 
@@ -42,9 +44,31 @@ MoreBC2 separates configuration docs into:
 - Indexing and pruning options.
 - Debugging options.
 
+## Command and config testing status
+
+MoreBC2 has not yet tested platform-specific configuration examples or startup commands.
+
+Track future tests in [Command testing status](../verification/command-testing.md).
+
+Configuration examples should include:
+
+- Operating system.
+- BitcoinII Core release, branch, or commit.
+- Network mode.
+- Data directory location.
+- Config file path.
+- Command used to start the node.
+- Relevant command output or log result.
+
+Do not treat future config snippets as verified until they include this context.
+
 ## Production caution
 
 Configuration examples for exchanges, explorers, pools, or other services should be tested before publication as verified.
+
+Do not expose BitcoinII Core RPC directly to the public internet.
+
+Separate source-observed defaults from recommended operator settings.
 
 ## Open items
 
@@ -52,13 +76,18 @@ Configuration examples for exchanges, explorers, pools, or other services should
 - Confirm command-line override behavior.
 - Confirm wallet-specific config examples.
 - Confirm platform-specific service setup.
+- Add tested configuration records for local node startup.
+- Confirm release binary names before writing copy/paste command examples.
 
 ## Sources
 
 - `share/examples/bitcoinII.conf`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/share/examples/bitcoinII.conf
+- [Command testing status](../verification/command-testing.md)
+- [RPC configuration](rpc-configuration.md)
+- [Node configuration](node-configuration.md)
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Yes
-**Notes:** General config-file behavior is based on the generated example config. Platform-specific instructions still need testing.
+**Primary sources checked:** Partially
+**Notes:** General config-file behavior is based on the generated example config. Platform-specific instructions, startup commands, service setup examples, and release binary names still need testing.
