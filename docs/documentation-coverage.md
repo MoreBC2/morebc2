@@ -25,10 +25,10 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 | Area | Status | Notes |
 |---|---|---|
-| Architecture overview | Framework | Overview has been refreshed, but should keep changing as new source areas are reviewed. |
+| Architecture overview | Framework | Overview has been refreshed, but should keep changing as source areas and navigation are polished. |
 | Node startup | Partial | Built from first-pass startup-path review, now including wallet loader/startup notes. GUI, daemon, shutdown details pending. |
 | Consensus model | Partial | Built from reviewed chainparams, PoW, validation, block connection, reorg, transaction-helper, and script-engine notes. Flag caller mapping still pending. |
-| Life of a transaction | Partial | Built from reviewed broadcast, mempool, block, reorg, first-pass wallet spend/history RPC notes, raw transaction construction/PSBT notes, and mempool/broadcast RPC notes. Lower-level P2P paths pending. |
+| Life of a transaction | Partial | Built from reviewed broadcast, mempool, block, reorg, wallet spend/history RPC notes, raw transaction construction/PSBT notes, and mempool/broadcast RPC notes. Lower-level P2P paths pending. |
 | Life of a block | Partial | Built from reviewed block acceptance, validation, notification, storage, template assembly, mining RPC, and blockchain RPC paths. P2P details pending. |
 | Life of a reorganization | Partial | Built from reviewed reorg, disconnection, undo, storage, notification, and mempool re-add paths. Wallet and index handling pending. |
 | Block validation flow | Reviewed | Strong first-pass flow map exists. |
@@ -116,30 +116,32 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Area | Status | Notes |
 |---|---|---|
 | Developer README | Partial | Links reading order, verification workflow, source review guide, source atlas, local development, build, testing, and release verification. |
-| Repository map | Partial | Refreshed through raw transaction RPC. Needs mempool RPC file added after navigation cleanup. |
-| Source tree guide | Partial | Refreshed through raw transaction RPC. Needs mempool RPC file added after navigation cleanup. |
-| Developer reading order | Framework | Updated to include current Source Atlas and developer workflow paths. |
+| Repository map | Partial | Refreshed through mempool/broadcast RPC. Needs polish pass rather than immediate new navigation work. |
+| Source tree guide | Partial | Refreshed through mempool/broadcast RPC. Needs polish pass rather than immediate new navigation work. |
+| Developer reading order | Framework | Updated to include current Source Atlas and developer workflow paths; should be refreshed after polish. |
 | Source review guide | Framework | Created as contributor workflow; should be tested on future source reviews. |
 | Verification standards | Framework | Practical workflow page exists; evidence scale remains the root confidence model. |
 | Local development environment | Framework | Defines safe test-record workflow; commands still need actual testing. |
 | Build system guide | Partial | First-pass CMake/source-doc review exists. Commands still need actual testing. |
 | Testing guide | Partial | First-pass unit, wallet, CTest, and functional test-runner review exists. Commands still need actual testing. |
 | Release verification guide | Framework | Defines release artifact verification standard; specific releases still need checks. |
+| Documentation polish plan | Framework | Broad cleanup plan exists and should guide the next phase. |
 | Developer glossary | Partial | Expanded with transaction, storage, and validation-notification terms. More cross-linking still useful. |
 | Root glossary | Partial | Expanded with common architecture, storage, policy, and release-verification terms. |
 
 ## Current priority order
 
-1. Repository map/source tree refresh for mempool RPC file.
-2. Release artifact verification pass.
-3. Explorer/API documentation framework.
-4. Build/test command smoke-test record.
-5. Functional test framework review.
-6. Network RPC source review.
-7. Glossary cross-linking during future page updates.
+1. Broad documentation polish pass: root README, docs index, section READMEs, coverage/audit/status consistency.
+2. Open-question consolidation pass.
+3. Cross-link and terminology pass across architecture and Source Atlas pages.
+4. Release artifact verification pass.
+5. Explorer/API documentation framework.
+6. Build/test command smoke-test record.
+7. Network RPC or P2P source review.
+8. Glossary cross-linking during future page updates.
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Repository docs and current section indexes
-**Notes:** This dashboard should be updated whenever a major source audit or architecture page is added.
+**Notes:** This dashboard should be updated whenever a major source audit, polish pass, or architecture page is added.
