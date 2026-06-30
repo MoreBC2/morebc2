@@ -26,6 +26,7 @@ MoreBC2 has also reviewed a first pass of wallet RPC registration and address-ma
 - `src/wallet/rpc/wallet.cpp`
 - `src/wallet/rpc/addresses.cpp`
 - `src/wallet/rpc/backup.cpp`
+- `src/wallet/rpc/spend.cpp`
 
 Reviewed startup behavior includes:
 
@@ -64,6 +65,14 @@ Wallet backup/import RPC behavior reviewed so far includes:
 - Legacy import commands can trigger rescans and can be limited by pruned block data.
 - Descriptor import commands require timestamps and can scan from those timestamps.
 - `dumpwallet` and `dumpprivkey` are legacy-wallet-only and should be treated as advanced/sensitive commands.
+
+Wallet spend and PSBT behavior reviewed so far includes:
+
+- Direct send commands require careful treatment because they can move wallet funds.
+- Funding commands can add wallet inputs, choose change handling, and apply fee options.
+- PSBT commands can create, update, sign, and finalize partially signed transactions.
+- Fee-bump commands target eligible replaceable wallet transactions.
+- Some reviewed fee-rate options use atom-per-vbyte units while older options used BC2-per-kvB units.
 
 Wallet RPC examples remain untested until run against a local BitcoinII Core node.
 
@@ -140,7 +149,7 @@ Before this guide is marked Verified, MoreBC2 needs to document whether releases
 - Confirm wallet data directory by operating system.
 - Confirm backup file names and restore process.
 - Confirm wallet encryption workflow.
-- Review spend, encryption, transaction, and coin wallet RPC files in more detail.
+- Review encryption, transaction-history, and coin wallet RPC files in more detail.
 - Review wallet database format behavior.
 - Confirm whether GUI and CLI wallets differ in user-facing behavior.
 - Test safe wallet RPC examples locally before publishing them as verified.
@@ -156,12 +165,14 @@ Before this guide is marked Verified, MoreBC2 needs to document whether releases
 - `src/wallet/rpc/wallet.cpp`
 - `src/wallet/rpc/addresses.cpp`
 - `src/wallet/rpc/backup.cpp`
+- `src/wallet/rpc/spend.cpp`
 - [Source atlas: wallet startup](../developers/source-atlas/wallet-startup.md)
 - [Source atlas: wallet RPC](../developers/source-atlas/wallet-rpc.md)
 - [Source atlas: wallet backup/import RPC](../developers/source-atlas/wallet-backup-import-rpc.md)
+- [Source atlas: wallet spend and PSBT RPC](../developers/source-atlas/wallet-spend-rpc.md)
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This page now includes first-pass source-reviewed wallet startup, wallet RPC, and wallet backup/import notes. Platform-specific wallet instructions, spend/encryption/transaction RPC detail, release verification, and command testing remain open.
+**Notes:** This page now includes first-pass source-reviewed wallet startup, wallet RPC, backup/import, and spend/PSBT notes. Platform-specific wallet instructions, encryption/transaction-history/coin RPC detail, release verification, and command testing remain open.
