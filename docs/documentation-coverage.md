@@ -28,12 +28,12 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Architecture overview | Framework | Overview has been refreshed, but should keep changing as new source areas are reviewed. |
 | Node startup | Partial | Built from first-pass startup-path review, now including wallet loader/startup notes. GUI, daemon, shutdown details pending. |
 | Consensus model | Partial | Built from reviewed chainparams, PoW, validation, block connection, reorg, transaction-helper, and script-engine notes. Flag caller mapping still pending. |
-| Life of a transaction | Partial | Built from reviewed broadcast, mempool, block, and reorg notes. Wallet transaction creation and P2P paths pending. |
+| Life of a transaction | Partial | Built from reviewed broadcast, mempool, block, reorg, and first-pass wallet spend RPC notes. Lower-level wallet transaction creation and P2P paths pending. |
 | Life of a block | Partial | Built from reviewed block acceptance, validation, notification, storage, template assembly, mining RPC, and blockchain RPC paths. P2P details pending. |
 | Life of a reorganization | Partial | Built from reviewed reorg, disconnection, undo, storage, notification, and mempool re-add paths. Wallet and index handling pending. |
 | Block validation flow | Reviewed | Strong first-pass flow map exists. |
 | Mempool flow | Reviewed | Strong first-pass mempool and transaction acceptance map exists. |
-| Wallet flow | Partial | First-pass wallet startup/lifecycle, wallet RPC, and backup/import RPC review exists. Detailed spend, coin, and encryption command groups pending. |
+| Wallet flow | Partial | First-pass wallet startup/lifecycle, wallet RPC, backup/import, and spend/PSBT RPC review exists. Coin and encryption command groups pending. |
 | Candidate block flow | Partial | First-pass template assembly and mining RPC review exists. External-operation docs pending. |
 
 ## Source atlas coverage
@@ -59,7 +59,8 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | `src/wallet/wallet.h` | Partial | Startup-adjacent declarations and defaults reviewed. Deeper wallet internals pending. |
 | `src/wallet/rpc/wallet.cpp` | Partial | First-pass wallet RPC registration, management, creation, loading, migration, and status review exists. Commands untested. |
 | `src/wallet/rpc/addresses.cpp` | Partial | First-pass address, change address, label, grouping, and multisig RPC review exists. Commands untested. |
-| `src/wallet/rpc/backup.cpp` | Partial | First-pass backup, restore, legacy import, descriptor import, dump, and rescan-related review exists. Commands untested. |
+| `src/wallet/rpc/backup.cpp` | Partial | First-pass backup, restore, legacy import, descriptor import, export, and rescan-related review exists. Commands untested. |
+| `src/wallet/rpc/spend.cpp` | Partial | First-pass direct spend, funding, fee setting, fee bumping, signing, and PSBT review exists. Commands untested. |
 | Block lifecycle path | Reviewed | Consolidated source-atlas lifecycle page exists. |
 | `src/txmempool.*` | Partial | Core mempool structure and many functions reviewed. Policy details pending. |
 | `src/kernel/mempool_entry.h` | Reviewed | First-pass entry metadata review exists. |
@@ -98,7 +99,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 | Area | Status | Notes |
 |---|---|---|
-| Wallet guide | Partial | First-pass wallet startup, wallet RPC, backup/import, address, and source-observed defaults added. Release verification, platform steps, spend/encryption details pending. |
+| Wallet guide | Partial | First-pass wallet startup, wallet RPC, backup/import, spend/PSBT, address, and source-observed defaults added. Release verification, platform steps, and encryption details pending. |
 | Node guide | Framework | Needs tested commands and current config checks. |
 | Mining overview | Partial | Consensus-level mining, candidate-template assembly, and mining RPC paths have first-pass source review. Live software/pool data pending. |
 | Configuration overview | Partial | Based on generated config/source; local testing pending. |
@@ -110,8 +111,8 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Area | Status | Notes |
 |---|---|---|
 | Developer README | Partial | Links reading order, verification workflow, source review guide, source atlas, local development, build, testing, and release verification. |
-| Repository map | Partial | Refreshed for storage, notification, template, mining RPC, blockchain RPC, wallet startup, and wallet RPC files. Needs backup/import RPC file added after navigation cleanup. |
-| Source tree guide | Partial | Refreshed for storage, notification, template, mining RPC, blockchain RPC, wallet startup, and wallet RPC files. Needs backup/import RPC file added after navigation cleanup. |
+| Repository map | Partial | Refreshed for storage, notification, template, mining RPC, blockchain RPC, wallet startup, wallet RPC, and backup/import RPC files. Needs spend RPC file added after navigation cleanup. |
+| Source tree guide | Partial | Refreshed for storage, notification, template, mining RPC, blockchain RPC, wallet startup, wallet RPC, and backup/import RPC files. Needs spend RPC file added after navigation cleanup. |
 | Developer reading order | Framework | Updated to include current Source Atlas and developer workflow paths. |
 | Source review guide | Framework | Created as contributor workflow; should be tested on future source reviews. |
 | Verification standards | Framework | Practical workflow page exists; evidence scale remains the root confidence model. |
@@ -124,7 +125,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. Repository map/source tree refresh for wallet backup/import RPC file.
+1. Repository map/source tree refresh for wallet spend RPC file.
 2. Remaining wallet RPC source review.
 3. Raw transaction / mempool RPC source review.
 4. Release artifact verification pass.
