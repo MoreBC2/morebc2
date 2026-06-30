@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Summary
 
@@ -20,6 +20,8 @@ Currently reviewed or partially reviewed files:
 - `src/pow.cpp`
 - `src/validation.cpp`
 - `src/validation.h`
+- `src/validationinterface.cpp`
+- `src/validationinterface.h`
 - `src/txmempool.cpp`
 - `src/txmempool.h`
 - `src/hash.h`
@@ -30,6 +32,7 @@ Known use from review:
 - Proof-of-work and difficulty retargeting.
 - Block validation and best-chain activation.
 - Block connection and disconnection.
+- Validation and mempool event notifications.
 - Mempool acceptance paths.
 - Mempool storage and indexing.
 - Hash helper paths.
@@ -41,6 +44,37 @@ Related pages:
 - [Consensus model](../architecture/consensus-model.md)
 - [Block validation flow](../architecture/block-validation-flow.md)
 - [Mempool flow](../architecture/mempool-flow.md)
+- [Source atlas: validation interface](source-atlas/validation-interface.md)
+
+### `src/node/`
+
+Currently reviewed or partially reviewed files:
+
+- `src/node/blockstorage.h`
+- `src/node/blockstorage.cpp`
+
+Known use from review:
+
+- Block index database access.
+- Block and undo flat-file handling.
+- Block-file cursor bookkeeping.
+- Block and raw-block reads.
+- Block and undo writes.
+- Pruning bookkeeping.
+- Reindex and import handling.
+
+Related pages:
+
+- [Source atlas: block storage](source-atlas/block-storage.md)
+- [Life of a block](../architecture/life-of-a-block.md)
+- [Life of a reorganization](../architecture/life-of-a-reorg.md)
+- [Node startup](../architecture/node-startup.md)
+
+Still needed:
+
+- `src/node/miner.*`
+- Additional node context and chainstate helpers.
+- Operator-facing pruning and reindex examples.
 
 ### `src/kernel/`
 
@@ -161,7 +195,6 @@ These areas should be mapped later:
 - `src/wallet/`
 - `src/qt/`
 - `src/node/miner.*`
-- `src/validationinterface.*`
 - `test/`
 - `src/test/`
 - `src/wallet/test/`
