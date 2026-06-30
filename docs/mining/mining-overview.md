@@ -10,6 +10,8 @@ BitcoinII (BC2) uses proof-of-work mining. Miners search for a block header hash
 
 This page documents only source-backed general mining behavior and leaves pool/software recommendations for later verification.
 
+Mining command examples are not verified until local test records exist.
+
 ## What is verified from source
 
 Current checked source shows:
@@ -56,6 +58,21 @@ Reviewed behavior includes:
 
 The reviewed file notes that mining RPCs follow GBT/BIP22 in using satoshi amounts, unlike wallet RPCs that use BC2 values.
 
+## Mining command testing status
+
+Track command testing in [Command testing status](../verification/command-testing.md).
+
+Mining-related command forms that still need records include:
+
+- `bitcoinII-cli getmininginfo`
+- `bitcoinII-cli getblocktemplate '{"rules":["segwit"]}'`
+- `bitcoinII-cli getnetworkhashps`
+
+Advanced submission commands should not be published as normal user examples until a dedicated safe workflow exists:
+
+- `bitcoinII-cli submitblock <hex>`
+- `bitcoinII-cli submitheader <hex>`
+
 ## What this page does not claim
 
 This page does not claim:
@@ -101,6 +118,7 @@ This page does not claim:
 - `src/node/mini_miner.h`
 - `src/node/mini_miner.cpp`
 - `src/rpc/mining.cpp`
+- [Command testing status](../verification/command-testing.md)
 
 ## Verification
 
