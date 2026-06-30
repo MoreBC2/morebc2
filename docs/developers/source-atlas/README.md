@@ -19,6 +19,7 @@ Each page should explain one important source file in plain language, link it to
 - [script engine](script-interpreter.md)
 - [validation.cpp](validation-cpp.md)
 - [validation interface](validation-interface.md)
+- [block storage](block-storage.md)
 - [block lifecycle](block-acceptance.md)
 - [mempool accept](mempool-accept.md)
 - [mempool source](txmempool.md)
