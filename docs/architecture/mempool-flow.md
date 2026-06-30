@@ -2,13 +2,13 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Summary
 
-This page maps the reviewed BitcoinII Core mempool architecture from `src/txmempool.h`, `src/txmempool.cpp`, and reviewed validation flow.
+This page maps the reviewed BitcoinII Core mempool architecture from `src/txmempool.h`, `src/txmempool.cpp`, reviewed validation flow, and reviewed mempool RPC behavior.
 
-It is intentionally partial. It focuses on mempool structure, ancestor and descendant tracking, transaction acceptance, reorg repair behavior, and the reviewed mempool functions.
+It is intentionally partial. It focuses on mempool structure, ancestor and descendant tracking, transaction acceptance, reorg repair behavior, reviewed mempool functions, and RPC surfaces that expose or affect mempool state.
 
 ## What the mempool stores
 
@@ -41,6 +41,8 @@ The mempool tracks:
 
 These cached values allow the node to enforce limits without repeatedly walking the full mempool graph.
 
+Reviewed mempool RPC behavior can expose parts of this relationship through ancestor, descendant, entry, and raw-mempool commands.
+
 ## Transaction acceptance flow
 
 A simplified single-transaction acceptance path is:
@@ -64,6 +66,15 @@ AcceptSingleTransaction
        -> LimitMempoolSize, unless bypassed/package submission
   -> TransactionAddedToMempool notification
 ```
+
+## Dry-run acceptance and live submission
+
+Reviewed mempool RPC behavior adds two important user/service-facing surfaces:
+
+- `testmempoolaccept` can test whether raw transactions would pass local mempool checks without submitting them.
+- `sendrawtransaction` submits a signed raw transaction toward local acceptance and relay.
+
+This distinction matters for documentation safety. Dry-run examples and live submission examples should stay separate until both are tested locally.
 
 ## Normal add flow
 
@@ -121,7 +132,7 @@ AcceptPackage
                  -> Finalize each transaction
 ```
 
-This is still a first-pass map. Package policy needs deeper review before MoreBC2 makes service-provider recommendations.
+Reviewed mempool RPC behavior also includes experimental package submission. Package policy needs deeper review before MoreBC2 makes service-provider recommendations.
 
 ## Reorg repair flow
 
@@ -158,6 +169,20 @@ A re-added transaction may already have children in the mempool. Until parent an
 - Updating descendant and ancestor accounting.
 - Removing descendants that exceed ancestor limits.
 
+## Mempool inspection and persistence RPCs
+
+Reviewed mempool RPC behavior includes commands for:
+
+- Listing raw mempool entries.
+- Reading a single mempool entry.
+- Reading ancestors or descendants.
+- Checking whether supplied prevouts are spent by mempool transactions.
+- Reading mempool summary state.
+- Saving or importing mempool state.
+- Hidden orphan-transaction inspection.
+
+Mempool persistence and orphan/package commands should remain advanced documentation topics until tested and reviewed more deeply.
+
 ## Consistency and locking
 
 The source comments document two major guarantees:
@@ -172,29 +197,34 @@ Adding transactions and changing the chain tip require both locks until consiste
 - Public `AcceptToMemoryPool` wrappers and caller paths.
 - Replacement-policy helper functions.
 - Full package policy behavior.
-- Mempool persistence behavior.
 - Fee estimation interaction.
 - Functional tests for mempool acceptance.
+- Tested RPC examples for dry-run acceptance, live submission, and mempool inspection.
 
 ## Related pages
 
 - [Source atlas: mempool accept](../developers/source-atlas/mempool-accept.md)
 - [Source atlas: txmempool](../developers/source-atlas/txmempool.md)
 - [Mempool entry](../developers/source-atlas/mempool-entry.md)
+- [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
+- [Source atlas: raw transaction RPC](../developers/source-atlas/rpc-rawtransaction.md)
 - [Source atlas: validation.cpp](../developers/source-atlas/validation-cpp.md)
 - [Disconnected transactions](../developers/source-atlas/disconnected-transactions.md)
 - [Block validation flow](block-validation-flow.md)
+- [Life of a transaction](life-of-a-transaction.md)
+- [Life of a reorganization](life-of-a-reorg.md)
 - [Reorganizations](../encyclopedia/reorganizations.md)
 
 ## Sources
 
-- `src/validation.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/validation.cpp
-- `src/txmempool.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/txmempool.h
-- `src/txmempool.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/txmempool.cpp
-- `src/kernel/mempool_entry.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/kernel/mempool_entry.h
+- `src/validation.cpp`
+- `src/txmempool.h`
+- `src/txmempool.cpp`
+- `src/kernel/mempool_entry.h`
+- `src/rpc/mempool.cpp`
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a first-pass mempool architecture and transaction-acceptance map. It should be expanded after deeper review of public caller paths, replacement policy, and tests.
+**Notes:** This is a first-pass mempool architecture, transaction-acceptance, and mempool-RPC map. It should be expanded after deeper review of public caller paths, replacement policy, tests, and local RPC examples.
