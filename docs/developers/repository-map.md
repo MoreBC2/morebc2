@@ -30,6 +30,7 @@ This is not a full source audit. It is a navigation aid that should be expanded 
 | `src/rpc/mining.cpp` | Mining RPC, candidate template, block/header submission, mining status | E1 partial |
 | `src/rpc/blockchain.cpp` | Blockchain RPC, block lookup, pruning, UTXO scans, chainstate status | E1 partial |
 | `src/rpc/rawtransaction.cpp` | Raw transaction lookup, decode, unsigned construction, explicit-key signing, and PSBT RPCs | E1 partial |
+| `src/rpc/mempool.cpp` | Transaction broadcast, mempool acceptance testing, mempool inspection, persistence, orphan, and package RPCs | E1 partial |
 | `src/wallet/init.cpp` | Wallet options, parameter interaction, wallet loader construction | E1 partial |
 | `src/wallet/load.*` | Wallet verification, loading, start, flush, stop, unload | E1 partial |
 | `src/wallet/context.*` | Shared wallet context and wallet list state | E1 partial |
@@ -271,8 +272,30 @@ Questions:
 - Which raw transaction examples can be tested safely on regtest?
 - Which raw transaction commands belong in service docs?
 - Which PSBT workflows are safest for service integrations?
-- Where are transaction broadcast and mempool acceptance RPCs implemented?
 - How should txindex and pruned-node limitations be explained for services?
+
+### Mempool and broadcast RPC
+
+Reviewed or partially reviewed:
+
+- `src/rpc/mempool.cpp`
+
+Related MoreBC2 pages:
+
+- [Source atlas: mempool and transaction broadcast RPC](source-atlas/rpc-mempool.md)
+- [Source atlas: raw transaction RPC](source-atlas/rpc-rawtransaction.md)
+- [RPC overview](rpc-overview.md)
+- [Mempool flow](../architecture/mempool-flow.md)
+- [Life of a transaction](../architecture/life-of-a-transaction.md)
+- [Service integration checklist](../exchange/service-integration-checklist.md)
+
+Questions:
+
+- Which dry-run acceptance examples can be safely tested on regtest?
+- Which live broadcast examples should stay out of beginner docs?
+- Which mempool inspection commands belong in exchange/service docs?
+- How should package submission be documented while marked experimental?
+- Which mempool persistence warnings should be repeated in operator docs?
 
 ### Validation notifications
 
@@ -309,6 +332,7 @@ Related MoreBC2 pages:
 - [Life of a transaction](../architecture/life-of-a-transaction.md)
 - [Source atlas: mempool accept](source-atlas/mempool-accept.md)
 - [Source atlas: mempool source](source-atlas/txmempool.md)
+- [Source atlas: mempool and transaction broadcast RPC](source-atlas/rpc-mempool.md)
 
 Questions:
 
@@ -342,6 +366,7 @@ Reviewed or partially reviewed:
 - `src/rpc/mining.cpp`
 - `src/rpc/blockchain.cpp`
 - `src/rpc/rawtransaction.cpp`
+- `src/rpc/mempool.cpp`
 - `src/wallet/rpc/wallet.cpp`
 - `src/wallet/rpc/addresses.cpp`
 - `src/wallet/rpc/backup.cpp`
@@ -352,7 +377,7 @@ Reviewed or partially reviewed:
 
 Likely files/directories to review next:
 
-- mempool or transaction-broadcast RPC files
+- network RPC files
 - other `src/rpc/` files
 - `src/bitcoinII-cli.cpp`
 - remaining `src/wallet/` internals
