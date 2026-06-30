@@ -122,6 +122,44 @@ Still needed:
 - RPC examples tested against a local node.
 - Service-safe RPC command recommendations.
 
+### `src/wallet/`
+
+Currently reviewed or partially reviewed files:
+
+- `src/wallet/init.cpp`
+- `src/wallet/load.h`
+- `src/wallet/load.cpp`
+- `src/wallet/context.h`
+- `src/wallet/context.cpp`
+- startup-adjacent parts of `src/wallet/wallet.h`
+
+Known use from review:
+
+- Wallet option registration.
+- Wallet parameter interactions.
+- Runtime wallet-disable handling.
+- Wallet loader construction during node startup.
+- Wallet directory validation.
+- Wallet database verification before loading.
+- Wallet object creation and context registration.
+- Wallet start, flush, stop, and unload helpers.
+- Shared wallet context state.
+- Startup-adjacent wallet defaults and declarations.
+
+Related pages:
+
+- [Source atlas: wallet startup](source-atlas/wallet-startup.md)
+- [Wallet guide](../wallets/wallet-guide.md)
+- [Node startup](../architecture/node-startup.md)
+
+Still needed:
+
+- Wallet RPC files.
+- Wallet database internals.
+- Wallet transaction creation paths.
+- Backup and restore paths.
+- GUI wallet paths.
+
 ### `src/kernel/`
 
 Currently reviewed files:
@@ -239,7 +277,7 @@ These areas should be mapped later:
 - `src/net_processing.*`
 - `src/protocol.*`
 - other `src/rpc/` files
-- `src/wallet/`
+- other `src/wallet/` files
 - `src/qt/`
 - `test/`
 - `src/test/`
