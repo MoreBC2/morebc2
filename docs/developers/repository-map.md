@@ -37,6 +37,8 @@ This is not a full source audit. It is a navigation aid that should be expanded 
 | `src/wallet/rpc/addresses.cpp` | Address, change-address, label, grouping, and multisig wallet RPCs | E1 partial |
 | `src/wallet/rpc/backup.cpp` | Wallet backup, restore, import, descriptor import, export, and rescan-related RPCs | E1 partial |
 | `src/wallet/rpc/spend.cpp` | Wallet send, funding, fee setting, fee bumping, signing, and PSBT RPCs | E1 partial |
+| `src/wallet/rpc/encrypt.cpp` | Wallet timed access, relock, access-phrase update, and first-time encryption RPCs | E1 partial |
+| `src/wallet/rpc/coins.cpp` | Received amount, balance, output-state, and available-output RPCs | E1 partial |
 | `src/txmempool.cpp` | Mempool storage, removal, expiry, prioritization, checking | E1 partial |
 | `src/txmempool.h` | Mempool structure, indexes, ancestor/descendant tracking | E1 partial |
 | `src/kernel/mempool_entry.h` | Mempool entry metadata and lockpoint data | E1 |
@@ -139,12 +141,16 @@ Reviewed or partially reviewed:
 - `src/wallet/rpc/addresses.cpp`
 - `src/wallet/rpc/backup.cpp`
 - `src/wallet/rpc/spend.cpp`
+- `src/wallet/rpc/encrypt.cpp`
+- `src/wallet/rpc/coins.cpp`
 
 Related MoreBC2 pages:
 
 - [Source atlas: wallet RPC](source-atlas/wallet-rpc.md)
 - [Source atlas: wallet backup/import RPC](source-atlas/wallet-backup-import-rpc.md)
 - [Source atlas: wallet spend and PSBT RPC](source-atlas/wallet-spend-rpc.md)
+- [Source atlas: wallet encryption RPC](source-atlas/wallet-encryption-rpc.md)
+- [Source atlas: wallet coins and balances RPC](source-atlas/wallet-coins-rpc.md)
 - [Source atlas: wallet startup](source-atlas/wallet-startup.md)
 - [Wallet guide](../wallets/wallet-guide.md)
 - [RPC overview](rpc-overview.md)
@@ -153,9 +159,10 @@ Related MoreBC2 pages:
 Questions:
 
 - Which wallet RPC examples can be safely tested locally?
-- Which address and status commands belong in service docs?
+- Which address, balance, and status commands belong in service docs?
 - Which recovery commands need separate advanced pages?
 - Which wallet send and PSBT workflows need separate advanced pages?
+- Which wallet access-state workflows need separate advanced pages?
 - Which descriptor-vs-legacy behaviors need user-facing explanation?
 - Which build flags affect wallet RPC availability?
 
@@ -312,6 +319,8 @@ Reviewed or partially reviewed:
 - `src/wallet/rpc/addresses.cpp`
 - `src/wallet/rpc/backup.cpp`
 - `src/wallet/rpc/spend.cpp`
+- `src/wallet/rpc/encrypt.cpp`
+- `src/wallet/rpc/coins.cpp`
 
 Likely files/directories to review next:
 
@@ -338,6 +347,8 @@ Reviewed or partially reviewed:
 - `src/wallet/rpc/addresses.cpp`
 - `src/wallet/rpc/backup.cpp`
 - `src/wallet/rpc/spend.cpp`
+- `src/wallet/rpc/encrypt.cpp`
+- `src/wallet/rpc/coins.cpp`
 
 Likely files/directories to review next:
 
