@@ -2,7 +2,7 @@
 
 **Category:** Architecture
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Summary
 
@@ -14,12 +14,13 @@ It is an explainer page, not a complete source audit. Technical claims should re
 
 ```text
 Wallet / caller
-  -> creates transaction
+  -> creates or prepares transaction
+  -> optional dry-run acceptance check
   -> broadcasts transaction
   -> mempool acceptance
   -> local mempool storage
   -> relay to peers
-  -> miner/block assembler selects transaction
+  -> candidate block assembler selects transaction
   -> transaction appears in a block
   -> block is accepted and connected
   -> transaction becomes confirmed
@@ -30,9 +31,25 @@ Wallet / caller
 
 A wallet or external caller creates a transaction that spends one or more previous outputs and creates new outputs.
 
-MoreBC2 has not yet audited wallet internals, so this page does not document wallet transaction construction in detail.
+Reviewed paths now include:
 
-## Step 2: Broadcast path
+- Wallet spend and PSBT RPCs for wallet-backed construction, funding, signing, and sending.
+- Raw transaction RPCs for non-wallet transaction creation, decoding, explicit-key signing, and PSBT workflows.
+
+MoreBC2 has reviewed major wallet and raw transaction RPC surfaces, but lower-level wallet internals and GUI transaction construction still need deeper source review.
+
+## Step 2: Optional dry-run acceptance check
+
+Reviewed mempool RPC behavior includes `testmempoolaccept`, which tests whether one or more raw transactions would be accepted by local mempool rules without submitting them.
+
+This is useful for future service documentation, but examples remain untested.
+
+Important distinction:
+
+- `testmempoolaccept` is a dry-run acceptance check.
+- `sendrawtransaction` is a live broadcast path.
+
+## Step 3: Broadcast path
 
 The reviewed `node::BroadcastTransaction` path can be called by RPC or wallet code.
 
@@ -46,7 +63,9 @@ Reviewed behavior includes:
 - Optionally waiting for validation-interface callbacks.
 - Relaying the transaction through peer manager when relay is requested.
 
-## Step 3: Mempool acceptance
+Reviewed mempool RPC behavior also covers `sendrawtransaction`, package submission, and mempool inspection commands.
+
+## Step 4: Mempool acceptance
 
 Mempool acceptance is handled through the reviewed `MemPoolAccept` path.
 
@@ -69,7 +88,7 @@ Important distinction:
 
 A transaction may be consensus-valid but still rejected from the mempool for policy reasons.
 
-## Step 4: Mempool storage
+## Step 5: Mempool storage
 
 If accepted, the transaction is stored in `CTxMemPool`.
 
@@ -83,22 +102,25 @@ The mempool tracks:
 - Lock points.
 - Sigop cost.
 - Memory usage.
+- Unbroadcast state where applicable.
 
-These structures let the node relay, sort, evict, and later remove transactions efficiently.
+These structures let the node relay, sort, evict, inspect, and later remove transactions efficiently.
 
-## Step 5: Relay
+Reviewed RPC commands expose parts of this state through `getrawmempool`, `getmempoolentry`, `getmempoolancestors`, `getmempooldescendants`, `gettxspendingprevout`, and `getmempoolinfo`.
+
+## Step 6: Relay
 
 The reviewed broadcast path relays through peer manager when relay is requested.
 
 MoreBC2 has not yet audited the full P2P relay path, so this page does not document peer announcement, inventory, or compact-block behavior in detail.
 
-## Step 6: Mining and block inclusion
+## Step 7: Mining and block inclusion
 
-A miner or block assembler may select transactions from the mempool for inclusion in a candidate block.
+A candidate block assembler may select transactions from the mempool for inclusion in a candidate block.
 
-MoreBC2 has not yet audited mining/block-template source in detail. The mempool source does show fee and ancestor/descendant accounting that are relevant to mining selection, but exact block-template behavior remains a future review task.
+MoreBC2 has reviewed first-pass candidate-template assembly and mining RPC paths. The reviewed template path uses mempool package selection and fee/ancestor/descendant data, but external mining software and live pool behavior remain separate ecosystem questions.
 
-## Step 7: Block acceptance
+## Step 8: Block acceptance
 
 Once a transaction appears in a block, the block follows the reviewed block lifecycle:
 
@@ -111,15 +133,17 @@ ProcessNewBlock
   -> ConnectBlock
 ```
 
-During `ConnectBlock`, transaction inputs are checked against the UTXO set, scripts are checked when required, fees are accumulated, and the coinbase payout is checked against fees plus subsidy.
+During `ConnectBlock`, transaction inputs are checked against the UTXO set, input verification checks run when required, fees are accumulated, and the coinbase payout is checked against fees plus subsidy.
 
-## Step 8: Confirmation
+## Step 9: Confirmation
 
 When the block containing the transaction becomes part of the active best chain, the transaction becomes confirmed.
 
 Additional blocks built on top of that block increase the transaction's confirmation depth.
 
-## Step 9: Reorg behavior
+Wallet transaction-history RPCs such as `listsinceblock` and `gettransaction` can surface confirmation and reorg-related wallet history, but service examples still need local testing.
+
+## Step 10: Reorg behavior
 
 During a reorganization, a confirmed transaction can become unconfirmed again if its block is disconnected from the active chain.
 
@@ -132,12 +156,11 @@ Reviewed reorg behavior includes:
 
 ## What is not fully reviewed yet
 
-- Wallet transaction construction.
+- Lower-level wallet transaction construction internals.
 - P2P transaction relay internals.
-- Mining/block-template transaction selection.
 - Fee estimation.
 - Replacement policy in full detail.
-- RPC transaction submission paths beyond reviewed broadcast notes.
+- Tested service-safe examples for transaction lookup, dry-run checks, and broadcast.
 
 ## Related pages
 
@@ -145,12 +168,17 @@ Reviewed reorg behavior includes:
 - [Block validation flow](block-validation-flow.md)
 - [Life of a block](life-of-a-block.md)
 - [Life of a reorganization](life-of-a-reorg.md)
+- [Source atlas: wallet spend and PSBT RPC](../developers/source-atlas/wallet-spend-rpc.md)
+- [Source atlas: wallet transaction history RPC](../developers/source-atlas/wallet-transactions-rpc.md)
+- [Source atlas: raw transaction RPC](../developers/source-atlas/rpc-rawtransaction.md)
+- [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
 - [Source atlas: mempool accept](../developers/source-atlas/mempool-accept.md)
 - [Source atlas: txmempool](../developers/source-atlas/txmempool.md)
+- [Source atlas: block template assembly](../developers/source-atlas/miner.md)
 - [Source atlas: block lifecycle](../developers/source-atlas/block-acceptance.md)
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This explainer page is built from reviewed mempool, transaction acceptance, block acceptance, and reorg notes. Wallet, P2P relay, and mining selection still need deeper source review.
+**Notes:** This explainer is built from reviewed wallet RPC, raw transaction RPC, mempool RPC, mempool acceptance, transaction acceptance, block-template, block acceptance, and reorg notes. Lower-level wallet internals, P2P relay, fee estimation, and tested service examples still need deeper review.
