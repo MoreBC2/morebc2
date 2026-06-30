@@ -54,7 +54,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | `src/kernel/mempool_entry.h` | Reviewed | First-pass entry metadata review exists. |
 | `src/kernel/disconnected_transactions.*` | Reviewed | First-pass disconnected transaction pool review exists. |
 | `src/primitives/block.*` | Partial | Block hash path reviewed; broader primitive review pending. |
-| `src/hash.h` | Partial | Double-SHA256 path reviewed; broader hash utility review pending. |
+| `src/hash.h` | Partial | Double-SHA256 hashing behavior reviewed. Broader hash utility review pending. |
 | `src/consensus/amount.h` | Partial | COIN/MAX_MONEY documented; broader consensus files pending. |
 | Mining/block template | Not started | Needed for mining flow and mempool selection details. |
 | Wallet internals | Not started | Needed for wallet flow. |
@@ -99,25 +99,27 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 | Area | Status | Notes |
 |---|---|---|
-| Developer README | Partial | Links reading order, verification workflow, source review guide, and source atlas. |
-| Repository map | Partial | Needs latest reviewed storage and notification files added. |
-| Source tree guide | Partial | Needs latest reviewed storage and notification files added. |
-| Developer reading order | Framework | Created as contributor navigation path; should be updated as sections move. |
+| Developer README | Partial | Links reading order, verification workflow, source review guide, source atlas, local development, build, testing, and release verification. |
+| Repository map | Partial | Refreshed for storage and notification files. |
+| Source tree guide | Partial | Refreshed for storage and notification files. |
+| Developer reading order | Framework | Updated to include current Source Atlas and developer workflow paths. |
 | Source review guide | Framework | Created as contributor workflow; should be tested on future source reviews. |
 | Verification standards | Framework | Practical workflow page exists; evidence scale remains the root confidence model. |
+| Local development environment | Framework | Defines safe test-record workflow; commands still need actual testing. |
+| Release verification guide | Framework | Defines release artifact verification standard; specific releases still need checks. |
 | Developer glossary | Framework | Developer-facing glossary framework exists under Encyclopedia. |
 | Root glossary | Partial | Short general glossary exists; can be expanded and cross-linked. |
 
 ## Current priority order
 
-1. Repository map refresh for storage and notification files.
-2. Source tree guide refresh for storage and notification files.
-3. Life of a block / reorg cleanup for storage and notifications.
-4. Local development environment guide.
-5. Release verification guide.
-6. Glossary expansion and cross-linking.
-7. Mining/block-template source review.
-8. Wallet source review.
+1. Glossary expansion and cross-linking.
+2. Build system source review.
+3. Test tree source review.
+4. Mining/block-template source review.
+5. Wallet source review.
+6. RPC source review.
+7. Release artifact verification pass.
+8. Explorer/API documentation framework.
 
 ## Verification
 
