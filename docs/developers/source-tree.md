@@ -135,6 +135,7 @@ Currently reviewed or partially reviewed files:
 - `src/wallet/rpc/addresses.cpp`
 - `src/wallet/rpc/backup.cpp`
 - `src/wallet/rpc/spend.cpp`
+- `src/wallet/rpc/encrypt.cpp`
 
 Known use from review:
 
@@ -155,8 +156,9 @@ Known use from review:
 - Wallet backup and restore RPCs.
 - Legacy and descriptor import RPCs.
 - Wallet export and rescan-adjacent recovery RPCs.
-- Direct spend and fee-setting RPCs.
+- Wallet send and fee-setting RPCs.
 - Funding, fee bumping, signing, and PSBT RPCs.
+- Wallet lock-state, timed unlock, credential update, and first-time encryption RPCs.
 
 Related pages:
 
@@ -164,6 +166,7 @@ Related pages:
 - [Source atlas: wallet RPC](source-atlas/wallet-rpc.md)
 - [Source atlas: wallet backup/import RPC](source-atlas/wallet-backup-import-rpc.md)
 - [Source atlas: wallet spend and PSBT RPC](source-atlas/wallet-spend-rpc.md)
+- [Source atlas: wallet encryption RPC](source-atlas/wallet-encryption-rpc.md)
 - [Wallet guide](../wallets/wallet-guide.md)
 - [RPC overview](rpc-overview.md)
 - [Node startup](../architecture/node-startup.md)
