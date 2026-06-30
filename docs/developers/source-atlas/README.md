@@ -15,6 +15,7 @@ Each page should explain one important source file in plain language, link it to
 - [chainparams.cpp](chainparams-cpp.md)
 - [pow.cpp](pow-cpp.md)
 - [validation.cpp](validation-cpp.md)
+- [mempool accept](mempool-accept.md)
 - [mempool source](txmempool.md)
 - [mempool entry](mempool-entry.md)
 - [disconnected transactions](disconnected-transactions.md)
