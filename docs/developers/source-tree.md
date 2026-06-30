@@ -91,6 +91,7 @@ Currently reviewed or partially reviewed files:
 
 - `src/rpc/mining.cpp`
 - `src/rpc/blockchain.cpp`
+- `src/rpc/rawtransaction.cpp`
 
 Known use from review:
 
@@ -104,18 +105,22 @@ Known use from review:
 - Pruning and block-data RPCs.
 - UTXO set and descriptor scan RPCs.
 - Chainstate and deployment status RPCs.
+- Raw transaction lookup and decoding RPCs.
+- Unsigned transaction construction RPCs.
+- Explicit-key signing RPCs.
+- PSBT creation, update, joining, finalization, and analysis RPCs.
 
 Related pages:
 
 - [Source atlas: mining RPC](source-atlas/rpc-mining.md)
 - [Source atlas: blockchain RPC](source-atlas/rpc-blockchain.md)
+- [Source atlas: raw transaction RPC](source-atlas/rpc-rawtransaction.md)
 - [Source atlas: block template assembly](source-atlas/miner.md)
 - [Mining overview](../mining/mining-overview.md)
 - [RPC overview](rpc-overview.md)
 
 Still needed:
 
-- Raw transaction RPC files.
 - Mempool RPC files.
 - Network RPC files.
 - Remaining RPC examples tested against a local node.
