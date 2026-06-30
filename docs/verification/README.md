@@ -16,6 +16,7 @@ Verification pages should help MoreBC2 keep uncertainty visible instead of hidin
 
 - [Open questions backlog](open-questions.md)
 - [Known unknowns](known-unknowns.md)
+- [Command testing status](command-testing.md)
 - [Documentation coverage](../documentation-coverage.md)
 
 ## How to use this queue
@@ -26,6 +27,8 @@ Verification pages should help MoreBC2 keep uncertainty visible instead of hidin
 4. Decide whether it blocks private review, public launch, or only future polish.
 5. Move verified results into the correct documentation page.
 6. Leave a note explaining what changed.
+
+For command examples, also add or update a record in [Command testing status](command-testing.md).
 
 ## Open verification items
 
@@ -89,6 +92,14 @@ Verification pages should help MoreBC2 keep uncertainty visible instead of hidin
 
 **Status:** Needs Review
 
+### Command test records
+
+**Question:** Which command examples have local test records?
+
+**Needed source:** Local command records with environment details.
+
+**Status:** Needs Review
+
 ## Rules
 
 - Do not move an item out of verification until the evidence is strong enough for the target page.
@@ -107,4 +118,4 @@ Items in this queue should not be treated as verified documentation until moved 
 
 **Status:** Draft
 **Primary sources checked:** Current verification section structure
-**Notes:** This section README tracks verification workflow and priority unknowns. It does not verify BitcoinII protocol behavior.
+**Notes:** This section README tracks verification workflow, command-test tracking, and priority unknowns. It does not verify BitcoinII protocol behavior.
