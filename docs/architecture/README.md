@@ -13,11 +13,16 @@ Architecture pages should stay conservative. If a relationship has not been veri
 ## Current pages
 
 - [Architecture overview](architecture-overview.md)
+- [Life of a transaction](life-of-a-transaction.md)
+- [Life of a block](life-of-a-block.md)
+- [Life of a reorganization](life-of-a-reorg.md)
 - [Block validation flow](block-validation-flow.md)
 - [Mempool flow](mempool-flow.md)
 
 ## Planned pages
 
+- Node startup
+- Consensus model
 - Network stack
 - Node lifecycle
 - Data flow
