@@ -110,6 +110,10 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Nodes README | Partial | Normalized for current node/source-review anchors and operator-safety rules. |
 | Mining overview | Partial | Consensus-level mining, candidate-template assembly, and mining RPC paths have first-pass source review. Live software/pool data pending. |
 | Mining README | Partial | Normalized for current mining source-review anchors and live-ecosystem caution. |
+| Research README | Partial | Normalized for research-vs-documentation boundaries. |
+| Discussion README | Partial | Normalized for proposal/status labeling and discussion boundaries. |
+| History README | Partial | Normalized for dated-source and archive/current-status separation. |
+| Verification README | Partial | Normalized for verification workflow and priority unknowns. |
 | Configuration overview | Partial | Based on generated config/source; local testing pending. |
 | RPC overview | Partial | Mining, blockchain, raw transaction, mempool, and wallet RPC groups have source review. Examples still untested. |
 | RPC configuration | Partial | Needs tested command examples. |
@@ -136,7 +140,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. Continue section README normalization: research, discussion, history, verification, and any remaining thin indexes.
+1. Continue section README normalization for remaining thin indexes.
 2. Open-question consolidation pass.
 3. Cross-link and terminology pass across architecture and Source Atlas pages.
 4. Release artifact verification pass.
