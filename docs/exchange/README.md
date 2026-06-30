@@ -1,55 +1,79 @@
 # Exchange integration
 
+**Category:** Documentation
+**Status:** Draft
+**Last reviewed:** 2026-06-30
+
+## Summary
+
 This section is for centralized exchanges, swap services, wallets, explorers, payment processors, and other infrastructure providers that want to integrate BitcoinII (BC2).
 
-## Goal
+The goal is to create a clear integration package that reduces back-and-forth and helps service providers quickly find the technical information they need.
 
-Create a clear integration package that reduces back-and-forth and helps service providers quickly find the technical information they need.
+This section is still a framework. It should not be sent as final exchange documentation until release verification, confirmation policy, technical contact process, current service status, and RPC examples are reviewed.
 
-## Current drafts
+## Current pages
 
 - [Exchange integration package](integration-package.md)
 - [Exchange operator guide](operator-guide.md)
 - [Deposit monitoring](deposit-monitoring.md)
 - [Service integration checklist](service-integration-checklist.md)
 
-## Related pages
+## Source-backed anchors
 
 - [Network specifications](../documentation/network-specifications.md)
 - [Consensus overview](../documentation/consensus-overview.md)
 - [RPC overview](../developers/rpc-overview.md)
 - [RPC configuration](../configuration/rpc-configuration.md)
 - [Node configuration](../configuration/node-configuration.md)
-- [Release process guide](../developers/release-process.md)
+- [Source atlas: blockchain RPC](../developers/source-atlas/rpc-blockchain.md)
+- [Source atlas: raw transaction RPC](../developers/source-atlas/rpc-rawtransaction.md)
+- [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
+- [Source atlas: wallet RPC](../developers/source-atlas/wallet-rpc.md)
 - [Confirmations](../encyclopedia/confirmations.md)
 - [Reorganizations](../encyclopedia/reorganizations.md)
-- [Known unknowns](../verification/known-unknowns.md)
 
 ## Draft checklist
 
-- Project name: BitcoinII
-- Ticker: BC2
-- Official website
-- Official repositories
-- Current wallet release
-- Source code
-- License
-- Network parameters
-- Block explorer links
-- RPC documentation
-- Deposit confirmation recommendation
-- Withdrawal confirmation recommendation
-- Daemon setup notes
-- Wallet backup notes
-- Branding assets
-- Technical contact process
-- Known exchanges and services
-- Integration test procedure
+- Project name: BitcoinII.
+- Ticker: BC2.
+- Official website.
+- Official repositories.
+- Current wallet release.
+- Source code.
+- License.
+- Network parameters.
+- Block explorer links.
+- RPC documentation.
+- Deposit confirmation recommendation.
+- Withdrawal confirmation recommendation.
+- Daemon setup notes.
+- Wallet backup notes.
+- Branding assets.
+- Technical contact process.
+- Known exchanges and services.
+- Integration test procedure.
 
-## Verification status
+## Rules
+
+- Do not recommend confirmation counts until a policy is source-backed or clearly labeled as a draft risk model.
+- Do not list a service as active without direct current checking.
+- Do not present untested RPC commands as production instructions.
+- Clearly separate read-only RPC commands from wallet-moving, broadcast, import/export, private-key, and passphrase commands.
+- Do not recommend exposing RPC publicly.
+- Keep release-verification status visible.
+- Keep technical-contact status visible until confirmed from official or maintainer sources.
+
+## Related pages
+
+- [Known unknowns](../verification/known-unknowns.md)
+- [Open questions backlog](../verification/open-questions.md)
+- [Documentation coverage](../documentation-coverage.md)
+- [Documentation polish plan](../POLISH_PLAN.md)
+- [Ecosystem index](../ecosystem/README.md)
+
+## Verification
 
 **Status:** Draft
-**Last reviewed:** 2026-06-29
-**Primary sources:** Partial
-
-This section has source-backed anchors, but it is still a framework. It should not be sent as final exchange documentation until release verification, confirmations, contact process, and RPC examples are reviewed.
+**Primary sources checked:** Partially
+**Notes:** This section has source-backed anchors, but it remains a framework. Release verification, confirmation policy, contact process, direct ecosystem checks, and tested RPC examples are still required before final service-provider use.
