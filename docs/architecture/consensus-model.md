@@ -56,6 +56,8 @@ Reviewed examples include:
 - Difficulty retarget checks.
 - Block merkle root checks.
 - Coinbase placement rules.
+- Context-independent transaction checks.
+- Transaction finality and sequence-lock helpers.
 - Transaction input checks during block connection.
 - Coinbase payout not exceeding subsidy plus fees.
 - UTXO updates during block connection.
@@ -99,6 +101,37 @@ Reviewed block-level validation includes:
 
 A block must pass both structural checks and contextual checks before it can safely move toward active-chain connection.
 
+## Transaction consensus layers
+
+Reviewed transaction consensus helpers are split into two broad groups.
+
+### Context-independent transaction checks
+
+`CheckTransaction` checks transaction shape without depending on chain or mempool state.
+
+Reviewed checks include:
+
+- Non-empty inputs and outputs.
+- Size limit against maximum block weight.
+- Output value ranges.
+- Total output value range.
+- Duplicate input rejection.
+- Coinbase scriptSig length.
+- Null previous-output rejection for non-coinbase transactions.
+
+### Context-dependent transaction checks
+
+`tx_verify` helpers cover finality, sequence locks, operation-count accounting, and UTXO-input checks.
+
+Reviewed checks include:
+
+- `IsFinalTx` locktime behavior.
+- BIP68-style sequence-lock calculation and evaluation.
+- Operation-cost accounting helpers.
+- `Consensus::CheckTxInputs` input availability, coinbase maturity, input value ranges, input/output value comparison, and fee calculation.
+
+The transaction consensus review still does not cover script interpreter internals.
+
 ## Transaction consensus inside blocks
 
 The reviewed `ConnectBlock` path checks transaction effects against the UTXO view.
@@ -109,7 +142,7 @@ Reviewed behavior includes:
 - Money range and fee checks.
 - Sequence-lock checks.
 - Script checks when enabled.
-- Sigop cost accounting.
+- Operation-count accounting.
 - Undo data creation.
 - Updating the coins view.
 - Checking that the coinbase output value does not exceed fees plus subsidy.
@@ -171,14 +204,13 @@ Do not treat the presence of a parameter in source as a complete deployment-stat
 
 ## What is not fully reviewed yet
 
-- `consensus/tx_check.*`
-- `consensus/tx_verify.*`
 - Script interpreter internals.
 - Full mandatory vs policy script-flag separation.
 - Deployment state transitions in depth.
 - Full checkpoint behavior beyond current reviewed notes.
 - Full block storage and pruning behavior.
 - Release-branch matching against documented `main` source values.
+- Upstream comparison for transaction consensus helpers.
 
 ## Related pages
 
@@ -191,6 +223,7 @@ Do not treat the presence of a parameter in source as a complete deployment-stat
 - [Life of a reorganization](life-of-a-reorg.md)
 - [Mempool flow](mempool-flow.md)
 - [Source atlas: pow.cpp](../developers/source-atlas/pow-cpp.md)
+- [Source atlas: transaction consensus files](../developers/source-atlas/transaction-consensus.md)
 - [Source atlas: validation.cpp](../developers/source-atlas/validation-cpp.md)
 - [Source atlas: block lifecycle](../developers/source-atlas/block-acceptance.md)
 
@@ -198,4 +231,4 @@ Do not treat the presence of a parameter in source as a complete deployment-stat
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This page summarizes reviewed consensus-adjacent material from chain parameters, proof-of-work, validation, block connection, and reorg documentation. It is not a complete consensus specification and should be expanded after transaction consensus and script-source review.
+**Notes:** This page summarizes reviewed consensus-adjacent material from chain parameters, proof-of-work, transaction consensus helpers, validation, block connection, and reorg documentation. It is not a complete consensus specification and should be expanded after script-source review.
