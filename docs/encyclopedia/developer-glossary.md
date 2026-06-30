@@ -86,6 +86,15 @@ Related:
 
 - [Source atlas: block storage](../developers/source-atlas/block-storage.md)
 
+## BroadcastTransaction
+
+A node-level broadcast path that can submit a transaction toward mempool processing and, when relay is requested, toward peers.
+
+Related:
+
+- [Life of a transaction](../architecture/life-of-a-transaction.md)
+- [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
+
 ## Chainstate
 
 The node's current view of the active chain and spendable coin state.
@@ -166,6 +175,14 @@ Related:
 
 - [Mempool flow](../architecture/mempool-flow.md)
 
+## Descriptor-assisted PSBT processing
+
+A PSBT workflow where descriptor information helps update, sign, or finalize transaction data.
+
+Related:
+
+- [Source atlas: raw transaction RPC](../developers/source-atlas/rpc-rawtransaction.md)
+
 ## Difficulty target
 
 The threshold a block hash must be below to satisfy proof-of-work.
@@ -193,6 +210,14 @@ Related:
 
 - [Source atlas: disconnected transactions](../developers/source-atlas/disconnected-transactions.md)
 
+## Dry-run acceptance
+
+A local acceptance check that reports whether transactions would pass mempool checks without submitting them for relay.
+
+Related:
+
+- [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
+
 ## Finality
 
 Whether a transaction is valid for inclusion at a particular block height or time under locktime rules.
@@ -216,6 +241,14 @@ The last common block shared by the current active chain and a competing branch 
 ## LockPoints
 
 Mempool metadata used to track sequence-lock validity for a transaction.
+
+Related:
+
+- [Source atlas: mempool entry](../developers/source-atlas/mempool-entry.md)
+
+## Mempool entry
+
+The node's stored metadata for one transaction in the mempool, including data used for fee, size, ancestor, descendant, and relay decisions.
 
 Related:
 
@@ -251,10 +284,20 @@ Mempool acceptance of multiple related transactions together rather than one ind
 Related:
 
 - [Source atlas: mempool accept](../developers/source-atlas/mempool-accept.md)
+- [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
 
 ## Policy rule
 
 A local rule that affects mempool acceptance, relay, mining selection, or standardness without necessarily making a transaction consensus-invalid in a block.
+
+## PSBT
+
+Partially Signed Bitcoin Transaction. A coordination format for transaction construction workflows.
+
+Related:
+
+- [Source atlas: raw transaction RPC](../developers/source-atlas/rpc-rawtransaction.md)
+- [Source atlas: wallet spend and PSBT RPC](../developers/source-atlas/wallet-spend-rpc.md)
 
 ## Pruning
 
@@ -263,6 +306,14 @@ Deleting old block data from disk while preserving enough validated state for no
 Related:
 
 - [Source atlas: block storage](../developers/source-atlas/block-storage.md)
+
+## Raw transaction RPC
+
+RPC commands for non-wallet transaction lookup, decoding, unsigned construction, explicit-key signing, and PSBT processing.
+
+Related:
+
+- [Source atlas: raw transaction RPC](../developers/source-atlas/rpc-rawtransaction.md)
 
 ## Reindex
 
@@ -313,6 +364,14 @@ The current end block of a chain branch.
 
 The active tip is the tip of the active chain.
 
+## Transaction broadcast RPC
+
+RPC behavior for submitting a signed raw transaction toward local acceptance and relay.
+
+Related:
+
+- [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
+
 ## Undo data
 
 Data stored so a node can return the UTXO view to an earlier state during a reorganization.
@@ -337,6 +396,7 @@ A locally accepted transaction that the node tracks for relay until it is believ
 Related:
 
 - [Life of a transaction](../architecture/life-of-a-transaction.md)
+- [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
 
 ## UTXO set
 
@@ -351,6 +411,14 @@ A callback system used to notify other components about validation events such a
 Related:
 
 - [Source atlas: validation interface](../developers/source-atlas/validation-interface.md)
+
+## Wallet transaction history RPC
+
+Wallet RPC behavior for listing wallet transactions, polling since a block, reading one wallet transaction, abandon behavior, and rescans.
+
+Related:
+
+- [Source atlas: wallet transaction history RPC](../developers/source-atlas/wallet-transactions-rpc.md)
 
 ## Verification
 
