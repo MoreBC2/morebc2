@@ -65,7 +65,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | `src/wallet/rpc/spend.cpp` | Partial | First-pass wallet send, funding, fee setting, fee bumping, signing, and PSBT review exists. Commands untested. |
 | `src/wallet/rpc/encrypt.cpp` | Partial | First-pass wallet timed unlock, relock, credential update, and first-time encryption review exists. Commands untested. |
 | `src/wallet/rpc/coins.cpp` | Partial | First-pass received amount, balance, output locking, and listunspent review exists. Commands untested. |
-| `src/wallet/rpc/transactions.cpp` | Partial | First-pass wallet transaction listing, listsinceblock, gettransaction, abandon, rescan, and abort-rescan review exists. Commands untested. |
+| `src/wallet/rpc/transactions.cpp` | Partial | First-pass wallet transaction listing, listsinceblock, gettransaction, abandon, and rescan-related review exists. Commands untested. |
 | Block lifecycle path | Reviewed | Consolidated source-atlas lifecycle page exists. |
 | `src/txmempool.*` | Partial | Core mempool structure and many functions reviewed. Policy details pending. |
 | `src/kernel/mempool_entry.h` | Reviewed | First-pass entry metadata review exists. |
@@ -111,11 +111,11 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 | Area | Status | Notes |
 |---|---|---|
-| Wallet guide | Partial | First-pass wallet startup, wallet RPC, backup/import, spend/PSBT, encryption, coins/balances, transaction-history, address, and source-observed defaults added. Release verification, platform steps, and command testing pending. |
+| Wallet guide | Partial | Command testing status added for wallet RPC examples; platform/release/local testing pending. |
 | Wallets README | Partial | Normalized for current wallet source-review anchors and command-safety rules. |
-| Node guide | Framework | Needs tested commands and current config checks. |
+| Node guide | Partial | Command testing status added for node command examples; platform/release/local testing pending. |
 | Nodes README | Partial | Normalized for current node/source-review anchors and operator-safety rules. |
-| Mining overview | Partial | Consensus-level mining, candidate-template assembly, and mining RPC paths have first-pass source review. Live software/pool data pending. |
+| Mining overview | Partial | Command testing status added for mining RPC examples; live software/pool data pending. |
 | Mining README | Partial | Normalized for current mining source-review anchors and live-ecosystem caution. |
 | Research README | Partial | Normalized for research-vs-documentation boundaries. |
 | Discussion README | Partial | Normalized for proposal/status labeling and discussion boundaries. |
@@ -124,9 +124,9 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Known unknowns | Partial | Refreshed as short executive list linked to full backlog. |
 | Open questions backlog | Partial | Consolidated with priority labels, evidence needs, and public/private review blockers. |
 | Command testing status | Framework | Added command-test tracker, status labels, untested inventory, and test-record template. |
-| Configuration overview | Partial | Based on generated config/source; local testing pending. |
+| Configuration overview | Partial | Command/config testing status added; platform examples and startup commands pending. |
 | RPC overview | Partial | Mining, blockchain, raw transaction, mempool, and wallet RPC groups have source review. Untested examples now link to command-test tracker. |
-| RPC configuration | Partial | Needs tested command examples. |
+| RPC configuration | Partial | Command/config testing status added; auth/setup examples still need testing. |
 
 ## Developer onboarding coverage
 
@@ -150,12 +150,11 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. Continue untested-command labeling pass in node, wallet, mining, and configuration pages.
-2. Release artifact verification pass.
-3. Explorer/API documentation framework.
-4. Build/test command smoke-test record.
-5. Network RPC or P2P source review.
-6. Glossary cross-linking during future page updates.
+1. Release artifact verification pass.
+2. Explorer/API documentation framework.
+3. Build/test command smoke-test record.
+4. Network RPC or P2P source review.
+5. Glossary cross-linking during future page updates.
 
 ## Verification
 
