@@ -10,23 +10,25 @@ MoreBC2 is not intended to replace the official BitcoinII website, repositories,
 
 Preserve, organize, and expand publicly verifiable knowledge about the BitcoinII ecosystem.
 
-## Content model
+## Current status
 
-MoreBC2 separates information into clearly labeled categories:
+This repository is in private foundation-building mode.
 
-- **Documentation** — how BitcoinII works today, based on current source code, releases, and official project resources.
-- **News** — factual updates about things that happened.
-- **Research** — technical explainers, comparisons, and analysis that may be relevant to BitcoinII but are not necessarily implemented.
-- **Discussion** — community ideas, proposals, and opinions.
-- **History** — past events, milestones, and archived context.
+Start here if you are reviewing the project structure:
 
-## Core editorial rule
+- [Project status](PROJECT_STATUS.md)
+- [Repository audit](docs/AUDIT.md)
+- [Documentation coverage](docs/documentation-coverage.md)
+- [Roadmap](ROADMAP.md)
 
-Document reality. Explore possibilities. Clearly separate the two.
+## Start reading
 
-For example, if a difficulty adjustment algorithm such as Dark Gravity Wave is discussed by community members but is not implemented in BitcoinII, it belongs in Research or Discussion, not Documentation.
+- [Docs index](docs/README.md)
+- [Architecture](docs/architecture/README.md)
+- [Source atlas](docs/developers/source-atlas/README.md)
+- [Verification queue](docs/verification/README.md)
 
-## Start here
+## Contributor and editorial docs
 
 - [Founding principles](FOUNDING_PRINCIPLES.md)
 - [Documentation philosophy](DOCUMENTATION_PHILOSOPHY.md)
@@ -39,26 +41,48 @@ For example, if a difficulty adjustment algorithm such as Dark Gravity Wave is d
 - [Documentation taxonomy](DOCUMENTATION_TAXONOMY.md)
 - [Glossary](GLOSSARY.md)
 - [Governance](GOVERNANCE.md)
-- [Roadmap](ROADMAP.md)
-- [Docs index](docs/README.md)
-- [Verification queue](docs/verification/README.md)
+
+## Content model
+
+MoreBC2 separates information into clearly labeled categories:
+
+- **Documentation** — how BitcoinII works today, based on current source code, releases, and official project resources.
+- **Architecture** — source-backed conceptual explanations of how BitcoinII Core components and flows fit together.
+- **Developers** — source atlas, build notes, RPC notes, and developer-focused resources.
+- **News** — factual updates about things that happened.
+- **Research** — technical explainers, comparisons, and analysis that may be relevant to BitcoinII but are not necessarily implemented.
+- **Discussion** — community ideas, proposals, and opinions.
+- **History** — past events, milestones, and archived context.
+- **Ecosystem** — wallets, explorers, exchanges, pools, tools, and community resources, listed only after direct checking.
+- **Verification** — open questions, known unknowns, and claims that need checking.
+
+## Core editorial rule
+
+Document reality. Explore possibilities. Clearly separate the two.
+
+For example, if a difficulty adjustment algorithm such as Dark Gravity Wave is discussed by community members but is not implemented in BitcoinII, it belongs in Research or Discussion, not Documentation.
 
 ## Repository structure
 
 ```text
 morebc2/
 ├── docs/
+│   ├── architecture/
 │   ├── documentation/
+│   ├── developers/
+│   ├── configuration/
+│   ├── encyclopedia/
+│   ├── ecosystem/
+│   ├── exchange/
+│   ├── verification/
 │   ├── news/
 │   ├── research/
 │   ├── discussion/
 │   ├── history/
-│   ├── exchange/
 │   ├── mining/
 │   ├── wallets/
 │   ├── nodes/
-│   ├── developers/
-│   └── verification/
+│   └── site/
 ├── templates/
 ├── assets/
 ├── branding/
@@ -66,9 +90,11 @@ morebc2/
 └── README.md
 ```
 
-## Current status
+## Launch readiness
 
-This repository is in early foundation-building mode. Information should be treated as draft until each page has clear sources and a verification status.
+MoreBC2 should stay private until navigation, coverage tracking, verification standards, glossary framework, and contributor workflow are stronger.
+
+Invite-only review should come before public launch.
 
 ## Project phrase
 
