@@ -2,7 +2,7 @@
 
 **Category:** Project maintenance
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Summary
 
@@ -29,8 +29,8 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Node startup | Partial | Built from first-pass startup-path review. GUI, daemon, and shutdown paths pending. |
 | Consensus model | Partial | Built from reviewed chainparams, PoW, validation, block connection, reorg, transaction-helper, and script-engine notes. Flag caller mapping still pending. |
 | Life of a transaction | Partial | Built from reviewed broadcast, mempool, block, and reorg notes. Wallet, P2P, and mining paths pending. |
-| Life of a block | Partial | Built from reviewed block acceptance and validation paths. Mining, P2P, and storage details pending. |
-| Life of a reorganization | Partial | Built from reviewed reorg, disconnection, undo, and mempool re-add paths. Wallet and index handling pending. |
+| Life of a block | Partial | Built from reviewed block acceptance, validation, notification, and storage paths. Mining and P2P details pending. |
+| Life of a reorganization | Partial | Built from reviewed reorg, disconnection, undo, storage, notification, and mempool re-add paths. Wallet and index handling pending. |
 | Block validation flow | Reviewed | Strong first-pass flow map exists. |
 | Mempool flow | Reviewed | Strong first-pass mempool and transaction acceptance map exists. |
 | Wallet flow | Not started | Requires wallet source review. |
@@ -47,6 +47,8 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | `src/consensus/tx_verify.*` | Reviewed | Finality, sequence locks, operation-cost helpers, and input checks first pass exists. |
 | `src/script/interpreter.*` | Partial | First-pass script-engine map exists. Full flag caller mapping and upstream comparison pending. |
 | `src/validation.cpp` | Partial | Major validation, connection, reorg, mempool acceptance paths reviewed. Large file still not fully exhausted. |
+| `src/validationinterface.*` | Partial | First-pass validation notification interface map exists. Subscriber call sites pending. |
+| `src/node/blockstorage.*` | Partial | First-pass block storage, pruning, reindex, and import map exists. Undo-read and failure-recovery details pending. |
 | Block lifecycle path | Reviewed | Consolidated source-atlas lifecycle page exists. |
 | `src/txmempool.*` | Partial | Core mempool structure and many functions reviewed. Policy details pending. |
 | `src/kernel/mempool_entry.h` | Reviewed | First-pass entry metadata review exists. |
@@ -54,11 +56,9 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | `src/primitives/block.*` | Partial | Block hash path reviewed; broader primitive review pending. |
 | `src/hash.h` | Partial | Double-SHA256 path reviewed; broader hash utility review pending. |
 | `src/consensus/amount.h` | Partial | COIN/MAX_MONEY documented; broader consensus files pending. |
-| Block storage | Not started | Needed for disk and pruning details. |
 | Mining/block template | Not started | Needed for mining flow and mempool selection details. |
 | Wallet internals | Not started | Needed for wallet flow. |
 | RPC internals | Not started | Needed for RPC flow and service integration examples. |
-| Validation interface | Not started | Needed for callback ordering and wallet/index notifications. |
 
 ## Documentation section coverage
 
@@ -67,7 +67,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | What is BitcoinII | Partial | Needs final source review and public wording pass. |
 | Project overview | Partial | Needs current source/official-source review. |
 | Network specifications | Partial | Strong source-backed values exist; current release branch should be checked. |
-| Consensus overview | Partial | Strong PoW and amount notes exist; transaction-helper and script-engine material now needs summary refresh. |
+| Consensus overview | Partial | Strong PoW and amount notes exist; transaction-helper and script-engine material has been refreshed. |
 | Checkpoints | Framework | Existence documented; full checkpoint table and usage review pending. |
 | Releases | Framework | Release verification model remains open. |
 | Explorer resources | Framework | Active explorer checks pending. |
@@ -100,8 +100,8 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Area | Status | Notes |
 |---|---|---|
 | Developer README | Partial | Links reading order, verification workflow, source review guide, and source atlas. |
-| Repository map | Partial | Needs latest reviewed files added after script-engine review. |
-| Source tree guide | Partial | Needs latest reviewed files added after script-engine review. |
+| Repository map | Partial | Needs latest reviewed storage and notification files added. |
+| Source tree guide | Partial | Needs latest reviewed storage and notification files added. |
 | Developer reading order | Framework | Created as contributor navigation path; should be updated as sections move. |
 | Source review guide | Framework | Created as contributor workflow; should be tested on future source reviews. |
 | Verification standards | Framework | Practical workflow page exists; evidence scale remains the root confidence model. |
@@ -110,14 +110,14 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. Consensus overview refresh.
-2. Repository map refresh for transaction and script-engine files.
-3. Source tree guide refresh for transaction and script-engine files.
+1. Repository map refresh for storage and notification files.
+2. Source tree guide refresh for storage and notification files.
+3. Life of a block / reorg cleanup for storage and notifications.
 4. Local development environment guide.
 5. Release verification guide.
 6. Glossary expansion and cross-linking.
-7. Block storage source review.
-8. Validation interface source review.
+7. Mining/block-template source review.
+8. Wallet source review.
 
 ## Verification
 
