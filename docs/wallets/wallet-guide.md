@@ -29,6 +29,7 @@ MoreBC2 has also reviewed a first pass of wallet RPC registration and address-ma
 - `src/wallet/rpc/spend.cpp`
 - `src/wallet/rpc/encrypt.cpp`
 - `src/wallet/rpc/coins.cpp`
+- `src/wallet/rpc/transactions.cpp`
 
 Reviewed startup behavior includes:
 
@@ -90,6 +91,15 @@ Wallet coin and balance behavior reviewed so far includes:
 - `getbalances` separates trusted, untrusted pending, immature, and watch-only balance categories when applicable.
 - `lockunspent` and `listlockunspent` manage manual output selection state.
 - `listunspent` lists wallet outputs with confirmation, address, safety, amount, descriptor, and reuse-related fields.
+
+Wallet transaction-history behavior reviewed so far includes:
+
+- `listtransactions` lists recent wallet transaction entries with paging and optional label/watch-only filters.
+- `listsinceblock` supports service-style polling from a block reference and can include reorg-removed wallet transactions when available.
+- `gettransaction` returns details for a single in-wallet transaction and can include decoded transaction data.
+- `abandontransaction` marks eligible in-wallet transactions as abandoned when they are not included in a block and not in the mempool.
+- `rescanblockchain` scans local chain data for wallet-related transactions and has limits around pruned or unavailable block data.
+- `abortrescan` requests cancellation of an active wallet rescan.
 
 Wallet RPC examples remain untested until run against a local BitcoinII Core node.
 
@@ -166,7 +176,7 @@ Before this guide is marked Verified, MoreBC2 needs to document whether releases
 - Confirm wallet data directory by operating system.
 - Confirm backup file names and restore process.
 - Test wallet encryption workflow on a temporary wallet.
-- Review transaction-history wallet RPC files in more detail.
+- Test transaction-history and rescan examples on a temporary wallet.
 - Review wallet database format behavior.
 - Confirm whether GUI and CLI wallets differ in user-facing behavior.
 - Test safe wallet RPC examples locally before publishing them as verified.
@@ -185,15 +195,17 @@ Before this guide is marked Verified, MoreBC2 needs to document whether releases
 - `src/wallet/rpc/spend.cpp`
 - `src/wallet/rpc/encrypt.cpp`
 - `src/wallet/rpc/coins.cpp`
+- `src/wallet/rpc/transactions.cpp`
 - [Source atlas: wallet startup](../developers/source-atlas/wallet-startup.md)
 - [Source atlas: wallet RPC](../developers/source-atlas/wallet-rpc.md)
 - [Source atlas: wallet backup/import RPC](../developers/source-atlas/wallet-backup-import-rpc.md)
 - [Source atlas: wallet spend and PSBT RPC](../developers/source-atlas/wallet-spend-rpc.md)
 - [Source atlas: wallet encryption RPC](../developers/source-atlas/wallet-encryption-rpc.md)
 - [Source atlas: wallet coins and balances RPC](../developers/source-atlas/wallet-coins-rpc.md)
+- [Source atlas: wallet transaction history RPC](../developers/source-atlas/wallet-transactions-rpc.md)
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This page now includes first-pass source-reviewed wallet startup, wallet RPC, backup/import, spend/PSBT, encryption, and coin/balance notes. Platform-specific wallet instructions, transaction-history RPC detail, release verification, and command testing remain open.
+**Notes:** This page now includes first-pass source-reviewed wallet startup, wallet RPC, backup/import, spend/PSBT, encryption, coin/balance, and transaction-history notes. Platform-specific wallet instructions, release verification, and command testing remain open.
