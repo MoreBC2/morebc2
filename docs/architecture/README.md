@@ -14,6 +14,7 @@ Architecture pages should stay conservative. If a relationship has not been veri
 
 - [Architecture overview](architecture-overview.md)
 - [Block validation flow](block-validation-flow.md)
+- [Mempool flow](mempool-flow.md)
 
 ## Planned pages
 
