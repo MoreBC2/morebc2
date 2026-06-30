@@ -8,12 +8,12 @@
 
 This page explains the reviewed BitcoinII block lifecycle at a high level.
 
-It connects block header validation, full block checks, disk storage, block-index updates, best-chain activation, UTXO connection, undo-data creation, and validation notifications.
+It connects candidate block creation, block submission/arrival, block header validation, full block checks, disk storage, block-index updates, best-chain activation, UTXO connection, undo-data creation, and validation notifications.
 
 ## Simplified lifecycle
 
 ```text
-Miner / peer / disk import
+Candidate block / peer / disk import
   -> block arrives at node
   -> header is checked
   -> full block is checked
@@ -28,11 +28,13 @@ Miner / peer / disk import
   -> validation notifications are emitted
 ```
 
-## Step 1: Block creation
+## Step 1: Candidate block creation
 
-A miner constructs a candidate block and searches for proof-of-work.
+A candidate block is assembled from chain state, mempool contents, fee/priority data, and coinbase output information.
 
-MoreBC2 has not yet audited the miner/block-template source, so this page does not describe block construction in detail.
+MoreBC2 has reviewed first-pass candidate-template assembly and mining RPC paths. Reviewed behavior includes mempool package selection, coinbase construction for candidate blocks, and `getblocktemplate`/block submission RPC surfaces.
+
+Live mining software, pools, payout rules, and external operation details remain ecosystem questions, not verified architecture claims.
 
 ## Step 2: Block arrival
 
@@ -41,9 +43,9 @@ A block may arrive from:
 - Network peers.
 - Disk import.
 - Reindex.
-- Local mining submission.
+- Local block submission.
 
-The reviewed general full-block entry point is `ProcessNewBlock`.
+The reviewed general full-block entry point is `ProcessNewBlock`. Reviewed mining RPC paths also include block/header submission commands.
 
 ## Step 3: Header checks
 
@@ -153,7 +155,7 @@ Reviewed storage behavior includes:
 - Writing a checksum based on the previous block hash and undo data.
 - Updating the block index with undo position and undo-availability status.
 
-Undo data is what lets the node reverse a connected block without guessing how the UTXO set used to look.
+Undo data is what lets the node return the UTXO view to an earlier state without guessing how it used to look.
 
 ## Step 11: Tip update and notifications
 
@@ -176,6 +178,8 @@ A block on the active best chain confirms its included transactions.
 
 Every later block built on top of that block increases the confirmation depth of the earlier block and its transactions.
 
+Wallet transaction-history RPCs can surface wallet-specific confirmation data, but wallet/index subscriber behavior after notifications still needs deeper review.
+
 ## Reorg note
 
 A block can later be disconnected if a competing higher-work chain becomes active.
@@ -184,12 +188,11 @@ That is covered in [Life of a reorganization](life-of-a-reorg.md).
 
 ## What is not fully reviewed yet
 
-- Mining/block-template construction.
 - Network block relay caller paths.
-- Local block submission path.
 - Full undo-read behavior.
 - Full pruning failure and recovery behavior.
 - Wallet/index subscriber behavior after notifications.
+- Live external mining software and pool behavior.
 
 ## Related pages
 
@@ -200,6 +203,9 @@ That is covered in [Life of a reorganization](life-of-a-reorg.md).
 - [Source atlas: block storage](../developers/source-atlas/block-storage.md)
 - [Source atlas: validation interface](../developers/source-atlas/validation-interface.md)
 - [Source atlas: validation.cpp](../developers/source-atlas/validation-cpp.md)
+- [Source atlas: block template assembly](../developers/source-atlas/miner.md)
+- [Source atlas: mining RPC](../developers/source-atlas/rpc-mining.md)
+- [Source atlas: blockchain RPC](../developers/source-atlas/rpc-blockchain.md)
 - [Consensus overview](../documentation/consensus-overview.md)
 - [Proof-of-work](../encyclopedia/proof-of-work.md)
 
@@ -207,4 +213,4 @@ That is covered in [Life of a reorganization](life-of-a-reorg.md).
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This explainer is based on reviewed block acceptance, validation, best-chain activation, UTXO connection, block-storage, undo-writing, and validation-interface notes. Mining, P2P, local submission, and wallet/index subscriber behavior need deeper review.
+**Notes:** This explainer is based on reviewed block acceptance, validation, best-chain activation, UTXO connection, block-storage, undo-writing, validation-interface, candidate-template, mining RPC, and blockchain RPC notes. P2P, full undo-read behavior, pruning recovery, and wallet/index subscriber behavior need deeper review.
