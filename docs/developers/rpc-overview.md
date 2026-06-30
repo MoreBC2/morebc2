@@ -25,6 +25,7 @@ RPC can be used to:
 - Inspect UTXO state.
 - Manage pruning and block-data workflows.
 - Build, decode, and analyze raw transactions and PSBTs.
+- Inspect mempool state and test transaction acceptance.
 
 ## Verified configuration notes
 
@@ -57,6 +58,7 @@ MoreBC2 has reviewed first-pass source maps for these RPC files:
 - [Mining RPC](source-atlas/rpc-mining.md): `src/rpc/mining.cpp`
 - [Blockchain RPC](source-atlas/rpc-blockchain.md): `src/rpc/blockchain.cpp`
 - [Raw transaction RPC](source-atlas/rpc-rawtransaction.md): `src/rpc/rawtransaction.cpp`
+- [Mempool and transaction broadcast RPC](source-atlas/rpc-mempool.md): `src/rpc/mempool.cpp`
 - [Wallet RPC](source-atlas/wallet-rpc.md): wallet startup/address/backup/spend/encryption/coin/history RPC files
 
 These reviews document command groups and behavior from source, but do not mark command examples as tested.
@@ -124,6 +126,25 @@ Reviewed raw transaction RPC commands include:
 
 Raw transaction commands are advanced tools for non-wallet transaction lookup, unsigned transaction construction, explicit-key signing, script decoding, and PSBT workflows. They need tested examples before appearing in service or user guides.
 
+## Mempool and broadcast RPC group
+
+Reviewed mempool/broadcast RPC commands include:
+
+- `sendrawtransaction`
+- `testmempoolaccept`
+- `submitpackage`
+- `getrawmempool`
+- `getmempoolentry`
+- `getmempoolancestors`
+- `getmempooldescendants`
+- `gettxspendingprevout`
+- `getmempoolinfo`
+- `savemempool`
+- `importmempool`
+- `getorphantxs` hidden/experimental
+
+`testmempoolaccept` is a dry-run acceptance check. `sendrawtransaction` is a live broadcast command. `submitpackage`, `getorphantxs`, and mempool persistence commands should be treated as advanced until tested and documented more carefully.
+
 ## Wallet RPC group
 
 Reviewed wallet RPC commands include:
@@ -188,6 +209,9 @@ bitcoinII-cli listwallets
 bitcoinII-cli listwalletdir
 bitcoinII-cli getrawtransaction <txid> 1
 bitcoinII-cli decoderawtransaction <hex>
+bitcoinII-cli testmempoolaccept '["signedhex"]'
+bitcoinII-cli getrawmempool true
+bitcoinII-cli getmempoolinfo
 bitcoinII-cli analyzepsbt <psbt>
 ```
 
@@ -203,6 +227,8 @@ For service docs, MoreBC2 should distinguish:
 - Wallet commands that can create addresses.
 - Wallet commands that expose keys, sign transactions, or move funds.
 - Raw transaction and PSBT commands for advanced construction/signing workflows.
+- Dry-run mempool acceptance commands.
+- Live transaction broadcast commands.
 - Maintenance commands that can affect node state.
 - Hidden/testing commands that should not appear in normal operator guides.
 
@@ -212,7 +238,6 @@ For service docs, MoreBC2 should distinguish:
 - Confirm binary names for each platform and release asset.
 - Confirm configuration file paths by operating system.
 - Confirm wallet loading behavior.
-- Review mempool and transaction-broadcast RPC files.
 - Review network RPC files.
 - Confirm whether any BitcoinII-specific RPC differences exist beyond naming and visible strings.
 
@@ -223,6 +248,7 @@ For service docs, MoreBC2 should distinguish:
 - `src/rpc/mining.cpp`
 - `src/rpc/blockchain.cpp`
 - `src/rpc/rawtransaction.cpp`
+- `src/rpc/mempool.cpp`
 - `src/wallet/rpc/wallet.cpp`
 - `src/wallet/rpc/addresses.cpp`
 - `src/wallet/rpc/backup.cpp`
@@ -235,4 +261,4 @@ For service docs, MoreBC2 should distinguish:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** Port and config-option notes are source-backed. Mining, blockchain, raw transaction, and wallet RPC groups have first-pass source review. Command examples are placeholders until tested.
+**Notes:** Port and config-option notes are source-backed. Mining, blockchain, raw transaction, mempool, and wallet RPC groups have first-pass source review. Command examples are placeholders until tested.
