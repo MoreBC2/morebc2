@@ -79,6 +79,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 | Area | Status | Notes |
 |---|---|---|
+| Documentation README | Partial | Normalized for current-doc boundaries, source-backed anchors, and untested-command caution. |
 | What is BitcoinII | Partial | Needs final source review and public wording pass. |
 | Project overview | Partial | Needs current source/official-source review. |
 | Network specifications | Partial | Strong source-backed values exist; current release branch should be checked. |
@@ -86,14 +87,20 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Checkpoints | Framework | Existence documented; full checkpoint table and usage pending. |
 | Releases | Framework | Release verification model remains open. |
 | Explorer resources | Framework | Active explorer checks pending. |
+| Configuration README | Partial | Normalized for source-observed configuration anchors and local-testing rules. |
+| Encyclopedia README | Partial | Normalized for concept pages, Source Atlas links, and BitcoinII-specific claim rules. |
+| News README | Partial | Normalized for dated factual update rules and source expectations. |
+| Site README | Partial | Normalized for public website planning, launch blockers, and status-display requirements. |
 
 ## Ecosystem and integration coverage
 
 | Area | Status | Notes |
 |---|---|---|
+| Exchange README | Partial | Normalized for service-provider framework, source anchors, and production-use caveats. |
 | Exchange integration | Framework | Good structure exists; confirmations/contact/release verification pending. |
 | Deposit monitoring | Framework | Needs RPC testing and confirmation policy. |
 | Service integration checklist | Framework | Useful checklist; each item needs evidence links. |
+| Ecosystem README | Partial | Normalized for listing rules, direct-check requirements, and active-service caution. |
 | Ecosystem wallets | Framework | Conservative listing model exists. |
 | Ecosystem explorers | Framework | Direct explorer checks pending. |
 | Ecosystem mining pools | Framework | Direct pool checks pending. |
@@ -140,14 +147,13 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. Continue section README normalization for remaining thin indexes.
-2. Open-question consolidation pass.
-3. Cross-link and terminology pass across architecture and Source Atlas pages.
-4. Release artifact verification pass.
-5. Explorer/API documentation framework.
-6. Build/test command smoke-test record.
-7. Network RPC or P2P source review.
-8. Glossary cross-linking during future page updates.
+1. Open-question consolidation pass.
+2. Cross-link and terminology pass across architecture and Source Atlas pages.
+3. Release artifact verification pass.
+4. Explorer/API documentation framework.
+5. Build/test command smoke-test record.
+6. Network RPC or P2P source review.
+7. Glossary cross-linking during future page updates.
 
 ## Verification
 
