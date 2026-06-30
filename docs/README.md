@@ -2,6 +2,11 @@
 
 This directory holds the working documentation for MoreBC2.
 
+## Project-maintenance pages
+
+- [Repository audit](AUDIT.md)
+- [Documentation coverage](documentation-coverage.md)
+
 ## Main sections
 
 - [Documentation](documentation/README.md) — current verified BitcoinII behavior.
@@ -11,7 +16,7 @@ This directory holds the working documentation for MoreBC2.
 - [Discussion](discussion/README.md) — community ideas, proposals, and opinions.
 - [History](history/README.md) — past events and milestones.
 - [Exchange](exchange/README.md) — exchange and service-provider integration resources.
-- [Developers](developers/README.md) — RPC, build, and integration notes.
+- [Developers](developers/README.md) — RPC, build, source atlas, and integration notes.
 - [Mining](mining/README.md) — mining guides and pool information.
 - [Wallets](wallets/README.md) — wallet resources and user guides.
 - [Nodes](nodes/README.md) — node operation and network resources.
@@ -23,6 +28,8 @@ This directory holds the working documentation for MoreBC2.
 ## Rule of thumb
 
 If it describes how BitcoinII works today, place it in Documentation.
+
+If it explains how reviewed components fit together, place it in Architecture.
 
 If it describes something people are considering, debating, or comparing, place it in Research or Discussion.
 
