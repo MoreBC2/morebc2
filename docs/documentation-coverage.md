@@ -29,7 +29,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Node startup | Partial | Built from first-pass startup-path review. GUI, daemon, shutdown paths pending. |
 | Consensus model | Partial | Built from reviewed chainparams, PoW, validation, block connection, reorg, transaction-helper, and script-engine notes. Flag caller mapping still pending. |
 | Life of a transaction | Partial | Built from reviewed broadcast, mempool, block, and reorg notes. Wallet and P2P paths pending. |
-| Life of a block | Partial | Built from reviewed block acceptance, validation, notification, storage, template assembly, and mining RPC paths. P2P details pending. |
+| Life of a block | Partial | Built from reviewed block acceptance, validation, notification, storage, template assembly, mining RPC, and blockchain RPC paths. P2P details pending. |
 | Life of a reorganization | Partial | Built from reviewed reorg, disconnection, undo, storage, notification, and mempool re-add paths. Wallet and index handling pending. |
 | Block validation flow | Reviewed | Strong first-pass flow map exists. |
 | Mempool flow | Reviewed | Strong first-pass mempool and transaction acceptance map exists. |
@@ -52,6 +52,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | `src/node/miner.*` | Partial | First-pass candidate-block template assembly and package selection review exists. |
 | `src/node/mini_miner.*` | Partial | First-pass fee/ordering simulation helper review exists. Caller paths pending. |
 | `src/rpc/mining.cpp` | Partial | First-pass mining RPC, getblocktemplate, submitblock, submitheader, and mining-info review exists. Commands untested. |
+| `src/rpc/blockchain.cpp` | Partial | First-pass blockchain RPC, block lookup, pruning, UTXO stats, scans, and chainstate review exists. Commands untested. |
 | Block lifecycle path | Reviewed | Consolidated source-atlas lifecycle page exists. |
 | `src/txmempool.*` | Partial | Core mempool structure and many functions reviewed. Policy details pending. |
 | `src/kernel/mempool_entry.h` | Reviewed | First-pass entry metadata review exists. |
@@ -60,7 +61,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | `src/hash.h` | Partial | Double-SHA256 hashing behavior reviewed. Broader hash utility review pending. |
 | `src/consensus/amount.h` | Partial | COIN/MAX_MONEY documented; broader consensus files pending. |
 | Wallet internals | Not started | Needed for wallet flow. |
-| RPC internals | Not started | Needed for RPC flow and service integration examples. |
+| Other RPC internals | Not started | Raw transaction, mempool, network, utility, and wallet RPC files still pending. |
 
 ## Documentation section coverage
 
@@ -95,6 +96,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Node guide | Framework | Needs tested commands and current config checks. |
 | Mining overview | Partial | Consensus-level mining, candidate-template assembly, and mining RPC paths have first-pass source review. Live software/pool data pending. |
 | Configuration overview | Partial | Based on generated config/source; local testing pending. |
+| RPC overview | Partial | Mining and blockchain RPC groups have first-pass source review. Examples still untested. |
 | RPC configuration | Partial | Needs tested command examples. |
 
 ## Developer onboarding coverage
@@ -102,8 +104,8 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Area | Status | Notes |
 |---|---|---|
 | Developer README | Partial | Links reading order, verification workflow, source review guide, source atlas, local development, build, testing, and release verification. |
-| Repository map | Partial | Refreshed for storage, notification, and template files. Needs mining RPC file added. |
-| Source tree guide | Partial | Refreshed for storage, notification, and template files. Needs mining RPC file added. |
+| Repository map | Partial | Refreshed for storage, notification, template, and mining RPC files. Needs blockchain RPC file added. |
+| Source tree guide | Partial | Refreshed for storage, notification, template, and mining RPC files. Needs blockchain RPC file added. |
 | Developer reading order | Framework | Updated to include current Source Atlas and developer workflow paths. |
 | Source review guide | Framework | Created as contributor workflow; should be tested on future source reviews. |
 | Verification standards | Framework | Practical workflow page exists; evidence scale remains the root confidence model. |
@@ -116,9 +118,9 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. Repository map/source tree refresh for mining RPC file.
+1. Repository map/source tree refresh for blockchain RPC file.
 2. Wallet source review.
-3. Broader RPC source review.
+3. Raw transaction / mempool RPC source review.
 4. Release artifact verification pass.
 5. Explorer/API documentation framework.
 6. Build/test command smoke-test record.
