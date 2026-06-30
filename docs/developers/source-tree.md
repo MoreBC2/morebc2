@@ -52,6 +52,10 @@ Currently reviewed or partially reviewed files:
 
 - `src/node/blockstorage.h`
 - `src/node/blockstorage.cpp`
+- `src/node/miner.h`
+- `src/node/miner.cpp`
+- `src/node/mini_miner.h`
+- `src/node/mini_miner.cpp`
 
 Known use from review:
 
@@ -62,17 +66,23 @@ Known use from review:
 - Block and undo writes.
 - Pruning bookkeeping.
 - Reindex and import handling.
+- Candidate block-template assembly.
+- Mempool package selection for candidate blocks.
+- Coinbase construction for candidate blocks.
+- Fee and ordering simulation helpers.
 
 Related pages:
 
 - [Source atlas: block storage](source-atlas/block-storage.md)
+- [Source atlas: block template assembly](source-atlas/miner.md)
+- [Mining overview](../mining/mining-overview.md)
 - [Life of a block](../architecture/life-of-a-block.md)
 - [Life of a reorganization](../architecture/life-of-a-reorg.md)
 - [Node startup](../architecture/node-startup.md)
 
 Still needed:
 
-- `src/node/miner.*`
+- RPC caller path for candidate block templates.
 - Additional node context and chainstate helpers.
 - Operator-facing pruning and reindex examples.
 
@@ -129,6 +139,7 @@ Known use from review:
 Still needed:
 
 - Caller graph into validation and mempool acceptance.
+- Subsidy calculation review.
 - Upstream comparison.
 
 ### `src/script/`
@@ -194,7 +205,6 @@ These areas should be mapped later:
 - `src/rpc/`
 - `src/wallet/`
 - `src/qt/`
-- `src/node/miner.*`
 - `test/`
 - `src/test/`
 - `src/wallet/test/`
