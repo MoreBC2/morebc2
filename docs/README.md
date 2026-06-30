@@ -1,15 +1,39 @@
 # MoreBC2 Docs
 
+**Category:** Documentation index
+**Status:** Draft
+**Last reviewed:** 2026-06-30
+
 This directory holds the working documentation for MoreBC2.
+
+MoreBC2 is still a private, source-backed documentation project. Many pages are intentionally marked Draft or Partial because command examples, release artifacts, and ecosystem claims still need direct verification.
+
+## Best starting points
+
+For a quick project-level orientation, start with:
+
+- [Project status](../PROJECT_STATUS.md)
+- [Repository audit](AUDIT.md)
+- [Documentation coverage](documentation-coverage.md)
+- [Documentation polish plan](POLISH_PLAN.md)
+
+For a technical reader, start with:
+
+- [Architecture](architecture/README.md)
+- [Developers](developers/README.md)
+- [Source Atlas](developers/source-atlas/README.md)
+- [RPC overview](developers/rpc-overview.md)
+- [Wallet guide](wallets/wallet-guide.md)
 
 ## Project-maintenance pages
 
 - [Repository audit](AUDIT.md)
 - [Documentation coverage](documentation-coverage.md)
+- [Documentation polish plan](POLISH_PLAN.md)
 
 ## Main sections
 
-- [Documentation](documentation/README.md) — current verified BitcoinII behavior.
+- [Documentation](documentation/README.md) — current source-backed BitcoinII behavior.
 - [Architecture](architecture/README.md) — conceptual maps of BitcoinII Core components and flows.
 - [Configuration](configuration/README.md) — BitcoinII Core configuration concepts and option references.
 - [Research](research/README.md) — technical explainers and analysis.
@@ -25,12 +49,26 @@ This directory holds the working documentation for MoreBC2.
 - [Verification](verification/README.md) — open verification work, known unknowns, and source-backed status tracking.
 - [Site](site/README.md) — public website planning.
 
+## Current caution
+
+The repository has many source-reviewed pages, but not all examples are tested.
+
+Before using a command in production, check whether the relevant page says the command was actually run. If it does not, treat the command as source-observed and untested.
+
 ## Rule of thumb
 
 If it describes how BitcoinII works today, place it in Documentation.
 
 If it explains how reviewed components fit together, place it in Architecture.
 
+If it describes a reviewed implementation file, place it in Developers / Source Atlas.
+
 If it describes something people are considering, debating, or comparing, place it in Research or Discussion.
 
 If it records what still needs to be checked, place it in Verification.
+
+## Verification
+
+**Status:** Draft
+**Primary sources checked:** Current MoreBC2 documentation structure
+**Notes:** This index is a navigation aid for MoreBC2. It does not verify BitcoinII protocol behavior.
