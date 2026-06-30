@@ -10,6 +10,8 @@ BitcoinII Core includes JSON-RPC functionality for command-line tools, wallets, 
 
 This page is a safe starting point only. RPC command examples should not be marked Verified until they are tested against a running BitcoinII Core node.
 
+For test tracking, see [Command testing status](../verification/command-testing.md).
+
 ## What RPC is used for
 
 RPC can be used to:
@@ -20,7 +22,7 @@ RPC can be used to:
 - Query wallet status.
 - Generate deposit addresses.
 - Inspect transactions.
-- Broadcast withdrawals.
+- Submit transactions.
 - Monitor blocks and confirmations.
 - Inspect UTXO state.
 - Manage pruning and block-data workflows.
@@ -143,7 +145,7 @@ Reviewed mempool/broadcast RPC commands include:
 - `importmempool`
 - `getorphantxs` hidden/experimental
 
-`testmempoolaccept` is a dry-run acceptance check. `sendrawtransaction` is a live broadcast command. `submitpackage`, `getorphantxs`, and mempool persistence commands should be treated as advanced until tested and documented more carefully.
+`testmempoolaccept` is a dry-run acceptance check. `sendrawtransaction` submits a signed raw transaction toward local acceptance and relay. `submitpackage`, `getorphantxs`, and mempool persistence commands should be treated as advanced until tested and documented more carefully.
 
 ## Wallet RPC group
 
@@ -183,9 +185,11 @@ Reviewed wallet RPC commands include:
 
 The reviewed wallet registration and file-specific passes now cover major wallet command groups. Examples still need local testing before being recommended.
 
-## Commands to test later
+## Untested command inventory
 
-These commands are common for Bitcoin-style node operation, but they still need to be tested against BitcoinII Core before being moved into verified examples:
+The command forms below are not verified instructions. They are placeholders for future local testing and are tracked in [Command testing status](../verification/command-testing.md).
+
+### Common examples to test later
 
 ```bash
 bitcoinII-cli getblockchaininfo
@@ -197,7 +201,7 @@ bitcoinII-cli gettransaction <txid>
 bitcoinII-cli sendtoaddress <address> <amount>
 ```
 
-Additional reviewed commands that should be tested before examples are published:
+### Additional reviewed command surfaces to test later
 
 ```bash
 bitcoinII-cli getblockcount
@@ -215,6 +219,8 @@ bitcoinII-cli getmempoolinfo
 bitcoinII-cli analyzepsbt <psbt>
 ```
 
+Do not copy these into user guides as working examples until the command-testing page has matching test records.
+
 ## Exchange/service-provider caution
 
 Service providers should not expose RPC publicly. RPC access should be firewalled, authenticated, and restricted to trusted systems.
@@ -226,9 +232,9 @@ For service docs, MoreBC2 should distinguish:
 - Address/deposit commands.
 - Wallet commands that can create addresses.
 - Wallet commands that expose keys, sign transactions, or move funds.
-- Raw transaction and PSBT commands for advanced construction/signing workflows.
+- Raw transaction and PSBT commands for advanced construction workflows.
 - Dry-run mempool acceptance commands.
-- Live transaction broadcast commands.
+- Live transaction submission commands.
 - Maintenance commands that can affect node state.
 - Hidden/testing commands that should not appear in normal operator guides.
 
@@ -256,9 +262,10 @@ For service docs, MoreBC2 should distinguish:
 - `src/wallet/rpc/encrypt.cpp`
 - `src/wallet/rpc/coins.cpp`
 - `src/wallet/rpc/transactions.cpp`
+- [Command testing status](../verification/command-testing.md)
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** Port and config-option notes are source-backed. Mining, blockchain, raw transaction, mempool, and wallet RPC groups have first-pass source review. Command examples are placeholders until tested.
+**Notes:** Port and config-option notes are source-backed. Mining, blockchain, raw transaction, mempool, and wallet RPC groups have first-pass source review. Command examples are placeholders until matching local test records exist.
