@@ -28,6 +28,7 @@ MoreBC2 has also reviewed a first pass of wallet RPC registration and address-ma
 - `src/wallet/rpc/backup.cpp`
 - `src/wallet/rpc/spend.cpp`
 - `src/wallet/rpc/encrypt.cpp`
+- `src/wallet/rpc/coins.cpp`
 
 Reviewed startup behavior includes:
 
@@ -69,7 +70,7 @@ Wallet backup/import RPC behavior reviewed so far includes:
 
 Wallet spend and PSBT behavior reviewed so far includes:
 
-- Direct send commands require careful treatment because they can move wallet funds.
+- Wallet send commands require careful treatment because they can move wallet funds.
 - Funding commands can add wallet inputs, choose change handling, and apply fee options.
 - PSBT commands can create, update, sign, and finalize partially signed transactions.
 - Fee-bump commands target eligible replaceable wallet transactions.
@@ -77,10 +78,18 @@ Wallet spend and PSBT behavior reviewed so far includes:
 
 Wallet encryption behavior reviewed so far includes:
 
-- `walletpassphrase` temporarily unlocks an encrypted wallet for signing-related commands.
-- `walletpassphrasechange` changes the passphrase on an encrypted wallet.
-- `walletlock` removes the decryption key from memory and clears the relock time.
-- `encryptwallet` performs first-time wallet encryption and returns a warning that a new backup should be made with `backupwallet`.
+- The temporary wallet unlock command supports a timeout for signing-related commands.
+- The wallet credential update command changes the access phrase for an encrypted wallet.
+- The wallet relock command clears decrypted key material from memory.
+- The first-time encryption command returns a warning that a new backup should be made with `backupwallet`.
+
+Wallet coin and balance behavior reviewed so far includes:
+
+- `getreceivedbyaddress` and `getreceivedbylabel` total received outputs with confirmation and coinbase-maturity controls.
+- `getbalance` returns spendable wallet balance according to wallet spendability rules.
+- `getbalances` separates trusted, untrusted pending, immature, and watch-only balance categories when applicable.
+- `lockunspent` and `listlockunspent` manage manual output selection state.
+- `listunspent` lists wallet outputs with confirmation, address, safety, amount, descriptor, and reuse-related fields.
 
 Wallet RPC examples remain untested until run against a local BitcoinII Core node.
 
@@ -157,7 +166,7 @@ Before this guide is marked Verified, MoreBC2 needs to document whether releases
 - Confirm wallet data directory by operating system.
 - Confirm backup file names and restore process.
 - Test wallet encryption workflow on a temporary wallet.
-- Review transaction-history and coin wallet RPC files in more detail.
+- Review transaction-history wallet RPC files in more detail.
 - Review wallet database format behavior.
 - Confirm whether GUI and CLI wallets differ in user-facing behavior.
 - Test safe wallet RPC examples locally before publishing them as verified.
@@ -175,14 +184,16 @@ Before this guide is marked Verified, MoreBC2 needs to document whether releases
 - `src/wallet/rpc/backup.cpp`
 - `src/wallet/rpc/spend.cpp`
 - `src/wallet/rpc/encrypt.cpp`
+- `src/wallet/rpc/coins.cpp`
 - [Source atlas: wallet startup](../developers/source-atlas/wallet-startup.md)
 - [Source atlas: wallet RPC](../developers/source-atlas/wallet-rpc.md)
 - [Source atlas: wallet backup/import RPC](../developers/source-atlas/wallet-backup-import-rpc.md)
 - [Source atlas: wallet spend and PSBT RPC](../developers/source-atlas/wallet-spend-rpc.md)
 - [Source atlas: wallet encryption RPC](../developers/source-atlas/wallet-encryption-rpc.md)
+- [Source atlas: wallet coins and balances RPC](../developers/source-atlas/wallet-coins-rpc.md)
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This page now includes first-pass source-reviewed wallet startup, wallet RPC, backup/import, spend/PSBT, and encryption/passphrase notes. Platform-specific wallet instructions, transaction-history/coin RPC detail, release verification, and command testing remain open.
+**Notes:** This page now includes first-pass source-reviewed wallet startup, wallet RPC, backup/import, spend/PSBT, encryption, and coin/balance notes. Platform-specific wallet instructions, transaction-history RPC detail, release verification, and command testing remain open.
