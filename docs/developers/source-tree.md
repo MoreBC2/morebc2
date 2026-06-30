@@ -82,9 +82,36 @@ Related pages:
 
 Still needed:
 
-- RPC caller path for candidate block templates.
 - Additional node context and chainstate helpers.
 - Operator-facing pruning and reindex examples.
+
+### `src/rpc/`
+
+Currently reviewed or partially reviewed files:
+
+- `src/rpc/mining.cpp`
+
+Known use from review:
+
+- Mining status RPCs.
+- Candidate block template RPC path.
+- Block and header submission RPC paths.
+- Transaction prioritization RPC paths.
+- Hidden local-generation helper RPCs.
+
+Related pages:
+
+- [Source atlas: mining RPC](source-atlas/rpc-mining.md)
+- [Source atlas: block template assembly](source-atlas/miner.md)
+- [Mining overview](../mining/mining-overview.md)
+- [RPC overview](rpc-overview.md)
+
+Still needed:
+
+- Broader RPC command table.
+- RPC wallet files.
+- RPC examples tested against a local node.
+- Service-safe RPC command recommendations.
 
 ### `src/kernel/`
 
@@ -202,7 +229,7 @@ These areas should be mapped later:
 - `src/net.*`
 - `src/net_processing.*`
 - `src/protocol.*`
-- `src/rpc/`
+- other `src/rpc/` files
 - `src/wallet/`
 - `src/qt/`
 - `test/`
