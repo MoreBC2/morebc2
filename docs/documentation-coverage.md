@@ -100,24 +100,25 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 | Area | Status | Notes |
 |---|---|---|
-| Developer README | Framework | Needs reading order and standards links. |
+| Developer README | Partial | Now links reading order, verification workflow, source review guide, and source atlas. |
 | Repository map | Partial | Needs refresh against current repository structure. |
 | Source tree guide | Partial | Needs source audit links. |
-| Developer reading order | Not started | High priority. |
-| Source review guide | Not started | High priority for contributors. |
-| Verification standards | Partial | Evidence scale exists; a practical workflow page is needed. |
-| Glossary | Weak | Needs developer-focused expansion. |
+| Developer reading order | Framework | Created as contributor navigation path; should be updated as sections move. |
+| Source review guide | Framework | Created as contributor workflow; should be tested on future source reviews. |
+| Verification standards | Framework | Practical workflow page now exists; evidence scale remains the root confidence model. |
+| Developer glossary | Framework | Developer-facing glossary framework now exists under Encyclopedia. |
+| Root glossary | Partial | Short general glossary exists; can be expanded and cross-linked. |
 
 ## Current priority order
 
-1. Developer reading order.
-2. Verification standards workflow.
-3. Source review guide.
-4. Master open-questions backlog.
-5. README normalization.
-6. Glossary framework.
-7. Node startup architecture page.
-8. Consensus model architecture page.
+1. README normalization for thinner sections.
+2. Node startup architecture page.
+3. Consensus model architecture page.
+4. Repository map refresh.
+5. Source tree guide refresh.
+6. Local development environment guide.
+7. Glossary expansion and cross-linking.
+8. Release verification guide.
 
 ## Verification
 
