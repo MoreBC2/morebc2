@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Summary
 
@@ -23,6 +23,8 @@ This is not a full source audit. It is a navigation aid that should be expanded 
 | `src/script/interpreter.*` | Script engine, script flags, witness/Taproot paths, script verification entry points | E1 partial |
 | `src/validation.cpp` | Block validation, block connection, reorgs, mempool acceptance paths | E1 partial |
 | `src/validation.h` | Validation declarations and public validation interfaces | E1 partial |
+| `src/validationinterface.*` | Validation and mempool notification interface | E1 partial |
+| `src/node/blockstorage.*` | Block index database, block and undo files, pruning, reindex, import | E1 partial |
 | `src/txmempool.cpp` | Mempool storage, removal, expiry, prioritization, checking | E1 partial |
 | `src/txmempool.h` | Mempool structure, indexes, ancestor/descendant tracking | E1 partial |
 | `src/kernel/mempool_entry.h` | Mempool entry metadata and lockpoint data | E1 |
@@ -67,14 +69,16 @@ Reviewed or partially reviewed:
 - `src/script/interpreter.*`
 - `src/validation.cpp`
 - `src/validation.h`
+- `src/validationinterface.*`
+- `src/node/blockstorage.*`
 - `src/consensus/amount.h`
 
 Likely files/directories to review next:
 
 - Caller paths for mandatory-vs-policy script flags.
 - Additional files under `src/script/`.
-- Block storage and pruning paths.
-- Validation interface paths.
+- Validation notification subscribers.
+- Additional block-storage failure and pruning paths.
 
 Related MoreBC2 pages:
 
@@ -84,12 +88,56 @@ Related MoreBC2 pages:
 - [Life of a reorganization](../architecture/life-of-a-reorg.md)
 - [Source atlas: transaction consensus files](source-atlas/transaction-consensus.md)
 - [Source atlas: script engine](source-atlas/script-interpreter.md)
+- [Source atlas: validation interface](source-atlas/validation-interface.md)
+- [Source atlas: block storage](source-atlas/block-storage.md)
 
 Questions:
 
 - Which script flags are mandatory consensus vs policy in each caller context?
+- Which validation-interface subscribers are active in wallet, index, and UI paths?
+- Which storage failure paths matter most for operator troubleshooting?
 - Which consensus constants are BitcoinII-specific beyond already reviewed chain parameters?
-- Which script tests are inherited and which are BitcoinII-specific?
+- Which tests cover transaction, script, storage, and notification behavior?
+
+### Block storage, pruning, and reindex
+
+Reviewed or partially reviewed:
+
+- `src/node/blockstorage.h`
+- `src/node/blockstorage.cpp`
+
+Related MoreBC2 pages:
+
+- [Source atlas: block storage](source-atlas/block-storage.md)
+- [Life of a block](../architecture/life-of-a-block.md)
+- [Life of a reorganization](../architecture/life-of-a-reorg.md)
+- [Node startup](../architecture/node-startup.md)
+
+Questions:
+
+- Which operator-facing pruning behavior should move into node docs?
+- Which undo-read paths should be documented with disconnect/reorg follow-up work?
+- Which reindex and import behavior should be included in user troubleshooting docs?
+
+### Validation notifications
+
+Reviewed or partially reviewed:
+
+- `src/validationinterface.h`
+- `src/validationinterface.cpp`
+
+Related MoreBC2 pages:
+
+- [Source atlas: validation interface](source-atlas/validation-interface.md)
+- [Life of a block](../architecture/life-of-a-block.md)
+- [Life of a reorganization](../architecture/life-of-a-reorg.md)
+- [Mempool flow](../architecture/mempool-flow.md)
+
+Questions:
+
+- Which wallet and index paths subscribe to validation notifications?
+- Which callback ordering details should appear in lifecycle pages?
+- Which callbacks are user-visible through wallet balance or index update behavior?
 
 ### Mempool and transaction policy
 
