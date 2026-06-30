@@ -12,21 +12,63 @@ Preserve, organize, and expand publicly verifiable knowledge about the BitcoinII
 
 ## Current status
 
-This repository is in private foundation-building mode.
+This repository is in private foundation-building mode and is now entering a broader polish pass.
+
+The project has meaningful first-pass source-backed coverage across BitcoinII Core architecture, chain parameters, proof of work, validation, block storage, mempool behavior, wallet RPC groups, mining RPC, blockchain RPC, raw transaction RPC, and mempool/broadcast RPC.
+
+It is still not ready for broad public launch because command examples, release artifacts, and ecosystem listings still need direct verification.
 
 Start here if you are reviewing the project structure:
 
 - [Project status](PROJECT_STATUS.md)
 - [Repository audit](docs/AUDIT.md)
 - [Documentation coverage](docs/documentation-coverage.md)
+- [Documentation polish plan](docs/POLISH_PLAN.md)
 - [Roadmap](ROADMAP.md)
 
 ## Start reading
 
+For a general reader:
+
 - [Docs index](docs/README.md)
+- [What is BitcoinII?](docs/documentation/what-is-bitcoinii.md)
+- [Wallet guide](docs/wallets/wallet-guide.md)
+- [Mining overview](docs/mining/mining-overview.md)
+
+For a technical reviewer:
+
 - [Architecture](docs/architecture/README.md)
-- [Source atlas](docs/developers/source-atlas/README.md)
+- [Developer reading order](docs/developers/reading-order.md)
+- [Repository map](docs/developers/repository-map.md)
+- [Source tree guide](docs/developers/source-tree.md)
+- [Source Atlas](docs/developers/source-atlas/README.md)
+- [RPC overview](docs/developers/rpc-overview.md)
 - [Verification queue](docs/verification/README.md)
+
+## Current source-backed highlights
+
+MoreBC2 currently has first-pass source review for:
+
+- Mainnet chain parameters and genesis data.
+- Proof-of-work and Bitcoin-style difficulty retargeting.
+- Transaction consensus helper files.
+- Script engine behavior.
+- Block validation, block lifecycle, and reorg paths.
+- Mempool acceptance and mempool storage.
+- Block storage, pruning, reindex, and import paths.
+- Candidate block-template assembly.
+- Mining, blockchain, raw transaction, mempool/broadcast, and wallet RPC groups.
+- Wallet startup, address, backup/import, spend/PSBT, encryption, balance, and transaction-history RPC behavior.
+
+All of this remains Draft/Partial unless the relevant page says it is Verified.
+
+## Important caution
+
+Source-reviewed does not always mean locally tested.
+
+Many pages describe behavior observed in BitcoinII Core source files. Command examples should not be treated as verified instructions unless the page explicitly says the command was run against a local BitcoinII Core node.
+
+Wallet-moving, private-key, passphrase, broadcast, and import/export commands should be treated especially carefully.
 
 ## Contributor and editorial docs
 
@@ -48,7 +90,7 @@ MoreBC2 separates information into clearly labeled categories:
 
 - **Documentation** — how BitcoinII works today, based on current source code, releases, and official project resources.
 - **Architecture** — source-backed conceptual explanations of how BitcoinII Core components and flows fit together.
-- **Developers** — source atlas, build notes, RPC notes, and developer-focused resources.
+- **Developers** — Source Atlas, build notes, RPC notes, and developer-focused resources.
 - **News** — factual updates about things that happened.
 - **Research** — technical explainers, comparisons, and analysis that may be relevant to BitcoinII but are not necessarily implemented.
 - **Discussion** — community ideas, proposals, and opinions.
@@ -92,9 +134,18 @@ morebc2/
 
 ## Launch readiness
 
-MoreBC2 should stay private until navigation, coverage tracking, verification standards, glossary framework, and contributor workflow are stronger.
+MoreBC2 should stay private while the broad polish pass is completed.
 
 Invite-only review should come before public launch.
+
+Public launch should wait until:
+
+- Top-level navigation is polished.
+- Known unknowns are centralized.
+- License and contribution workflow are settled.
+- Release verification has been checked against actual releases.
+- Ecosystem claims are checked against current direct sources.
+- At least one outside reviewer has checked core technical claims.
 
 ## Project phrase
 
