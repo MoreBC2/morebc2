@@ -27,6 +27,7 @@ This is not a full source audit. It is a navigation aid that should be expanded 
 | `src/node/blockstorage.*` | Block index database, block and undo files, pruning, reindex, import | E1 partial |
 | `src/node/miner.*` | Candidate block-template assembly and mempool package selection | E1 partial |
 | `src/node/mini_miner.*` | Fee and ordering simulation helper | E1 partial |
+| `src/rpc/mining.cpp` | Mining RPC, candidate template, block/header submission, mining status | E1 partial |
 | `src/txmempool.cpp` | Mempool storage, removal, expiry, prioritization, checking | E1 partial |
 | `src/txmempool.h` | Mempool structure, indexes, ancestor/descendant tracking | E1 partial |
 | `src/kernel/mempool_entry.h` | Mempool entry metadata and lockpoint data | E1 |
@@ -140,10 +141,29 @@ Related MoreBC2 pages:
 
 Questions:
 
-- Which RPC path exposes candidate block templates?
 - Where exactly is the subsidy calculation implemented?
 - Which external operation docs can be verified from primary sources?
 - Which tests cover candidate block assembly and package selection?
+
+### Mining RPC
+
+Reviewed or partially reviewed:
+
+- `src/rpc/mining.cpp`
+
+Related MoreBC2 pages:
+
+- [Source atlas: mining RPC](source-atlas/rpc-mining.md)
+- [Source atlas: block template assembly](source-atlas/miner.md)
+- [Mining overview](../mining/mining-overview.md)
+- [RPC overview](rpc-overview.md)
+
+Questions:
+
+- Which mining RPC examples can be safely tested locally?
+- Which mining RPCs belong in user docs versus developer docs?
+- Which external tools actually use `getblocktemplate` with BitcoinII today?
+- How should satoshi-vs-BC2 units be highlighted in service docs?
 
 ### Validation notifications
 
@@ -207,9 +227,13 @@ Questions:
 
 ### RPC
 
-Likely files/directories to review:
+Reviewed or partially reviewed:
 
-- `src/rpc/`
+- `src/rpc/mining.cpp`
+
+Likely files/directories to review next:
+
+- other `src/rpc/` files
 - `src/bitcoinII-cli.cpp`
 - `src/wallet/rpc*`
 
