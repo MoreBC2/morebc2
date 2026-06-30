@@ -120,11 +120,12 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Research README | Partial | Normalized for research-vs-documentation boundaries. |
 | Discussion README | Partial | Normalized for proposal/status labeling and discussion boundaries. |
 | History README | Partial | Normalized for dated-source and archive/current-status separation. |
-| Verification README | Partial | Normalized for verification workflow and priority unknowns. |
+| Verification README | Partial | Normalized for verification workflow, command tracking, and priority unknowns. |
 | Known unknowns | Partial | Refreshed as short executive list linked to full backlog. |
 | Open questions backlog | Partial | Consolidated with priority labels, evidence needs, and public/private review blockers. |
+| Command testing status | Framework | Added command-test tracker, status labels, untested inventory, and test-record template. |
 | Configuration overview | Partial | Based on generated config/source; local testing pending. |
-| RPC overview | Partial | Mining, blockchain, raw transaction, mempool, and wallet RPC groups have source review. Examples still untested. |
+| RPC overview | Partial | Mining, blockchain, raw transaction, mempool, and wallet RPC groups have source review. Untested examples now link to command-test tracker. |
 | RPC configuration | Partial | Needs tested command examples. |
 
 ## Developer onboarding coverage
@@ -149,7 +150,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. Untested-command labeling pass.
+1. Continue untested-command labeling pass in node, wallet, mining, and configuration pages.
 2. Release artifact verification pass.
 3. Explorer/API documentation framework.
 4. Build/test command smoke-test record.
