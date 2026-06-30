@@ -121,6 +121,8 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Discussion README | Partial | Normalized for proposal/status labeling and discussion boundaries. |
 | History README | Partial | Normalized for dated-source and archive/current-status separation. |
 | Verification README | Partial | Normalized for verification workflow and priority unknowns. |
+| Known unknowns | Partial | Refreshed as short executive list linked to full backlog. |
+| Open questions backlog | Partial | Consolidated with priority labels, evidence needs, and public/private review blockers. |
 | Configuration overview | Partial | Based on generated config/source; local testing pending. |
 | RPC overview | Partial | Mining, blockchain, raw transaction, mempool, and wallet RPC groups have source review. Examples still untested. |
 | RPC configuration | Partial | Needs tested command examples. |
@@ -147,8 +149,8 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. Open-question consolidation pass.
-2. Cross-link and terminology pass across architecture and Source Atlas pages.
+1. Cross-link and terminology pass across architecture and Source Atlas pages.
+2. Untested-command labeling pass.
 3. Release artifact verification pass.
 4. Explorer/API documentation framework.
 5. Build/test command smoke-test record.
