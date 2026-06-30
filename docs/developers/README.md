@@ -5,6 +5,8 @@ This section is for developer-focused BitcoinII (BC2) resources.
 ## Start here
 
 - [Developer reading order](reading-order.md)
+- [Verification standards workflow](verification-standards.md)
+- [Source review guide](source-review-guide.md)
 - [Source atlas](source-atlas/README.md)
 - [Repository map](repository-map.md)
 - [Source tree guide](source-tree.md)
@@ -27,8 +29,6 @@ This section is for developer-focused BitcoinII (BC2) resources.
 
 ## Draft topics still to create
 
-- Source review guide
-- Verification standards workflow
 - Local development environment guide
 - Configuration examples
 - Release verification guide
