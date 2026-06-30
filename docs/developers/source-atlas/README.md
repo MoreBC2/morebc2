@@ -23,6 +23,7 @@ Each page should explain one important source file in plain language, link it to
 - [block template assembly](miner.md)
 - [mining RPC](rpc-mining.md)
 - [blockchain RPC](rpc-blockchain.md)
+- [raw transaction RPC](rpc-rawtransaction.md)
 - [wallet startup](wallet-startup.md)
 - [wallet RPC](wallet-rpc.md)
 - [wallet backup/import RPC](wallet-backup-import-rpc.md)
