@@ -35,6 +35,7 @@ This is not a full source audit. It is a navigation aid that should be expanded 
 | `src/wallet/wallet.h` | Wallet declarations, startup-adjacent defaults, chain notification hooks | E1 partial |
 | `src/wallet/rpc/wallet.cpp` | Wallet RPC registration, management, creation, loading, migration, status | E1 partial |
 | `src/wallet/rpc/addresses.cpp` | Address, change-address, label, grouping, and multisig wallet RPCs | E1 partial |
+| `src/wallet/rpc/backup.cpp` | Wallet backup, restore, import, descriptor import, export, and rescan-related RPCs | E1 partial |
 | `src/txmempool.cpp` | Mempool storage, removal, expiry, prioritization, checking | E1 partial |
 | `src/txmempool.h` | Mempool structure, indexes, ancestor/descendant tracking | E1 partial |
 | `src/kernel/mempool_entry.h` | Mempool entry metadata and lockpoint data | E1 |
@@ -135,10 +136,12 @@ Reviewed or partially reviewed:
 
 - `src/wallet/rpc/wallet.cpp`
 - `src/wallet/rpc/addresses.cpp`
+- `src/wallet/rpc/backup.cpp`
 
 Related MoreBC2 pages:
 
 - [Source atlas: wallet RPC](source-atlas/wallet-rpc.md)
+- [Source atlas: wallet backup/import RPC](source-atlas/wallet-backup-import-rpc.md)
 - [Source atlas: wallet startup](source-atlas/wallet-startup.md)
 - [Wallet guide](../wallets/wallet-guide.md)
 - [RPC overview](rpc-overview.md)
@@ -148,7 +151,7 @@ Questions:
 
 - Which wallet RPC examples can be safely tested locally?
 - Which address and status commands belong in service docs?
-- Which wallet command groups need separate advanced pages?
+- Which recovery commands need separate advanced pages?
 - Which descriptor-vs-legacy behaviors need user-facing explanation?
 - Which build flags affect wallet RPC availability?
 
@@ -303,6 +306,7 @@ Reviewed or partially reviewed:
 - `src/rpc/blockchain.cpp`
 - `src/wallet/rpc/wallet.cpp`
 - `src/wallet/rpc/addresses.cpp`
+- `src/wallet/rpc/backup.cpp`
 
 Likely files/directories to review next:
 
@@ -327,6 +331,7 @@ Reviewed or partially reviewed:
 - startup-adjacent parts of `src/wallet/wallet.h`
 - `src/wallet/rpc/wallet.cpp`
 - `src/wallet/rpc/addresses.cpp`
+- `src/wallet/rpc/backup.cpp`
 
 Likely files/directories to review next:
 
