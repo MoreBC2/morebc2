@@ -75,21 +75,53 @@ Known use from review:
 
 ### `src/consensus/`
 
-Currently reviewed file:
+Currently reviewed or partially reviewed files:
 
 - `src/consensus/amount.h`
+- `src/consensus/tx_check.*`
+- `src/consensus/tx_verify.*`
 
 Known use from review:
 
 - `COIN` definition.
 - `MAX_MONEY` sanity check.
 - `MoneyRange()` helper.
+- Context-independent transaction checks.
+- Transaction finality helpers.
+- Sequence-lock helpers.
+- UTXO-input checks.
+- Operation-cost accounting helpers.
 
 Still needed:
 
-- `src/consensus/tx_check.*`
-- `src/consensus/tx_verify.*`
-- Related script validation paths.
+- Caller graph into validation and mempool acceptance.
+- Upstream comparison.
+
+### `src/script/`
+
+Currently reviewed or partially reviewed files:
+
+- `src/script/interpreter.h`
+- `src/script/interpreter.cpp`
+
+Known use from review:
+
+- Verification flags.
+- Execution versions.
+- Stack-machine evaluation.
+- Signature-checking hooks.
+- Locktime and sequence checker hooks.
+- P2SH handling.
+- Witness program handling.
+- Taproot and Tapscript handling.
+- Witness operation counting.
+
+Still needed:
+
+- Mandatory-vs-policy flag mapping.
+- Caller graph from validation and mempool acceptance.
+- Tests.
+- Upstream comparison.
 
 ### `share/examples/`
 
