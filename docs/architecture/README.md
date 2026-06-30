@@ -13,6 +13,8 @@ Architecture pages should stay conservative. If a relationship has not been veri
 ## Current pages
 
 - [Architecture overview](architecture-overview.md)
+- [Node startup](node-startup.md)
+- [Consensus model](consensus-model.md)
 - [Life of a transaction](life-of-a-transaction.md)
 - [Life of a block](life-of-a-block.md)
 - [Life of a reorganization](life-of-a-reorg.md)
@@ -21,11 +23,8 @@ Architecture pages should stay conservative. If a relationship has not been veri
 
 ## Planned pages
 
-- Node startup
-- Consensus model
-- Network stack
+- Peer communication model
 - Node lifecycle
-- Data flow
 - RPC flow
 - Wallet flow
 - Mining flow
