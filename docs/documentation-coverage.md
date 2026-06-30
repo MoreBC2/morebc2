@@ -85,7 +85,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Network specifications | Partial | Strong source-backed values exist; current release branch should be checked. |
 | Consensus overview | Partial | Strong PoW and amount notes exist; transaction-helper and script-engine material has been refreshed. |
 | Checkpoints | Framework | Existence documented; full checkpoint table and usage pending. |
-| Releases | Framework | Release verification model remains open. |
+| Releases | Partial | Current and legacy release-page observations refreshed; full asset verification still pending. |
 | Explorer resources | Framework | Active explorer checks pending. |
 | Configuration README | Partial | Normalized for source-observed configuration anchors and local-testing rules. |
 | Encyclopedia README | Partial | Normalized for concept pages, Source Atlas links, and BitcoinII-specific claim rules. |
@@ -143,14 +143,14 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Local development environment | Framework | Defines safe test-record workflow; commands still need actual testing. |
 | Build system guide | Partial | First-pass CMake/source-doc review exists. Commands still need actual testing. |
 | Testing guide | Partial | First-pass unit, wallet, CTest, and functional test-runner review exists. Commands still need actual testing. |
-| Release verification guide | Framework | Defines release artifact verification standard; specific releases still need checks. |
+| Release verification guide | Partial | Current release-page observations and verification gaps recorded; binary verification still pending. |
 | Documentation polish plan | Framework | Broad cleanup plan exists and should guide the next phase. |
 | Developer glossary | Partial | Refreshed with RPC, PSBT, broadcast, package, and wallet-history terminology. |
 | Root glossary | Partial | Refreshed with general RPC, raw transaction, PSBT, package, broadcast, and watch-only terms. |
 
 ## Current priority order
 
-1. Release artifact verification pass.
+1. Continue release artifact verification: full current asset list, manifest/signature status, and tag/source comparison.
 2. Explorer/API documentation framework.
 3. Build/test command smoke-test record.
 4. Network RPC or P2P source review.
