@@ -30,11 +30,13 @@ Understand what MoreBC2 is, what it is not, and why verification matters.
 Read these next:
 
 1. [Architecture overview](../architecture/architecture-overview.md)
-2. [Life of a transaction](../architecture/life-of-a-transaction.md)
-3. [Life of a block](../architecture/life-of-a-block.md)
-4. [Life of a reorganization](../architecture/life-of-a-reorg.md)
-5. [Block validation flow](../architecture/block-validation-flow.md)
-6. [Mempool flow](../architecture/mempool-flow.md)
+2. [Node startup](../architecture/node-startup.md)
+3. [Consensus model](../architecture/consensus-model.md)
+4. [Life of a transaction](../architecture/life-of-a-transaction.md)
+5. [Life of a block](../architecture/life-of-a-block.md)
+6. [Life of a reorganization](../architecture/life-of-a-reorg.md)
+7. [Block validation flow](../architecture/block-validation-flow.md)
+8. [Mempool flow](../architecture/mempool-flow.md)
 
 Goal:
 
@@ -64,15 +66,16 @@ Read:
 
 1. [Source atlas index](source-atlas/README.md)
 2. [chainparams.cpp](source-atlas/chainparams-cpp.md)
-3. [pow.cpp](source-atlas/pow-cpp.md)
-4. [block lifecycle](source-atlas/block-acceptance.md)
-5. [validation.cpp](source-atlas/validation-cpp.md)
-6. [mempool accept](source-atlas/mempool-accept.md)
-7. [mempool source](source-atlas/txmempool.md)
-8. [mempool entry](source-atlas/mempool-entry.md)
-9. [disconnected transactions](source-atlas/disconnected-transactions.md)
-10. [block primitives](source-atlas/block-primitives.md)
-11. [hash.h](source-atlas/hash-h.md)
+3. [startup initialization](source-atlas/init-cpp.md)
+4. [pow.cpp](source-atlas/pow-cpp.md)
+5. [block lifecycle](source-atlas/block-acceptance.md)
+6. [validation.cpp](source-atlas/validation-cpp.md)
+7. [mempool accept](source-atlas/mempool-accept.md)
+8. [mempool source](source-atlas/txmempool.md)
+9. [mempool entry](source-atlas/mempool-entry.md)
+10. [disconnected transactions](source-atlas/disconnected-transactions.md)
+11. [block primitives](source-atlas/block-primitives.md)
+12. [hash.h](source-atlas/hash-h.md)
 
 Goal:
 
