@@ -28,9 +28,9 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Architecture overview | Framework | Overview has been refreshed, but should keep changing as source areas and navigation are polished. |
 | Node startup | Partial | Built from first-pass startup-path review, now including wallet loader/startup notes. GUI, daemon, shutdown details pending. |
 | Consensus model | Partial | Built from reviewed chainparams, PoW, validation, block connection, reorg, transaction-helper, and script-engine notes. Flag caller mapping still pending. |
-| Life of a transaction | Partial | Built from reviewed broadcast, mempool, block, reorg, wallet spend/history RPC notes, raw transaction construction/PSBT notes, and mempool/broadcast RPC notes. Lower-level P2P paths pending. |
-| Life of a block | Partial | Built from reviewed block acceptance, validation, notification, storage, template assembly, mining RPC, and blockchain RPC paths. P2P details pending. |
-| Life of a reorganization | Partial | Built from reviewed reorg, disconnection, undo, storage, notification, and mempool re-add paths. Wallet and index handling pending. |
+| Life of a transaction | Partial | Refreshed with wallet RPC, raw transaction RPC, mempool/broadcast RPC, dry-run acceptance, and block-template links. Lower-level P2P paths pending. |
+| Life of a block | Partial | Refreshed with candidate-template, mining RPC, blockchain RPC, and wallet-history visibility links. P2P and subscriber behavior pending. |
+| Life of a reorganization | Partial | Refreshed with wallet transaction-history RPC, mempool RPC, service visibility, and pruned-node caveats. Wallet/index/P2P internals pending. |
 | Block validation flow | Reviewed | Strong first-pass flow map exists. |
 | Mempool flow | Reviewed | Strong first-pass mempool and transaction acceptance map exists. |
 | Wallet flow | Partial | First-pass wallet startup/lifecycle, wallet RPC, backup/import, spend/PSBT, encryption, coins/balances, and transaction-history RPC review exists. Wallet database internals pending. |
@@ -144,12 +144,12 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Testing guide | Partial | First-pass unit, wallet, CTest, and functional test-runner review exists. Commands still need actual testing. |
 | Release verification guide | Framework | Defines release artifact verification standard; specific releases still need checks. |
 | Documentation polish plan | Framework | Broad cleanup plan exists and should guide the next phase. |
-| Developer glossary | Partial | Expanded with transaction, storage, and validation-notification terms. More cross-linking still useful. |
-| Root glossary | Partial | Expanded with common architecture, storage, policy, and release-verification terms. |
+| Developer glossary | Partial | Refreshed with RPC, PSBT, broadcast, package, and wallet-history terminology. |
+| Root glossary | Partial | Refreshed with general RPC, raw transaction, PSBT, package, broadcast, and watch-only terms. |
 
 ## Current priority order
 
-1. Cross-link and terminology pass across architecture and Source Atlas pages.
+1. Continue cross-link pass for remaining architecture/source-atlas pages.
 2. Untested-command labeling pass.
 3. Release artifact verification pass.
 4. Explorer/API documentation framework.
