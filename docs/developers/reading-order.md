@@ -2,7 +2,7 @@
 
 **Category:** Developer guide
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Summary
 
@@ -68,20 +68,40 @@ Read:
 2. [chainparams.cpp](source-atlas/chainparams-cpp.md)
 3. [startup initialization](source-atlas/init-cpp.md)
 4. [pow.cpp](source-atlas/pow-cpp.md)
-5. [block lifecycle](source-atlas/block-acceptance.md)
-6. [validation.cpp](source-atlas/validation-cpp.md)
-7. [mempool accept](source-atlas/mempool-accept.md)
-8. [mempool source](source-atlas/txmempool.md)
-9. [mempool entry](source-atlas/mempool-entry.md)
-10. [disconnected transactions](source-atlas/disconnected-transactions.md)
-11. [block primitives](source-atlas/block-primitives.md)
-12. [hash.h](source-atlas/hash-h.md)
+5. [transaction consensus files](source-atlas/transaction-consensus.md)
+6. [script engine](source-atlas/script-interpreter.md)
+7. [block lifecycle](source-atlas/block-acceptance.md)
+8. [block storage](source-atlas/block-storage.md)
+9. [validation.cpp](source-atlas/validation-cpp.md)
+10. [validation interface](source-atlas/validation-interface.md)
+11. [mempool accept](source-atlas/mempool-accept.md)
+12. [mempool source](source-atlas/txmempool.md)
+13. [mempool entry](source-atlas/mempool-entry.md)
+14. [disconnected transactions](source-atlas/disconnected-transactions.md)
+15. [block primitives](source-atlas/block-primitives.md)
+16. [hash.h](source-atlas/hash-h.md)
 
 Goal:
 
 Move from conceptual understanding to implementation details.
 
-## Fifth pass: integration and operations
+## Fifth pass: developer workflow
+
+Read:
+
+1. [Source review guide](source-review-guide.md)
+2. [Verification standards workflow](verification-standards.md)
+3. [Local development environment](local-development.md)
+4. [Build system guide](build-system.md)
+5. [Testing guide](testing.md)
+6. [Release process guide](release-process.md)
+7. [Release verification guide](release-verification.md)
+
+Goal:
+
+Understand how to add or verify work without turning guesses into documentation.
+
+## Sixth pass: integration and operations
 
 Read based on what you are trying to do:
 
@@ -91,6 +111,7 @@ Read based on what you are trying to do:
 - [Exchange integration package](../exchange/integration-package.md)
 - [Service integration checklist](../exchange/service-integration-checklist.md)
 - [Deposit monitoring](../exchange/deposit-monitoring.md)
+- [Release verification guide](release-verification.md)
 
 ### Node operators
 
@@ -110,7 +131,7 @@ Read based on what you are trying to do:
 - [Mining overview](../mining/mining-overview.md)
 - [Ecosystem mining pools](../ecosystem/mining-pools.md)
 
-## Sixth pass: open work
+## Seventh pass: open work
 
 Read:
 
