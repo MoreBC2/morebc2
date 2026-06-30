@@ -25,14 +25,14 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 | Area | Status | Notes |
 |---|---|---|
-| Architecture overview | Framework | Overview has been refreshed, but should keep changing as source areas and navigation are polished. |
+| Architecture overview | Partial | Refreshed with current Source Atlas, wallet/RPC, mempool, block-template, and service-interface links. |
 | Node startup | Partial | Built from first-pass startup-path review, now including wallet loader/startup notes. GUI, daemon, shutdown details pending. |
-| Consensus model | Partial | Built from reviewed chainparams, PoW, validation, block connection, reorg, transaction-helper, and script-engine notes. Flag caller mapping still pending. |
+| Consensus model | Partial | Refreshed with script-engine, mempool RPC, policy/service-surface, and reorg-history links. Full flag caller mapping still pending. |
 | Life of a transaction | Partial | Refreshed with wallet RPC, raw transaction RPC, mempool/broadcast RPC, dry-run acceptance, and block-template links. Lower-level P2P paths pending. |
 | Life of a block | Partial | Refreshed with candidate-template, mining RPC, blockchain RPC, and wallet-history visibility links. P2P and subscriber behavior pending. |
 | Life of a reorganization | Partial | Refreshed with wallet transaction-history RPC, mempool RPC, service visibility, and pruned-node caveats. Wallet/index/P2P internals pending. |
 | Block validation flow | Reviewed | Strong first-pass flow map exists. |
-| Mempool flow | Reviewed | Strong first-pass mempool and transaction acceptance map exists. |
+| Mempool flow | Partial | Refreshed with mempool RPC, dry-run distinction, mempool inspection, and persistence notes. Replacement policy and tests pending. |
 | Wallet flow | Partial | First-pass wallet startup/lifecycle, wallet RPC, backup/import, spend/PSBT, encryption, coins/balances, and transaction-history RPC review exists. Wallet database internals pending. |
 | Candidate block flow | Partial | First-pass template assembly and mining RPC review exists. External-operation docs pending. |
 
@@ -54,7 +54,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | `src/rpc/mining.cpp` | Partial | First-pass mining RPC, getblocktemplate, submitblock, submitheader, and mining-info review exists. Commands untested. |
 | `src/rpc/blockchain.cpp` | Partial | First-pass blockchain RPC, block lookup, pruning, UTXO stats, scans, and chainstate review exists. Commands untested. |
 | `src/rpc/rawtransaction.cpp` | Partial | First-pass raw transaction lookup, decode, construction, explicit-key signing, and PSBT review exists. Commands untested. |
-| `src/rpc/mempool.cpp` | Partial | First-pass transaction broadcast, mempool acceptance testing, mempool inspection, persistence, orphan, and package RPC review exists. Commands untested. |
+| `src/rpc/mempool.cpp` | Partial | First-pass transaction relay, mempool acceptance testing, mempool inspection, persistence, orphan, and package RPC review exists. Commands untested. |
 | `src/wallet/init.cpp` | Partial | First-pass wallet option, parameter interaction, and loader construction review exists. |
 | `src/wallet/load.*` | Partial | First-pass wallet verification, loading, start, flush, stop, and unload review exists. |
 | `src/wallet/context.*` | Partial | First-pass shared wallet context review exists. |
@@ -149,13 +149,12 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. Continue cross-link pass for remaining architecture/source-atlas pages.
-2. Untested-command labeling pass.
-3. Release artifact verification pass.
-4. Explorer/API documentation framework.
-5. Build/test command smoke-test record.
-6. Network RPC or P2P source review.
-7. Glossary cross-linking during future page updates.
+1. Untested-command labeling pass.
+2. Release artifact verification pass.
+3. Explorer/API documentation framework.
+4. Build/test command smoke-test record.
+5. Network RPC or P2P source review.
+6. Glossary cross-linking during future page updates.
 
 ## Verification
 
