@@ -18,6 +18,9 @@ This is not a full source audit. It is a navigation aid that should be expanded 
 | `src/init.cpp` | Startup orchestration, chainstate loading, RPC warmup, index/wallet loading, final startup handoff | E1 partial |
 | `src/kernel/chainparams.cpp` | Mainnet parameters, genesis block, DNS seeds, address prefixes | E1 |
 | `src/pow.cpp` | Difficulty adjustment and proof-of-work target checks | E1 |
+| `src/consensus/tx_check.*` | Context-independent transaction checks | E1 |
+| `src/consensus/tx_verify.*` | Finality, sequence locks, operation-cost helpers, input checks | E1 |
+| `src/script/interpreter.*` | Script engine, script flags, witness/Taproot paths, script verification entry points | E1 partial |
 | `src/validation.cpp` | Block validation, block connection, reorgs, mempool acceptance paths | E1 partial |
 | `src/validation.h` | Validation declarations and public validation interfaces | E1 partial |
 | `src/txmempool.cpp` | Mempool storage, removal, expiry, prioritization, checking | E1 partial |
@@ -53,21 +56,25 @@ Open questions:
 - Which startup commands have been locally tested?
 - Which shutdown paths should be mapped next?
 
-### Consensus and validation
+### Consensus, validation, and script engine
 
 Reviewed or partially reviewed:
 
 - `src/kernel/chainparams.cpp`
 - `src/pow.cpp`
+- `src/consensus/tx_check.*`
+- `src/consensus/tx_verify.*`
+- `src/script/interpreter.*`
 - `src/validation.cpp`
 - `src/validation.h`
 - `src/consensus/amount.h`
 
 Likely files/directories to review next:
 
-- `src/consensus/tx_check.*`
-- `src/consensus/tx_verify.*`
-- `src/script/`
+- Caller paths for mandatory-vs-policy script flags.
+- Additional files under `src/script/`.
+- Block storage and pruning paths.
+- Validation interface paths.
 
 Related MoreBC2 pages:
 
@@ -75,12 +82,14 @@ Related MoreBC2 pages:
 - [Block validation flow](../architecture/block-validation-flow.md)
 - [Life of a block](../architecture/life-of-a-block.md)
 - [Life of a reorganization](../architecture/life-of-a-reorg.md)
+- [Source atlas: transaction consensus files](source-atlas/transaction-consensus.md)
+- [Source atlas: script engine](source-atlas/script-interpreter.md)
 
 Questions:
 
-- Which transaction consensus paths remain undocumented?
-- Which script flags are mandatory consensus vs policy?
+- Which script flags are mandatory consensus vs policy in each caller context?
 - Which consensus constants are BitcoinII-specific beyond already reviewed chain parameters?
+- Which script tests are inherited and which are BitcoinII-specific?
 
 ### Mempool and transaction policy
 
