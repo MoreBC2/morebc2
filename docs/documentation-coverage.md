@@ -105,8 +105,11 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Area | Status | Notes |
 |---|---|---|
 | Wallet guide | Partial | First-pass wallet startup, wallet RPC, backup/import, spend/PSBT, encryption, coins/balances, transaction-history, address, and source-observed defaults added. Release verification, platform steps, and command testing pending. |
+| Wallets README | Partial | Normalized for current wallet source-review anchors and command-safety rules. |
 | Node guide | Framework | Needs tested commands and current config checks. |
+| Nodes README | Partial | Normalized for current node/source-review anchors and operator-safety rules. |
 | Mining overview | Partial | Consensus-level mining, candidate-template assembly, and mining RPC paths have first-pass source review. Live software/pool data pending. |
+| Mining README | Partial | Normalized for current mining source-review anchors and live-ecosystem caution. |
 | Configuration overview | Partial | Based on generated config/source; local testing pending. |
 | RPC overview | Partial | Mining, blockchain, raw transaction, mempool, and wallet RPC groups have source review. Examples still untested. |
 | RPC configuration | Partial | Needs tested command examples. |
@@ -115,6 +118,8 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 | Area | Status | Notes |
 |---|---|---|
+| Root README | Partial | Refreshed for polish phase and current source-backed coverage. |
+| Docs README | Partial | Refreshed with best starting points and untested-command caution. |
 | Developer README | Partial | Links reading order, verification workflow, source review guide, source atlas, local development, build, testing, and release verification. |
 | Repository map | Partial | Refreshed through mempool/broadcast RPC. Needs polish pass rather than immediate new navigation work. |
 | Source tree guide | Partial | Refreshed through mempool/broadcast RPC. Needs polish pass rather than immediate new navigation work. |
@@ -131,7 +136,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. Broad documentation polish pass: root README, docs index, section READMEs, coverage/audit/status consistency.
+1. Continue section README normalization: research, discussion, history, verification, and any remaining thin indexes.
 2. Open-question consolidation pass.
 3. Cross-link and terminology pass across architecture and Source Atlas pages.
 4. Release artifact verification pass.
