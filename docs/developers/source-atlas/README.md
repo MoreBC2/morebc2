@@ -22,6 +22,7 @@ Each page should explain one important source file in plain language, link it to
 - [block storage](block-storage.md)
 - [block template assembly](miner.md)
 - [mining RPC](rpc-mining.md)
+- [blockchain RPC](rpc-blockchain.md)
 - [block lifecycle](block-acceptance.md)
 - [mempool accept](mempool-accept.md)
 - [mempool source](txmempool.md)
