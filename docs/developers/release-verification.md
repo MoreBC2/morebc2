@@ -8,7 +8,9 @@
 
 This page defines how MoreBC2 should evaluate BitcoinII Core release artifacts.
 
-It does not claim that BitcoinII releases currently provide every verification artifact listed here. It defines the standard MoreBC2 should use when checking releases.
+It does not claim that BitcoinII releases currently provide every verification artifact listed here. It defines the standard MoreBC2 should use when checking releases and records the current gaps found so far.
+
+For release-page observations, see [BitcoinII releases](../documentation/releases.md).
 
 ## Core idea
 
@@ -25,6 +27,28 @@ release binary
 ```
 
 If any step is missing, document the gap clearly.
+
+## Current finding
+
+MoreBC2 has now checked current public GitHub release pages and one source-tree verification helper.
+
+Current observations:
+
+- Current observed release path: `https://github.com/Bitcoin-II/BitcoinII-Core/releases`.
+- Current observed latest release: `BitcoinII Core v29.1.0`.
+- The `v29.1.0` GitHub release page shows a GitHub verified commit marker and assets count.
+- The source tree includes `contrib/verify-binaries/README.md`, which describes a checksum-and-signature model using `SHA256SUMS` and `SHA256SUMS.asc`.
+
+Current caveats:
+
+- MoreBC2 has not confirmed that the GitHub release path is canonical.
+- MoreBC2 has not confirmed the full `v29.1.0` asset list.
+- MoreBC2 has not confirmed that current BitcoinII releases publish `SHA256SUMS` and `SHA256SUMS.asc`.
+- MoreBC2 has not confirmed trusted BitcoinII release keys.
+- MoreBC2 has not downloaded binaries or calculated independent hashes.
+- MoreBC2 has not verified detached signatures.
+
+Therefore, MoreBC2 should still treat release verification as **Needs Review**, not Verified.
 
 ## Evidence levels for releases
 
@@ -75,18 +99,27 @@ For each release, record:
 - Result.
 - Reviewer and date.
 
-## Suggested release table
+## Current release table
 
-| Version | Asset | Hash checked | Checksum file | Signature | Status | Notes |
-|---|---|---|---|---|---|---|
-| v0.27.0 | Needs review | No | Needs review | Needs review | Needs Review | Genesis release observed, verification workflow not confirmed. |
-| v0.27.1 | Needs review | No | Needs review | Needs review | Needs Review | Release observed, verification workflow not confirmed. |
+| Version | Release path | Hash checked | Checksum file | Signature | Status | Notes |
+|---|---|---:|---|---|---|---|
+| v29.1.0 | `Bitcoin-II/BitcoinII-Core` | No | Needs review | Needs review | Needs Review | Latest observed current release; GitHub verified commit marker observed, but binaries not independently verified. |
+| v0.27.1 | redirected legacy path | No | Needs review | Needs review | Needs Review | Observed on redirected legacy repository path; not confirmed as current canonical path. |
+| v0.27.0 | redirected legacy path | No | Needs review | Needs review | Needs Review | Genesis release observed on redirected legacy path; not independently verified. |
+
+## Source-tree helper caveat
+
+The source tree includes a verification helper page at `contrib/verify-binaries/README.md`.
+
+That page describes verifying a checksum file and signature file before comparing downloaded binary hashes.
+
+However, MoreBC2 should not treat that inherited helper as proof that current BitcoinII releases publish all required artifacts. A release-specific review still needs to find the actual checksum files, signature files, and trusted keys for BitcoinII.
 
 ## Verification commands
 
 Do not mark commands verified until they have been run.
 
-When verified, record commands in the test-record format from [Local development environment](local-development.md).
+When verified, record commands in the test-record format from [Command testing status](../verification/command-testing.md) or [Local development environment](local-development.md).
 
 Common command categories to test later:
 
@@ -128,17 +161,19 @@ MoreBC2 should track whether BitcoinII releases meet that kind of standard witho
 
 ## Open questions
 
+- Is `Bitcoin-II/BitcoinII-Core` the canonical release repository?
 - Are BitcoinII release tags signed?
-- Are BitcoinII release commits GitHub-verified?
+- Are BitcoinII release commits GitHub-verified for all current releases?
 - Are SHA256 checksum files published for each release?
 - Are checksum files signed?
 - Which key or keys should be trusted for BitcoinII releases?
 - Are release builds reproducible?
 - Are source archives and binary assets generated from the same commit?
 - What release-verification process should exchanges follow today?
+- How should the redirected legacy repository path be documented?
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This guide defines the release verification standard MoreBC2 should apply. It does not yet verify a specific BitcoinII release.
+**Notes:** This guide defines the release verification standard and now records current release-page observations. It still does not verify a specific BitcoinII release binary.
