@@ -24,6 +24,7 @@ Each page should explain one important source file in plain language, link it to
 - [mining RPC](rpc-mining.md)
 - [blockchain RPC](rpc-blockchain.md)
 - [wallet startup](wallet-startup.md)
+- [wallet RPC](wallet-rpc.md)
 - [block lifecycle](block-acceptance.md)
 - [mempool accept](mempool-accept.md)
 - [mempool source](txmempool.md)
