@@ -10,6 +10,14 @@ The encyclopedia section is for short, cross-linked explainers of concepts used 
 
 Glossary entries define terms briefly. Encyclopedia pages explain them more deeply.
 
+## Current pages
+
+- [Developer glossary](developer-glossary.md)
+- [Confirmations](confirmations.md)
+- [Reorganizations](reorganizations.md)
+- [Proof-of-work](proof-of-work.md)
+- [Difficulty adjustment](difficulty-adjustment.md)
+
 ## Rules
 
 - Keep general concepts neutral.
@@ -26,15 +34,12 @@ Glossary entries define terms briefly. Encyclopedia pages explain them more deep
 - Checkpoints
 - Consensus
 - Difficulty
-- Difficulty adjustment
 - DNS seeds
 - Genesis block
 - Mempool
 - Merkle root
 - Nodes
 - Peer discovery
-- Proof-of-work
-- Reorganizations
 - RPC
 - UTXOs
 - Wallets
