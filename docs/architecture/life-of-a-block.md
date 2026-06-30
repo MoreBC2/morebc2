@@ -2,13 +2,13 @@
 
 **Category:** Architecture
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Summary
 
 This page explains the reviewed BitcoinII block lifecycle at a high level.
 
-It connects block header validation, full block checks, disk storage, block-index updates, best-chain activation, UTXO connection, and notifications.
+It connects block header validation, full block checks, disk storage, block-index updates, best-chain activation, UTXO connection, undo-data creation, and validation notifications.
 
 ## Simplified lifecycle
 
@@ -18,12 +18,14 @@ Miner / peer / disk import
   -> header is checked
   -> full block is checked
   -> contextual checks run
-  -> block data is stored
-  -> block index is updated
+  -> block data is stored in blk files
+  -> block index and file metadata are updated
   -> best-chain candidate is selected
   -> block is connected if it belongs on best chain
+  -> undo data is written for disconnect safety
   -> UTXO set is updated
   -> active tip changes
+  -> validation notifications are emitted
 ```
 
 ## Step 1: Block creation
@@ -70,7 +72,7 @@ Reviewed checks include:
 - First transaction must be coinbase.
 - Later transactions must not be coinbase.
 - Per-transaction context-free checks.
-- Legacy sigops limit.
+- Operation-count limit checks.
 
 ## Step 5: Contextual block checks
 
@@ -97,7 +99,22 @@ Reviewed behavior includes:
 
 `ReceivedBlockTransactions` records block-data status, file position, and transaction count, then makes eligible blocks candidates for chain connection.
 
-## Step 7: Best-chain selection
+## Step 7: Block storage details
+
+The reviewed block-storage layer writes serialized blocks to `blk` files and tracks their positions through block-index metadata.
+
+Reviewed storage behavior includes:
+
+- `BlockManager::WriteBlock` choosing a flat-file position.
+- Writing message-start bytes and serialized block size before the block payload.
+- Writing the block with witness data.
+- Updating block-file statistics and dirty-file metadata.
+- Maintaining block-file cursors.
+- Supporting reindex and imported block files through `ImportBlocks`.
+
+The block-storage layer is not the same as validation. It gives validation durable data to read later.
+
+## Step 8: Best-chain selection
 
 `ActivateBestChain` and related functions choose the best usable chain.
 
@@ -108,7 +125,7 @@ Reviewed behavior includes:
 - Disconnecting old active blocks if needed.
 - Connecting candidate blocks with `ConnectTip`.
 
-## Step 8: UTXO connection
+## Step 9: UTXO connection
 
 `ConnectTip` calls `ConnectBlock`.
 
@@ -119,13 +136,26 @@ Reviewed `ConnectBlock` behavior includes:
 - Building undo data.
 - Accumulating fees.
 - Checking sequence locks.
-- Counting sigop cost.
-- Running input script checks when enabled.
+- Counting operation cost.
+- Running input verification checks when enabled.
 - Updating the coins view.
 - Checking that coinbase output value does not exceed fees plus subsidy.
 - Setting the coins view best block to the connected block.
 
-## Step 9: Tip update and notifications
+## Step 10: Undo data
+
+When a block is connected, the node records undo data so the block can later be disconnected if a reorganization happens.
+
+Reviewed storage behavior includes:
+
+- Writing undo data to `rev` files.
+- Writing message-start bytes and undo-data size.
+- Writing a checksum based on the previous block hash and undo data.
+- Updating the block index with undo position and undo-availability status.
+
+Undo data is what lets the node reverse a connected block without guessing how the UTXO set used to look.
+
+## Step 11: Tip update and notifications
 
 When a block is connected as the active tip, reviewed paths call or emit:
 
@@ -134,9 +164,13 @@ When a block is connected as the active tip, reviewed paths call or emit:
 - `UpdatedBlockTip`
 - Header-tip notifications
 
-Wallets, indexes, RPC observers, and other validation-interface clients can depend on these notifications.
+The validation-interface layer delivers block, chain, and mempool events to subscribers such as wallets, indexes, and other observers.
 
-## Step 10: Confirmations
+Important ordering caveat:
+
+A single subscriber receives callbacks in generated order, but no ordering should be assumed across different subscribers.
+
+## Step 12: Confirmations
 
 A block on the active best chain confirms its included transactions.
 
@@ -152,10 +186,10 @@ That is covered in [Life of a reorganization](life-of-a-reorg.md).
 
 - Mining/block-template construction.
 - Network block relay caller paths.
-- Block storage internals.
-- Pruning internals.
-- Validation-interface callback ordering.
 - Local block submission path.
+- Full undo-read behavior.
+- Full pruning failure and recovery behavior.
+- Wallet/index subscriber behavior after notifications.
 
 ## Related pages
 
@@ -163,6 +197,8 @@ That is covered in [Life of a reorganization](life-of-a-reorg.md).
 - [Life of a transaction](life-of-a-transaction.md)
 - [Life of a reorganization](life-of-a-reorg.md)
 - [Source atlas: block lifecycle](../developers/source-atlas/block-acceptance.md)
+- [Source atlas: block storage](../developers/source-atlas/block-storage.md)
+- [Source atlas: validation interface](../developers/source-atlas/validation-interface.md)
 - [Source atlas: validation.cpp](../developers/source-atlas/validation-cpp.md)
 - [Consensus overview](../documentation/consensus-overview.md)
 - [Proof-of-work](../encyclopedia/proof-of-work.md)
@@ -171,4 +207,4 @@ That is covered in [Life of a reorganization](life-of-a-reorg.md).
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This explainer is based on reviewed block acceptance, validation, best-chain activation, and UTXO connection notes. Mining, P2P, storage, and pruning internals need deeper review.
+**Notes:** This explainer is based on reviewed block acceptance, validation, best-chain activation, UTXO connection, block-storage, undo-writing, and validation-interface notes. Mining, P2P, local submission, and wallet/index subscriber behavior need deeper review.
