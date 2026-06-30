@@ -4,6 +4,12 @@ This section tracks claims, values, links, and pages that need checking.
 
 Use this section when something is important but not ready to become verified documentation.
 
+## Main verification pages
+
+- [Open questions backlog](open-questions.md)
+- [Known unknowns](known-unknowns.md)
+- [Documentation coverage](../documentation-coverage.md)
+
 ## How to use this queue
 
 1. Write the claim or question clearly.
@@ -75,5 +81,7 @@ Use this section when something is important but not ready to become verified do
 **Status:** Needs Review
 
 ## Notes
+
+The backlog page is now the preferred place to add larger cross-project verification questions. This README keeps the highest-priority legacy queue visible.
 
 Items in this queue should not be treated as verified documentation until moved to the proper page with sources.
