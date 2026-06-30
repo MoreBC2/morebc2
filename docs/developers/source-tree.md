@@ -118,8 +118,7 @@ Still needed:
 - Raw transaction RPC files.
 - Mempool RPC files.
 - Network RPC files.
-- Wallet RPC files.
-- RPC examples tested against a local node.
+- Remaining RPC examples tested against a local node.
 - Service-safe RPC command recommendations.
 
 ### `src/wallet/`
@@ -132,6 +131,8 @@ Currently reviewed or partially reviewed files:
 - `src/wallet/context.h`
 - `src/wallet/context.cpp`
 - startup-adjacent parts of `src/wallet/wallet.h`
+- `src/wallet/rpc/wallet.cpp`
+- `src/wallet/rpc/addresses.cpp`
 
 Known use from review:
 
@@ -145,19 +146,25 @@ Known use from review:
 - Wallet start, flush, stop, and unload helpers.
 - Shared wallet context state.
 - Startup-adjacent wallet defaults and declarations.
+- Wallet RPC command registration.
+- Wallet state, wallet directory, and loaded-wallet status RPCs.
+- Wallet create, load, unload, migration, and flag RPCs.
+- Address, change-address, label, grouping, and multisig RPCs.
 
 Related pages:
 
 - [Source atlas: wallet startup](source-atlas/wallet-startup.md)
+- [Source atlas: wallet RPC](source-atlas/wallet-rpc.md)
 - [Wallet guide](../wallets/wallet-guide.md)
+- [RPC overview](rpc-overview.md)
 - [Node startup](../architecture/node-startup.md)
 
 Still needed:
 
-- Wallet RPC files.
+- Remaining wallet RPC source files.
 - Wallet database internals.
 - Wallet transaction creation paths.
-- Backup and restore paths.
+- Wallet backup and restore paths.
 - GUI wallet paths.
 
 ### `src/kernel/`
