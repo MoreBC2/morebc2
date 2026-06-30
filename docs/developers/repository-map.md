@@ -29,6 +29,7 @@ This is not a full source audit. It is a navigation aid that should be expanded 
 | `src/node/mini_miner.*` | Fee and ordering simulation helper | E1 partial |
 | `src/rpc/mining.cpp` | Mining RPC, candidate template, block/header submission, mining status | E1 partial |
 | `src/rpc/blockchain.cpp` | Blockchain RPC, block lookup, pruning, UTXO scans, chainstate status | E1 partial |
+| `src/rpc/rawtransaction.cpp` | Raw transaction lookup, decode, unsigned construction, explicit-key signing, and PSBT RPCs | E1 partial |
 | `src/wallet/init.cpp` | Wallet options, parameter interaction, wallet loader construction | E1 partial |
 | `src/wallet/load.*` | Wallet verification, loading, start, flush, stop, unload | E1 partial |
 | `src/wallet/context.*` | Shared wallet context and wallet list state | E1 partial |
@@ -252,6 +253,27 @@ Questions:
 - Which pruning and block-data errors should become operator troubleshooting notes?
 - Which scan commands belong in normal docs versus advanced recovery docs?
 
+### Raw transaction RPC
+
+Reviewed or partially reviewed:
+
+- `src/rpc/rawtransaction.cpp`
+
+Related MoreBC2 pages:
+
+- [Source atlas: raw transaction RPC](source-atlas/rpc-rawtransaction.md)
+- [RPC overview](rpc-overview.md)
+- [Service integration checklist](../exchange/service-integration-checklist.md)
+- [Life of a transaction](../architecture/life-of-a-transaction.md)
+
+Questions:
+
+- Which raw transaction examples can be tested safely on regtest?
+- Which raw transaction commands belong in service docs?
+- Which PSBT workflows are safest for service integrations?
+- Where are transaction broadcast and mempool acceptance RPCs implemented?
+- How should txindex and pruned-node limitations be explained for services?
+
 ### Validation notifications
 
 Reviewed or partially reviewed:
@@ -293,6 +315,7 @@ Questions:
 - What replacement-policy details still need review?
 - Which mempool defaults should be documented for operators?
 - Which package acceptance behaviors need deeper explanation?
+- Which RPCs expose mempool/package acceptance state?
 
 ### Networking
 
@@ -318,6 +341,7 @@ Reviewed or partially reviewed:
 
 - `src/rpc/mining.cpp`
 - `src/rpc/blockchain.cpp`
+- `src/rpc/rawtransaction.cpp`
 - `src/wallet/rpc/wallet.cpp`
 - `src/wallet/rpc/addresses.cpp`
 - `src/wallet/rpc/backup.cpp`
@@ -328,6 +352,7 @@ Reviewed or partially reviewed:
 
 Likely files/directories to review next:
 
+- mempool or transaction-broadcast RPC files
 - other `src/rpc/` files
 - `src/bitcoinII-cli.cpp`
 - remaining `src/wallet/` internals
