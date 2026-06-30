@@ -52,6 +52,12 @@ A node's local index of known block headers and related metadata.
 
 An ordered chain of blocks where each block commits to the previous block.
 
+## Broadcast
+
+Sending a transaction or block from one node toward the peer-to-peer network.
+
+For transactions, distinguish live broadcast from dry-run mempool acceptance checks.
+
 ## Chainstate
 
 A node's current view of the active chain and spendable coin state.
@@ -91,6 +97,12 @@ See also: [Difficulty adjustment](docs/encyclopedia/difficulty-adjustment.md).
 ## DNS seed
 
 A DNS service that helps new nodes discover peers on the network.
+
+## Dry-run acceptance check
+
+A local check that reports whether a transaction would be accepted without submitting it for relay.
+
+See also: [Source atlas: mempool and transaction broadcast RPC](docs/developers/source-atlas/rpc-mempool.md).
 
 ## Explorer
 
@@ -144,6 +156,10 @@ A value miners change while searching for a block header hash that satisfies pro
 
 A block that was validly found but did not become part of the active best chain.
 
+## Package
+
+A group of related transactions evaluated together, often because one unconfirmed transaction depends on another.
+
 ## P2P
 
 Peer-to-peer networking between nodes.
@@ -163,6 +179,18 @@ See also: [Proof-of-work](docs/encyclopedia/proof-of-work.md).
 ## Pruning
 
 Deleting old block data from local disk while preserving enough validated state for node operation.
+
+## PSBT
+
+Partially Signed Bitcoin Transaction. A format used to coordinate transaction construction across tools or participants before a final transaction is produced.
+
+See also: [Source atlas: raw transaction RPC](docs/developers/source-atlas/rpc-rawtransaction.md).
+
+## Raw transaction
+
+A transaction represented in serialized form, usually as hex, outside the wallet's normal high-level send flow.
+
+See also: [Source atlas: raw transaction RPC](docs/developers/source-atlas/rpc-rawtransaction.md).
 
 ## Reindex
 
@@ -184,6 +212,8 @@ See also: [Life of a reorganization](docs/architecture/life-of-a-reorg.md).
 
 Remote Procedure Call. A way for tools, wallets, exchanges, and services to communicate with node software.
 
+See also: [RPC overview](docs/developers/rpc-overview.md).
+
 ## Sequence lock
 
 A relative locktime rule that can prevent a transaction from being valid until certain height or time conditions are met.
@@ -195,6 +225,10 @@ The short market symbol commonly used for a cryptocurrency, such as BC2 for Bitc
 ## Undo data
 
 Data stored so a node can return the UTXO view to an earlier state during a reorganization.
+
+## Unbroadcast transaction
+
+A locally accepted transaction that the node tracks for relay until it is believed to have been announced successfully.
 
 ## UTXO
 
@@ -208,7 +242,11 @@ See also: [Source atlas: validation interface](docs/developers/source-atlas/vali
 
 ## Wallet
 
-Software that manages keys and helps users send or receive funds. Some wallets also include full-node functionality.
+Software that manages addresses and helps users receive or send funds. Some wallets also include full-node functionality.
+
+## Watch-only
+
+A wallet or wallet entry that can observe funds or transactions without holding the key material needed to authorize movement.
 
 ## Verification
 
