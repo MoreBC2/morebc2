@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Summary
 
@@ -18,6 +18,7 @@ Each page should explain one important source file in plain language, link it to
 - [transaction consensus files](transaction-consensus.md)
 - [script engine](script-interpreter.md)
 - [validation.cpp](validation-cpp.md)
+- [validation interface](validation-interface.md)
 - [block lifecycle](block-acceptance.md)
 - [mempool accept](mempool-accept.md)
 - [mempool source](txmempool.md)
