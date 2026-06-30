@@ -27,7 +27,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 |---|---|---|
 | Architecture overview | Framework | Existing overview needs refresh after lifecycle pages. |
 | Node startup | Partial | Built from first-pass `src/init.cpp` startup-path review. GUI/daemon/shutdown paths pending. |
-| Consensus model | Partial | Built from reviewed chainparams, PoW, validation, block connection, and reorg notes. Transaction/script consensus pending. |
+| Consensus model | Partial | Built from reviewed chainparams, PoW, validation, block connection, reorg, and transaction consensus helper notes. Script consensus pending. |
 | Life of a transaction | Partial | Built from reviewed broadcast, mempool, block, and reorg notes. Wallet/P2P/mining paths pending. |
 | Life of a block | Partial | Built from reviewed block acceptance and validation paths. Mining/P2P/storage details pending. |
 | Life of a reorganization | Partial | Built from reviewed reorg, disconnection, undo, and mempool re-add paths. Wallet/index handling pending. |
@@ -43,6 +43,8 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | `src/kernel/chainparams.cpp` | Reviewed | Mainnet parameters documented; release-branch confirmation still needed. |
 | `src/init.cpp` | Partial | Startup orchestration first pass exists. GUI/daemon/shutdown and option-level details pending. |
 | `src/pow.cpp` | Reviewed | Difficulty retarget and PoW checks documented. |
+| `src/consensus/tx_check.*` | Reviewed | Context-independent transaction checks first pass exists. Upstream comparison pending. |
+| `src/consensus/tx_verify.*` | Reviewed | Finality, sequence locks, operation-cost helpers, and input checks first pass exists. Script internals pending. |
 | `src/validation.cpp` | Partial | Major validation, connection, reorg, mempool acceptance paths reviewed. Large file still not fully exhausted. |
 | Block acceptance path | Reviewed | Consolidated source-atlas lifecycle page exists. |
 | `src/txmempool.*` | Partial | Core mempool structure and many functions reviewed. Policy details pending. |
@@ -51,8 +53,6 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | `src/primitives/block.*` | Partial | Block hash path reviewed; broader primitive review pending. |
 | `src/hash.h` | Partial | Double-SHA256 path reviewed; broader hash utility review pending. |
 | `src/consensus/amount.h` | Partial | COIN/MAX_MONEY documented; broader consensus files pending. |
-| `src/consensus/tx_check.*` | Not started | Needed for transaction consensus validation. |
-| `src/consensus/tx_verify.*` | Not started | Needed for UTXO input consensus checks. |
 | Script interpreter | Not started | Needed for script validation model. |
 | Block storage | Not started | Needed for disk/pruning details. |
 | Mining/block template | Not started | Needed for mining flow and mempool selection details. |
@@ -110,14 +110,14 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. Architecture overview refresh.
-2. Repository map refresh.
-3. Source tree guide refresh.
-4. Transaction consensus source review.
-5. Script validation source review.
-6. Local development environment guide.
-7. Release verification guide.
-8. Glossary expansion and cross-linking.
+1. Script validation source review.
+2. Consensus overview refresh.
+3. Repository map refresh for transaction consensus files.
+4. Source tree guide refresh for transaction consensus files.
+5. Local development environment guide.
+6. Release verification guide.
+7. Glossary expansion and cross-linking.
+8. Block storage source review.
 
 ## Verification
 
