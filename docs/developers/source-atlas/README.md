@@ -13,6 +13,7 @@ Each page should explain one important source file in plain language, link it to
 ## Current atlas entries
 
 - [chainparams.cpp](chainparams-cpp.md)
+- [startup initialization](init-cpp.md)
 - [pow.cpp](pow-cpp.md)
 - [validation.cpp](validation-cpp.md)
 - [block lifecycle](block-acceptance.md)
