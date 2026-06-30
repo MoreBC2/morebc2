@@ -29,6 +29,10 @@ This is not a full source audit. It is a navigation aid that should be expanded 
 | `src/node/mini_miner.*` | Fee and ordering simulation helper | E1 partial |
 | `src/rpc/mining.cpp` | Mining RPC, candidate template, block/header submission, mining status | E1 partial |
 | `src/rpc/blockchain.cpp` | Blockchain RPC, block lookup, pruning, UTXO scans, chainstate status | E1 partial |
+| `src/wallet/init.cpp` | Wallet options, parameter interaction, wallet loader construction | E1 partial |
+| `src/wallet/load.*` | Wallet verification, loading, start, flush, stop, unload | E1 partial |
+| `src/wallet/context.*` | Shared wallet context and wallet list state | E1 partial |
+| `src/wallet/wallet.h` | Wallet declarations, startup-adjacent defaults, chain notification hooks | E1 partial |
 | `src/txmempool.cpp` | Mempool storage, removal, expiry, prioritization, checking | E1 partial |
 | `src/txmempool.h` | Mempool structure, indexes, ancestor/descendant tracking | E1 partial |
 | `src/kernel/mempool_entry.h` | Mempool entry metadata and lockpoint data | E1 |
@@ -50,17 +54,20 @@ This is not a full source audit. It is a navigation aid that should be expanded 
 Reviewed or partially reviewed:
 
 - `src/init.cpp`
+- wallet loader interaction from `src/wallet/init.cpp`
 
 Related MoreBC2 pages:
 
 - [Node startup](../architecture/node-startup.md)
 - [Source atlas: startup initialization](source-atlas/init-cpp.md)
+- [Source atlas: wallet startup](source-atlas/wallet-startup.md)
 
 Open questions:
 
 - Which executable entry points call the reviewed startup helpers in daemon and GUI mode?
 - Which startup commands have been locally tested?
 - Which shutdown paths should be mapped next?
+- Which wallet GUI startup paths differ from daemon startup?
 
 ### Consensus, validation, and script engine
 
@@ -103,6 +110,31 @@ Questions:
 - Which storage failure paths matter most for operator troubleshooting?
 - Which consensus constants are BitcoinII-specific beyond already reviewed chain parameters?
 - Which tests cover transaction, script, storage, and notification behavior?
+
+### Wallet startup and lifecycle
+
+Reviewed or partially reviewed:
+
+- `src/wallet/init.cpp`
+- `src/wallet/load.h`
+- `src/wallet/load.cpp`
+- `src/wallet/context.h`
+- `src/wallet/context.cpp`
+- startup-adjacent parts of `src/wallet/wallet.h`
+
+Related MoreBC2 pages:
+
+- [Source atlas: wallet startup](source-atlas/wallet-startup.md)
+- [Wallet guide](../wallets/wallet-guide.md)
+- [Node startup](../architecture/node-startup.md)
+
+Questions:
+
+- Which wallet RPC files expose create/load/backup/send behavior?
+- Which wallet database formats are enabled in current releases?
+- Which backup and restore workflows can be tested safely?
+- Which wallet notification paths should be mapped to validation-interface events?
+- Which GUI wallet flows differ from CLI/daemon behavior?
 
 ### Block storage, pruning, and reindex
 
@@ -269,17 +301,25 @@ Questions:
 
 ### Wallet
 
-Likely files/directories to review:
+Reviewed or partially reviewed:
 
-- `src/wallet/`
-- `src/qt/`
+- `src/wallet/init.cpp`
+- `src/wallet/load.*`
+- `src/wallet/context.*`
+- startup-adjacent parts of `src/wallet/wallet.h`
+
+Likely files/directories to review next:
+
+- other `src/wallet/` files
+- `src/wallet/rpc*`
+- `src/qt/` wallet paths
 
 Questions:
 
-- Where is wallet loading handled beyond the startup interface calls?
 - Where is address generation handled?
 - Which wallet behavior should be documented for users and exchanges?
 - What backup and restore guidance is source-backed or tested?
+- Which wallet RPCs are safest for service documentation?
 
 ### Build and release
 
