@@ -24,8 +24,12 @@ Mempool acceptance affects:
 
 ## Main reviewed entry points
 
-Reviewed methods include:
+Reviewed methods and wrappers include:
 
+- `AcceptToMemoryPool`
+- `ProcessNewPackage`
+- `ChainstateManager::ProcessTransaction` declaration
+- `node::BroadcastTransaction`
 - `AcceptSingleTransaction`
 - `AcceptMultipleTransactions`
 - `AcceptSubPackage`
@@ -38,6 +42,88 @@ Reviewed methods include:
 - `Finalize`
 - `SubmitPackage`
 - `CleanupTemporaryCoins`
+
+## Public-facing wrappers and caller paths
+
+### `AcceptToMemoryPool`
+
+Reviewed behavior:
+
+- Requires `cs_main` to be held.
+- Gets chain parameters from the active chainstate's chain manager.
+- Requires the active chainstate to have a mempool.
+- Builds `ATMPArgs::SingleAccept`.
+- Calls `MemPoolAccept(...).AcceptSingleTransaction(...)`.
+- If the result is not valid, uncaches coins added during validation to prevent memory DoS through invalid transactions.
+- Emits a mempool rejection tracepoint.
+- Calls `FlushStateToDisk` with periodic mode after validation so the coins cache remains within limits.
+- Returns a `MempoolAcceptResult`.
+
+### `ProcessNewPackage`
+
+Reviewed behavior:
+
+- Requires `cs_main` to be held.
+- Requires the package to be non-empty and contain non-null transactions.
+- Builds package acceptance arguments based on whether this is test acceptance or real submission.
+- For test acceptance, uses `ATMPArgs::PackageTestAccept` and calls `AcceptMultipleTransactions`.
+- For real submission, uses `ATMPArgs::PackageChildWithParents` and calls `AcceptPackage`.
+- Uncaches coins for transactions not submitted to the mempool when test-accept is used or package validation is invalid.
+- Calls `FlushStateToDisk` with periodic mode after validation.
+- Returns a `PackageMempoolAcceptResult`.
+
+### `ChainstateManager::ProcessTransaction`
+
+Reviewed declaration:
+
+- Public method on `ChainstateManager`.
+- Attempts to add a transaction to the memory pool.
+- Takes a transaction reference and a `test_accept` flag.
+- Returns `MempoolAcceptResult`.
+
+The exact implementation location still needs a follow-up source search because the declaration is clear in `validation.h`, while this pass focused on the wrapper and caller paths around it.
+
+### `node::BroadcastTransaction`
+
+Reviewed behavior:
+
+- Can be called by RPC or by the wallet.
+- Requires chain manager, mempool, and peer manager to be initialized.
+- Checks whether the transaction is already confirmed in the active chain and returns `ALREADY_IN_CHAIN` if so.
+- Checks whether a transaction with the same txid is already in the mempool and, if found, uses the mempool transaction's witness transaction ID for possible reannouncement.
+- If `max_tx_fee` is set, first calls `ProcessTransaction(..., test_accept=true)` and rejects if the transaction would exceed the maximum fee.
+- Calls `ProcessTransaction(..., test_accept=false)` to submit the transaction to the mempool.
+- Adds the txid to the mempool's unbroadcast set when relay is requested.
+- Optionally waits for validation-interface callbacks so wallet/RPC users do not see stale wallet state immediately after broadcast.
+- Relays the transaction through peer manager when relay is requested.
+
+## `MempoolAcceptResult`
+
+Reviewed result types:
+
+- `VALID` — fully validated and valid.
+- `INVALID` — invalid or rejected.
+- `MEMPOOL_ENTRY` — already in the mempool.
+- `DIFFERENT_WITNESS` — same txid but different witness transaction already exists in the mempool.
+
+Reviewed result fields include:
+
+- Validation state.
+- Replaced transactions.
+- Virtual size.
+- Base fees.
+- Effective feerate.
+- Witness transaction IDs used for fee calculations.
+- Other wtxid for same-txid/different-witness results.
+
+## `PackageMempoolAcceptResult`
+
+Reviewed behavior:
+
+- Stores package-level validation state.
+- Stores a map from wtxid to finished `MempoolAcceptResult`.
+- Some transaction results may be missing if validation stopped early.
+- Package-wide errors can return an empty result map.
 
 ## `ATMPArgs`
 
@@ -54,7 +140,7 @@ Reviewed behavior:
 - Whether the transaction is part of a package submission.
 - Whether package feerates are used.
 
-The reviewed code includes a `SingleInPackageAccept` helper that adjusts arguments for one transaction inside package handling.
+The reviewed code includes helpers for single-transaction acceptance, package test acceptance, child-with-parents package acceptance, and single-transaction acceptance inside package handling.
 
 ## `Workspace`
 
@@ -258,16 +344,17 @@ This reviewed code shows BitcoinII naming and fork metadata. This pass has not i
 
 ## Open questions
 
-- Review public `AcceptToMemoryPool` wrappers and caller paths.
-- Review `validation.h` declarations for transaction acceptance APIs.
+- Locate and review the exact `ChainstateManager::ProcessTransaction` implementation body.
 - Review package acceptance code in a second pass to capture full subpackage behavior.
 - Review replacement-policy helper functions and policy documentation.
 - Review functional tests for mempool acceptance.
+- Review RPC caller paths such as `testmempoolaccept` and transaction broadcast RPCs.
 
 ## Sources
 
 - `src/validation.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/validation.cpp
 - `src/validation.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/validation.h
+- `src/node/transaction.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/node/transaction.cpp
 - `src/txmempool.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/txmempool.h
 - `src/txmempool.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/txmempool.cpp
 
@@ -275,4 +362,4 @@ This reviewed code shows BitcoinII naming and fork metadata. This pass has not i
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a first-pass transaction acceptance audit. Replacement policy, public caller paths, and tests still need separate review.
+**Notes:** This is a transaction acceptance audit with public wrapper and broadcast caller notes. Replacement policy, RPC paths, tests, and the exact `ProcessTransaction` implementation still need separate review.
