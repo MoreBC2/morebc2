@@ -55,6 +55,7 @@ MoreBC2 has reviewed first-pass source maps for these RPC files:
 
 - [Mining RPC](source-atlas/rpc-mining.md): `src/rpc/mining.cpp`
 - [Blockchain RPC](source-atlas/rpc-blockchain.md): `src/rpc/blockchain.cpp`
+- [Wallet RPC](source-atlas/wallet-rpc.md): `src/wallet/rpc/wallet.cpp` and `src/wallet/rpc/addresses.cpp`
 
 These reviews document command groups and behavior from source, but do not mark command examples as tested.
 
@@ -99,6 +100,29 @@ Reviewed blockchain RPC commands include:
 
 Some commands are powerful, slow, experimental, or intended for advanced workflows. They should be documented carefully and tested before being recommended.
 
+## Wallet RPC group
+
+Reviewed wallet RPC commands include:
+
+- `getwalletinfo`
+- `listwalletdir`
+- `listwallets`
+- `loadwallet`
+- `unloadwallet`
+- `createwallet`
+- `setwalletflag`
+- `sethdseed`
+- `upgradewallet`
+- `migratewallet`
+- `simulaterawtransaction`
+- `getnewaddress`
+- `getrawchangeaddress`
+- `setlabel`
+- `listaddressgroupings`
+- `addmultisigaddress`
+
+The reviewed wallet registration table also includes backup, import, encryption, balance, coin, spend, PSBT, signing, transaction-history, and rescan commands. Those command groups still need deeper file-specific review before examples are recommended.
+
 ## Commands to test later
 
 These commands are common for Bitcoin-style node operation, but they still need to be tested against BitcoinII Core before being moved into verified examples:
@@ -121,6 +145,8 @@ bitcoinII-cli getbestblockhash
 bitcoinII-cli getmininginfo
 bitcoinII-cli getdifficulty
 bitcoinII-cli getblocktemplate '{"rules":["segwit"]}'
+bitcoinII-cli listwallets
+bitcoinII-cli listwalletdir
 ```
 
 ## Exchange/service-provider caution
@@ -131,7 +157,9 @@ For service docs, MoreBC2 should distinguish:
 
 - Read-only status commands.
 - Block and transaction lookup commands.
-- Wallet commands that can create addresses or move funds.
+- Address/deposit commands.
+- Wallet commands that can create addresses.
+- Wallet commands that expose keys, sign transactions, or move funds.
 - Maintenance commands that can affect node state.
 - Hidden/testing commands that should not appear in normal operator guides.
 
@@ -141,7 +169,7 @@ For service docs, MoreBC2 should distinguish:
 - Confirm binary names for each platform and release asset.
 - Confirm configuration file paths by operating system.
 - Confirm wallet loading behavior.
-- Review wallet RPC files.
+- Review wallet backup, spend, encryption, transaction, and coin RPC files in more detail.
 - Review network RPC files.
 - Review raw transaction RPC files.
 - Confirm whether any BitcoinII-specific RPC differences exist beyond naming and visible strings.
@@ -152,9 +180,11 @@ For service docs, MoreBC2 should distinguish:
 - `doc/JSON-RPC-interface.md`
 - `src/rpc/mining.cpp`
 - `src/rpc/blockchain.cpp`
+- `src/wallet/rpc/wallet.cpp`
+- `src/wallet/rpc/addresses.cpp`
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** Port and config-option notes are source-backed. Mining and blockchain RPC groups have first-pass source review. Command examples are placeholders until tested.
+**Notes:** Port and config-option notes are source-backed. Mining, blockchain, and first-pass wallet RPC groups have source review. Command examples are placeholders until tested.
