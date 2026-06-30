@@ -1,8 +1,16 @@
 # Verification queue
 
-This section tracks claims, values, links, and pages that need checking.
+**Category:** Verification
+**Status:** Draft
+**Last reviewed:** 2026-06-30
+
+## Summary
+
+This section tracks claims, values, links, examples, and pages that need checking.
 
 Use this section when something is important but not ready to become verified documentation.
+
+Verification pages should help MoreBC2 keep uncertainty visible instead of hiding it inside confident-sounding docs.
 
 ## Main verification pages
 
@@ -15,8 +23,9 @@ Use this section when something is important but not ready to become verified do
 1. Write the claim or question clearly.
 2. List possible sources.
 3. Assign a current evidence level.
-4. Move verified results into the correct documentation page.
-5. Leave a note explaining what changed.
+4. Decide whether it blocks private review, public launch, or only future polish.
+5. Move verified results into the correct documentation page.
+6. Leave a note explaining what changed.
 
 ## Open verification items
 
@@ -80,8 +89,22 @@ Use this section when something is important but not ready to become verified do
 
 **Status:** Needs Review
 
+## Rules
+
+- Do not move an item out of verification until the evidence is strong enough for the target page.
+- Keep current facts, historical facts, research ideas, and discussion proposals separate.
+- Record the source type used: source code, release artifact, official website, archive, maintainer statement, local test, or current direct check.
+- Command examples should remain unverified until run locally with environment details.
+- Ecosystem claims should remain unverified until checked directly and dated.
+
 ## Notes
 
 The backlog page is now the preferred place to add larger cross-project verification questions. This README keeps the highest-priority legacy queue visible.
 
 Items in this queue should not be treated as verified documentation until moved to the proper page with sources.
+
+## Verification
+
+**Status:** Draft
+**Primary sources checked:** Current verification section structure
+**Notes:** This section README tracks verification workflow and priority unknowns. It does not verify BitcoinII protocol behavior.
