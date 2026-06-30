@@ -29,6 +29,7 @@ Each page should explain one important source file in plain language, link it to
 - [wallet spend and PSBT RPC](wallet-spend-rpc.md)
 - [wallet encryption RPC](wallet-encryption-rpc.md)
 - [wallet coins and balances RPC](wallet-coins-rpc.md)
+- [wallet transaction history RPC](wallet-transactions-rpc.md)
 - [block lifecycle](block-acceptance.md)
 - [mempool accept](mempool-accept.md)
 - [mempool source](txmempool.md)
