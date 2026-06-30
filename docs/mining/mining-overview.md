@@ -24,7 +24,7 @@ Current checked source shows:
 
 ## Candidate block templates
 
-MoreBC2 has now reviewed the first pass of `src/node/miner.*` and `src/node/mini_miner.*`.
+MoreBC2 has reviewed a first pass of `src/node/miner.*` and `src/node/mini_miner.*`.
 
 Reviewed behavior includes:
 
@@ -37,7 +37,24 @@ Reviewed behavior includes:
 - Selected packages are ordered so ancestors appear before descendants.
 - `MiniMiner` is a helper/simulation path for fee and ordering calculations, not actual block production.
 
-This source review does not yet document the RPC path that exposes block templates.
+## Mining RPC layer
+
+MoreBC2 has reviewed a first pass of `src/rpc/mining.cpp`.
+
+Reviewed behavior includes:
+
+- `getblocktemplate` exposes candidate block template data for clients that request required rules such as `segwit`.
+- `getblocktemplate` supports proposal mode for checking proposed block data.
+- `getblocktemplate` checks peer connection and initial sync state on non-test chains before serving templates.
+- `getblocktemplate` can long-poll for tip or mempool updates.
+- `submitblock` decodes and submits a full block to validation.
+- `submitheader` decodes and submits a block header as a candidate chain tip.
+- `getmininginfo` returns chain, target, difficulty, next-block, mempool, and warning data.
+- `getnetworkhashps` estimates network hash rate from chain work over observed time.
+- `prioritisetransaction` and `getprioritisedtransactions` expose fee-delta behavior used by template selection.
+- Hidden generation helpers exist for controlled local/test paths.
+
+The reviewed file notes that mining RPCs follow GBT/BIP22 in using satoshi amounts, unlike wallet RPCs that use BC2 values.
 
 ## What this page does not claim
 
@@ -48,7 +65,7 @@ This page does not claim:
 - That any specific miner software is official.
 - That any hashrate estimate is current.
 - That mining is profitable.
-- That block template RPC behavior has been fully reviewed.
+- That any mining RPC command has been run and tested by MoreBC2.
 
 ## Mining topics to document later
 
@@ -60,8 +77,8 @@ This page does not claim:
 - Orphan/reorg basics.
 - Pool list.
 - Hashrate and difficulty explainer.
-- Block-template RPC path.
 - Block subsidy schedule from source.
+- Tested RPC command examples.
 
 ## Open items
 
@@ -70,8 +87,8 @@ This page does not claim:
 - Verify pool fee models.
 - Verify current block reward calculation from source.
 - Verify whether maintainers prefer `double-SHA256` or `SHA-256d` wording.
-- Review `src/rpc/mining.cpp`.
-- Test mining setup instructions before publishing them as verified.
+- Test mining RPC commands before publishing examples as verified.
+- Decide which mining RPCs belong in user docs versus developer docs.
 
 ## Sources
 
@@ -83,9 +100,10 @@ This page does not claim:
 - `src/node/miner.cpp`
 - `src/node/mini_miner.h`
 - `src/node/mini_miner.cpp`
+- `src/rpc/mining.cpp`
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** Consensus-level mining behavior and candidate-template assembly have first-pass source review. Miner software, pools, hashrate, profitability, block-template RPC, and subsidy schedule are not yet verified.
+**Notes:** Consensus-level mining behavior, candidate-template assembly, and mining RPC paths have first-pass source review. Miner software, pools, hashrate, profitability, command testing, and subsidy schedule are not yet verified.
