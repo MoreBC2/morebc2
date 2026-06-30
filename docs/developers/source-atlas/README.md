@@ -15,6 +15,7 @@ Each page should explain one important source file in plain language, link it to
 - [chainparams.cpp](chainparams-cpp.md)
 - [startup initialization](init-cpp.md)
 - [pow.cpp](pow-cpp.md)
+- [transaction consensus files](transaction-consensus.md)
 - [validation.cpp](validation-cpp.md)
 - [block lifecycle](block-acceptance.md)
 - [mempool accept](mempool-accept.md)
