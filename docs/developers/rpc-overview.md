@@ -24,6 +24,7 @@ RPC can be used to:
 - Monitor blocks and confirmations.
 - Inspect UTXO state.
 - Manage pruning and block-data workflows.
+- Build, decode, and analyze raw transactions and PSBTs.
 
 ## Verified configuration notes
 
@@ -55,7 +56,8 @@ MoreBC2 has reviewed first-pass source maps for these RPC files:
 
 - [Mining RPC](source-atlas/rpc-mining.md): `src/rpc/mining.cpp`
 - [Blockchain RPC](source-atlas/rpc-blockchain.md): `src/rpc/blockchain.cpp`
-- [Wallet RPC](source-atlas/wallet-rpc.md): `src/wallet/rpc/wallet.cpp` and `src/wallet/rpc/addresses.cpp`
+- [Raw transaction RPC](source-atlas/rpc-rawtransaction.md): `src/rpc/rawtransaction.cpp`
+- [Wallet RPC](source-atlas/wallet-rpc.md): wallet startup/address/backup/spend/encryption/coin/history RPC files
 
 These reviews document command groups and behavior from source, but do not mark command examples as tested.
 
@@ -100,6 +102,28 @@ Reviewed blockchain RPC commands include:
 
 Some commands are powerful, slow, experimental, or intended for advanced workflows. They should be documented carefully and tested before being recommended.
 
+## Raw transaction RPC group
+
+Reviewed raw transaction RPC commands include:
+
+- `getrawtransaction`
+- `createrawtransaction`
+- `decoderawtransaction`
+- `decodescript`
+- `combinerawtransaction`
+- `signrawtransactionwithkey`
+- `decodepsbt`
+- `combinepsbt`
+- `finalizepsbt`
+- `createpsbt`
+- `converttopsbt`
+- `utxoupdatepsbt`
+- `descriptorprocesspsbt`
+- `joinpsbts`
+- `analyzepsbt`
+
+Raw transaction commands are advanced tools for non-wallet transaction lookup, unsigned transaction construction, explicit-key signing, script decoding, and PSBT workflows. They need tested examples before appearing in service or user guides.
+
 ## Wallet RPC group
 
 Reviewed wallet RPC commands include:
@@ -120,8 +144,23 @@ Reviewed wallet RPC commands include:
 - `setlabel`
 - `listaddressgroupings`
 - `addmultisigaddress`
+- `backupwallet`
+- `restorewallet`
+- `sendtoaddress`
+- `sendmany`
+- `send`
+- `sendall`
+- `walletpassphrase`
+- `walletlock`
+- `getbalance`
+- `getbalances`
+- `listunspent`
+- `listtransactions`
+- `listsinceblock`
+- `gettransaction`
+- `rescanblockchain`
 
-The reviewed wallet registration table also includes backup, import, encryption, balance, coin, spend, PSBT, signing, transaction-history, and rescan commands. Those command groups still need deeper file-specific review before examples are recommended.
+The reviewed wallet registration and file-specific passes now cover major wallet command groups. Examples still need local testing before being recommended.
 
 ## Commands to test later
 
@@ -147,6 +186,9 @@ bitcoinII-cli getdifficulty
 bitcoinII-cli getblocktemplate '{"rules":["segwit"]}'
 bitcoinII-cli listwallets
 bitcoinII-cli listwalletdir
+bitcoinII-cli getrawtransaction <txid> 1
+bitcoinII-cli decoderawtransaction <hex>
+bitcoinII-cli analyzepsbt <psbt>
 ```
 
 ## Exchange/service-provider caution
@@ -160,6 +202,7 @@ For service docs, MoreBC2 should distinguish:
 - Address/deposit commands.
 - Wallet commands that can create addresses.
 - Wallet commands that expose keys, sign transactions, or move funds.
+- Raw transaction and PSBT commands for advanced construction/signing workflows.
 - Maintenance commands that can affect node state.
 - Hidden/testing commands that should not appear in normal operator guides.
 
@@ -169,9 +212,8 @@ For service docs, MoreBC2 should distinguish:
 - Confirm binary names for each platform and release asset.
 - Confirm configuration file paths by operating system.
 - Confirm wallet loading behavior.
-- Review wallet backup, spend, encryption, transaction, and coin RPC files in more detail.
+- Review mempool and transaction-broadcast RPC files.
 - Review network RPC files.
-- Review raw transaction RPC files.
 - Confirm whether any BitcoinII-specific RPC differences exist beyond naming and visible strings.
 
 ## Sources
@@ -180,11 +222,17 @@ For service docs, MoreBC2 should distinguish:
 - `doc/JSON-RPC-interface.md`
 - `src/rpc/mining.cpp`
 - `src/rpc/blockchain.cpp`
+- `src/rpc/rawtransaction.cpp`
 - `src/wallet/rpc/wallet.cpp`
 - `src/wallet/rpc/addresses.cpp`
+- `src/wallet/rpc/backup.cpp`
+- `src/wallet/rpc/spend.cpp`
+- `src/wallet/rpc/encrypt.cpp`
+- `src/wallet/rpc/coins.cpp`
+- `src/wallet/rpc/transactions.cpp`
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** Port and config-option notes are source-backed. Mining, blockchain, and first-pass wallet RPC groups have source review. Command examples are placeholders until tested.
+**Notes:** Port and config-option notes are source-backed. Mining, blockchain, raw transaction, and wallet RPC groups have first-pass source review. Command examples are placeholders until tested.
