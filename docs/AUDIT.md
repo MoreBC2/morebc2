@@ -2,13 +2,13 @@
 
 **Category:** Project maintenance
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Summary
 
 This audit reviews the MoreBC2 repository as a documentation project, not as BitcoinII protocol documentation.
 
-The repository is in good shape for private foundation-building. The main issue is no longer lack of content. The main issue is navigation and contributor-readiness.
+The repository is in good shape for private foundation-building. The main issue is no longer lack of content. The main issue is now polish, navigation, tested examples, and readiness for invite-only review.
 
 ## Audit scope
 
@@ -18,65 +18,90 @@ Reviewed areas:
 - Main docs index.
 - Architecture section.
 - Documentation section.
-- Developer section and source atlas.
+- Developer section and Source Atlas.
 - Verification queue.
 - Exchange section.
 - Ecosystem section.
 - Mining, wallets, nodes, research, discussion, and history section indexes.
+- Current documentation coverage dashboard.
+- Current project status dashboard.
 
 ## Overall assessment
 
-MoreBC2 has a strong foundation.
+MoreBC2 has a strong foundation and has reached the point where a broader cleanup pass makes sense.
 
 The strongest parts are:
 
 - Clear mission and editorial philosophy.
 - Strong separation between documentation, research, discussion, history, and ecosystem tracking.
 - Conservative verification language.
-- Growing source atlas tied to reviewed code paths.
+- Growing Source Atlas tied to reviewed code paths.
 - Architecture explainers that are easier to read than raw source notes.
+- RPC overview with first-pass source review of mining, blockchain, raw transaction, mempool/broadcast, and wallet command groups.
+- Wallet guide with source-backed notes across startup, address, backup/import, spend/PSBT, encryption, balances, and transaction history.
 
-The weakest parts are:
+The weakest parts are now:
 
-- Contributor onboarding.
-- Centralized coverage tracking.
-- Centralized open-question tracking.
-- Glossary depth.
-- Normalized README structure across all sections.
+- Top-level polish.
+- Centralized open-question cleanup.
+- Section README consistency.
+- Command examples that are intentionally untested.
+- Release verification against real release artifacts.
+- Ecosystem/explorer/exchange checks from direct current sources.
 
 ## Critical findings
 
-### 1. Missing project dashboard
+### 1. Project dashboard exists but needs current polish
 
-Before this audit, readers had to infer the project state from many separate files.
+Before the first audit, readers had to infer the project state from many separate files.
 
-Fix started:
+Fix status:
 
 - Added `PROJECT_STATUS.md`.
+- Refreshed it for the current Source Atlas/RPC/wallet coverage.
 
-### 2. Missing documentation coverage dashboard
+Remaining work:
 
-The repository needs one page showing which areas have been reviewed, partially reviewed, or not started.
+- Keep this page aligned with `docs/documentation-coverage.md` during polish.
 
-Recommended fix:
+### 2. Documentation coverage dashboard exists
 
-- Add `docs/documentation-coverage.md`.
+Before the first audit, the repository needed one page showing which areas had been reviewed, partially reviewed, or not started.
 
-### 3. Missing developer reading order
+Fix status:
 
-New contributors need a guided path through architecture, source atlas, and verification rules.
+- Added `docs/documentation-coverage.md`.
+- Expanded it repeatedly as new Source Atlas pages were added.
 
-Recommended fix:
+Remaining work:
 
-- Add `docs/developers/reading-order.md`.
+- Reconcile it after each major polish batch.
+- Keep priority order realistic rather than letting old tasks linger after completion.
 
-### 4. Open questions are scattered
+### 3. Developer reading order exists
 
-Many pages contain local open questions. That is good, but the project also needs a master backlog.
+New contributors needed a guided path through architecture, Source Atlas, and verification rules.
 
-Recommended fix:
+Fix status:
 
-- Add `docs/verification/open-questions.md` or expand `docs/verification/README.md` into a dashboard.
+- Added `docs/developers/reading-order.md`.
+
+Remaining work:
+
+- Refresh the reading order after the broad polish pass so it reflects current RPC and wallet coverage.
+
+### 4. Open questions are still spread across many pages
+
+Many pages contain local open questions. That is useful, but the project also needs a central backlog that reduces duplication.
+
+Fix status:
+
+- Added `docs/verification/open-questions.md`.
+
+Remaining work:
+
+- Consolidate repeated open questions from Source Atlas pages, architecture pages, and user-operation pages.
+- Mark which questions block invite-only review versus public launch.
 
 ## High-priority findings
 
@@ -86,16 +111,18 @@ Some section README files are strong and current, especially:
 
 - `docs/architecture/README.md`
 - `docs/configuration/README.md`
-- `docs/ecosystem/README.md`
+- `docs/developers/README.md`
 - `docs/developers/source-atlas/README.md`
+- `docs/ecosystem/README.md`
 
-Some are thinner and should be normalized later:
+Some are still thinner and should be normalized during polish:
 
 - `docs/mining/README.md`
 - `docs/wallets/README.md`
 - `docs/nodes/README.md`
 - `docs/research/README.md`
 - `docs/history/README.md`
+- `docs/discussion/README.md`
 
 Recommendation:
 
@@ -108,22 +135,33 @@ Every section README should include:
 - Rules.
 - Verification block.
 
-### Architecture section is now ahead of navigation
+### Architecture section is ahead of some navigation
 
-Architecture pages are now substantial enough that they should become part of the recommended reading path.
+Architecture pages are substantial enough to be part of the recommended reading path.
 
-Recommended fix:
+Fix status:
 
-- Add reading order.
-- Link architecture pages from root README more clearly.
+- Added reading order.
+- Added repository map and source tree guide.
+- Added more cross-links from Source Atlas pages.
 
-### Source atlas needs coverage indexing
+Remaining work:
 
-The Source Atlas index lists current pages, but it does not show coverage status by subsystem.
+- Refresh root README and docs index around the current architecture/source coverage.
+- Check whether architecture pages duplicate or drift from Source Atlas pages.
 
-Recommended fix:
+### Source Atlas needs periodic coverage indexing
 
-- Add coverage table to a dedicated dashboard rather than overloading the atlas README.
+The Source Atlas index now lists many current pages, but coverage status belongs in the dedicated coverage dashboard, not the atlas index.
+
+Fix status:
+
+- Added and expanded `docs/documentation-coverage.md`.
+
+Remaining work:
+
+- Keep Source Atlas index simple.
+- Keep detailed coverage status in the dashboard.
 
 ## Medium-priority findings
 
@@ -136,6 +174,8 @@ Preferred terms should be:
 - `Mempool acceptance` or `transaction acceptance` depending on context.
 - `Source Atlas` for file-by-file implementation notes.
 - `Architecture` for conceptual flow pages.
+- `Raw transaction RPC` for `src/rpc/rawtransaction.cpp`.
+- `Mempool and broadcast RPC` for `src/rpc/mempool.cpp`.
 
 ### Duplication
 
@@ -152,15 +192,17 @@ Future risk:
 
 Recommended fix:
 
-- Add a documentation style rule: architecture pages summarize, Source Atlas pages anchor implementation.
+- During polish, ensure architecture pages summarize and Source Atlas pages anchor implementation.
+- Avoid adding new implementation detail to architecture pages unless it points back to a Source Atlas page.
 
 ### Verification block normalization
 
-Most technical pages include a verification block, but some older section README files do not use the newer format.
+Most technical pages include a verification block, but older section README files and some framework pages may not use the newer format.
 
 Recommended fix:
 
-- Normalize section READMEs during a later cleanup pass.
+- Normalize section READMEs during the broad cleanup pass.
+- Do not mark command examples Verified until commands have been run locally.
 
 ## Low-priority findings
 
@@ -174,6 +216,8 @@ Later, the project could add SVG diagrams, but that should wait until structure 
 
 Current names are mostly fine. Avoid large renames until public launch planning, because renames can make the audit harder to follow.
 
+Small naming cleanup is acceptable when it reduces confusion, but avoid churn.
+
 ## Launch-readiness assessment
 
 ### Private development
@@ -182,12 +226,16 @@ Ready.
 
 ### Invite-only review
 
-Almost ready after adding:
+Getting close after the broad polish pass.
 
-- Coverage dashboard.
-- Reading order.
-- Verification standards page.
-- Master open-question backlog.
+Before invite-only review, finish:
+
+- Root README refresh.
+- Docs index refresh.
+- Documentation coverage reconciliation.
+- Open-question consolidation.
+- Section README normalization.
+- One pass over Source Atlas links and verification blocks.
 
 ### Public launch
 
@@ -195,20 +243,21 @@ Not ready yet.
 
 Reasons:
 
-- Contributor path is not clear enough.
-- License/public contribution workflow should be decided first.
-- Glossary and coverage dashboards need more polish.
+- Public contribution workflow and license posture should be decided first.
+- Release verification needs real artifact checks.
+- Ecosystem/explorer/exchange pages need direct current checks.
+- Command examples should be tested or clearly separated as untested.
 - Core technical claims should get at least one outside review.
 
 ## Recommended next tasks
 
-1. Create documentation coverage dashboard.
-2. Create developer reading order.
-3. Create master open-questions backlog.
-4. Normalize thin section README files.
-5. Create verification standards page.
-6. Create source-review guide.
-7. Expand glossary framework.
+1. Refresh root README and docs README around current coverage.
+2. Normalize thin section README files.
+3. Reconcile `docs/documentation-coverage.md` with current Source Atlas pages.
+4. Consolidate repeated open questions into `docs/verification/open-questions.md`.
+5. Run a cross-link pass from architecture pages to Source Atlas pages.
+6. Separate untested command examples from future verified examples.
+7. After polish, choose the next source-backed work stream: release verification, explorer/API framework, network RPC, or wallet internals.
 
 ## Verification
 
