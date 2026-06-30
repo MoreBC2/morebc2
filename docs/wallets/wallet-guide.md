@@ -10,6 +10,8 @@ This page is the starting point for BitcoinII (BC2) wallet documentation.
 
 It does not yet provide step-by-step installation instructions because those should be tested on each supported platform before being marked verified.
 
+Wallet command examples are not verified until local test records exist.
+
 ## What is source-reviewed today
 
 MoreBC2 has reviewed a first pass of wallet startup and lifecycle files:
@@ -103,6 +105,26 @@ Wallet transaction-history behavior reviewed so far includes:
 
 Wallet RPC examples remain untested until run against a local BitcoinII Core node.
 
+## Wallet command testing status
+
+Track command tests in [Command testing status](../verification/command-testing.md).
+
+Wallet commands that need local disposable-wallet or regtest records include:
+
+- `bitcoinII-cli getwalletinfo`
+- `bitcoinII-cli listwallets`
+- `bitcoinII-cli listwalletdir`
+- `bitcoinII-cli getnewaddress`
+- `bitcoinII-cli listtransactions`
+- `bitcoinII-cli gettransaction <txid>`
+- `bitcoinII-cli backupwallet <destination>`
+- `bitcoinII-cli restorewallet <wallet_name> <backup_file>`
+- `bitcoinII-cli walletpassphrase ...`
+- `bitcoinII-cli walletlock`
+- `bitcoinII-cli rescanblockchain`
+
+Commands that can move funds, expose sensitive material, or change wallet state should stay out of beginner docs until tested on disposable wallets and heavily caveated.
+
 ## Wallet options observed from source
 
 Reviewed wallet options include:
@@ -147,6 +169,7 @@ These are general cryptocurrency wallet safety principles:
 - Do not expose private keys or wallet files.
 - Do not run unknown wallet binaries from unofficial links.
 - Keep a small test balance when trying a new wallet setup.
+- Test wallet command workflows with temporary/regtest wallets before documenting them for users.
 
 ## Release verification note
 
@@ -168,6 +191,7 @@ Before this guide is marked Verified, MoreBC2 needs to document whether releases
 - CLI-only wallet guide.
 - Backup and restore guide.
 - Troubleshooting sync issues.
+- Tested wallet RPC examples.
 
 ## Open items
 
@@ -196,6 +220,7 @@ Before this guide is marked Verified, MoreBC2 needs to document whether releases
 - `src/wallet/rpc/encrypt.cpp`
 - `src/wallet/rpc/coins.cpp`
 - `src/wallet/rpc/transactions.cpp`
+- [Command testing status](../verification/command-testing.md)
 - [Source atlas: wallet startup](../developers/source-atlas/wallet-startup.md)
 - [Source atlas: wallet RPC](../developers/source-atlas/wallet-rpc.md)
 - [Source atlas: wallet backup/import RPC](../developers/source-atlas/wallet-backup-import-rpc.md)
@@ -208,4 +233,4 @@ Before this guide is marked Verified, MoreBC2 needs to document whether releases
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This page now includes first-pass source-reviewed wallet startup, wallet RPC, backup/import, spend/PSBT, encryption, coin/balance, and transaction-history notes. Platform-specific wallet instructions, release verification, and command testing remain open.
+**Notes:** This page now includes first-pass source-reviewed wallet startup, wallet RPC, backup/import, spend/PSBT, encryption, coin/balance, transaction-history, and command-testing-status notes. Platform-specific wallet instructions, release verification, and local command testing remain open.
