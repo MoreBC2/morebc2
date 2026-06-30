@@ -2,13 +2,13 @@
 
 **Category:** Discussion
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Summary
 
 This section is for community ideas, opinions, proposals, and open questions.
 
-Discussion pages should be clearly labeled so readers do not confuse them with current BitcoinII implementation.
+Discussion pages should be clearly labeled so readers do not confuse them with current BitcoinII implementation, verified documentation, or accepted roadmap items.
 
 ## Good discussion topics
 
@@ -18,6 +18,19 @@ Discussion pages should be clearly labeled so readers do not confuse them with c
 - Ecosystem ideas.
 - Governance and documentation standards.
 - Draft RFC-style proposals.
+- Questions that need developer, maintainer, or community review.
+
+## Current pages
+
+Add discussion pages here only when they are clearly labeled with their status and evidence level.
+
+## Planned pages
+
+- Proposal template.
+- Open ecosystem ideas.
+- Documentation governance discussions.
+- Integration questions that need community review.
+- Resolved discussion archive.
 
 ## Status labels
 
@@ -37,6 +50,7 @@ Use one of these near the top of discussion pages:
 - Do not present proposals as planned protocol changes.
 - Link related source-backed pages when a proposal touches current behavior.
 - Move resolved factual questions into Documentation, Architecture, or Verification as appropriate.
+- Do not let discussion pages override source-backed pages.
 
 ## Related pages
 
@@ -45,9 +59,10 @@ Use one of these near the top of discussion pages:
 - [Open questions backlog](../verification/open-questions.md)
 - [Documentation taxonomy](../../DOCUMENTATION_TAXONOMY.md)
 - [Editorial style guide](../../STYLE_GUIDE.md)
+- [Documentation polish plan](../POLISH_PLAN.md)
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Not applicable
-**Notes:** This section README defines placement rules for discussion content. Individual discussion pages should identify their evidence level and status.
+**Primary sources checked:** Not applicable for this section index
+**Notes:** This section README defines placement rules for discussion content. Individual discussion pages should identify their evidence level, status, and whether they have been reviewed by maintainers or community members.
