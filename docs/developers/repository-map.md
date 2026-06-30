@@ -25,6 +25,8 @@ This is not a full source audit. It is a navigation aid that should be expanded 
 | `src/validation.h` | Validation declarations and public validation interfaces | E1 partial |
 | `src/validationinterface.*` | Validation and mempool notification interface | E1 partial |
 | `src/node/blockstorage.*` | Block index database, block and undo files, pruning, reindex, import | E1 partial |
+| `src/node/miner.*` | Candidate block-template assembly and mempool package selection | E1 partial |
+| `src/node/mini_miner.*` | Fee and ordering simulation helper | E1 partial |
 | `src/txmempool.cpp` | Mempool storage, removal, expiry, prioritization, checking | E1 partial |
 | `src/txmempool.h` | Mempool structure, indexes, ancestor/descendant tracking | E1 partial |
 | `src/kernel/mempool_entry.h` | Mempool entry metadata and lockpoint data | E1 |
@@ -79,6 +81,7 @@ Likely files/directories to review next:
 - Additional files under `src/script/`.
 - Validation notification subscribers.
 - Additional block-storage failure and pruning paths.
+- Subsidy calculation path.
 
 Related MoreBC2 pages:
 
@@ -118,6 +121,29 @@ Questions:
 - Which operator-facing pruning behavior should move into node docs?
 - Which undo-read paths should be documented with disconnect/reorg follow-up work?
 - Which reindex and import behavior should be included in user troubleshooting docs?
+
+### Candidate block templates
+
+Reviewed or partially reviewed:
+
+- `src/node/miner.h`
+- `src/node/miner.cpp`
+- `src/node/mini_miner.h`
+- `src/node/mini_miner.cpp`
+
+Related MoreBC2 pages:
+
+- [Source atlas: block template assembly](source-atlas/miner.md)
+- [Mining overview](../mining/mining-overview.md)
+- [Mempool flow](../architecture/mempool-flow.md)
+- [Life of a block](../architecture/life-of-a-block.md)
+
+Questions:
+
+- Which RPC path exposes candidate block templates?
+- Where exactly is the subsidy calculation implemented?
+- Which external operation docs can be verified from primary sources?
+- Which tests cover candidate block assembly and package selection?
 
 ### Validation notifications
 
