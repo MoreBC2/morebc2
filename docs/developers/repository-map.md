@@ -28,6 +28,7 @@ This is not a full source audit. It is a navigation aid that should be expanded 
 | `src/node/miner.*` | Candidate block-template assembly and mempool package selection | E1 partial |
 | `src/node/mini_miner.*` | Fee and ordering simulation helper | E1 partial |
 | `src/rpc/mining.cpp` | Mining RPC, candidate template, block/header submission, mining status | E1 partial |
+| `src/rpc/blockchain.cpp` | Blockchain RPC, block lookup, pruning, UTXO scans, chainstate status | E1 partial |
 | `src/txmempool.cpp` | Mempool storage, removal, expiry, prioritization, checking | E1 partial |
 | `src/txmempool.h` | Mempool structure, indexes, ancestor/descendant tracking | E1 partial |
 | `src/kernel/mempool_entry.h` | Mempool entry metadata and lockpoint data | E1 |
@@ -165,6 +166,27 @@ Questions:
 - Which external tools actually use `getblocktemplate` with BitcoinII today?
 - How should satoshi-vs-BC2 units be highlighted in service docs?
 
+### Blockchain RPC
+
+Reviewed or partially reviewed:
+
+- `src/rpc/blockchain.cpp`
+
+Related MoreBC2 pages:
+
+- [Source atlas: blockchain RPC](source-atlas/rpc-blockchain.md)
+- [RPC overview](rpc-overview.md)
+- [Deposit monitoring](../exchange/deposit-monitoring.md)
+- [Life of a block](../architecture/life-of-a-block.md)
+- [Life of a reorganization](../architecture/life-of-a-reorg.md)
+
+Questions:
+
+- Which blockchain RPC examples can be safely tested locally?
+- Which commands should be included in exchange/service docs?
+- Which pruning and block-data errors should become operator troubleshooting notes?
+- Which scan commands belong in normal docs versus advanced recovery docs?
+
 ### Validation notifications
 
 Reviewed or partially reviewed:
@@ -230,6 +252,7 @@ Questions:
 Reviewed or partially reviewed:
 
 - `src/rpc/mining.cpp`
+- `src/rpc/blockchain.cpp`
 
 Likely files/directories to review next:
 
