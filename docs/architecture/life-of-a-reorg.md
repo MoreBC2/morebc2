@@ -10,7 +10,7 @@ This page explains the reviewed BitcoinII chain reorganization lifecycle at a hi
 
 A reorganization happens when the node switches from one active chain branch to another usable branch with more work.
 
-The reviewed path connects candidate selection, old-branch rollback, stored undo data, disconnected-transaction handling, new-branch connection, mempool repair, storage state, and validation notifications.
+The reviewed path connects candidate selection, old-branch rollback, stored undo data, disconnected-transaction handling, new-branch connection, mempool repair, storage state, wallet-visible transaction-history effects, and validation notifications.
 
 ## Simplified lifecycle
 
@@ -26,6 +26,7 @@ Competing chain appears
   -> eligible old-branch transactions are reconsidered for mempool
   -> active tip changes
   -> validation notifications are emitted
+  -> wallets/indexes/services update after callbacks or polling
 ```
 
 ## Step 1: Competing chain appears
@@ -76,7 +77,7 @@ Reviewed `DisconnectBlock` behavior includes:
 - Moving the coins view best block backward.
 - Returning clean, unclean, or failed status.
 
-Undo data is what allows the node to reverse a previously connected block.
+Undo data is what allows the node to return the UTXO view to the state before a previously connected block.
 
 ## Step 6: Storage support during reorgs
 
@@ -128,6 +129,8 @@ After rollback and reconnection, reviewed `MaybeUpdateMempoolForReorg` behavior 
 - Removing transactions that spend immature coinbase outputs.
 - Re-limiting mempool size.
 
+Reviewed mempool RPC pages describe how some mempool state can be inspected after a reorg, but examples remain untested.
+
 ## Step 10: New active tip
 
 After successful connection, the active chain tip points to the candidate branch.
@@ -158,6 +161,14 @@ Important ordering caveat:
 
 A single subscriber receives callbacks in generated order, but no ordering should be assumed across different subscribers.
 
+## Step 12: Wallet and service visibility
+
+Reviewed wallet transaction-history RPC behavior includes `listsinceblock`, which can report wallet transactions after a given block reference and can include removed transactions for reorg-related cases when available.
+
+The reviewed source warns that removed-transaction reporting is not guaranteed to work on pruned nodes.
+
+For service docs, this means reorg-aware polling and confirmation policy should stay in Draft until tested against a running BitcoinII Core node.
+
 ## Why reorgs matter
 
 Reorgs are a normal part of Nakamoto-style proof-of-work consensus.
@@ -172,16 +183,17 @@ During a reorg:
 - A transaction may return to the mempool if it is still valid.
 - A transaction may be confirmed again on the new branch.
 - A transaction may leave the mempool if it is no longer valid under the new active chain.
-- Wallet or explorer display may update after validation-interface subscribers process the relevant callbacks.
+- Wallet or explorer display may update after validation-interface subscribers process the relevant callbacks or after wallet/service polling sees the changed chain state.
 
 ## What is not fully reviewed yet
 
 - P2P conditions that cause competing branches to be learned.
-- Wallet-specific reorg handling.
+- Wallet-specific reorg handling below the reviewed RPC surface.
 - Index-specific reorg behavior.
 - Full validation-interface subscriber behavior.
 - Full undo-read failure handling.
 - Deep mempool policy beyond reviewed reorg processing.
+- Tested service examples for reorg-aware deposit monitoring.
 
 ## Related pages
 
@@ -192,10 +204,13 @@ During a reorg:
 - [Source atlas: block storage](../developers/source-atlas/block-storage.md)
 - [Source atlas: validation interface](../developers/source-atlas/validation-interface.md)
 - [Disconnected transactions](../developers/source-atlas/disconnected-transactions.md)
+- [Source atlas: wallet transaction history RPC](../developers/source-atlas/wallet-transactions-rpc.md)
+- [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
 - [Mempool flow](mempool-flow.md)
+- [Deposit monitoring](../exchange/deposit-monitoring.md)
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This explainer is based on reviewed validation, rollback, disconnected-transaction, storage, notification, mempool-reorg, and best-chain activation code paths. Wallet/index/P2P reorg behavior still needs review.
+**Notes:** This explainer is based on reviewed validation, rollback, disconnected-transaction, storage, notification, mempool-reorg, wallet transaction-history RPC, mempool RPC, and best-chain activation code paths. Wallet internals, index behavior, P2P reorg behavior, and tested service examples still need review.
