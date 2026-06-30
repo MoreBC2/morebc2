@@ -137,6 +137,7 @@ Currently reviewed or partially reviewed files:
 - `src/wallet/rpc/spend.cpp`
 - `src/wallet/rpc/encrypt.cpp`
 - `src/wallet/rpc/coins.cpp`
+- `src/wallet/rpc/transactions.cpp`
 
 Known use from review:
 
@@ -161,6 +162,7 @@ Known use from review:
 - Funding, fee bumping, signing, and PSBT RPCs.
 - Wallet lock-state, timed unlock, credential update, and first-time encryption RPCs.
 - Wallet received-amount, balance, output-state, and available-output RPCs.
+- Wallet transaction listing, single-transaction lookup, polling, abandon, rescan, and abort-rescan RPCs.
 
 Related pages:
 
@@ -170,13 +172,13 @@ Related pages:
 - [Source atlas: wallet spend and PSBT RPC](source-atlas/wallet-spend-rpc.md)
 - [Source atlas: wallet encryption RPC](source-atlas/wallet-encryption-rpc.md)
 - [Source atlas: wallet coins and balances RPC](source-atlas/wallet-coins-rpc.md)
+- [Source atlas: wallet transaction history RPC](source-atlas/wallet-transactions-rpc.md)
 - [Wallet guide](../wallets/wallet-guide.md)
 - [RPC overview](rpc-overview.md)
 - [Node startup](../architecture/node-startup.md)
 
 Still needed:
 
-- Remaining wallet RPC source files.
 - Wallet database internals.
 - GUI wallet paths.
 
