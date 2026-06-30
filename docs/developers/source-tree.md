@@ -12,11 +12,43 @@ The guide should be expanded only as directories and files are directly reviewed
 
 ## Reviewed or partially reviewed areas
 
+### `src/`
+
+Currently reviewed or partially reviewed files:
+
+- `src/init.cpp`
+- `src/pow.cpp`
+- `src/validation.cpp`
+- `src/validation.h`
+- `src/txmempool.cpp`
+- `src/txmempool.h`
+- `src/hash.h`
+
+Known use from review:
+
+- Startup orchestration.
+- Proof-of-work and difficulty retargeting.
+- Block validation and best-chain activation.
+- Block connection and disconnection.
+- Mempool acceptance paths.
+- Mempool storage and indexing.
+- Hash helper paths.
+
+Related pages:
+
+- [Source atlas](source-atlas/README.md)
+- [Node startup](../architecture/node-startup.md)
+- [Consensus model](../architecture/consensus-model.md)
+- [Block validation flow](../architecture/block-validation-flow.md)
+- [Mempool flow](../architecture/mempool-flow.md)
+
 ### `src/kernel/`
 
-Currently reviewed file:
+Currently reviewed files:
 
 - `src/kernel/chainparams.cpp`
+- `src/kernel/mempool_entry.h`
+- `src/kernel/disconnected_transactions.*`
 
 Known use from review:
 
@@ -25,18 +57,8 @@ Known use from review:
 - DNS seed list.
 - Address prefixes.
 - Consensus deployment heights and parameters visible in chain parameters.
-
-### `src/`
-
-Currently reviewed file:
-
-- `src/pow.cpp`
-
-Known use from review:
-
-- Difficulty retargeting.
-- Proof-of-work target checks.
-- Permitted difficulty transition checks.
+- Mempool entry metadata.
+- Disconnected transaction handling during reorg processing.
 
 ### `src/primitives/`
 
@@ -62,6 +84,12 @@ Known use from review:
 - `COIN` definition.
 - `MAX_MONEY` sanity check.
 - `MoneyRange()` helper.
+
+Still needed:
+
+- `src/consensus/tx_check.*`
+- `src/consensus/tx_verify.*`
+- Related script validation paths.
 
 ### `share/examples/`
 
@@ -94,14 +122,17 @@ Known use from review:
 
 These areas should be mapped later:
 
-- `src/validation.*`
 - `src/net.*`
+- `src/net_processing.*`
 - `src/protocol.*`
 - `src/rpc/`
 - `src/wallet/`
 - `src/qt/`
+- `src/node/miner.*`
+- `src/validationinterface.*`
 - `test/`
 - `src/test/`
+- `src/wallet/test/`
 - `depends/`
 - `contrib/`
 - `cmake/`
@@ -120,7 +151,7 @@ When adding a directory to this guide, include:
 
 ## Sources
 
-- BitcoinII repository: https://github.com/BitcoinII-Dev/BitcoinII
+- BitcoinII source repository currently reviewed through MoreBC2 source-atlas entries.
 
 ## Verification
 
