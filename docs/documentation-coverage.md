@@ -107,19 +107,19 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Verification standards | Framework | Practical workflow page exists; evidence scale remains the root confidence model. |
 | Local development environment | Framework | Defines safe test-record workflow; commands still need actual testing. |
 | Release verification guide | Framework | Defines release artifact verification standard; specific releases still need checks. |
-| Developer glossary | Framework | Developer-facing glossary framework exists under Encyclopedia. |
-| Root glossary | Partial | Short general glossary exists; can be expanded and cross-linked. |
+| Developer glossary | Partial | Expanded with transaction, storage, and validation-notification terms. More cross-linking still useful. |
+| Root glossary | Partial | Expanded with common architecture, storage, policy, and release-verification terms. |
 
 ## Current priority order
 
-1. Glossary expansion and cross-linking.
-2. Build system source review.
-3. Test tree source review.
-4. Mining/block-template source review.
-5. Wallet source review.
-6. RPC source review.
-7. Release artifact verification pass.
-8. Explorer/API documentation framework.
+1. Build system source review.
+2. Test tree source review.
+3. Mining/block-template source review.
+4. Wallet source review.
+5. RPC source review.
+6. Release artifact verification pass.
+7. Explorer/API documentation framework.
+8. Glossary cross-linking during future page updates.
 
 ## Verification
 
