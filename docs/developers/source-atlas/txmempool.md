@@ -33,7 +33,7 @@ The source comment for `CTxMemPool` describes it as storing transactions that ar
 It also states that not all seen transactions are added. Examples include:
 
 - Transactions below minimum fee requirements.
-- Double-spends that do not meet Replace-By-Fee requirements.
+- Double-spends that do not meet replacement requirements.
 - Non-standard transactions.
 
 ## `MEMPOOL_HEIGHT`
@@ -91,7 +91,7 @@ Reviewed `CTxMemPool` options include:
 - Bare multisig policy.
 - Maximum datacarrier bytes.
 - Standardness requirement.
-- Full-RBF setting.
+- Full replacement setting.
 - v1 mempool persistence setting.
 - Ancestor/descendant limits.
 
@@ -189,6 +189,111 @@ Reviewed behavior:
 - Updates total size, total fee, memory usage, and `mapTx`.
 - Increments transaction update counters.
 
+### `removeForBlock`
+
+Reviewed behavior:
+
+- Called when a block is connected.
+- Removes transactions from the mempool when they appear in the connected block.
+- Removes conflicts caused by transactions in the connected block.
+- Clears prioritisation for block transactions.
+- Emits a `MempoolTransactionsRemovedForBlock` signal.
+- Updates rolling-fee tracking state after block connection.
+
+### `check`
+
+Reviewed behavior:
+
+- Runs only according to the configured mempool check ratio.
+- Verifies that mempool inputs are available either from the active coins view or from other mempool transactions.
+- Verifies that `mapNextTx` tracks transaction inputs.
+- Checks parent and child link consistency.
+- Recalculates ancestor state and compares it against cached values.
+- Checks that mempool transactions pass `Consensus::CheckTxInputs` against the constructed mempool coins view.
+- Verifies total size, total fee, and cached memory usage accounting.
+
+### `CompareDepthAndScore`
+
+Reviewed behavior:
+
+- Compares two transactions for relay/ordering purposes.
+- Prefers transactions already in the mempool over missing ones.
+- Prefers fewer ancestors first.
+- Uses fee score when ancestor count is equal.
+
+### `PrioritiseTransaction`
+
+Reviewed behavior:
+
+- Adds or updates a local fee delta for a transaction.
+- If the transaction is already in the mempool, updates its modified fee.
+- Updates ancestor descendant-fee accounting.
+- Updates descendant ancestor-fee accounting.
+- Clears the delta entry if the resulting delta becomes zero.
+
+### `CCoinsViewMemPool::GetCoin`
+
+Reviewed behavior:
+
+- Checks temporary package-added coins first.
+- Checks mempool transactions before the base coins view.
+- Returns mempool outputs with `MEMPOOL_HEIGHT`.
+- Falls back to the base coins view if the output is not in temporary package data or the mempool.
+
+### `DynamicMemoryUsage`
+
+Reviewed behavior:
+
+- Estimates memory used by `mapTx`, `mapNextTx`, fee deltas, randomized storage, and cached inner usage.
+
+### `RemoveStaged`
+
+Reviewed behavior:
+
+- Updates mempool state for the staged removal set.
+- Calls `removeUnchecked` for each staged entry.
+
+### `Expire`
+
+Reviewed behavior:
+
+- Uses the entry-time index to find transactions older than the expiry threshold.
+- Calculates descendants of expired transactions.
+- Removes expired transactions and descendants with removal reason `EXPIRY`.
+- Returns the number of removed transactions.
+
+### `GetMinFee`
+
+Reviewed behavior:
+
+- Returns the current rolling minimum fee rate.
+- Decays the rolling minimum fee rate over time after blocks are found.
+- Decays faster when memory usage is below lower fractions of the mempool size limit.
+- Returns at least the incremental relay feerate when rolling minimum fee is active.
+
+### `TrimToSize`
+
+Reviewed behavior:
+
+- Removes transactions while dynamic memory usage exceeds the configured size limit.
+- Chooses removal candidates by descendant score.
+- Removes the candidate and its descendants.
+- Bumps the rolling minimum fee based on the removed package feerate plus incremental relay feerate.
+- Optionally records prevouts that may no longer have spends remaining.
+
+### `GetTransactionAncestry`
+
+Reviewed behavior:
+
+- Returns ancestor count, descendant count, ancestor size, and ancestor fees for a transaction if it is in the mempool.
+
+### `CCoinsViewMemPool::PackageAddTransaction`
+
+Reviewed behavior:
+
+- Adds outputs from package transactions to temporary package-added coins.
+- Marks those coins as non-base coins for package validation lookup.
+
 ## Relationship to validation and reorg docs
 
 The mempool is updated during block connection and reorganization flow:
@@ -210,10 +315,11 @@ MaybeUpdateMempoolForReorg
 
 ## BitcoinII-specific notes
 
-The reviewed files show BitcoinII naming and fork metadata, but this first pass has not identified BitcoinII-specific mempool behavior beyond inherited Bitcoin Core-derived logic and configured options.
+The reviewed files show BitcoinII naming and fork metadata, but this pass has not identified BitcoinII-specific mempool behavior beyond inherited Bitcoin Core-derived logic and configured options.
 
 ## Related MoreBC2 pages
 
+- [Mempool flow](../../architecture/mempool-flow.md)
 - [Block validation flow](../../architecture/block-validation-flow.md)
 - [Disconnected transactions](disconnected-transactions.md)
 - [Source atlas: validation.cpp](validation-cpp.md)
@@ -221,11 +327,11 @@ The reviewed files show BitcoinII naming and fork metadata, but this first pass 
 
 ## Open questions
 
-- Review the rest of `txmempool.cpp` for removal, expiry, rolling minimum fee, prioritization, conflict handling, and persistence.
 - Review `kernel/mempool_entry.h` in detail.
 - Review mempool option defaults.
-- Review Replace-By-Fee policy files.
+- Review replacement policy files.
 - Review package acceptance in `validation.cpp` together with mempool limits.
+- Review mempool persistence behavior.
 
 ## Sources
 
@@ -237,4 +343,4 @@ The reviewed files show BitcoinII naming and fork metadata, but this first pass 
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a first-pass mempool architecture audit. Broader mempool policy and transaction acceptance still need separate review.
+**Notes:** This is a broader mempool architecture audit. Transaction acceptance and policy still need separate review.
