@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Summary
 
@@ -46,7 +46,17 @@ A node may know about multiple branches, but only one is active at a time.
 
 A disk file that stores serialized block data.
 
-MoreBC2 has not yet reviewed block-storage internals in depth.
+Related:
+
+- [Source atlas: block storage](../developers/source-atlas/block-storage.md)
+
+## Block file cursor
+
+Bookkeeping used by the block-storage layer to track the current block file and related undo-file progress.
+
+Related:
+
+- [Source atlas: block storage](../developers/source-atlas/block-storage.md)
 
 ## Block index
 
@@ -57,6 +67,7 @@ The block index helps track known branches, validation status, work, and disk po
 Related:
 
 - [Source atlas: validation.cpp](../developers/source-atlas/validation-cpp.md)
+- [Source atlas: block storage](../developers/source-atlas/block-storage.md)
 
 ## Block lifecycle
 
@@ -66,6 +77,14 @@ Related:
 
 - [Life of a block](../architecture/life-of-a-block.md)
 - [Source atlas: block lifecycle](../developers/source-atlas/block-acceptance.md)
+
+## BlockTreeDB
+
+The block index database wrapper used for block metadata, block-file metadata, flags, and reindex state.
+
+Related:
+
+- [Source atlas: block storage](../developers/source-atlas/block-storage.md)
 
 ## Chainstate
 
@@ -83,6 +102,16 @@ Related:
 
 - [Block validation flow](../architecture/block-validation-flow.md)
 - [Source atlas: validation.cpp](../developers/source-atlas/validation-cpp.md)
+
+## CheckTransaction
+
+A context-independent transaction check helper.
+
+Reviewed behavior includes non-empty inputs and outputs, output value range checks, duplicate input rejection, coinbase scriptSig size checks, and null previous-output rejection for non-coinbase transactions.
+
+Related:
+
+- [Source atlas: transaction consensus files](../developers/source-atlas/transaction-consensus.md)
 
 ## Coin
 
@@ -108,7 +137,7 @@ Coins views can be layered, cached, and updated during validation.
 
 The validation path that applies a block to the current UTXO view.
 
-Reviewed behavior includes transaction input checks, script checks, fee accounting, undo data creation, coinbase payout checks, and UTXO updates.
+Reviewed behavior includes transaction input checks, input verification checks, fee accounting, undo data creation, coinbase payout checks, and UTXO updates.
 
 Related:
 
@@ -149,7 +178,7 @@ Related:
 
 ## DisconnectBlock
 
-The validation path that reverses the UTXO effects of a previously connected block using undo data.
+The validation path that restores the UTXO view to the previous block using undo data.
 
 Related:
 
@@ -167,6 +196,18 @@ Related:
 ## Finality
 
 Whether a transaction is valid for inclusion at a particular block height or time under locktime rules.
+
+Related:
+
+- [Source atlas: transaction consensus files](../developers/source-atlas/transaction-consensus.md)
+
+## Flat file
+
+A sequential disk file used to store block or undo data.
+
+Related:
+
+- [Source atlas: block storage](../developers/source-atlas/block-storage.md)
 
 ## Fork point
 
@@ -219,7 +260,17 @@ A local rule that affects mempool acceptance, relay, mining selection, or standa
 
 Deleting old block data from disk while preserving enough validated state for node operation.
 
-MoreBC2 has not yet reviewed BitcoinII pruning internals in depth.
+Related:
+
+- [Source atlas: block storage](../developers/source-atlas/block-storage.md)
+
+## Reindex
+
+A local process that rebuilds block-index state from stored block files.
+
+Related:
+
+- [Source atlas: block storage](../developers/source-atlas/block-storage.md)
 
 ## Reorganization
 
@@ -232,15 +283,21 @@ Related:
 
 ## Script flags
 
-Flags that control script validation behavior.
+Flags that control transaction input verification behavior.
 
-Some may be mandatory consensus checks, while others may be policy checks depending on context.
+Some may be mandatory consensus checks, while others may be policy checks depending on caller context.
 
-MoreBC2 still needs deeper script-source review.
+Related:
+
+- [Source atlas: script engine](../developers/source-atlas/script-interpreter.md)
 
 ## Sequence locks
 
 Relative locktime rules that can prevent a transaction from being valid until certain height or time conditions are met.
+
+Related:
+
+- [Source atlas: transaction consensus files](../developers/source-atlas/transaction-consensus.md)
 
 ## Source Atlas
 
@@ -258,11 +315,20 @@ The active tip is the tip of the active chain.
 
 ## Undo data
 
-Data stored so a node can reverse the UTXO changes made by a connected block during a reorganization or rollback.
+Data stored so a node can return the UTXO view to an earlier state during a reorganization.
 
 Related:
 
 - [Life of a reorganization](../architecture/life-of-a-reorg.md)
+- [Source atlas: block storage](../developers/source-atlas/block-storage.md)
+
+## Undo file
+
+A disk file that stores undo data for connected blocks.
+
+Related:
+
+- [Source atlas: block storage](../developers/source-atlas/block-storage.md)
 
 ## Unbroadcast transaction
 
@@ -280,9 +346,11 @@ Bitcoin-style chains use the UTXO set to determine what can be spent.
 
 ## Validation interface
 
-A callback system used to notify other components about validation events such as block connection, disconnection, or tip updates.
+A callback system used to notify other components about validation events such as block connection, block rollback, mempool changes, or tip updates.
 
-MoreBC2 has not yet reviewed validation-interface internals in depth.
+Related:
+
+- [Source atlas: validation interface](../developers/source-atlas/validation-interface.md)
 
 ## Verification
 
