@@ -2,7 +2,7 @@
 
 **Category:** Architecture
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Summary
 
@@ -36,7 +36,13 @@ Transaction input rules
   -> values are in range
   -> inputs are spendable
   -> fees are non-negative
-  -> script checks pass when required
+  -> input verification checks pass when required
+
+Mempool policy layer
+  -> standardness and relay rules
+  -> ancestor/descendant limits
+  -> replacement and package checks
+  -> dry-run acceptance and live submission surfaces
 
 Chain selection
   -> valid blocks only
@@ -59,6 +65,7 @@ Reviewed examples include:
 - Context-independent transaction checks.
 - Transaction finality and sequence-lock helpers.
 - Transaction input checks during block connection.
+- Script engine first-pass behavior.
 - Coinbase payout not exceeding subsidy plus fees.
 - UTXO updates during block connection.
 
@@ -74,6 +81,7 @@ Reviewed examples include:
 - Policy script checks.
 - Ancestor and descendant limits.
 - Mempool size limiting and expiry.
+- Dry-run acceptance behavior exposed through mempool RPC.
 
 Policy can be stricter than consensus.
 
@@ -98,6 +106,7 @@ Reviewed block-level validation includes:
 - Full block acceptance through `AcceptBlock`.
 - Best-chain activation through `ActivateBestChain`.
 - Block connection through `ConnectBlock`.
+- Undo-data writing for later disconnection.
 
 A block must pass both structural checks and contextual checks before it can safely move toward active-chain connection.
 
@@ -130,7 +139,7 @@ Reviewed checks include:
 - Operation-cost accounting helpers.
 - `Consensus::CheckTxInputs` input availability, coinbase maturity, input value ranges, input/output value comparison, and fee calculation.
 
-The transaction consensus review still does not cover script interpreter internals.
+MoreBC2 now has a first-pass script-engine source review, but full mandatory-vs-policy flag mapping remains open.
 
 ## Transaction consensus inside blocks
 
@@ -141,7 +150,7 @@ Reviewed behavior includes:
 - Input checks through `Consensus::CheckTxInputs`.
 - Money range and fee checks.
 - Sequence-lock checks.
-- Script checks when enabled.
+- Input verification checks when enabled.
 - Operation-count accounting.
 - Undo data creation.
 - Updating the coins view.
@@ -166,6 +175,19 @@ When a block is disconnected during a reorganization:
 - Outputs created by the disconnected block are removed.
 - Previously spent outputs are restored from undo data.
 - The coins view moves backward.
+
+## Mempool policy and service surfaces
+
+Reviewed mempool and RPC work now gives MoreBC2 a clearer boundary between consensus, policy, and service-facing commands.
+
+Relevant reviewed surfaces include:
+
+- `testmempoolaccept` for dry-run mempool acceptance.
+- `sendrawtransaction` for live transaction submission.
+- `getrawmempool`, `getmempoolentry`, ancestor/descendant queries, and mempool summary RPCs for inspection.
+- Package acceptance and experimental package submission notes.
+
+These are policy/service surfaces, not consensus definitions. Public examples remain untested until local command records exist.
 
 ## Chain selection
 
@@ -193,6 +215,7 @@ Reviewed behavior includes:
 - Temporary storage of transactions from disconnected blocks.
 - Reconnection of the new branch.
 - Reconsideration of eligible disconnected transactions for mempool entry.
+- Wallet transaction-history RPC surfaces that can expose some wallet-visible reorg effects.
 
 ## Soft-fork deployment notes
 
@@ -204,13 +227,13 @@ Do not treat the presence of a parameter in source as a complete deployment-stat
 
 ## What is not fully reviewed yet
 
-- Script interpreter internals.
 - Full mandatory vs policy script-flag separation.
 - Deployment state transitions in depth.
 - Full checkpoint behavior beyond current reviewed notes.
-- Full block storage and pruning behavior.
+- Full pruning failure and recovery behavior.
 - Release-branch matching against documented `main` source values.
 - Upstream comparison for transaction consensus helpers.
+- Tested examples for policy and RPC behavior.
 
 ## Related pages
 
@@ -219,16 +242,19 @@ Do not treat the presence of a parameter in source as a complete deployment-stat
 - [Proof-of-work](../encyclopedia/proof-of-work.md)
 - [Difficulty adjustment](../encyclopedia/difficulty-adjustment.md)
 - [Block validation flow](block-validation-flow.md)
+- [Life of a transaction](life-of-a-transaction.md)
 - [Life of a block](life-of-a-block.md)
 - [Life of a reorganization](life-of-a-reorg.md)
 - [Mempool flow](mempool-flow.md)
 - [Source atlas: pow.cpp](../developers/source-atlas/pow-cpp.md)
 - [Source atlas: transaction consensus files](../developers/source-atlas/transaction-consensus.md)
+- [Source atlas: script engine](../developers/source-atlas/script-interpreter.md)
 - [Source atlas: validation.cpp](../developers/source-atlas/validation-cpp.md)
 - [Source atlas: block lifecycle](../developers/source-atlas/block-acceptance.md)
+- [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This page summarizes reviewed consensus-adjacent material from chain parameters, proof-of-work, transaction consensus helpers, validation, block connection, and reorg documentation. It is not a complete consensus specification and should be expanded after script-source review.
+**Notes:** This page summarizes reviewed consensus-adjacent material from chain parameters, proof-of-work, transaction consensus helpers, script first-pass review, validation, block connection, mempool policy, RPC service surfaces, and reorg documentation. It is not a complete consensus specification.
