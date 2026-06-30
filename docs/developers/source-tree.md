@@ -133,6 +133,7 @@ Currently reviewed or partially reviewed files:
 - startup-adjacent parts of `src/wallet/wallet.h`
 - `src/wallet/rpc/wallet.cpp`
 - `src/wallet/rpc/addresses.cpp`
+- `src/wallet/rpc/backup.cpp`
 
 Known use from review:
 
@@ -150,11 +151,15 @@ Known use from review:
 - Wallet state, wallet directory, and loaded-wallet status RPCs.
 - Wallet create, load, unload, migration, and flag RPCs.
 - Address, change-address, label, grouping, and multisig RPCs.
+- Wallet backup and restore RPCs.
+- Legacy and descriptor import RPCs.
+- Wallet export and rescan-adjacent recovery RPCs.
 
 Related pages:
 
 - [Source atlas: wallet startup](source-atlas/wallet-startup.md)
 - [Source atlas: wallet RPC](source-atlas/wallet-rpc.md)
+- [Source atlas: wallet backup/import RPC](source-atlas/wallet-backup-import-rpc.md)
 - [Wallet guide](../wallets/wallet-guide.md)
 - [RPC overview](rpc-overview.md)
 - [Node startup](../architecture/node-startup.md)
@@ -164,7 +169,6 @@ Still needed:
 - Remaining wallet RPC source files.
 - Wallet database internals.
 - Wallet transaction creation paths.
-- Wallet backup and restore paths.
 - GUI wallet paths.
 
 ### `src/kernel/`
