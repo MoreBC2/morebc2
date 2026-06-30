@@ -90,6 +90,7 @@ Still needed:
 Currently reviewed or partially reviewed files:
 
 - `src/rpc/mining.cpp`
+- `src/rpc/blockchain.cpp`
 
 Known use from review:
 
@@ -98,18 +99,26 @@ Known use from review:
 - Block and header submission RPC paths.
 - Transaction prioritization RPC paths.
 - Hidden local-generation helper RPCs.
+- Blockchain status and chain-tip RPCs.
+- Block/header lookup RPCs.
+- Pruning and block-data RPCs.
+- UTXO set and descriptor scan RPCs.
+- Chainstate and deployment status RPCs.
 
 Related pages:
 
 - [Source atlas: mining RPC](source-atlas/rpc-mining.md)
+- [Source atlas: blockchain RPC](source-atlas/rpc-blockchain.md)
 - [Source atlas: block template assembly](source-atlas/miner.md)
 - [Mining overview](../mining/mining-overview.md)
 - [RPC overview](rpc-overview.md)
 
 Still needed:
 
-- Broader RPC command table.
-- RPC wallet files.
+- Raw transaction RPC files.
+- Mempool RPC files.
+- Network RPC files.
+- Wallet RPC files.
 - RPC examples tested against a local node.
 - Service-safe RPC command recommendations.
 
