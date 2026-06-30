@@ -25,6 +25,7 @@ MoreBC2 has also reviewed a first pass of wallet RPC registration and address-ma
 
 - `src/wallet/rpc/wallet.cpp`
 - `src/wallet/rpc/addresses.cpp`
+- `src/wallet/rpc/backup.cpp`
 
 Reviewed startup behavior includes:
 
@@ -55,6 +56,14 @@ Reviewed wallet RPC behavior includes:
 - `setlabel` updates the wallet address book.
 - `listaddressgroupings` reports address groupings tied together by transaction history.
 - `addmultisigaddress` is legacy-wallet-only and requires a new wallet backup.
+
+Wallet backup/import RPC behavior reviewed so far includes:
+
+- `backupwallet` backs up the loaded wallet to a requested destination.
+- `restorewallet` restores and loads a wallet from a backup file under a requested wallet name.
+- Legacy import commands can trigger rescans and can be limited by pruned block data.
+- Descriptor import commands require timestamps and can scan from those timestamps.
+- `dumpwallet` and `dumpprivkey` are legacy-wallet-only and should be treated as advanced/sensitive commands.
 
 Wallet RPC examples remain untested until run against a local BitcoinII Core node.
 
@@ -131,7 +140,7 @@ Before this guide is marked Verified, MoreBC2 needs to document whether releases
 - Confirm wallet data directory by operating system.
 - Confirm backup file names and restore process.
 - Confirm wallet encryption workflow.
-- Review backup, spend, encryption, transaction, and coin wallet RPC files in more detail.
+- Review spend, encryption, transaction, and coin wallet RPC files in more detail.
 - Review wallet database format behavior.
 - Confirm whether GUI and CLI wallets differ in user-facing behavior.
 - Test safe wallet RPC examples locally before publishing them as verified.
@@ -146,11 +155,13 @@ Before this guide is marked Verified, MoreBC2 needs to document whether releases
 - `src/wallet/wallet.h`
 - `src/wallet/rpc/wallet.cpp`
 - `src/wallet/rpc/addresses.cpp`
+- `src/wallet/rpc/backup.cpp`
 - [Source atlas: wallet startup](../developers/source-atlas/wallet-startup.md)
 - [Source atlas: wallet RPC](../developers/source-atlas/wallet-rpc.md)
+- [Source atlas: wallet backup/import RPC](../developers/source-atlas/wallet-backup-import-rpc.md)
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This page now includes first-pass source-reviewed wallet startup and wallet RPC notes. Platform-specific wallet instructions, backup/restore workflows, spend/encryption/transaction RPC detail, release verification, and command testing remain open.
+**Notes:** This page now includes first-pass source-reviewed wallet startup, wallet RPC, and wallet backup/import notes. Platform-specific wallet instructions, spend/encryption/transaction RPC detail, release verification, and command testing remain open.
