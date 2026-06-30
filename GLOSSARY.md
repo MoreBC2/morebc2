@@ -4,6 +4,8 @@ This glossary defines common terms used across MoreBC2.
 
 Definitions should stay neutral and general unless a BitcoinII-specific detail has been verified against a primary source.
 
+For more technical architecture and Source Atlas terms, see the [Developer glossary](docs/encyclopedia/developer-glossary.md).
+
 ## Address
 
 A string used to receive funds. Address formats depend on the network and wallet type.
@@ -135,3 +137,9 @@ Unspent transaction output. Bitcoin-style chains track spendable balances as out
 ## Wallet
 
 Software that manages keys and helps users send or receive funds. Some wallets also include full-node functionality.
+
+## Verification
+
+**Status:** Draft
+**Primary sources checked:** Partially
+**Notes:** This glossary is a general reference. BitcoinII-specific details should link to source-backed documentation or be marked Needs Review.
