@@ -26,14 +26,13 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Area | Status | Notes |
 |---|---|---|
 | Architecture overview | Framework | Existing overview needs refresh after lifecycle pages. |
+| Node startup | Partial | Built from first-pass `src/init.cpp` startup-path review. GUI/daemon/shutdown paths pending. |
+| Consensus model | Partial | Built from reviewed chainparams, PoW, validation, block connection, and reorg notes. Transaction/script consensus pending. |
 | Life of a transaction | Partial | Built from reviewed broadcast, mempool, block, and reorg notes. Wallet/P2P/mining paths pending. |
 | Life of a block | Partial | Built from reviewed block acceptance and validation paths. Mining/P2P/storage details pending. |
 | Life of a reorganization | Partial | Built from reviewed reorg, disconnection, undo, and mempool re-add paths. Wallet/index handling pending. |
 | Block validation flow | Reviewed | Strong first-pass flow map exists. |
 | Mempool flow | Reviewed | Strong first-pass mempool and transaction acceptance map exists. |
-| Node startup | Not started | Needed before invite-only review. |
-| Consensus model | Not started | Needed to explain consensus vs policy clearly. |
-| Network stack | Not started | Requires `net_processing` review. |
 | Wallet flow | Not started | Requires wallet source review. |
 | Mining flow | Not started | Requires miner/block-template review. |
 
@@ -42,6 +41,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Source area | Status | Notes |
 |---|---|---|
 | `src/kernel/chainparams.cpp` | Reviewed | Mainnet parameters documented; release-branch confirmation still needed. |
+| `src/init.cpp` | Partial | Startup orchestration first pass exists. GUI/daemon/shutdown and option-level details pending. |
 | `src/pow.cpp` | Reviewed | Difficulty retarget and PoW checks documented. |
 | `src/validation.cpp` | Partial | Major validation, connection, reorg, mempool acceptance paths reviewed. Large file still not fully exhausted. |
 | Block acceptance path | Reviewed | Consolidated source-atlas lifecycle page exists. |
@@ -55,7 +55,6 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | `src/consensus/tx_verify.*` | Not started | Needed for UTXO input consensus checks. |
 | Script interpreter | Not started | Needed for script validation model. |
 | Block storage | Not started | Needed for disk/pruning details. |
-| `net_processing` | Not started | Needed for P2P block/transaction relay paths. |
 | Mining/block template | Not started | Needed for mining flow and mempool selection details. |
 | Wallet internals | Not started | Needed for wallet flow. |
 | RPC internals | Not started | Needed for RPC flow and service integration examples. |
@@ -111,14 +110,14 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. README normalization for thinner sections.
-2. Node startup architecture page.
-3. Consensus model architecture page.
-4. Repository map refresh.
-5. Source tree guide refresh.
+1. Architecture overview refresh.
+2. Repository map refresh.
+3. Source tree guide refresh.
+4. Transaction consensus source review.
+5. Script validation source review.
 6. Local development environment guide.
-7. Glossary expansion and cross-linking.
-8. Release verification guide.
+7. Release verification guide.
+8. Glossary expansion and cross-linking.
 
 ## Verification
 
