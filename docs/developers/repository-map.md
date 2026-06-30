@@ -33,6 +33,8 @@ This is not a full source audit. It is a navigation aid that should be expanded 
 | `src/wallet/load.*` | Wallet verification, loading, start, flush, stop, unload | E1 partial |
 | `src/wallet/context.*` | Shared wallet context and wallet list state | E1 partial |
 | `src/wallet/wallet.h` | Wallet declarations, startup-adjacent defaults, chain notification hooks | E1 partial |
+| `src/wallet/rpc/wallet.cpp` | Wallet RPC registration, management, creation, loading, migration, status | E1 partial |
+| `src/wallet/rpc/addresses.cpp` | Address, change-address, label, grouping, and multisig wallet RPCs | E1 partial |
 | `src/txmempool.cpp` | Mempool storage, removal, expiry, prioritization, checking | E1 partial |
 | `src/txmempool.h` | Mempool structure, indexes, ancestor/descendant tracking | E1 partial |
 | `src/kernel/mempool_entry.h` | Mempool entry metadata and lockpoint data | E1 |
@@ -84,14 +86,6 @@ Reviewed or partially reviewed:
 - `src/node/blockstorage.*`
 - `src/consensus/amount.h`
 
-Likely files/directories to review next:
-
-- Caller paths for mandatory-vs-policy script flags.
-- Additional files under `src/script/`.
-- Validation notification subscribers.
-- Additional block-storage failure and pruning paths.
-- Subsidy calculation path.
-
 Related MoreBC2 pages:
 
 - [Consensus model](../architecture/consensus-model.md)
@@ -130,11 +124,33 @@ Related MoreBC2 pages:
 
 Questions:
 
-- Which wallet RPC files expose create/load/backup/send behavior?
 - Which wallet database formats are enabled in current releases?
 - Which backup and restore workflows can be tested safely?
 - Which wallet notification paths should be mapped to validation-interface events?
 - Which GUI wallet flows differ from CLI/daemon behavior?
+
+### Wallet RPC
+
+Reviewed or partially reviewed:
+
+- `src/wallet/rpc/wallet.cpp`
+- `src/wallet/rpc/addresses.cpp`
+
+Related MoreBC2 pages:
+
+- [Source atlas: wallet RPC](source-atlas/wallet-rpc.md)
+- [Source atlas: wallet startup](source-atlas/wallet-startup.md)
+- [Wallet guide](../wallets/wallet-guide.md)
+- [RPC overview](rpc-overview.md)
+- [Service integration checklist](../exchange/service-integration-checklist.md)
+
+Questions:
+
+- Which wallet RPC examples can be safely tested locally?
+- Which address and status commands belong in service docs?
+- Which wallet command groups need separate advanced pages?
+- Which descriptor-vs-legacy behaviors need user-facing explanation?
+- Which build flags affect wallet RPC availability?
 
 ### Block storage, pruning, and reindex
 
@@ -285,12 +301,14 @@ Reviewed or partially reviewed:
 
 - `src/rpc/mining.cpp`
 - `src/rpc/blockchain.cpp`
+- `src/wallet/rpc/wallet.cpp`
+- `src/wallet/rpc/addresses.cpp`
 
 Likely files/directories to review next:
 
 - other `src/rpc/` files
 - `src/bitcoinII-cli.cpp`
-- `src/wallet/rpc*`
+- remaining `src/wallet/rpc/` files
 
 Questions:
 
@@ -307,16 +325,17 @@ Reviewed or partially reviewed:
 - `src/wallet/load.*`
 - `src/wallet/context.*`
 - startup-adjacent parts of `src/wallet/wallet.h`
+- `src/wallet/rpc/wallet.cpp`
+- `src/wallet/rpc/addresses.cpp`
 
 Likely files/directories to review next:
 
 - other `src/wallet/` files
-- `src/wallet/rpc*`
+- remaining `src/wallet/rpc/` files
 - `src/qt/` wallet paths
 
 Questions:
 
-- Where is address generation handled?
 - Which wallet behavior should be documented for users and exchanges?
 - What backup and restore guidance is source-backed or tested?
 - Which wallet RPCs are safest for service documentation?
