@@ -21,7 +21,12 @@ MoreBC2 has reviewed a first pass of wallet startup and lifecycle files:
 - `src/wallet/context.cpp`
 - startup-adjacent parts of `src/wallet/wallet.h`
 
-Reviewed behavior includes:
+MoreBC2 has also reviewed a first pass of wallet RPC registration and address-management files:
+
+- `src/wallet/rpc/wallet.cpp`
+- `src/wallet/rpc/addresses.cpp`
+
+Reviewed startup behavior includes:
 
 - Wallet support can be compiled into the node.
 - `-disablewallet` disables wallet loading and wallet RPC calls.
@@ -33,6 +38,25 @@ Reviewed behavior includes:
 - Wallet loading creates `CWallet` objects, notifies load listeners, and adds wallets to wallet context.
 - Wallet startup calls post-initialization processing and schedules periodic flush/compaction and transaction resend behavior.
 - Wallet shutdown helpers flush, close, remove, and wait for wallet deletion.
+
+## Wallet RPC behavior observed from source
+
+Reviewed wallet RPC behavior includes:
+
+- `getwalletinfo` returns wallet state including name, version, database format, balances, transaction count, keypool data, fee setting, scanning status, descriptor status, external-signer status, blank-wallet status, birth time, and last processed block.
+- `listwalletdir` lists wallets in the wallet directory.
+- `listwallets` lists currently loaded wallets.
+- `loadwallet` loads an existing wallet and can update persistent startup loading behavior.
+- `unloadwallet` unloads a wallet after checking endpoint/argument consistency and active rescan state.
+- `createwallet` creates and loads a new wallet.
+- `setwalletflag` can change mutable wallet flags such as `avoid_reuse`.
+- `getnewaddress` creates a new receiving address and can attach a label.
+- `getrawchangeaddress` creates a new change address for raw-transaction workflows, not normal receiving use.
+- `setlabel` updates the wallet address book.
+- `listaddressgroupings` reports address groupings tied together by transaction history.
+- `addmultisigaddress` is legacy-wallet-only and requires a new wallet backup.
+
+Wallet RPC examples remain untested until run against a local BitcoinII Core node.
 
 ## Wallet options observed from source
 
@@ -63,6 +87,8 @@ Reviewed startup-adjacent wallet defaults include:
 - Default wallet disabled: false.
 - Default fallback fee: zero.
 - Default pay transaction fee: zero.
+
+Reviewed wallet RPC behavior also shows `createwallet` defaults to descriptor wallets when the `descriptors` argument is not overridden.
 
 These defaults should still be checked against a running release before being used in user-facing examples.
 
@@ -105,9 +131,10 @@ Before this guide is marked Verified, MoreBC2 needs to document whether releases
 - Confirm wallet data directory by operating system.
 - Confirm backup file names and restore process.
 - Confirm wallet encryption workflow.
-- Review wallet RPC files.
+- Review backup, spend, encryption, transaction, and coin wallet RPC files in more detail.
 - Review wallet database format behavior.
 - Confirm whether GUI and CLI wallets differ in user-facing behavior.
+- Test safe wallet RPC examples locally before publishing them as verified.
 
 ## Sources
 
@@ -117,10 +144,13 @@ Before this guide is marked Verified, MoreBC2 needs to document whether releases
 - `src/wallet/context.h`
 - `src/wallet/context.cpp`
 - `src/wallet/wallet.h`
+- `src/wallet/rpc/wallet.cpp`
+- `src/wallet/rpc/addresses.cpp`
 - [Source atlas: wallet startup](../developers/source-atlas/wallet-startup.md)
+- [Source atlas: wallet RPC](../developers/source-atlas/wallet-rpc.md)
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This page now includes first-pass source-reviewed wallet startup notes. Platform-specific wallet instructions, wallet RPCs, backups, restores, and release verification still need testing or deeper review before publication as verified docs.
+**Notes:** This page now includes first-pass source-reviewed wallet startup and wallet RPC notes. Platform-specific wallet instructions, backup/restore workflows, spend/encryption/transaction RPC detail, release verification, and command testing remain open.
