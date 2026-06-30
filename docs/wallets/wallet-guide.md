@@ -27,6 +27,7 @@ MoreBC2 has also reviewed a first pass of wallet RPC registration and address-ma
 - `src/wallet/rpc/addresses.cpp`
 - `src/wallet/rpc/backup.cpp`
 - `src/wallet/rpc/spend.cpp`
+- `src/wallet/rpc/encrypt.cpp`
 
 Reviewed startup behavior includes:
 
@@ -73,6 +74,13 @@ Wallet spend and PSBT behavior reviewed so far includes:
 - PSBT commands can create, update, sign, and finalize partially signed transactions.
 - Fee-bump commands target eligible replaceable wallet transactions.
 - Some reviewed fee-rate options use atom-per-vbyte units while older options used BC2-per-kvB units.
+
+Wallet encryption behavior reviewed so far includes:
+
+- `walletpassphrase` temporarily unlocks an encrypted wallet for signing-related commands.
+- `walletpassphrasechange` changes the passphrase on an encrypted wallet.
+- `walletlock` removes the decryption key from memory and clears the relock time.
+- `encryptwallet` performs first-time wallet encryption and returns a warning that a new backup should be made with `backupwallet`.
 
 Wallet RPC examples remain untested until run against a local BitcoinII Core node.
 
@@ -148,8 +156,8 @@ Before this guide is marked Verified, MoreBC2 needs to document whether releases
 - Confirm release-verification workflow.
 - Confirm wallet data directory by operating system.
 - Confirm backup file names and restore process.
-- Confirm wallet encryption workflow.
-- Review encryption, transaction-history, and coin wallet RPC files in more detail.
+- Test wallet encryption workflow on a temporary wallet.
+- Review transaction-history and coin wallet RPC files in more detail.
 - Review wallet database format behavior.
 - Confirm whether GUI and CLI wallets differ in user-facing behavior.
 - Test safe wallet RPC examples locally before publishing them as verified.
@@ -166,13 +174,15 @@ Before this guide is marked Verified, MoreBC2 needs to document whether releases
 - `src/wallet/rpc/addresses.cpp`
 - `src/wallet/rpc/backup.cpp`
 - `src/wallet/rpc/spend.cpp`
+- `src/wallet/rpc/encrypt.cpp`
 - [Source atlas: wallet startup](../developers/source-atlas/wallet-startup.md)
 - [Source atlas: wallet RPC](../developers/source-atlas/wallet-rpc.md)
 - [Source atlas: wallet backup/import RPC](../developers/source-atlas/wallet-backup-import-rpc.md)
 - [Source atlas: wallet spend and PSBT RPC](../developers/source-atlas/wallet-spend-rpc.md)
+- [Source atlas: wallet encryption RPC](../developers/source-atlas/wallet-encryption-rpc.md)
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This page now includes first-pass source-reviewed wallet startup, wallet RPC, backup/import, and spend/PSBT notes. Platform-specific wallet instructions, encryption/transaction-history/coin RPC detail, release verification, and command testing remain open.
+**Notes:** This page now includes first-pass source-reviewed wallet startup, wallet RPC, backup/import, spend/PSBT, and encryption/passphrase notes. Platform-specific wallet instructions, transaction-history/coin RPC detail, release verification, and command testing remain open.
