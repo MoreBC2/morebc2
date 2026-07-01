@@ -16,6 +16,7 @@ For a quick project-level orientation, start with:
 - [Repository audit](AUDIT.md)
 - [Documentation coverage](documentation-coverage.md)
 - [Private review handoff](REVIEW_HANDOFF.md)
+- [Legal and reuse posture](LEGAL_REUSE.md)
 - [Documentation polish plan](POLISH_PLAN.md)
 
 For a technical reader, start with:
@@ -31,6 +32,7 @@ For a technical reader, start with:
 - [Repository audit](AUDIT.md)
 - [Documentation coverage](documentation-coverage.md)
 - [Private review handoff](REVIEW_HANDOFF.md)
+- [Legal and reuse posture](LEGAL_REUSE.md)
 - [Documentation polish plan](POLISH_PLAN.md)
 
 ## Main sections
@@ -59,9 +61,9 @@ Before using a command in production, check whether the relevant page says the c
 
 ## Private review caution
 
-Before opening the repo to new readers or agents, use [Private review handoff](REVIEW_HANDOFF.md).
+Before opening the repo to new readers or agents, use [Private review handoff](REVIEW_HANDOFF.md) and [Legal and reuse posture](LEGAL_REUSE.md).
 
-That page explains what is ready for narrow review, what should not be changed broadly yet, and which public-launch blockers remain.
+Those pages explain what is ready for narrow review, what should not be changed broadly yet, which public-launch blockers remain, and how to avoid accidental reuse assumptions before a license decision.
 
 ## Rule of thumb
 
