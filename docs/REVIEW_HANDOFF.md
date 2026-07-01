@@ -12,7 +12,7 @@ It is meant for private review, not public launch.
 
 ## Current recommendation
 
-MoreBC2 is close to being ready for invite-only review.
+MoreBC2 is closer to invite-only review now that a contribution workflow and feedback-bucket system exist.
 
 It is not ready for broad public launch.
 
@@ -31,6 +31,8 @@ Do not ask a reviewer or agent to treat the repository as final public documenta
 
 - Root and docs indexes have been refreshed.
 - Section READMEs have been normalized.
+- `CONTRIBUTING.md` now defines a private-review workflow.
+- Review feedback buckets exist.
 - Architecture lifecycle pages have been cross-linked to newer Source Atlas pages.
 - Source Atlas has meaningful first-pass coverage across consensus, validation, mempool, storage, wallet, mining, raw transaction, and RPC areas.
 - Wallet guide has first-pass source-reviewed wallet RPC coverage.
@@ -46,15 +48,18 @@ These should be done before inviting people or agents to review the repo:
 
 ### 1. Contribution and review workflow
 
-Needed:
+Status: **Mostly done for private review**
 
-- Add a clear `CONTRIBUTING.md` or private-review equivalent.
-- Explain how reviewers should leave feedback.
-- Explain evidence expectations.
-- Explain that claims should not be upgraded without source or test records.
-- Explain where to put unresolved questions.
+Current anchors:
 
-Status: **Needed before private review**
+- [`CONTRIBUTING.md`](../CONTRIBUTING.md)
+- [Review feedback buckets](verification/review-feedback-buckets.md)
+
+Still needed before public contribution:
+
+- Final public license decision.
+- Public pull-request process.
+- Issue templates, if issues are opened.
 
 ### 2. License / reuse posture
 
@@ -68,39 +73,45 @@ Status: **Needed before private review**
 
 ### 3. Reviewer start page
 
-Needed:
+Status: **Mostly done for private review**
 
-- Add a short page telling reviewers exactly where to start.
-- Suggested flow:
-  1. `README.md`
-  2. `docs/README.md`
-  3. `PROJECT_STATUS.md`
-  4. `docs/documentation-coverage.md`
-  5. `docs/verification/known-unknowns.md`
-  6. `docs/verification/open-questions.md`
-  7. One assigned review target
+Suggested flow:
 
-Status: **Needed before private review**
+1. `README.md`
+2. `docs/README.md`
+3. `PROJECT_STATUS.md`
+4. `docs/REVIEW_HANDOFF.md`
+5. `docs/documentation-coverage.md`
+6. `docs/verification/known-unknowns.md`
+7. `docs/verification/open-questions.md`
+8. One assigned review target
+
+Still useful:
+
+- Add this flow to the root README before inviting reviewers.
 
 ### 4. Issue labels or feedback buckets
 
-Needed:
+Status: **Done as a document, not configured in GitHub**
 
-Create a small feedback taxonomy, even if issues are not enabled publicly yet.
+Current anchor:
 
-Suggested buckets:
+- [Review feedback buckets](verification/review-feedback-buckets.md)
+
+Suggested buckets include:
 
 - source mismatch
 - stale link
 - unclear status
 - unsupported claim
-- missing citation/source
+- missing source
 - command not tested
 - ecosystem needs direct check
+- release verification
 - wording/polish
 - navigation/cross-link
-
-Status: **Needed before private review**
+- open question
+- good first review
 
 ### 5. Final stale wording scan
 
@@ -200,5 +211,5 @@ Please do not add live ecosystem listings, install instructions, wallet movement
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current MoreBC2 project status, documentation coverage, verification queue, and recent polish work
+**Primary sources checked:** Current MoreBC2 project status, documentation coverage, verification queue, contribution guide, feedback buckets, and recent polish work
 **Notes:** This page is a handoff checklist for private review. It does not verify BitcoinII protocol behavior.
