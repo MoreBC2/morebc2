@@ -76,11 +76,12 @@ Future RPC setup examples should record:
 - Confirm whether RPC whitelist examples should be included.
 - Confirm `bitcoinII-cli` command examples against a running node.
 - Add tested records for local-only RPC setup before publishing copy/paste examples.
+- Confirm canonical repository/source path before public-link polish.
 
 ## Sources
 
-- `share/examples/bitcoinII.conf`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/share/examples/bitcoinII.conf
-- `doc/JSON-RPC-interface.md`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/doc/JSON-RPC-interface.md
+- `share/examples/bitcoinII.conf` in the current observed repository: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/share/examples/bitcoinII.conf
+- `doc/JSON-RPC-interface.md` in the current observed repository: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/doc/JSON-RPC-interface.md
 - [Command testing status](../verification/command-testing.md)
 - [RPC overview](../developers/rpc-overview.md)
 
@@ -88,4 +89,4 @@ Future RPC setup examples should record:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** Options and default ports are source-backed from the generated config. Authentication setup, CLI command examples, production RPC patterns, and whitelist examples still need testing and review.
+**Notes:** Options and default ports are source-backed from the generated config. Authentication setup, CLI command examples, production RPC patterns, and whitelist examples still need testing and review. Source links use the current observed repository path, but canonical repository status still needs confirmation.
