@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Needs Review
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Purpose
 
@@ -32,18 +32,20 @@ MoreBC2 currently cites this file for:
 - [Network specifications](../../documentation/network-specifications.md)
 - [Mining overview](../../mining/mining-overview.md)
 - [Proof-of-work](../../encyclopedia/proof-of-work.md)
+- [Block primitives](block-primitives.md)
 
 ## Open questions
 
 - Confirm maintainer-preferred public wording: `double-SHA256`, `SHA-256d`, or another phrase.
 - Confirm whether any BitcoinII-specific hashing changes exist elsewhere.
+- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
 
 ## Sources
 
-- `src/hash.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/hash.h
+- Current observed `main` `src/hash.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/hash.h
 
 ## Verification
 
 **Status:** Needs Review
 **Primary sources checked:** Yes
-**Notes:** Hashing helper behavior has been checked from source, but this page should be reviewed against the current release branch before being marked Verified.
+**Notes:** Hashing helper behavior has been checked from source, but this page should be reviewed against `v29.1.0` and current `main` before being marked Verified.
