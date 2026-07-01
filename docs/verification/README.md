@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-01
 
 ## Summary
 
@@ -20,6 +20,7 @@ Verification pages should help MoreBC2 keep uncertainty visible instead of hidin
 - [Stale wording scan](stale-wording-scan.md)
 - [Command example scan](command-example-scan.md)
 - [Command testing status](command-testing.md)
+- [Command smoke-test plan](command-smoke-test-plan.md)
 - [Release source comparison notes](release-source-comparison.md)
 - [Release artifact checklist](release-artifact-checklist.md)
 - [Documentation coverage](../documentation-coverage.md)
@@ -37,7 +38,7 @@ For review notes, use [Review feedback buckets](review-feedback-buckets.md) to k
 
 For stale wording or overconfident language, use [Stale wording scan](stale-wording-scan.md).
 
-For command examples, also use [Command example scan](command-example-scan.md) and add or update a record in [Command testing status](command-testing.md).
+For command examples, also use [Command example scan](command-example-scan.md), [Command testing status](command-testing.md), and the [Command smoke-test plan](command-smoke-test-plan.md).
 
 For release checks, also update [Release source comparison notes](release-source-comparison.md) or [Release artifact checklist](release-artifact-checklist.md).
 
@@ -111,6 +112,8 @@ For release checks, also update [Release source comparison notes](release-source
 
 **Needed source:** Local command records with environment details.
 
+**Current next step:** Use the command smoke-test plan to test harmless local commands first.
+
 **Status:** Needs Review
 
 ## Rules
@@ -131,5 +134,5 @@ Items in this queue should not be treated as verified documentation until moved 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current verification section structure
-**Notes:** This section README tracks verification workflow, feedback buckets, stale-wording scan, command-example scan, command-test tracking, release-check tracking, and priority unknowns. It does not verify BitcoinII protocol behavior.
+**Primary sources checked:** Current verification section structure and command smoke-test plan
+**Notes:** This section README tracks verification workflow, feedback buckets, stale-wording scan, command-example scan, command-test tracking, release-check tracking, command smoke-test planning, and priority unknowns. It does not verify BitcoinII protocol behavior.
