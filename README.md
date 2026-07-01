@@ -12,19 +12,38 @@ Preserve, organize, and expand publicly verifiable knowledge about the BitcoinII
 
 ## Current status
 
-This repository is in private foundation-building mode and is now entering a broader polish pass.
+This repository is in private foundation-building mode and is near invite-only review preparation.
 
 The project has meaningful first-pass source-backed coverage across BitcoinII Core architecture, chain parameters, proof of work, validation, block storage, mempool behavior, wallet RPC groups, mining RPC, blockchain RPC, raw transaction RPC, and mempool/broadcast RPC.
 
-It is still not ready for broad public launch because command examples, release artifacts, and ecosystem listings still need direct verification.
+It is still not ready for broad public launch because command examples, release artifacts, ecosystem listings, and some service-provider recommendations still need direct verification.
 
 Start here if you are reviewing the project structure:
 
 - [Project status](PROJECT_STATUS.md)
+- [Docs index](docs/README.md)
+- [Private review handoff](docs/REVIEW_HANDOFF.md)
+- [Legal and reuse posture](docs/LEGAL_REUSE.md)
 - [Repository audit](docs/AUDIT.md)
 - [Documentation coverage](docs/documentation-coverage.md)
 - [Documentation polish plan](docs/POLISH_PLAN.md)
 - [Roadmap](ROADMAP.md)
+
+## Private reviewer start flow
+
+For a narrow private review, use this order:
+
+1. [README](README.md)
+2. [Docs index](docs/README.md)
+3. [Project status](PROJECT_STATUS.md)
+4. [Private review handoff](docs/REVIEW_HANDOFF.md)
+5. [Legal and reuse posture](docs/LEGAL_REUSE.md)
+6. [Documentation coverage](docs/documentation-coverage.md)
+7. [Known unknowns](docs/verification/known-unknowns.md)
+8. [Open questions backlog](docs/verification/open-questions.md)
+9. One assigned review target
+
+Reviewers should keep feedback narrow. Do not rewrite broad sections, mark pages Verified, add live ecosystem claims, or promote command examples unless the evidence and test records are present.
 
 ## Start reading
 
@@ -134,7 +153,7 @@ morebc2/
 
 ## Launch readiness
 
-MoreBC2 should stay private while the broad polish pass is completed.
+MoreBC2 should stay private while the final review-prep pass is completed.
 
 Invite-only review should come before public launch.
 
