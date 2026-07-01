@@ -72,14 +72,15 @@ For each flagged phrase, decide:
 | 2026-06-30 | node/config/RPC source-link path check | `docs/nodes/node-guide.md`, `docs/configuration/configuration-overview.md`, `docs/configuration/rpc-configuration.md` | Older repository source links found and updated | `8e4a749`, `062686f`, `b1272f8` | Links now use current observed repository path and include canonical-path caveats. |
 | 2026-06-30 | old repository path search | repository search for `BitcoinII-Dev/BitcoinII` | No remaining matches returned by repository search after updates | No further change | This does not prove every external link is perfect, but the known old path no longer appears in search results. |
 | 2026-06-30 | developer workflow wording | `docs/developers/local-development.md`, `docs/developers/build-system.md`, `docs/developers/testing.md`, `docs/developers/release-verification.md`, `docs/developers/release-process.md` | Release-process page had stale release list and old release path | `a5aaf58` | Developer workflow pages keep build, test, and release-check examples unverified. Release-process page now points to current observed release path and release tracking pages. |
+| 2026-06-30 | Source Atlas chain parameters and PoW wording | `docs/developers/source-atlas/chainparams-cpp.md`, `docs/developers/source-atlas/pow-cpp.md` | Chainparams had stale BIP9 warning height and stale chain-data snapshot values; PoW needed current source links and release-comparison note | `df138fa`, `72b0e75` | Chainparams now labels snapshot-style fields by source version and records `v29.1.0` values. PoW now links current observed source and keeps DGW unsupported. |
 
 ## Still to scan
 
-The orientation, exchange, wallet, mining, ecosystem framework/listing, node, configuration, RPC configuration, and developer workflow pages are in decent shape after this pass.
+The orientation, exchange, wallet, mining, ecosystem framework/listing, node, configuration, RPC configuration, developer workflow, chainparams, and PoW pages are in decent shape after this pass.
 
 Still scan next:
 
-- Source Atlas pages with `Reviewed` status.
+- Remaining Source Atlas pages with `Reviewed` status.
 - Any remaining command blocks found by repository search.
 
 ## Known acceptable uses
@@ -94,7 +95,7 @@ Some terms are acceptable in limited contexts:
 
 ## Next actions
 
-1. Scan Source Atlas pages with `Reviewed` status for overconfident labels or stale source-ref wording.
+1. Continue Source Atlas scan for overconfident labels or stale source-ref wording.
 2. Search remaining command blocks, if any.
 3. Update documentation coverage after each scan batch.
 
@@ -110,5 +111,5 @@ Some terms are acceptable in limited contexts:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current MoreBC2 review workflow, coverage dashboard, targeted orientation/exchange/wallet/mining/ecosystem pages, node/configuration pages, old-path repository search, and developer workflow pages
-**Notes:** This page now records targeted stale-wording passes through the main private-review orientation, user/service-facing framework pages, known old repository path checks, and developer workflow pages. Source Atlas pages still need scanning before private review.
+**Primary sources checked:** Current MoreBC2 review workflow, coverage dashboard, targeted orientation/exchange/wallet/mining/ecosystem pages, node/configuration pages, old-path repository search, developer workflow pages, and initial Source Atlas source-ref scan
+**Notes:** This page now records targeted stale-wording passes through the main private-review orientation, user/service-facing framework pages, known old repository path checks, developer workflow pages, and initial Source Atlas source-ref checks. Remaining Source Atlas pages still need scanning before private review.
