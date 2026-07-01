@@ -98,33 +98,33 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 |---|---|---|
 | Exchange README | Partial | Normalized for service-provider framework, source anchors, and production-use caveats. |
 | Exchange integration | Framework | Good structure exists; confirmations/contact/release verification pending. |
-| Deposit monitoring | Framework | Needs RPC testing and confirmation policy. |
-| Service integration checklist | Framework | Useful checklist; each item needs evidence links. |
+| Deposit monitoring | Framework | Stale wording scan updated command caveats and current observed source links; RPC testing and confirmation policy still pending. |
+| Service integration checklist | Framework | Useful checklist; initial stale wording scan found no blocking issue. Each item still needs evidence links. |
 | Ecosystem README | Partial | Linked API framework and added API-specific listing caution. |
 | Ecosystem APIs | Framework | Added API listing and endpoint-test framework. No live APIs verified yet. |
-| Ecosystem wallets | Framework | Conservative listing model exists. |
-| Ecosystem explorers | Framework | Direct explorer checks pending. |
-| Ecosystem mining pools | Framework | Direct pool checks pending. |
-| Ecosystem exchanges | Framework | Current listing checks pending. |
+| Ecosystem wallets | Framework | Current observed release path and legacy/redirected path are distinguished; canonical wallet download verification still pending. |
+| Ecosystem explorers | Framework | Direct explorer checks pending; initial stale wording scan found no active-listing claim. |
+| Ecosystem mining pools | Framework | Direct pool checks pending; initial stale wording scan found no active-listing claim. |
+| Ecosystem exchanges | Framework | Current listing checks pending; initial stale wording scan found no active-listing claim. |
 | Ecosystem resources | Framework | Community resources need direct review. |
 
 ## User operation coverage
 
 | Area | Status | Notes |
 |---|---|---|
-| Wallet guide | Partial | Command testing status added for wallet RPC examples; platform/release/local testing pending. |
+| Wallet guide | Partial | Command testing status added for wallet RPC examples; initial stale wording/command scan found no blocking issue. Platform/release/local testing pending. |
 | Wallets README | Partial | Normalized for current wallet source-review anchors and command-safety rules. |
 | Node guide | Partial | Command testing status added for node command examples; platform/release/local testing pending. |
 | Nodes README | Partial | Normalized for current node/source-review anchors and operator-safety rules. |
-| Mining overview | Partial | Command testing status added for mining RPC examples; live software/pool data pending. |
+| Mining overview | Partial | Command testing status added for mining RPC examples; initial stale wording/command scan found no blocking issue. Live software/pool data pending. |
 | Mining README | Partial | Normalized for current mining source-review anchors and live-ecosystem caution. |
 | Research README | Partial | Normalized for research-vs-documentation boundaries. |
 | Discussion README | Partial | Normalized for proposal/status labeling and discussion boundaries. |
 | History README | Partial | Normalized for dated-source and archive/current-status separation. |
 | Verification README | Partial | Normalized for verification workflow, review feedback buckets, stale-wording scan, command-example scan, command tracking, release tracking, and priority unknowns. |
 | Review feedback buckets | Framework | Added feedback taxonomy and narrow assignment guidance for private review. |
-| Stale wording scan | Partial | Initial high-risk orientation scan recorded; exchange/wallet/mining/ecosystem scans still pending. |
-| Command example scan | Framework | Added command-example scan checklist and priority files. Scan still needs to be run. |
+| Stale wording scan | Partial | Targeted orientation, exchange, wallet, mining, and ecosystem scans recorded. Source Atlas and stale path scans still pending. |
+| Command example scan | Partial | First pass recorded for exchange, wallet, mining, and service checklist pages. Remaining command-heavy pages still pending. |
 | Known unknowns | Partial | Refreshed as short executive list linked to full backlog. |
 | Open questions backlog | Partial | Consolidated with priority labels, evidence needs, and public/private review blockers. |
 | Command testing status | Framework | Added command-test tracker, status labels, untested inventory, and test-record template. |
@@ -159,12 +159,13 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. Continue stale wording scan in exchange, wallet, mining, and ecosystem pages.
-2. Run final command-example scan.
-3. Build/test command smoke-test record framework.
-4. Network RPC or P2P source review.
-5. Continue release artifact verification when full release asset data is available.
-6. Direct ecosystem checks for explorers, APIs, pools, and exchanges.
+1. Continue command-example scan in RPC, node, and configuration pages.
+2. Search for old repository path citations and update obvious stale links.
+3. Scan Source Atlas pages with `Reviewed` status.
+4. Build/test command smoke-test record framework.
+5. Network RPC or P2P source review.
+6. Continue release artifact verification when full release asset data is available.
+7. Direct ecosystem checks for explorers, APIs, pools, and exchanges.
 
 ## Verification
 
