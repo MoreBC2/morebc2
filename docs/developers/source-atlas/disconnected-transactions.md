@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Source files
 
@@ -11,9 +11,9 @@
 
 ## Purpose
 
-`DisconnectedBlockTransactions` temporarily stores transactions from disconnected blocks during a chain reorganization.
+`DisconnectedBlockTransactions` temporarily stores transactions from blocks that leave the active chain during a reorganization.
 
-Its job is to preserve transactions that may need to be reconsidered for the mempool after the reorg finishes, while avoiding expensive mempool re-acceptance during every intermediate disconnect step.
+Its job is to preserve transactions that may need to be reconsidered for the mempool after the reorg finishes, while avoiding expensive mempool re-acceptance during every intermediate step.
 
 ## File header notes
 
@@ -25,7 +25,7 @@ During a reorg, transactions from the old active chain may become unconfirmed.
 
 Some of those transactions may still be valid and useful to keep in the mempool. Others may be confirmed again in the new chain or may no longer be valid.
 
-`DisconnectedBlockTransactions` provides the temporary holding area used between block disconnection and final mempool reprocessing.
+`DisconnectedBlockTransactions` provides the temporary holding area used between block handling and final mempool reprocessing.
 
 ## Memory limit
 
@@ -42,7 +42,7 @@ This caps the memory used for disconnected transaction processing.
 The source comments describe the queue order:
 
 - The front of the list should contain the most recently confirmed transactions.
-- Transactions are added while disconnecting blocks.
+- Transactions are added while blocks leave the active chain.
 - If memory usage grows too large, trimming removes entries from the front.
 - Remaining transactions can later be re-added from the back toward the front without missing inputs.
 
@@ -52,7 +52,7 @@ Reviewed members:
 
 - `cachedInnerUsage` — cached dynamic memory usage for transaction references.
 - `m_max_mem_usage` — maximum allowed memory usage.
-- `queuedTx` — ordered list of disconnected transactions.
+- `queuedTx` — ordered list of transactions being held for later review.
 - `iters_by_txid` — lookup map from transaction ID to list iterator.
 
 ## Reviewed behavior
@@ -88,7 +88,7 @@ Reviewed behavior:
 
 - Reserves txid lookup capacity.
 - Iterates through the block's transactions in reverse order.
-- Appends each transaction to the disconnected transaction queue.
+- Appends each transaction to the holding queue.
 - Adds each transaction to the txid lookup map.
 - Asserts that callers do not pass duplicate transaction IDs.
 - Updates cached memory usage.
@@ -99,7 +99,7 @@ Reviewed behavior:
 Reviewed behavior:
 
 - Does nothing if the queue is empty.
-- For each transaction in a newly connected block, removes matching entries from the disconnected transaction queue.
+- For each transaction in a newly connected block, removes matching entries from the holding queue.
 - Updates cached memory usage and the txid lookup map.
 
 ### `clear`
@@ -130,7 +130,7 @@ DisconnectTip
 ConnectTip
   -> removeForBlock
 
-After disconnection/reconnection
+After chain switch handling
   -> MaybeUpdateMempoolForReorg, still needs deeper review
 ```
 
@@ -146,15 +146,16 @@ After disconnection/reconnection
 - Confirm exact mempool re-add order after `take()`.
 - Confirm whether any BitcoinII-specific behavior differs from inherited Bitcoin Core behavior.
 - Decide whether disconnected transaction handling belongs in a separate reorg architecture page.
+- Confirm whether `v29.1.0` differs from current `main` for these files before upgrading status.
 
 ## Sources
 
-- `src/kernel/disconnected_transactions.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/kernel/disconnected_transactions.h
-- `src/kernel/disconnected_transactions.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/kernel/disconnected_transactions.cpp
-- `src/validation.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/validation.cpp
+- Current observed `main` `src/kernel/disconnected_transactions.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/disconnected_transactions.h
+- Current observed `main` `src/kernel/disconnected_transactions.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/disconnected_transactions.cpp
+- Current observed `main` `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.cpp
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Yes
-**Notes:** This page documents the disconnected-transaction holding structure. The final mempool re-add policy still needs review in validation code.
+**Notes:** This page documents the disconnected-transaction holding structure. Final mempool re-add behavior and release-versus-main comparison still need review.
