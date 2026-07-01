@@ -69,17 +69,18 @@ For each flagged phrase, decide:
 | 2026-06-30 | wallet sensitive-command wording | `docs/wallets/wallet-guide.md` | No blocking issue found | No change | Wallet guide already labels wallet commands as untested and cautions sensitive/state-changing commands. |
 | 2026-06-30 | mining pool/software and DGW wording | `docs/mining/mining-overview.md` | No blocking issue found | No change | Mining overview explicitly avoids DGW, pool, miner software, profitability, and tested-command claims. |
 | 2026-06-30 | ecosystem active/official/recommended wording | `docs/ecosystem/explorers.md`, `docs/ecosystem/mining-pools.md`, `docs/ecosystem/exchanges.md`, `docs/ecosystem/wallets.md` | Wallet ecosystem page had stale release path and stale release-process link | `c109759` | Wallet listing now distinguishes current observed release URL from legacy/redirected URL and links release verification pages. Other ecosystem listing pages remained conservative. |
+| 2026-06-30 | node/config/RPC source-link path check | `docs/nodes/node-guide.md`, `docs/configuration/configuration-overview.md`, `docs/configuration/rpc-configuration.md` | Older repository source links found and updated | `8e4a749`, `062686f`, `b1272f8` | Links now use current observed repository path and include canonical-path caveats. |
+| 2026-06-30 | old repository path search | repository search for `BitcoinII-Dev/BitcoinII` | No remaining matches returned by repository search after updates | No further change | This does not prove every external link is perfect, but the known old path no longer appears in search results. |
 
 ## Still to scan
 
-The orientation, exchange, wallet, mining, and ecosystem framework/listing pages are in decent shape after this pass.
+The orientation, exchange, wallet, mining, ecosystem framework/listing, node, configuration, and RPC configuration pages are in decent shape after this pass.
 
 Still scan next:
 
 - Source Atlas pages with `Reviewed` status.
 - Developer workflow pages for outdated release or command wording.
-- Documentation pages that still cite older repository paths.
-- Any remaining `bitcoinII-cli` command blocks outside the known command-tracking pages.
+- Any remaining command blocks found by repository search.
 
 ## Known acceptable uses
 
@@ -93,9 +94,9 @@ Some terms are acceptable in limited contexts:
 
 ## Next actions
 
-1. Run command-example scan across remaining command blocks.
-2. Search for old repository path citations and update obvious stale links.
-3. Scan Source Atlas pages with `Reviewed` status for overconfident labels or stale source-ref wording.
+1. Continue command-example scan across remaining command blocks.
+2. Scan Source Atlas pages with `Reviewed` status for overconfident labels or stale source-ref wording.
+3. Scan developer workflow pages for stale command/release wording.
 4. Update documentation coverage after each scan batch.
 
 ## Related pages
@@ -110,5 +111,5 @@ Some terms are acceptable in limited contexts:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current MoreBC2 review workflow, coverage dashboard, and targeted orientation/exchange/wallet/mining/ecosystem pages
-**Notes:** This page now records targeted stale-wording passes through the main private-review orientation and user/service-facing framework pages. Source Atlas, remaining command blocks, and stale repository path citations still need scanning before private review.
+**Primary sources checked:** Current MoreBC2 review workflow, coverage dashboard, targeted orientation/exchange/wallet/mining/ecosystem pages, node/configuration pages, and old-path repository search
+**Notes:** This page now records targeted stale-wording passes through the main private-review orientation, user/service-facing framework pages, and known old repository path checks. Source Atlas and developer workflow pages still need scanning before private review.
