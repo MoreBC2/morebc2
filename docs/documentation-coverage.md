@@ -121,9 +121,10 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Research README | Partial | Normalized for research-vs-documentation boundaries. |
 | Discussion README | Partial | Normalized for proposal/status labeling and discussion boundaries. |
 | History README | Partial | Normalized for dated-source and archive/current-status separation. |
-| Verification README | Partial | Normalized for verification workflow, review feedback buckets, stale-wording scan, command tracking, release tracking, and priority unknowns. |
+| Verification README | Partial | Normalized for verification workflow, review feedback buckets, stale-wording scan, command-example scan, command tracking, release tracking, and priority unknowns. |
 | Review feedback buckets | Framework | Added feedback taxonomy and narrow assignment guidance for private review. |
-| Stale wording scan | Framework | Added search-term checklist for overconfident wording. Scan still needs to be run. |
+| Stale wording scan | Partial | Initial high-risk orientation scan recorded; exchange/wallet/mining/ecosystem scans still pending. |
+| Command example scan | Framework | Added command-example scan checklist and priority files. Scan still needs to be run. |
 | Known unknowns | Partial | Refreshed as short executive list linked to full backlog. |
 | Open questions backlog | Partial | Consolidated with priority labels, evidence needs, and public/private review blockers. |
 | Command testing status | Framework | Added command-test tracker, status labels, untested inventory, and test-record template. |
@@ -158,8 +159,8 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. Run final stale wording scan.
-2. Run final untested-command scan.
+1. Continue stale wording scan in exchange, wallet, mining, and ecosystem pages.
+2. Run final command-example scan.
 3. Build/test command smoke-test record framework.
 4. Network RPC or P2P source review.
 5. Continue release artifact verification when full release asset data is available.
