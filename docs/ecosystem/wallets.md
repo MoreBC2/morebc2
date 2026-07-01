@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Summary
 
@@ -32,15 +32,17 @@ Nothing should be marked active, official, or recommended until directly verifie
 **Status:** Needs Review
 **Official:** Needs confirmation from canonical project source
 **Type:** Full node wallet / GUI and CLI components
-**URL:** https://github.com/BitcoinII-Dev/BitcoinII/releases
-**Source:** BitcoinII repository README and release page
-**Last checked:** 2026-06-29
+**Current observed release URL:** https://github.com/Bitcoin-II/BitcoinII-Core/releases
+**Legacy/redirected release URL:** https://github.com/BitcoinII-Dev/BitcoinII/releases
+**Source:** Current release-page observations and source-reviewed wallet files
+**Last checked:** 2026-06-30
 **Evidence level:** E2/E3
-**Notes:** The repository README states BitcoinII Core includes wallet functionality and can optionally build a GUI. Release assets are listed publicly, but the release verification model still needs review.
+**Notes:** MoreBC2 currently observes `Bitcoin-II/BitcoinII-Core` as the active public release path, while older release links may redirect elsewhere. BitcoinII Core source includes wallet functionality and reviewed wallet RPC groups, but the canonical release path, asset list, release verification model, and platform-specific wallet downloads still need review before this listing is promoted.
 
 ## Open items
 
 - Confirm official wallet download source.
+- Confirm canonical repository and release path.
 - Confirm release verification workflow.
 - Confirm platform-specific wallet asset names.
 - Confirm whether any third-party wallets exist.
@@ -49,11 +51,12 @@ Nothing should be marked active, official, or recommended until directly verifie
 ## Related pages
 
 - [Wallet guide](../wallets/wallet-guide.md)
-- [Release process guide](../developers/release-process.md)
+- [Release verification guide](../developers/release-verification.md)
+- [Release artifact checklist](../verification/release-artifact-checklist.md)
 - [Known unknowns](../verification/known-unknowns.md)
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This ecosystem page is intentionally conservative. Listings need direct verification before public use.
+**Notes:** This ecosystem page is intentionally conservative. The current observed release path has been updated, but canonical status, release assets, and wallet download verification still need direct review before public use.
