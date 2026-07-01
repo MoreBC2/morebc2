@@ -146,7 +146,7 @@ The index-based overload also checks that the read block hash matches the expect
 
 ## Undo data
 
-`WriteBlockUndo` writes undo data used to reverse a connected block.
+`WriteBlockUndo` writes undo data used to return local state to the prior chain tip when needed.
 
 Reviewed behavior includes:
 
@@ -156,7 +156,7 @@ Reviewed behavior includes:
 - Writing a checksum based on the previous block hash and undo data.
 - Updating the block index with undo position and `BLOCK_HAVE_UNDO`.
 
-`ReadBlockUndo` is declared in the header and should receive a deeper follow-up review alongside disconnect/reorg internals.
+`ReadBlockUndo` is declared in the header and should receive a deeper follow-up review alongside reorg internals.
 
 ## Pruning
 
@@ -214,23 +214,24 @@ The reviewed file structure appears Bitcoin-style, but no upstream comparison ha
 ## Open questions
 
 - Does BitcoinII differ from upstream Bitcoin Core in block storage, pruning, or reindex behavior?
-- Which `ReadBlockUndo` paths should be documented together with disconnect/reorg follow-up work?
+- Which `ReadBlockUndo` paths should be documented together with reorg follow-up work?
 - Which operator-facing pruning behaviors should be moved into node operation docs?
 - Which block-storage failures should be explained for troubleshooting users?
 - How should assumeutxo-related storage behavior be explained, if at all, for BitcoinII readers?
 - Which tests cover block storage and pruning behavior?
+- Confirm whether `v29.1.0` differs from current `main` for these files before upgrading status.
 
 ## Sources
 
-- `src/node/blockstorage.h`
-- `src/node/blockstorage.cpp`
-- `src/validation.cpp`
-- `src/undo.h`
-- `src/flatfile.h`
-- `src/kernel/blockmanager_opts.h`
+- Current observed `main` `src/node/blockstorage.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/blockstorage.h
+- Current observed `main` `src/node/blockstorage.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/blockstorage.cpp
+- Current observed `main` `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.cpp
+- Current observed `main` `src/undo.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/undo.h
+- Current observed `main` `src/flatfile.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/flatfile.h
+- Current observed `main` `src/kernel/blockmanager_opts.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/blockmanager_opts.h
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a first-pass block-storage review. Full pruning flow, undo-read behavior, failure recovery, tests, and upstream comparison remain open.
+**Notes:** This is a first-pass block-storage review. Full pruning flow, undo-read behavior, failure recovery, tests, upstream comparison, and release-versus-main comparison remain open.
