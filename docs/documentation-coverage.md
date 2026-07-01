@@ -114,7 +114,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 |---|---|---|
 | Wallet guide | Partial | Command testing status added for wallet RPC examples; initial stale wording/command scan found no blocking issue. Platform/release/local testing pending. |
 | Wallets README | Partial | Normalized for current wallet source-review anchors and command-safety rules. |
-| Node guide | Partial | Command testing status added for node command examples; platform/release/local testing pending. |
+| Node guide | Partial | Command testing status added for node command examples; command scan found no blocking issue, and old source links were updated. Platform/release/local testing pending. |
 | Nodes README | Partial | Normalized for current node/source-review anchors and operator-safety rules. |
 | Mining overview | Partial | Command testing status added for mining RPC examples; initial stale wording/command scan found no blocking issue. Live software/pool data pending. |
 | Mining README | Partial | Normalized for current mining source-review anchors and live-ecosystem caution. |
@@ -123,16 +123,16 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | History README | Partial | Normalized for dated-source and archive/current-status separation. |
 | Verification README | Partial | Normalized for verification workflow, review feedback buckets, stale-wording scan, command-example scan, command tracking, release tracking, and priority unknowns. |
 | Review feedback buckets | Framework | Added feedback taxonomy and narrow assignment guidance for private review. |
-| Stale wording scan | Partial | Targeted orientation, exchange, wallet, mining, and ecosystem scans recorded. Source Atlas and stale path scans still pending. |
-| Command example scan | Partial | First pass recorded for exchange, wallet, mining, and service checklist pages. Remaining command-heavy pages still pending. |
+| Stale wording scan | Partial | Targeted orientation, exchange, wallet, mining, ecosystem, node/config, and old-path scans recorded. Source Atlas and developer workflow scans still pending. |
+| Command example scan | Partial | Scans recorded for exchange, wallet, mining, RPC overview, node, configuration, and command tracker pages. Remaining developer workflow/Source Atlas snippets pending. |
 | Known unknowns | Partial | Refreshed as short executive list linked to full backlog. |
 | Open questions backlog | Partial | Consolidated with priority labels, evidence needs, and public/private review blockers. |
 | Command testing status | Framework | Added command-test tracker, status labels, untested inventory, and test-record template. |
 | Release source comparison notes | Partial | Added `v29.1.0` versus `main` comparison and source spot checks. |
 | Release artifact checklist | Framework | Added asset-inventory table, workflow observation, release-process notes, and future test-record template. |
-| Configuration overview | Partial | Command/config testing status added; platform examples and startup commands pending. |
-| RPC overview | Partial | Mining, blockchain, raw transaction, mempool, and wallet RPC groups have source review. Untested examples now link to command-test tracker. |
-| RPC configuration | Partial | Command/config testing status added; auth/setup examples still need testing. |
+| Configuration overview | Partial | Command/config testing status added; stale source links updated. Platform examples and startup commands pending. |
+| RPC overview | Partial | Mining, blockchain, raw transaction, mempool, and wallet RPC groups have source review. Command scan found no blocking issue; examples remain linked to command-test tracker. |
+| RPC configuration | Partial | Command/config testing status added; stale source links updated. Auth/setup examples still need testing. |
 
 ## Developer onboarding coverage
 
@@ -159,13 +159,12 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. Continue command-example scan in RPC, node, and configuration pages.
-2. Search for old repository path citations and update obvious stale links.
-3. Scan Source Atlas pages with `Reviewed` status.
-4. Build/test command smoke-test record framework.
-5. Network RPC or P2P source review.
-6. Continue release artifact verification when full release asset data is available.
-7. Direct ecosystem checks for explorers, APIs, pools, and exchanges.
+1. Scan developer workflow pages for command/release wording.
+2. Scan Source Atlas pages with `Reviewed` status.
+3. Build/test command smoke-test record framework.
+4. Network RPC or P2P source review.
+5. Continue release artifact verification when full release asset data is available.
+6. Direct ecosystem checks for explorers, APIs, pools, and exchanges.
 
 ## Verification
 
