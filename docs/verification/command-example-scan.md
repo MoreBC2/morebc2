@@ -87,11 +87,12 @@ Priority pages:
 | 2026-06-30 | node command inventory | `docs/nodes/node-guide.md` | No command-labeling issue found; stale source links updated separately | `8e4a749` | Node guide links to command-testing status and warns not to treat listed commands as working instructions. |
 | 2026-06-30 | configuration command/setup wording | `docs/configuration/configuration-overview.md`, `docs/configuration/rpc-configuration.md` | No command-labeling issue found; stale source links updated separately | `062686f`, `b1272f8` | Configuration pages say setup/auth examples are untested and link command-testing status. |
 | 2026-06-30 | command tracker itself | `docs/verification/command-testing.md` | No blocking issue found | No change | Command tracker correctly labels entries as Placeholder, Source-observed, Locally tested, Verified, Needs recheck, or Do not publish. |
+| 2026-06-30 | developer build/test command blocks | `docs/developers/local-development.md`, `docs/developers/build-system.md`, `docs/developers/testing.md` | No blocking issue found | No change | Build and test commands are explicitly described as untested or future record shapes. Local-development page explains test-record workflow rather than verified commands. |
+| 2026-06-30 | release checking command wording | `docs/developers/release-verification.md`, `docs/developers/release-process.md` | Release-process page had stale current-release wording and old release path | `a5aaf58` | Release-process page now points to current observed release path and keeps download checking unverified. |
 
 ## Still to scan
 
 - Any remaining command blocks found by repository search.
-- Developer workflow pages such as build, testing, local development, and release verification.
 - Source Atlas pages that include command examples or command-shaped snippets.
 
 ## Known acceptable cases
@@ -122,5 +123,5 @@ It is acceptable to list command names when:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current MoreBC2 command tracker, RPC overview, node, wallet, mining, exchange, and configuration pages
-**Notes:** This page now records command-example scans across the main user/service-facing command pages. Remaining developer workflow and Source Atlas snippets should still be checked before private review.
+**Primary sources checked:** Current MoreBC2 command tracker, RPC overview, node, wallet, mining, exchange, configuration, and developer workflow pages
+**Notes:** This page now records command-example scans across the main user/service-facing and developer workflow command pages. Remaining Source Atlas snippets should still be checked before private review.
