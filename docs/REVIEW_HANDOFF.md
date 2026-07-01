@@ -12,7 +12,7 @@ It is meant for private review, not public launch.
 
 ## Current recommendation
 
-MoreBC2 is closer to invite-only review now that a contribution workflow and feedback-bucket system exist.
+MoreBC2 is closer to invite-only review now that a contribution workflow, feedback-bucket system, and legal/reuse posture note exist.
 
 It is not ready for broad public launch.
 
@@ -33,6 +33,7 @@ Do not ask a reviewer or agent to treat the repository as final public documenta
 - Section READMEs have been normalized.
 - `CONTRIBUTING.md` now defines a private-review workflow.
 - Review feedback buckets exist.
+- Legal/reuse posture note exists.
 - Architecture lifecycle pages have been cross-linked to newer Source Atlas pages.
 - Source Atlas has meaningful first-pass coverage across consensus, validation, mempool, storage, wallet, mining, raw transaction, and RPC areas.
 - Wallet guide has first-pass source-reviewed wallet RPC coverage.
@@ -63,13 +64,22 @@ Still needed before public contribution:
 
 ### 2. License / reuse posture
 
-Needed:
+Status: **Documented for private review, not finalized for public launch**
 
-- Decide whether MoreBC2 will include a license before sharing.
-- If no license is chosen yet, clearly say that the repo is private review only and not open for reuse.
-- Separate MoreBC2 documentation license from BitcoinII Core source license if needed.
+Current anchor:
 
-Status: **Needed before private review**
+- [Legal and reuse posture](LEGAL_REUSE.md)
+
+Current rule:
+
+- No repository license file was found during the check.
+- Treat MoreBC2 as private-review material only until the owner chooses a license or reuse policy.
+
+Still needed before public launch:
+
+- Final repository license decision.
+- Attribution/reuse rules for documentation, screenshots, logos, and third-party material.
+- Contributor reuse expectations if public pull requests are accepted.
 
 ### 3. Reviewer start page
 
@@ -81,10 +91,11 @@ Suggested flow:
 2. `docs/README.md`
 3. `PROJECT_STATUS.md`
 4. `docs/REVIEW_HANDOFF.md`
-5. `docs/documentation-coverage.md`
-6. `docs/verification/known-unknowns.md`
-7. `docs/verification/open-questions.md`
-8. One assigned review target
+5. `docs/LEGAL_REUSE.md`
+6. `docs/documentation-coverage.md`
+7. `docs/verification/known-unknowns.md`
+8. `docs/verification/open-questions.md`
+9. One assigned review target
 
 Still useful:
 
@@ -205,11 +216,11 @@ Please review conservatively. Do not assume Draft or Partial pages are final. If
 
 Useful feedback: broken links, stale wording, source mismatches, unclear status labels, missing verification notes, and unsupported claims.
 
-Please do not add live ecosystem listings, install instructions, wallet movement instructions, or release-verification claims unless you have direct evidence and a test record.
+Please do not add live ecosystem listings, install instructions, wallet movement instructions, release-verification claims, or reuse/publication claims unless you have direct evidence and a test record or permission.
 ```
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current MoreBC2 project status, documentation coverage, verification queue, contribution guide, feedback buckets, and recent polish work
+**Primary sources checked:** Current MoreBC2 project status, documentation coverage, verification queue, contribution guide, feedback buckets, legal/reuse note, and recent polish work
 **Notes:** This page is a handoff checklist for private review. It does not verify BitcoinII protocol behavior.
