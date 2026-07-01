@@ -68,8 +68,8 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | `src/wallet/rpc/transactions.cpp` | Partial | First-pass wallet transaction listing, listsinceblock, gettransaction, abandon, and rescan-related review exists. Commands untested. |
 | Block lifecycle path | Reviewed | Consolidated source-atlas lifecycle page exists. |
 | `src/txmempool.*` | Partial | Core mempool structure and many functions reviewed. Policy details pending. |
-| `src/kernel/mempool_entry.h` | Reviewed | First-pass entry metadata review exists; source-link cleanup still pending. |
-| `src/kernel/disconnected_transactions.*` | Reviewed | First-pass disconnected transaction pool exists; source-link cleanup still pending. |
+| `src/kernel/mempool_entry.h` | Reviewed | First-pass entry metadata review exists; source links refreshed and release-versus-main comparison remains open. |
+| `src/kernel/disconnected_transactions.*` | Reviewed | First-pass disconnected transaction pool exists; source links refreshed and release-versus-main comparison remains open. |
 | `src/primitives/block.*` | Partial | Block hash path reviewed; broader primitive review pending. |
 | `src/hash.h` | Partial | Double-SHA256 hashing behavior reviewed. Broader hash utility review pending. |
 | `src/consensus/amount.h` | Partial | COIN/MAX_MONEY documented; broader consensus files pending. |
@@ -123,7 +123,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | History README | Partial | Normalized for dated-source and archive/current-status separation. |
 | Verification README | Partial | Normalized for verification workflow, review feedback buckets, stale-wording scan, command-example scan, command tracking, release tracking, and priority unknowns. |
 | Review feedback buckets | Framework | Added feedback taxonomy and narrow assignment guidance for private review. |
-| Stale wording scan | Partial | Targeted orientation, exchange, wallet, mining, ecosystem, node/config, old-path, developer workflow, and initial Source Atlas scans recorded. Remaining Source Atlas pages pending. |
+| Stale wording scan | Partial | Targeted orientation, exchange, wallet, mining, ecosystem, node/config, old-path, developer workflow, and Source Atlas scans recorded. Remaining Source Atlas pages pending. |
 | Command example scan | Partial | Scans recorded for exchange, wallet, mining, RPC overview, node, configuration, command tracker, and developer workflow pages. Remaining Source Atlas snippets pending. |
 | Known unknowns | Partial | Refreshed as short executive list linked to full backlog. |
 | Open questions backlog | Partial | Consolidated with priority labels, evidence needs, and public/private review blockers. |
