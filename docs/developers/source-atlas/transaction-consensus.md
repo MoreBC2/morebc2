@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Summary
 
@@ -15,7 +15,7 @@ This page covers a first-pass review of the transaction consensus files:
 
 These files define context-independent transaction checks, locktime and sequence-lock helpers, operation-count accounting helpers, and UTXO-input checks used during validation.
 
-This page does not cover script interpreter internals.
+This page does not cover script engine internals.
 
 ## Why these files matter
 
@@ -169,18 +169,19 @@ The reviewed code appears Bitcoin-style in structure, but no upstream comparison
 - Which script flags are mandatory consensus flags vs policy flags in the current BitcoinII source?
 - How should MoreBC2 explain transaction finality and sequence locks for non-developer readers?
 - Should operation-count accounting receive its own encyclopedia explainer?
+- Confirm whether `v29.1.0` differs from current `main` for these files before upgrading status.
 
 ## Sources
 
-- `src/consensus/tx_check.cpp`
-- `src/consensus/tx_check.h`
-- `src/consensus/tx_verify.cpp`
-- `src/consensus/tx_verify.h`
-- `src/consensus/amount.h`
-- `src/validation.cpp`
+- Current observed `main` `src/consensus/tx_check.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/consensus/tx_check.cpp
+- Current observed `main` `src/consensus/tx_check.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/consensus/tx_check.h
+- Current observed `main` `src/consensus/tx_verify.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/consensus/tx_verify.cpp
+- Current observed `main` `src/consensus/tx_verify.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/consensus/tx_verify.h
+- Current observed `main` `src/consensus/amount.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/consensus/amount.h
+- Current observed `main` `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.cpp
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a first-pass review of transaction consensus helper files. Script interpreter internals, caller graph, package acceptance interaction, and upstream comparison remain open.
+**Notes:** This is a first-pass review of transaction consensus helper files. Script engine internals, caller graph, package acceptance interaction, upstream comparison, and release-versus-main comparison remain open.
