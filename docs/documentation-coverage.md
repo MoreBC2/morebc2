@@ -53,6 +53,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | `src/node/mini_miner.*` | Partial | First-pass fee/ordering simulation helper review exists; source links refreshed. Caller paths pending. |
 | `src/rpc/mining.cpp` | Partial | First-pass mining RPC, getblocktemplate, submitblock, submitheader, and mining-info review exists. Commands untested; source links refreshed. |
 | `src/rpc/blockchain.cpp` | Partial | First-pass blockchain RPC, block lookup, pruning, UTXO stats, scans, and chainstate review exists. Commands untested; source links refreshed. |
+| `src/rpc/net.cpp` | Partial | First-pass network RPC, peer status, network status, address-manager, ban-list, manual peer, and hidden testing command review exists. Commands untested; lower-level P2P review pending. |
 | `src/rpc/rawtransaction.cpp` | Partial | First-pass raw transaction lookup, decode, construction, explicit-key signing, and PSBT review exists. Commands untested; source links refreshed. |
 | `src/rpc/mempool.cpp` | Partial | First-pass transaction relay, mempool acceptance testing, mempool inspection, persistence, orphan, and package RPC review exists. Commands untested; source links refreshed. |
 | `src/wallet/init.cpp` | Partial | First-pass wallet option, parameter interaction, and loader construction review exists; source links refreshed. |
@@ -73,7 +74,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | `src/primitives/block.*` | Needs recheck | Block hash path reviewed; source links refreshed. Broader primitive and release/main comparison pending. |
 | `src/hash.h` | Needs recheck | Double-SHA256 hashing behavior reviewed; source link refreshed. Broader hash utility and release/main comparison pending. |
 | `src/consensus/amount.h` | Partial | COIN/MAX_MONEY documented; broader consensus files pending. |
-| Other RPC internals | Not started | Network, utility, CLI, and remaining wallet internals still pending. |
+| Other RPC internals | Not started | Utility, CLI, and remaining wallet internals still pending. |
 
 ## Documentation section coverage
 
@@ -121,17 +122,18 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Research README | Partial | Normalized for research-vs-documentation boundaries. |
 | Discussion README | Partial | Normalized for proposal/status labeling and discussion boundaries. |
 | History README | Partial | Normalized for dated-source and archive/current-status separation. |
-| Verification README | Partial | Normalized for verification workflow, review feedback buckets, stale-wording scan, command-example scan, command tracking, release tracking, and priority unknowns. |
+| Verification README | Partial | Normalized for verification workflow, review feedback buckets, stale-wording scan, command-example scan, command tracking, release tracking, smoke-test planning, and priority unknowns. |
 | Review feedback buckets | Framework | Added feedback taxonomy and narrow assignment guidance for private review. |
 | Stale wording scan | Partial | Targeted orientation, exchange, wallet, mining, ecosystem, node/config, old-path, developer workflow, and Source Atlas scans recorded. Known stale source path and stale BIP9 value no longer appear in repo search. |
 | Command example scan | Partial | Scans recorded for exchange, wallet, mining, RPC overview, node, configuration, command tracker, developer workflow, and Source Atlas RPC/wallet pages. Remaining repository-wide command-term search pending. |
 | Known unknowns | Partial | Refreshed as short executive list linked to full backlog. |
 | Open questions backlog | Partial | Consolidated with priority labels, evidence needs, and public/private review blockers. |
-| Command testing status | Framework | Added command-test tracker, status labels, untested inventory, and test-record template. |
+| Command testing status | Framework | Added command-test tracker, smoke-test-plan links, status labels, untested inventory, and test-record template. |
+| Command smoke-test plan | Framework | Added safe phased plan for harmless node checks, temporary-wallet checks, and later dry-run transaction checks. |
 | Release source comparison notes | Partial | Added `v29.1.0` versus `main` comparison and source spot checks. |
 | Release artifact checklist | Framework | Added asset-inventory table, workflow observation, release-process notes, and future test-record template. |
 | Configuration overview | Partial | Command/config testing status added; stale source links updated. Platform examples and startup commands pending. |
-| RPC overview | Partial | Mining, blockchain, raw transaction, mempool, and wallet RPC groups have source review. Command scan found no blocking issue; examples remain linked to command-test tracker. |
+| RPC overview | Partial | Mining, blockchain, network, raw transaction, mempool, and wallet RPC groups have source review. Command examples remain linked to command-test tracker. |
 | RPC configuration | Partial | Command/config testing status added; stale source links updated. Auth/setup examples still need testing. |
 
 ## Developer onboarding coverage
@@ -160,14 +162,14 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. Repository-wide command-term search.
-2. Safe command smoke-test plan.
-3. Network RPC or P2P source review.
-4. Continue release artifact verification when full release asset data is available.
-5. Direct ecosystem checks for explorers, APIs, pools, and exchanges.
+1. Lower-level P2P source review.
+2. Safe command smoke-test execution when a BitcoinII binary/environment is available.
+3. Continue release artifact verification when full release asset data is available.
+4. Direct ecosystem checks for explorers, APIs, pools, and exchanges.
+5. Repository-wide command-term search recheck with a more reliable method.
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Repository docs and current section indexes
-**Notes:** This dashboard was refreshed after the Source Atlas stale source-link cleanup and scan-tracker updates.
+**Notes:** This dashboard was refreshed after adding network RPC source review and linking it into the RPC overview.
