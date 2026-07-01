@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Purpose
 
@@ -66,7 +66,7 @@ Reviewed private fields include:
 - `entryHeight` — chain height when the transaction entered the mempool.
 - `spendsCoinbase` — whether the transaction spends a coinbase output.
 - `sigOpCost` — total signature operation cost.
-- `m_modified_fee` — fee after local prioritisation deltas.
+- `m_modified_fee` — fee after local priority adjustment.
 - `lockPoints` — cached relative-locktime values.
 
 ## Descendant accounting
@@ -199,15 +199,16 @@ The reviewed file shows BitcoinII naming and fork metadata, but this first pass 
 - Review mining/block-template selection to confirm how virtual transaction size and ancestor data are used.
 - Review replacement policy interactions with entry metadata.
 - Review fee-estimation use of entry data.
+- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
 
 ## Sources
 
-- `src/kernel/mempool_entry.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/kernel/mempool_entry.h
-- `src/txmempool.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/txmempool.h
-- `src/txmempool.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/txmempool.cpp
+- Current observed `main` `src/kernel/mempool_entry.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/mempool_entry.h
+- Current observed `main` `src/txmempool.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/txmempool.h
+- Current observed `main` `src/txmempool.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/txmempool.cpp
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Yes
-**Notes:** This page documents the mempool entry data structure. Transaction acceptance, mining selection, and replacement policy still need separate review.
+**Notes:** This page documents the mempool entry data structure. Transaction acceptance, mining selection, replacement policy, and release-versus-main comparison still need separate review.
