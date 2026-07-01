@@ -63,7 +63,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | `src/wallet/rpc/addresses.cpp` | Partial | First-pass address, change address, label, grouping, and multisig RPC review exists. Commands untested. |
 | `src/wallet/rpc/backup.cpp` | Partial | First-pass backup, restore, legacy import, descriptor import, export, and rescan-related review exists. Commands untested. |
 | `src/wallet/rpc/spend.cpp` | Partial | First-pass wallet send, funding, fee setting, fee bumping, signing, and PSBT review exists. Commands untested. |
-| `src/wallet/rpc/encrypt.cpp` | Partial | First-pass wallet timed unlock, relock, credential update, and first-time encryption review exists. Commands untested. |
+| `src/wallet/rpc/encrypt.cpp` | Partial | First-pass wallet timed unlock, relock, and first-time encryption review exists. Commands untested. |
 | `src/wallet/rpc/coins.cpp` | Partial | First-pass received amount, balance, output locking, and listunspent review exists. Commands untested. |
 | `src/wallet/rpc/transactions.cpp` | Partial | First-pass wallet transaction listing, listsinceblock, gettransaction, abandon, and rescan-related review exists. Commands untested. |
 | Block lifecycle path | Reviewed | Consolidated source-atlas lifecycle page exists. |
@@ -85,7 +85,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Network specifications | Partial | Strong source-backed values exist; current release branch comparison has started. |
 | Consensus overview | Partial | Strong PoW and amount notes exist; transaction-helper and script-engine material has been refreshed. |
 | Checkpoints | Framework | Existence documented; checkpoint list should distinguish `v29.1.0` from `main`. |
-| Releases | Partial | Current and legacy release-page observations refreshed; release source comparison added; full asset verification still pending. |
+| Releases | Partial | Current and legacy release-page observations refreshed; release source comparison and artifact checklist added; full asset verification still pending. |
 | Explorer resources | Framework | Active explorer checks pending. |
 | Configuration README | Partial | Normalized for source-observed configuration anchors and local-testing rules. |
 | Encyclopedia README | Partial | Normalized for concept pages, Source Atlas links, and BitcoinII-specific claim rules. |
@@ -120,11 +120,12 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Research README | Partial | Normalized for research-vs-documentation boundaries. |
 | Discussion README | Partial | Normalized for proposal/status labeling and discussion boundaries. |
 | History README | Partial | Normalized for dated-source and archive/current-status separation. |
-| Verification README | Partial | Normalized for verification workflow, command tracking, and priority unknowns. |
+| Verification README | Partial | Normalized for verification workflow, command tracking, release tracking, and priority unknowns. |
 | Known unknowns | Partial | Refreshed as short executive list linked to full backlog. |
 | Open questions backlog | Partial | Consolidated with priority labels, evidence needs, and public/private review blockers. |
 | Command testing status | Framework | Added command-test tracker, status labels, untested inventory, and test-record template. |
 | Release source comparison notes | Partial | Added `v29.1.0` versus `main` comparison and source spot checks. |
+| Release artifact checklist | Framework | Added asset-inventory table, workflow observation, release-process notes, and future test-record template. |
 | Configuration overview | Partial | Command/config testing status added; platform examples and startup commands pending. |
 | RPC overview | Partial | Mining, blockchain, raw transaction, mempool, and wallet RPC groups have source review. Untested examples now link to command-test tracker. |
 | RPC configuration | Partial | Command/config testing status added; auth/setup examples still need testing. |
@@ -144,7 +145,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Local development environment | Framework | Defines safe test-record workflow; commands still need actual testing. |
 | Build system guide | Partial | First-pass CMake/source-doc review exists. Commands still need actual testing. |
 | Testing guide | Partial | First-pass unit, wallet, CTest, and functional test-runner review exists. Commands still need actual testing. |
-| Release verification guide | Partial | Current release-page observations, source comparison, and verification gaps recorded; asset verification still pending. |
+| Release verification guide | Partial | Current release-page observations, source comparison, artifact checklist, and verification gaps recorded; asset verification still pending. |
 | Documentation polish plan | Framework | Broad cleanup plan exists and should guide the next phase. |
 | Developer glossary | Partial | Refreshed with RPC, PSBT, broadcast, package, and wallet-history terminology. |
 | Root glossary | Partial | Refreshed with general RPC, raw transaction, PSBT, package, broadcast, and watch-only terms. |
