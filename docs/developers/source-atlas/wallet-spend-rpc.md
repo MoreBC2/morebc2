@@ -154,17 +154,18 @@ No upstream comparison has been completed, so this page does not claim whether s
 - How should fee-rate units be explained across wallet and mining RPC docs?
 - Which wallet coin-selection defaults matter to normal users?
 - Which GUI send paths map to these RPC helpers?
+- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
 
 ## Sources
 
-- `src/wallet/rpc/spend.cpp`
-- `src/wallet/wallet.h`
-- `src/wallet/spend.h`
-- `src/wallet/coincontrol.h`
-- `src/wallet/fees.h`
+- Current observed `main` `src/wallet/rpc/spend.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/spend.cpp
+- Current observed `main` `src/wallet/wallet.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/wallet.h
+- Current observed `main` `src/wallet/spend.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/spend.h
+- Current observed `main` `src/wallet/coincontrol.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/coincontrol.h
+- Current observed `main` `src/wallet/fees.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/fees.h
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a first-pass spend/PSBT/funding RPC review. Commands have not been run. Public examples, service recommendations, GUI mapping, and upstream comparison remain open.
+**Notes:** This is a first-pass spend/PSBT/funding RPC review. Commands have not been run. Public examples, service recommendations, GUI mapping, upstream comparison, and release-versus-main comparison remain open.
