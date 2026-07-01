@@ -24,6 +24,7 @@ Each page should explain one important source file in plain language, link it to
 - [mining RPC](rpc-mining.md)
 - [blockchain RPC](rpc-blockchain.md)
 - [network RPC](rpc-network.md)
+- [P2P protocol primitives](protocol.md)
 - [raw transaction RPC](rpc-rawtransaction.md)
 - [mempool and transaction broadcast RPC](rpc-mempool.md)
 - [wallet startup](wallet-startup.md)
@@ -65,4 +66,4 @@ Each source atlas page should include:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** The atlas starts with files already reviewed for MoreBC2 core technical pages. Network RPC has been added as a first-pass source review; lower-level P2P review remains open.
+**Notes:** The atlas starts with files already reviewed for MoreBC2 core technical pages. Network RPC and protocol primitives have first-pass source reviews; lower-level peer-processing review remains open.
