@@ -2,13 +2,13 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Summary
 
 `src/init.cpp` coordinates BitcoinII Core process startup and shutdown.
 
-This file is a major orchestration layer. It touches argument handling, logging, scheduler setup, validation signals, wallet interfaces, RPC registration, network setup, chainstate loading, indexes, mempool loading, background block import, and final node start.
+This file is a major orchestration layer. It touches argument handling, logging, scheduler setup, validation events, wallet interfaces, RPC registration, network setup, chainstate loading, indexes, mempool loading, background block import, and final node start.
 
 This first-pass review focuses on the startup path around `AppInitMain` and related helper functions. It does not claim complete coverage of every startup option or shutdown path.
 
@@ -43,7 +43,7 @@ InitContext
   -> sanity checks and directory locks
   -> AppInitMain
       -> PID/logging/scheduler
-      -> validation signals
+      -> validation events
       -> wallet interface construction
       -> RPC registration and warmup server
       -> wallet database integrity checks
@@ -109,15 +109,15 @@ This ties process initialization into the interface layer before later startup w
 
 Reviewed details include:
 
-- Mempool receives validation signals.
-- Chainstate options include chain parameters, network data directory, notifications, and validation signals.
+- Mempool receives validation events.
+- Chainstate options include chain parameters, network data directory, notifications, and validation events.
 - Block manager options include chain parameters, block directory, notifications, and block tree database settings.
 - Reindex controls whether block-tree data is wiped.
 - Chainstate load options include mempool, chainstate wipe setting, prune mode, `-checkblocks`, and `-checklevel`.
 
 ### AppInitMain application setup
 
-`AppInitMain` starts with PID/logging setup, scheduler creation, periodic entropy gathering, periodic disk-space checks, and validation signal construction.
+`AppInitMain` starts with PID/logging setup, scheduler creation, periodic entropy gathering, periodic disk-space checks, and validation event interface construction.
 
 It then constructs wallet interfaces and registers RPC commands before external RPC calls are usable.
 
@@ -141,7 +141,7 @@ Before opening connections, startup creates or prepares network-related objects 
 
 The reviewed startup path creates kernel notifications, calculates cache sizes, determines reindex settings, calls `InitAndLoadChainstate`, and handles possible retry with reindex after some failures.
 
-After successful load, it creates the peer manager and registers it with validation signals.
+After successful load, it creates the peer manager and registers it with validation events.
 
 ### Indexes, wallets, pruning, import, and mempool load
 
@@ -192,20 +192,21 @@ Use this Source Atlas page when reading:
 - Which local startup commands have been tested against a BitcoinII binary?
 - How should MoreBC2 explain startup failure modes for normal users?
 - What should be documented separately under node-operation guidance rather than architecture?
+- Confirm whether `v29.1.0` differs from current `main` for these paths before upgrading status.
 
 ## Sources
 
-- `src/init.cpp`
-- `src/init.h`
-- `src/node/context.h`
-- `src/node/chainstate.h`
-- `src/node/mempool_persist.h`
-- `src/validation.h`
-- `src/validationinterface.h`
-- `src/kernel/chainparams.cpp`
+- Current observed `main` `src/init.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/init.cpp
+- Current observed `main` `src/init.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/init.h
+- Current observed `main` `src/node/context.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/context.h
+- Current observed `main` `src/node/chainstate.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/chainstate.h
+- Current observed `main` `src/node/mempool_persist.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/mempool_persist.h
+- Current observed `main` `src/validation.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.h
+- Current observed `main` `src/validationinterface.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validationinterface.h
+- Current observed `main` `src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/chainparams.cpp
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a first-pass startup-path review centered on `AppInitMain`, `InitAndLoadChainstate`, and nearby helpers. Shutdown, GUI entry points, daemon entry points, block storage internals, net-processing internals, and wallet internals still need deeper review.
+**Notes:** This is a first-pass startup-path review centered on `AppInitMain`, `InitAndLoadChainstate`, and nearby helpers. Shutdown, GUI entry points, daemon entry points, block storage internals, net-processing internals, wallet internals, and release-versus-main comparison still need deeper review.
