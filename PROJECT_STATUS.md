@@ -29,7 +29,6 @@ It is now close to a coherent private-review draft. Before inviting new eyes or 
 
 - A final stale wording scan.
 - A final untested-command scan.
-- Root README reviewer start flow update.
 - Narrow review assignments that prevent broad rewrites or unsupported claim upgrades.
 
 Before public sharing it still needs:
@@ -45,7 +44,7 @@ Before public sharing it still needs:
 
 - Clear editorial rule: document reality, explore possibilities, separate the two.
 - Strong naming standard: BitcoinII / BC2 / BitcoinII Core / MoreBC2.
-- Root and docs indexes now route readers through project status, coverage, private-review handoff, and legal/reuse posture.
+- Root and docs indexes now route readers through project status, coverage, private-review handoff, legal/reuse posture, and reviewer start flow.
 - Section READMEs are normalized.
 - `CONTRIBUTING.md` defines a private-review workflow.
 - Review feedback buckets are documented.
@@ -80,7 +79,6 @@ Keep private, but prepare invite-only review.
 
 Invite-only review with a small group of trusted readers or agents after:
 
-- Reviewer start flow is linked from root/docs indexes.
 - A final stale wording and untested-command scan is done.
 - Narrow assignments are prepared using `docs/REVIEW_HANDOFF.md`.
 
@@ -104,26 +102,25 @@ Public launch after:
 | Documentation taxonomy | Strong | Categories are defined and mostly respected. |
 | Architecture explainers | Partial | Transaction, block, reorg, startup, consensus, mempool, and validation pages exist; P2P/network and wallet internals remain pending. |
 | Source Atlas | Partial | Strong first-pass coverage now exists for chainparams, PoW, transaction checks, script, validation, storage, wallet RPC groups, mining RPC, blockchain RPC, raw transaction RPC, and mempool/broadcast RPC. |
-| Verification queue | Partial | Major unknowns, release-check work, command-test tracking, feedback buckets, and review handoff now exist. |
+| Verification queue | Partial | Major unknowns, release-check work, command-test tracking, feedback buckets, stale-wording scan tracker, and review handoff now exist. |
 | RPC documentation | Partial | Major RPC groups are source-reviewed, but command examples are not locally tested. |
 | Wallet documentation | Partial | Major wallet RPC groups are source-reviewed, but platform guides, database internals, GUI flows, and tested examples are pending. |
 | Release verification | Partial | Release page observations, source comparison, and artifact checklist exist; binaries/manifests/signatures are not verified. |
 | Exchange integration | Framework | Useful structure exists; confirmation policy and direct service checks remain unverified. |
 | Ecosystem directory | Framework | Good conservative structure; active services still need direct checks. API framework now exists. |
-| Developer onboarding | Partial | Reading order, repository map, source tree guide, source review guide, local dev, build, testing, release verification, contributing guide, legal/reuse posture, and private-review handoff pages exist. |
+| Developer onboarding | Partial | Reading order, repository map, source tree guide, source review guide, local dev, build, testing, release verification, contributing guide, legal/reuse posture, private-review handoff, and root reviewer flow exist. |
 | Glossary | Partial | Root and developer glossaries have been expanded; cross-linking and missing terms remain cleanup work. |
 | Public website planning | Early | Site section exists, but navigation/search/publishing choices remain open. |
 
 ## Immediate next actions
 
-1. Add reviewer start flow to the root README.
-2. Run final stale wording scan for overconfident claims.
-3. Run final command-example scan for untested examples.
-4. Prepare narrow private-review assignments using `docs/REVIEW_HANDOFF.md`.
-5. Then invite narrow private review or agents if desired.
+1. Run final stale wording scan for overconfident claims.
+2. Run final command-example scan for untested examples.
+3. Prepare narrow private-review assignments using `docs/REVIEW_HANDOFF.md`.
+4. Then invite narrow private review or agents if desired.
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Repository structure, current documentation files, coverage dashboard, private-review handoff, contribution guide, and legal/reuse posture note
+**Primary sources checked:** Repository structure, current documentation files, coverage dashboard, private-review handoff, contribution guide, legal/reuse posture note, and root README reviewer flow
 **Notes:** This dashboard is a project-management document for MoreBC2. It is not BitcoinII protocol documentation.
