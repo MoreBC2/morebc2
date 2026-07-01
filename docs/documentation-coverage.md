@@ -59,8 +59,8 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | `src/wallet/load.*` | Partial | First-pass wallet verification, loading, start, flush, stop, and unload review exists. |
 | `src/wallet/context.*` | Partial | First-pass shared wallet context review exists. |
 | `src/wallet/wallet.h` | Partial | Startup-adjacent declarations and defaults reviewed. Deeper wallet internals pending. |
-| `src/wallet/rpc/wallet.cpp` | Partial | First-pass wallet RPC registration, management, creation, loading, migration, and status review exists. Commands untested. |
-| `src/wallet/rpc/addresses.cpp` | Partial | First-pass address, change address, label, grouping, and multisig RPC review exists. Commands untested. |
+| `src/wallet/rpc/wallet.cpp` | Partial | First-pass wallet RPC registration, management, creation, loading, migration, and status exists. Commands untested. |
+| `src/wallet/rpc/addresses.cpp` | Partial | First-pass address, change address, label, grouping, and multisig RPC exists. Commands untested. |
 | `src/wallet/rpc/backup.cpp` | Partial | First-pass backup, restore, legacy import, descriptor import, export, and rescan-related review exists. Commands untested. |
 | `src/wallet/rpc/spend.cpp` | Partial | First-pass wallet send, funding, fee setting, fee bumping, signing, and PSBT review exists. Commands untested. |
 | `src/wallet/rpc/encrypt.cpp` | Partial | First-pass wallet timed unlock, relock, and first-time encryption review exists. Commands untested. |
@@ -121,7 +121,8 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Research README | Partial | Normalized for research-vs-documentation boundaries. |
 | Discussion README | Partial | Normalized for proposal/status labeling and discussion boundaries. |
 | History README | Partial | Normalized for dated-source and archive/current-status separation. |
-| Verification README | Partial | Normalized for verification workflow, command tracking, release tracking, and priority unknowns. |
+| Verification README | Partial | Normalized for verification workflow, review feedback buckets, command tracking, release tracking, and priority unknowns. |
+| Review feedback buckets | Framework | Added feedback taxonomy and narrow assignment guidance for private review. |
 | Known unknowns | Partial | Refreshed as short executive list linked to full backlog. |
 | Open questions backlog | Partial | Consolidated with priority labels, evidence needs, and public/private review blockers. |
 | Command testing status | Framework | Added command-test tracker, status labels, untested inventory, and test-record template. |
@@ -137,6 +138,8 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 |---|---|---|
 | Root README | Partial | Refreshed for polish phase and current source-backed coverage. |
 | Docs README | Partial | Refreshed with best starting points and untested-command caution. |
+| Contributing guide | Framework | Refreshed as private-review workflow with evidence rules, status rules, and feedback buckets. |
+| Private review handoff | Framework | Updated after contribution workflow and feedback-bucket work. |
 | Developer README | Partial | Links reading order, verification workflow, source review guide, source atlas, local development, build, testing, and release verification. |
 | Repository map | Partial | Refreshed through mempool/broadcast RPC. Needs polish pass rather than immediate new navigation work. |
 | Source tree guide | Partial | Refreshed through mempool/broadcast RPC. Needs polish pass rather than immediate new navigation work. |
@@ -153,11 +156,13 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. Build/test command smoke-test record framework.
-2. Network RPC or P2P source review.
-3. Glossary cross-linking during future page updates.
-4. Continue release artifact verification when full release asset data is available.
-5. Direct ecosystem checks for explorers, APIs, pools, and exchanges.
+1. License/reuse posture note.
+2. Final stale wording scan.
+3. Final untested-command scan.
+4. Build/test command smoke-test record framework.
+5. Network RPC or P2P source review.
+6. Continue release artifact verification when full release asset data is available.
+7. Direct ecosystem checks for explorers, APIs, pools, and exchanges.
 
 ## Verification
 
