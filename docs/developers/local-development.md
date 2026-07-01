@@ -25,6 +25,14 @@ A local development guide should eventually help contributors:
 - Keep test data separate from real wallet data.
 - Record exact command results for MoreBC2 verification.
 
+## Current repository note
+
+Current MoreBC2 review work observes this public source path:
+
+- `https://github.com/Bitcoin-II/BitcoinII-Core`
+
+The canonical repository question is still open. Do not present this as final official guidance until the repository path is confirmed by maintainers or official project material.
+
 ## Safety rule
 
 Do not run development builds against a real wallet or production data directory unless you know exactly what you are doing.
@@ -114,7 +122,7 @@ Document the data directory used in test records. Do not use examples that could
 The first path MoreBC2 should verify is:
 
 1. Clean Linux environment.
-2. Clone BitcoinII Core.
+2. Clone BitcoinII Core from the confirmed source path.
 3. Build daemon and CLI only.
 4. Run the most basic available test target.
 5. Start the daemon with a temporary data directory.
@@ -143,4 +151,4 @@ This path should be documented only after it is actually performed.
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This guide defines the local-development documentation workflow. It does not yet contain verified build commands.
+**Notes:** This guide defines the local-development documentation workflow. It does not yet contain verified build commands. The current observed source path is recorded, but canonical repository status still needs confirmation.
