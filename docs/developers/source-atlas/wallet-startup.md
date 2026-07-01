@@ -26,7 +26,7 @@ Wallet documentation needs to separate:
 - Which wallet files are verified at startup.
 - Which wallets are loaded and attached to the chain interface.
 - How wallets are started, flushed, stopped, and unloaded.
-- How wallet state relates to chain notifications.
+- How wallet state relates to chain events.
 
 These files define the first part of that lifecycle.
 
@@ -119,7 +119,7 @@ Reviewed fields include:
 - ArgsManager pointer.
 - Wallet mutex.
 - Opened wallet list.
-- Wallet-load callback list.
+- Wallet-load event list.
 
 The reviewed header warns that wallet context locking must not be taken after locking a wallet mutex because that can create inconsistent lock ordering and deadlock risk.
 
@@ -173,16 +173,16 @@ The reviewed top-level wallet header shows that `CWallet`:
 
 - Maintains wallet transactions and balances.
 - Can create new transactions.
-- Implements chain notification handling.
+- Implements chain event handling.
 - Stores a chain interface pointer.
 - Tracks wallet name and database handle.
 - Tracks last processed block hash and height.
 - Holds script managers for external and internal outputs.
 - Maintains an address book.
 - Tracks locked coins.
-- Has a registered chain-notifications handler.
+- Has a registered chain-event handler.
 
-`AttachChain` is declared as the static path that catches a wallet up to chain state, scans new blocks, updates the best-block locator and processed-block fields, and registers for chain notifications.
+`AttachChain` is declared as the static path that catches a wallet up to chain state, scans new blocks, updates the best-block locator and processed-block fields, and registers for chain events.
 
 ## Defaults observed in wallet header
 
@@ -225,20 +225,21 @@ No upstream comparison has been completed, so this page does not claim whether w
 - Which wallet database formats are enabled in current release builds?
 - How should legacy Berkeley DB versus SQLite descriptor-wallet behavior be documented?
 - Which backup and restore instructions can be tested safely?
-- Which wallet notification paths should be mapped to validation-interface events?
+- Which wallet event paths should be mapped to validation-interface events?
 - Which GUI wallet flows differ from daemon/CLI flows?
+- Confirm whether `v29.1.0` differs from current `main` for these files before upgrading status.
 
 ## Sources
 
-- `src/wallet/init.cpp`
-- `src/wallet/load.h`
-- `src/wallet/load.cpp`
-- `src/wallet/context.h`
-- `src/wallet/context.cpp`
-- `src/wallet/wallet.h`
+- Current observed `main` `src/wallet/init.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/init.cpp
+- Current observed `main` `src/wallet/load.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/load.h
+- Current observed `main` `src/wallet/load.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/load.cpp
+- Current observed `main` `src/wallet/context.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/context.h
+- Current observed `main` `src/wallet/context.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/context.cpp
+- Current observed `main` `src/wallet/wallet.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/wallet.h
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a first-pass wallet startup and lifecycle review. Wallet internals, wallet RPCs, database format details, GUI behavior, tested commands, and backup/restore workflows remain open.
+**Notes:** This is a first-pass wallet startup and lifecycle review. Wallet internals, wallet RPCs, database format details, GUI behavior, tested commands, backup/restore workflows, and release-versus-main comparison remain open.
