@@ -182,18 +182,19 @@ No upstream comparison has been completed, so this page does not claim whether m
 - How should package submission be described while it is marked experimental?
 - How should mempool persistence warnings be worded for operators?
 - Which policy defaults should be linked from the mempool RPC docs?
+- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
 
 ## Sources
 
-- `src/rpc/mempool.cpp`
-- `src/txmempool.h`
-- `src/txmempool.cpp`
-- `src/kernel/mempool_entry.h`
-- `src/validation.cpp`
-- `src/rpc/rawtransaction.cpp`
+- Current observed `main` `src/rpc/mempool.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/mempool.cpp
+- Current observed `main` `src/txmempool.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/txmempool.h
+- Current observed `main` `src/txmempool.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/txmempool.cpp
+- Current observed `main` `src/kernel/mempool_entry.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/mempool_entry.h
+- Current observed `main` `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.cpp
+- Current observed `main` `src/rpc/rawtransaction.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/rawtransaction.cpp
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a first-pass mempool and transaction-broadcast RPC review. Commands have not been run. Public examples, service recommendations, package policy details, and upstream comparison remain open.
+**Notes:** This is a first-pass mempool and transaction-broadcast RPC review. Commands have not been run. Public examples, service recommendations, package policy details, upstream comparison, and release-versus-main comparison remain open.
