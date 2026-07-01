@@ -253,17 +253,18 @@ No upstream comparison has been completed, so this page does not claim whether w
 - Which spend/signing RPC files should be reviewed next?
 - How should descriptor wallets versus legacy wallets be explained for BitcoinII users?
 - Which wallet commands behave differently depending on BDB, SQLite, external signer, or descriptor support?
+- Confirm whether `v29.1.0` differs from current `main` for these files before upgrading status.
 
 ## Sources
 
-- `src/wallet/rpc/wallet.cpp`
-- `src/wallet/rpc/addresses.cpp`
-- `src/wallet/init.cpp`
-- `src/wallet/load.cpp`
-- `src/wallet/wallet.h`
+- Current observed `main` `src/wallet/rpc/wallet.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/wallet.cpp
+- Current observed `main` `src/wallet/rpc/addresses.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/addresses.cpp
+- Current observed `main` `src/wallet/init.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/init.cpp
+- Current observed `main` `src/wallet/load.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/load.cpp
+- Current observed `main` `src/wallet/wallet.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/wallet.h
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a first-pass wallet RPC registration and address-management review. Backup, spend, encryption, transaction, coin, and detailed wallet database behavior still need deeper file-specific review. Commands have not been run.
+**Notes:** This is a first-pass wallet RPC registration and address-management review. Backup, spend, encryption, transaction, coin, detailed wallet database behavior, and release-versus-main comparison still need deeper file-specific review. Commands have not been run.
