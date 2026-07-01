@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Needs Review
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Purpose
 
@@ -101,6 +101,10 @@ Combining those values with this file's logic supports the current MoreBC2 wordi
 
 > BitcoinII mainnet uses Bitcoin-style 2016-block difficulty retargeting with 1/4x to 4x retarget bounds.
 
+## Release comparison note
+
+MoreBC2 spot-checked `src/pow.cpp` at `v29.1.0`. The observed retarget model matches the current source-reviewed wording: Bitcoin-style 2016-block retargeting with min-difficulty disabled and retargeting enabled for mainnet.
+
 ## Important clarification
 
 This file review does **not** support a claim that BitcoinII uses Dark Gravity Wave.
@@ -114,10 +118,10 @@ Current source-backed wording is Bitcoin-style 2016-block retargeting.
 - [Mining overview](../../mining/mining-overview.md)
 - [Difficulty adjustment](../../encyclopedia/difficulty-adjustment.md)
 - [Proof-of-work](../../encyclopedia/proof-of-work.md)
+- [Release source comparison notes](../../verification/release-source-comparison.md)
 
 ## Open questions
 
-- Confirm whether any release branch differs from `main` for difficulty behavior.
 - Confirm maintainer-preferred wording: `Bitcoin-style retargeting`, `2016-block retargeting`, or another phrase.
 - Confirm whether any BitcoinII-specific tests cover this behavior.
 - Review `pow.h` to document function declarations and comments.
@@ -125,11 +129,13 @@ Current source-backed wording is Bitcoin-style 2016-block retargeting.
 
 ## Sources
 
-- `src/pow.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/pow.cpp
-- `src/kernel/chainparams.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/kernel/chainparams.cpp
+- Current observed `main`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/pow.cpp
+- Current observed `main` chain parameters: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/chainparams.cpp
+- `v29.1.0` proof-of-work source: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/pow.cpp
+- [Release source comparison notes](../../verification/release-source-comparison.md)
 
 ## Verification
 
 **Status:** Needs Review
-**Primary sources checked:** Yes
-**Notes:** Behavior has been checked from source, but this page should be reviewed against the current release branch before being marked Verified.
+**Primary sources checked:** Yes, partially
+**Notes:** Behavior has been checked from current source and spot-checked against `v29.1.0`. This page should still remain Needs Review until caller paths and related tests are reviewed.
