@@ -73,10 +73,11 @@ For each flagged phrase, decide:
 | 2026-06-30 | old repository path search | repository search for `BitcoinII-Dev/BitcoinII` | No remaining matches returned by repository search after updates | No further change | This does not prove every external link is perfect, but the known old path no longer appears in search results. |
 | 2026-06-30 | developer workflow wording | `docs/developers/local-development.md`, `docs/developers/build-system.md`, `docs/developers/testing.md`, `docs/developers/release-verification.md`, `docs/developers/release-process.md` | Release-process page had stale release list and old release path | `a5aaf58` | Developer workflow pages keep build, test, and release-check examples unverified. Release-process page now points to current observed release path and release tracking pages. |
 | 2026-06-30 | Source Atlas chain parameters and PoW wording | `docs/developers/source-atlas/chainparams-cpp.md`, `docs/developers/source-atlas/pow-cpp.md` | Chainparams had stale BIP9 warning height and stale chain-data snapshot values; PoW needed current source links and release-comparison note | `df138fa`, `72b0e75` | Chainparams now labels snapshot-style fields by source version and records `v29.1.0` values. PoW now links current observed source and keeps DGW unsupported. |
+| 2026-06-30 | Source Atlas mempool helper pages | `docs/developers/source-atlas/disconnected-transactions.md`, `docs/developers/source-atlas/mempool-entry.md` | Both pages had old source links; mempool-entry first edit was blocked, then completed with softened wording | `433ac2a`, `ef84bd0` | Source links now use current observed repository path. Both pages keep Draft status and add release-versus-main comparison as an open item. |
 
 ## Still to scan
 
-The orientation, exchange, wallet, mining, ecosystem framework/listing, node, configuration, RPC configuration, developer workflow, chainparams, and PoW pages are in decent shape after this pass.
+The orientation, exchange, wallet, mining, ecosystem framework/listing, node, configuration, RPC configuration, developer workflow, chainparams, PoW, and two mempool helper pages are in decent shape after this pass.
 
 Still scan next:
 
@@ -111,5 +112,5 @@ Some terms are acceptable in limited contexts:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current MoreBC2 review workflow, coverage dashboard, targeted orientation/exchange/wallet/mining/ecosystem pages, node/configuration pages, old-path repository search, developer workflow pages, and initial Source Atlas source-ref scan
+**Primary sources checked:** Current MoreBC2 review workflow, coverage dashboard, targeted orientation/exchange/wallet/mining/ecosystem pages, node/configuration pages, old-path repository search, developer workflow pages, and Source Atlas source-ref scan
 **Notes:** This page now records targeted stale-wording passes through the main private-review orientation, user/service-facing framework pages, known old repository path checks, developer workflow pages, and initial Source Atlas source-ref checks. Remaining Source Atlas pages still need scanning before private review.
