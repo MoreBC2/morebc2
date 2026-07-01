@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-01
 
 ## Summary
 
@@ -10,7 +10,7 @@ BitcoinII Core includes JSON-RPC functionality for command-line tools, wallets, 
 
 This page is a safe starting point only. RPC command examples should not be marked Verified until they are tested against a running BitcoinII Core node.
 
-For test tracking, see [Command testing status](../verification/command-testing.md).
+For test tracking, see [Command testing status](../verification/command-testing.md) and the [Command smoke-test plan](../verification/command-smoke-test-plan.md).
 
 ## What RPC is used for
 
@@ -18,6 +18,7 @@ RPC can be used to:
 
 - Query node status.
 - Query chain and block status.
+- Query network and peer status.
 - Query mining/template status.
 - Query wallet status.
 - Generate deposit addresses.
@@ -59,6 +60,7 @@ MoreBC2 has reviewed first-pass source maps for these RPC files:
 
 - [Mining RPC](source-atlas/rpc-mining.md): `src/rpc/mining.cpp`
 - [Blockchain RPC](source-atlas/rpc-blockchain.md): `src/rpc/blockchain.cpp`
+- [Network RPC](source-atlas/rpc-network.md): `src/rpc/net.cpp`
 - [Raw transaction RPC](source-atlas/rpc-rawtransaction.md): `src/rpc/rawtransaction.cpp`
 - [Mempool and transaction broadcast RPC](source-atlas/rpc-mempool.md): `src/rpc/mempool.cpp`
 - [Wallet RPC](source-atlas/wallet-rpc.md): wallet startup/address/backup/spend/encryption/coin/history RPC files
@@ -105,6 +107,34 @@ Reviewed blockchain RPC commands include:
 - `getchainstates`
 
 Some commands are powerful, slow, experimental, or intended for advanced workflows. They should be documented carefully and tested before being recommended.
+
+## Network RPC group
+
+Reviewed network RPC commands include:
+
+- `getconnectioncount`
+- `ping`
+- `getpeerinfo`
+- `addnode`
+- `disconnectnode`
+- `getaddednodeinfo`
+- `getnettotals`
+- `getnetworkinfo`
+- `setban`
+- `listbanned`
+- `clearbanned`
+- `setnetworkactive`
+- `getnodeaddresses`
+- `getaddrmaninfo`
+
+Reviewed hidden/testing commands include:
+
+- `addconnection`
+- `addpeeraddress`
+- `sendmsgtopeer`
+- `getrawaddrman`
+
+Read-only network status commands are good smoke-test candidates. Peer-changing, ban-list, network-active, hidden, and testing-only commands should be documented carefully and should not be copied into beginner guides as normal examples.
 
 ## Raw transaction RPC group
 
@@ -208,6 +238,9 @@ bitcoinII-cli getblockcount
 bitcoinII-cli getbestblockhash
 bitcoinII-cli getmininginfo
 bitcoinII-cli getdifficulty
+bitcoinII-cli getconnectioncount
+bitcoinII-cli getpeerinfo
+bitcoinII-cli getnettotals
 bitcoinII-cli getblocktemplate '{"rules":["segwit"]}'
 bitcoinII-cli listwallets
 bitcoinII-cli listwalletdir
@@ -228,6 +261,7 @@ Service providers should not expose RPC publicly. RPC access should be firewalle
 For service docs, MoreBC2 should distinguish:
 
 - Read-only status commands.
+- Network and peer status commands.
 - Block and transaction lookup commands.
 - Address/deposit commands.
 - Wallet commands that can create addresses.
@@ -236,15 +270,16 @@ For service docs, MoreBC2 should distinguish:
 - Dry-run mempool acceptance commands.
 - Live transaction submission commands.
 - Maintenance commands that can affect node state.
+- Peer-changing or network-state commands.
 - Hidden/testing commands that should not appear in normal operator guides.
 
 ## Open items
 
-- Test common RPC commands against a synced BitcoinII Core node.
+- Test common RPC commands against a synced BitcoinII Core node or documented disposable local environment.
 - Confirm binary names for each platform and release asset.
 - Confirm configuration file paths by operating system.
 - Confirm wallet loading behavior.
-- Review network RPC files.
+- Review lower-level P2P files beyond network RPC.
 - Confirm whether any BitcoinII-specific RPC differences exist beyond naming and visible strings.
 
 ## Sources
@@ -253,6 +288,7 @@ For service docs, MoreBC2 should distinguish:
 - `doc/JSON-RPC-interface.md`
 - `src/rpc/mining.cpp`
 - `src/rpc/blockchain.cpp`
+- `src/rpc/net.cpp`
 - `src/rpc/rawtransaction.cpp`
 - `src/rpc/mempool.cpp`
 - `src/wallet/rpc/wallet.cpp`
@@ -263,9 +299,10 @@ For service docs, MoreBC2 should distinguish:
 - `src/wallet/rpc/coins.cpp`
 - `src/wallet/rpc/transactions.cpp`
 - [Command testing status](../verification/command-testing.md)
+- [Command smoke-test plan](../verification/command-smoke-test-plan.md)
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** Port and config-option notes are source-backed. Mining, blockchain, raw transaction, mempool, and wallet RPC groups have first-pass source review. Command examples are placeholders until matching local test records exist.
+**Notes:** Port and config-option notes are source-backed. Mining, blockchain, network, raw transaction, mempool, and wallet RPC groups have first-pass source review. Command examples are placeholders until matching local test records exist.
