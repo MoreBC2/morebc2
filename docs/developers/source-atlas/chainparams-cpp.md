@@ -2,13 +2,29 @@
 
 **Category:** Documentation
 **Status:** Needs Review
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Purpose
 
 `chainparams.cpp` defines chain-specific parameters for BitcoinII Core.
 
 For MoreBC2, this is currently one of the most important source files because it contains many values needed by users, developers, miners, explorers, and exchanges.
+
+## Review note
+
+Some values in this file are chain identity values. Other values are chain-data snapshots that can be updated over time.
+
+MoreBC2 has started comparing the current observed repository with `v29.1.0`. Identity values such as genesis data, ports, address prefixes, seeds, activation heights, and proof-of-work timing were spot-checked against `v29.1.0`.
+
+Snapshot-style fields should always say which source version they came from:
+
+- `nMinimumChainWork`
+- `defaultAssumeValid`
+- checkpoints
+- AssumeUTXO data
+- chain transaction statistics
+
+See [Release source comparison notes](../../verification/release-source-comparison.md).
 
 ## Why it matters
 
@@ -83,7 +99,7 @@ Mainnet is assigned:
 | Taproot start time | `1734019071` |
 | Taproot timeout | `18942120000` |
 | Taproot minimum activation height | `300` |
-| Minimum BIP9 warning height | `292` |
+| Minimum BIP9 warning height | `2306` |
 
 ## Mainnet proof-of-work parameters visible in this file
 
@@ -97,12 +113,16 @@ Mainnet is assigned:
 
 ## Chain work and assume-valid
 
-The file defines:
+These values are chain-data snapshots. They should not be quoted without naming the source version.
 
-- `nMinimumChainWork = 0x000000000000000000000000000000000000000000000000000001aa01aa01aa`
-- `defaultAssumeValid = 0x00000000dc956ee0d18f0e8f401c4dc3f248d00ca1c3f8ea0d60c6842b022390`
+For `v29.1.0`, MoreBC2 observed:
 
-A source comment identifies the assume-valid hash as related to height `425`.
+- `nMinimumChainWork = 0x00000000000000000000000000000000000000000000000000959028194ff1139272`
+- `defaultAssumeValid = 0x00000000000000067e82c9cebc8b58e70f0be31908598d3240a4ecbaa527682e`
+
+The related source comment identifies the assume-valid hash with height `33000` for that observation.
+
+Current `main` may differ after later updates.
 
 ## DNS seeds
 
@@ -126,7 +146,7 @@ Mainnet seeds visible in this file:
 
 The file defines mainnet checkpoint data for multiple heights, including early consensus activation heights and later chain heights.
 
-MoreBC2 should avoid copying the entire checkpoint table into every page. A separate checkpoint reference may be useful later.
+Checkpoint lists should be labeled by source version before being copied into public-facing docs.
 
 ## Related MoreBC2 pages
 
@@ -135,21 +155,24 @@ MoreBC2 should avoid copying the entire checkpoint table into every page. A sepa
 - [What is BitcoinII?](../../documentation/what-is-bitcoinii.md)
 - [Exchange integration package](../../exchange/integration-package.md)
 - [Difficulty adjustment](../../encyclopedia/difficulty-adjustment.md)
+- [Release source comparison notes](../../verification/release-source-comparison.md)
 
 ## Open questions
 
-- Confirm whether this file in the referenced repository path is the canonical source for current public releases.
-- Confirm whether any release branch differs from `main` for documented values.
+- Confirm whether `Bitcoin-II/BitcoinII-Core` is the canonical source for current public releases.
+- Confirm whether current `main` differs from `v29.1.0` for snapshot-style chain-data fields.
 - Confirm maintainer-preferred public wording for consensus parameters.
 - Decide whether checkpoint data deserves a separate reference page.
 - Review testnet, signet, and regtest sections separately before documenting non-mainnet values.
 
 ## Sources
 
-- `src/kernel/chainparams.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/kernel/chainparams.cpp
+- Current observed `main`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/chainparams.cpp
+- `v29.1.0`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/kernel/chainparams.cpp
+- [Release source comparison notes](../../verification/release-source-comparison.md)
 
 ## Verification
 
 **Status:** Needs Review
-**Primary sources checked:** Yes
-**Notes:** Mainnet values have been checked from source. This page should be reviewed against the current release branch before being marked Verified.
+**Primary sources checked:** Yes, partially
+**Notes:** Mainnet identity and consensus timing values have been checked from source, including a `v29.1.0` spot check. Snapshot-style chain-data fields must remain labeled by source version before being treated as public-ready.
