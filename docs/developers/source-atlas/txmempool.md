@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Purpose
 
@@ -75,9 +75,9 @@ The header explicitly describes a reorg exception to the normal assumption that 
 
 During reorg processing:
 
-- Transactions from disconnected blocks may be re-added while descendants already exist in the mempool.
+- Transactions from blocks that left the active chain may be re-added while descendants already exist in the mempool.
 - The mempool may be temporarily inconsistent until cleanup occurs.
-- The caller must call `UpdateTransactionsFromBlock()` to repair state after re-adding transactions from disconnected blocks.
+- The caller must call `UpdateTransactionsFromBlock()` to repair state after re-adding transactions from those blocks.
 
 ## Options visible in the header
 
@@ -109,7 +109,7 @@ Reviewed behavior:
 
 Reviewed behavior:
 
-- Used after reorg-related re-addition of transactions from disconnected blocks.
+- Used after reorg-related re-addition of transactions from blocks that left the active chain.
 - Reconstructs parent/child links for in-mempool descendants.
 - Uses `mapNextTx` to find children spending outputs of re-added transactions.
 - Processes transactions in reverse order to maximize descendant cache usefulness.
@@ -332,15 +332,16 @@ The reviewed files show BitcoinII naming and fork metadata, but this pass has no
 - Review replacement policy files.
 - Review package acceptance in `validation.cpp` together with mempool limits.
 - Review mempool persistence behavior.
+- Confirm whether `v29.1.0` differs from current `main` for these files before upgrading status.
 
 ## Sources
 
-- `src/txmempool.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/txmempool.h
-- `src/txmempool.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/txmempool.cpp
-- `src/validation.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/validation.cpp
+- Current observed `main` `src/txmempool.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/txmempool.h
+- Current observed `main` `src/txmempool.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/txmempool.cpp
+- Current observed `main` `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.cpp
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a broader mempool architecture audit. Transaction acceptance and policy still need separate review.
+**Notes:** This is a broader mempool architecture audit. Transaction acceptance, policy details, and release-versus-main comparison still need separate review.
