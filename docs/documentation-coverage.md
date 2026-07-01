@@ -121,8 +121,9 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Research README | Partial | Normalized for research-vs-documentation boundaries. |
 | Discussion README | Partial | Normalized for proposal/status labeling and discussion boundaries. |
 | History README | Partial | Normalized for dated-source and archive/current-status separation. |
-| Verification README | Partial | Normalized for verification workflow, review feedback buckets, command tracking, release tracking, and priority unknowns. |
+| Verification README | Partial | Normalized for verification workflow, review feedback buckets, stale-wording scan, command tracking, release tracking, and priority unknowns. |
 | Review feedback buckets | Framework | Added feedback taxonomy and narrow assignment guidance for private review. |
+| Stale wording scan | Framework | Added search-term checklist for overconfident wording. Scan still needs to be run. |
 | Known unknowns | Partial | Refreshed as short executive list linked to full backlog. |
 | Open questions backlog | Partial | Consolidated with priority labels, evidence needs, and public/private review blockers. |
 | Command testing status | Framework | Added command-test tracker, status labels, untested inventory, and test-record template. |
@@ -136,7 +137,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 | Area | Status | Notes |
 |---|---|---|
-| Root README | Partial | Refreshed for polish phase and current source-backed coverage. |
+| Root README | Partial | Refreshed with private reviewer start flow. |
 | Docs README | Partial | Refreshed with best starting points, untested-command caution, and legal/reuse posture link. |
 | Contributing guide | Framework | Refreshed as private-review workflow with evidence rules, status rules, and feedback buckets. |
 | Legal and reuse posture | Framework | Added private-review-only posture because no repository license file was found. |
@@ -157,13 +158,12 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. Add reviewer start flow to root README.
-2. Final stale wording scan.
-3. Final untested-command scan.
-4. Build/test command smoke-test record framework.
-5. Network RPC or P2P source review.
-6. Continue release artifact verification when full release asset data is available.
-7. Direct ecosystem checks for explorers, APIs, pools, and exchanges.
+1. Run final stale wording scan.
+2. Run final untested-command scan.
+3. Build/test command smoke-test record framework.
+4. Network RPC or P2P source review.
+5. Continue release artifact verification when full release asset data is available.
+6. Direct ecosystem checks for explorers, APIs, pools, and exchanges.
 
 ## Verification
 
