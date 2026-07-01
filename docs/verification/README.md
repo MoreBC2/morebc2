@@ -17,6 +17,8 @@ Verification pages should help MoreBC2 keep uncertainty visible instead of hidin
 - [Open questions backlog](open-questions.md)
 - [Known unknowns](known-unknowns.md)
 - [Command testing status](command-testing.md)
+- [Release source comparison notes](release-source-comparison.md)
+- [Release artifact checklist](release-artifact-checklist.md)
 - [Documentation coverage](../documentation-coverage.md)
 
 ## How to use this queue
@@ -30,13 +32,15 @@ Verification pages should help MoreBC2 keep uncertainty visible instead of hidin
 
 For command examples, also add or update a record in [Command testing status](command-testing.md).
 
+For release checks, also update [Release source comparison notes](release-source-comparison.md) or [Release artifact checklist](release-artifact-checklist.md).
+
 ## Open verification items
 
 ### Canonical BitcoinII repository path
 
 **Question:** Which GitHub path should MoreBC2 treat as the canonical public BitcoinII repository path?
 
-**Current evidence:** Project README and release links point to `BitcoinII-Dev/BitcoinII`, while accessible repository redirects may appear under other owner names.
+**Current evidence:** Current release review observes `Bitcoin-II/BitcoinII-Core`, while older paths may redirect elsewhere.
 
 **Needed source:** Maintainer confirmation or stable official project link.
 
@@ -56,7 +60,9 @@ For command examples, also add or update a record in [Command testing status](co
 
 **Question:** How should users verify BitcoinII release downloads?
 
-**Needed source:** Release assets, checksum files, signatures, signed tags, or maintainer statement.
+**Current evidence:** Source-tree verification and release-process docs describe checksum/signature style workflows, but current release assets and signatures still need direct checking.
+
+**Needed source:** Release assets, checksum files, signatures, signed tags, trusted keys, or maintainer statement.
 
 **Status:** Needs Review
 
@@ -106,6 +112,7 @@ For command examples, also add or update a record in [Command testing status](co
 - Keep current facts, historical facts, research ideas, and discussion proposals separate.
 - Record the source type used: source code, release artifact, official website, archive, maintainer statement, local test, or current direct check.
 - Command examples should remain unverified until run locally with environment details.
+- Release artifact claims should remain unverified until assets, hashes, and any available signatures are checked directly.
 - Ecosystem claims should remain unverified until checked directly and dated.
 
 ## Notes
@@ -118,4 +125,4 @@ Items in this queue should not be treated as verified documentation until moved 
 
 **Status:** Draft
 **Primary sources checked:** Current verification section structure
-**Notes:** This section README tracks verification workflow, command-test tracking, and priority unknowns. It does not verify BitcoinII protocol behavior.
+**Notes:** This section README tracks verification workflow, command-test tracking, release-check tracking, and priority unknowns. It does not verify BitcoinII protocol behavior.
