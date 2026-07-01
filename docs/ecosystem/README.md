@@ -6,7 +6,7 @@
 
 ## Summary
 
-This section tracks BitcoinII (BC2) ecosystem resources such as wallets, explorers, mining pools, exchanges, resources, services, and community projects.
+This section tracks BitcoinII (BC2) ecosystem resources such as wallets, explorers, mining pools, exchanges, resources, services, APIs, and community projects.
 
 Nothing should be listed as active until it has been directly checked.
 
@@ -16,6 +16,7 @@ Ecosystem pages are time-sensitive. Every listing should include a review date, 
 
 - [Wallets](wallets.md)
 - [Explorers](explorers.md)
+- [APIs](apis.md)
 - [Mining pools](mining-pools.md)
 - [Exchanges](exchanges.md)
 - [Resources](resources.md)
@@ -24,11 +25,11 @@ Ecosystem pages are time-sensitive. Every listing should include a review date, 
 
 - Wallets
 - Explorers
+- APIs
 - Mining pools
 - Exchanges
 - Mining software
 - Libraries
-- APIs
 - Community resources
 - Merchants
 - Educational resources
@@ -38,7 +39,7 @@ Ecosystem pages are time-sensitive. Every listing should include a review date, 
 ```md
 ### Name
 
-**Category:** Wallet / Explorer / Pool / Exchange / Resource / Other
+**Category:** Wallet / Explorer / API / Pool / Exchange / Resource / Other
 **Status:** Active / Needs Review / Offline / Historical
 **Official:** Yes / No / Unknown
 **URL:**
@@ -52,7 +53,6 @@ Ecosystem pages are time-sensitive. Every listing should include a review date, 
 
 - `community-projects.md`
 - `merchants.md`
-- `apis.md`
 - `mining-software.md`
 - `libraries.md`
 
@@ -66,6 +66,7 @@ Ecosystem pages are time-sensitive. Every listing should include a review date, 
 - Separate current ecosystem status from historical listings.
 - Prefer direct checks over copied community lists.
 - Link relevant service-integration docs for services that need node/RPC behavior.
+- Do not imply a public API can replace running a local node for critical service workflows.
 
 ## Related pages
 
@@ -73,6 +74,7 @@ Ecosystem pages are time-sensitive. Every listing should include a review date, 
 - [Wallet guide](../wallets/wallet-guide.md)
 - [Mining README](../mining/README.md)
 - [RPC overview](../developers/rpc-overview.md)
+- [Explorer resources](../documentation/explorer-resources.md)
 - [Open questions backlog](../verification/open-questions.md)
 - [Documentation polish plan](../POLISH_PLAN.md)
 - [History](../history/README.md)
