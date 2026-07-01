@@ -10,7 +10,7 @@ This page covers a first-pass review of:
 
 - `src/wallet/rpc/transactions.cpp`
 
-This file contains wallet RPC behavior for listing received amounts, listing wallet transaction history, reading one in-wallet transaction, marking eligible wallet transactions as abandoned, rescanning wallet history, and aborting active rescans.
+This file contains wallet RPC behavior for listing received amounts, listing wallet transaction history, reading one in-wallet transaction, marking eligible wallet transactions with a local abandoned state, rescanning wallet history, and requesting active rescans to stop.
 
 This is not a tested command guide. Examples should not be marked verified until they are run against BitcoinII Core with a temporary wallet.
 
@@ -126,7 +126,7 @@ Reviewed behavior includes:
 - Adding raw transaction hex.
 - Appending last processed block information.
 
-## Abandon and rescan behavior
+## Local transaction state and rescan behavior
 
 Reviewed commands include:
 
@@ -134,9 +134,9 @@ Reviewed commands include:
 - `rescanblockchain`
 - `abortrescan`
 
-`abandontransaction` marks eligible in-wallet transactions as abandoned, including in-wallet descendants, when they are not in a block and not in the mempool.
+`abandontransaction` marks eligible in-wallet transactions with abandoned state, including in-wallet descendants, when they are not in a block and not in the mempool.
 
-`rescanblockchain` scans local chain data for wallet-related transactions between requested heights. Reviewed behavior includes start/stop height validation, wallet unlock requirement, one-rescan-at-a-time reservation, unavailable-block checks, pruned-data errors, assumeutxo background-sync handling, and corruption/reindex-oriented fallback errors.
+`rescanblockchain` scans local chain data for wallet-related transactions between requested heights. Reviewed behavior includes start/stop height validation, wallet unlock requirement, one-rescan-at-a-time reservation, unavailable-block checks, pruned-data errors, assumeutxo background-sync handling, and local-data fallback errors.
 
 `abortrescan` requests cancellation of an active wallet rescan and returns whether the request was made.
 
@@ -176,17 +176,18 @@ No upstream comparison has been completed, so this page does not claim whether t
 - How should pruned-node limitations be documented for wallet rescans and service monitoring?
 - How should reorg-related removed transactions be explained for exchange/service operators?
 - Which GUI transaction-history paths map to these RPC helpers?
+- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
 
 ## Sources
 
-- `src/wallet/rpc/transactions.cpp`
-- `src/wallet/wallet.h`
-- `src/wallet/receive.h`
-- `src/wallet/rpc/coins.cpp`
-- `src/wallet/rpc/backup.cpp`
+- Current observed `main` `src/wallet/rpc/transactions.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/transactions.cpp
+- Current observed `main` `src/wallet/wallet.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/wallet.h
+- Current observed `main` `src/wallet/receive.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/receive.h
+- Current observed `main` `src/wallet/rpc/coins.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/coins.cpp
+- Current observed `main` `src/wallet/rpc/backup.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/backup.cpp
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a first-pass wallet transaction-history/rescan RPC review. Commands have not been run. Public examples, service recommendations, GUI mapping, and upstream comparison remain open.
+**Notes:** This is a first-pass wallet transaction-history/rescan RPC review. Commands have not been run. Public examples, service recommendations, GUI mapping, upstream comparison, and release-versus-main comparison remain open.
