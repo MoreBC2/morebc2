@@ -158,17 +158,18 @@ No upstream comparison has been completed, so this page does not claim whether r
 - Which examples need wallet RPCs versus raw transaction RPCs?
 - Where are transaction broadcast and mempool acceptance RPCs implemented?
 - How should txindex and pruned-node limitations be explained for services?
+- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
 
 ## Sources
 
-- `src/rpc/rawtransaction.cpp`
-- `src/rpc/rawtransaction_util.h`
-- `src/node/transaction.h`
-- `src/node/psbt.h`
-- `src/wallet/rpc/spend.cpp`
+- Current observed `main` `src/rpc/rawtransaction.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/rawtransaction.cpp
+- Current observed `main` `src/rpc/rawtransaction_util.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/rawtransaction_util.h
+- Current observed `main` `src/node/transaction.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/transaction.h
+- Current observed `main` `src/node/psbt.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/psbt.h
+- Current observed `main` `src/wallet/rpc/spend.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/spend.cpp
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a first-pass raw transaction and PSBT RPC review. Commands have not been run. Public examples, service recommendations, broadcast/mempool RPC linkage, and upstream comparison remain open.
+**Notes:** This is a first-pass raw transaction and PSBT RPC review. Commands have not been run. Public examples, service recommendations, broadcast/mempool RPC linkage, upstream comparison, and release-versus-main comparison remain open.
