@@ -218,17 +218,20 @@ No upstream comparison has been completed, so this page does not claim whether b
 - Which pruning and block-data failures should be documented for operators?
 - Which descriptor scan commands are relevant to BitcoinII users without wallet context?
 - Does BitcoinII differ from upstream Bitcoin Core in blockchain RPC behavior beyond naming?
+- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
 
 ## Sources
 
-- `src/rpc/blockchain.cpp`
-- `src/rpc/blockchain.h`
-- `src/rpc/server.h`
-- `src/node/blockstorage.*`
-- `src/validationinterface.*`
+- Current observed `main` `src/rpc/blockchain.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/blockchain.cpp
+- Current observed `main` `src/rpc/blockchain.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/blockchain.h
+- Current observed `main` `src/rpc/server.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/server.h
+- Current observed `main` `src/node/blockstorage.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/blockstorage.h
+- Current observed `main` `src/node/blockstorage.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/blockstorage.cpp
+- Current observed `main` `src/validationinterface.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validationinterface.h
+- Current observed `main` `src/validationinterface.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validationinterface.cpp
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a first-pass blockchain RPC review. Commands have not been run; examples, service recommendations, operator guidance, and upstream comparison remain open.
+**Notes:** This is a first-pass blockchain RPC review. Commands have not been run; examples, service recommendations, operator guidance, upstream comparison, and release-versus-main comparison remain open.
