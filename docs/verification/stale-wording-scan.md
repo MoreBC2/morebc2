@@ -75,14 +75,15 @@ For each flagged phrase, decide:
 | 2026-06-30 | Source Atlas chain parameters and PoW wording | `docs/developers/source-atlas/chainparams-cpp.md`, `docs/developers/source-atlas/pow-cpp.md` | Chainparams had stale BIP9 warning height and stale chain-data snapshot values; PoW needed current source links and release-comparison note | `df138fa`, `72b0e75` | Chainparams now labels snapshot-style fields by source version and records `v29.1.0` values. PoW now links current observed source and keeps DGW unsupported. |
 | 2026-06-30 | Source Atlas mempool helper pages | `docs/developers/source-atlas/disconnected-transactions.md`, `docs/developers/source-atlas/mempool-entry.md` | Both pages had old source links; mempool-entry first edit was blocked, then completed with softened wording | `433ac2a`, `ef84bd0` | Source links now use current observed repository path. Both pages keep Draft status and add release-versus-main comparison as an open item. |
 | 2026-06-30 | Source Atlas transaction and block lifecycle pages | `docs/developers/source-atlas/transaction-consensus.md`, `docs/developers/source-atlas/block-acceptance.md` | Both pages had source lists without current observed repository links and lacked release-versus-main open items | `07b96c6`, `3ba46fc` | Source links now use current observed repository path. Both pages keep Draft status and add release-versus-main comparison as an open item. |
+| 2026-06-30 | Source Atlas validation interface and block storage pages | `docs/developers/source-atlas/validation-interface.md`, `docs/developers/source-atlas/block-storage.md` | Both pages had plain source lists and lacked release-versus-main open items; validation-interface first edit was blocked, then completed with softer event wording | `91a5e00`, `5a2344d` | Source links now use current observed repository path. Both pages keep Draft status and add release-versus-main comparison as an open item. |
 
 ## Still to scan
 
-The orientation, exchange, wallet, mining, ecosystem framework/listing, node, configuration, RPC configuration, developer workflow, chainparams, PoW, mempool helper, transaction-consensus, and block-acceptance pages are in decent shape after this pass.
+The orientation, exchange, wallet, mining, ecosystem framework/listing, node, configuration, RPC configuration, developer workflow, chainparams, PoW, mempool helper, transaction-consensus, block-acceptance, validation-interface, and block-storage pages are in decent shape after this pass.
 
 Still scan next:
 
-- Remaining Source Atlas pages with `Reviewed` or important lifecycle status.
+- Remaining Source Atlas pages with important lifecycle or RPC status.
 - Any remaining command blocks found by repository search.
 
 ## Known acceptable uses
