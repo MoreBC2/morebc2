@@ -90,12 +90,13 @@ Do not treat these as working instructions until a matching command-test record 
 - Confirm whether inbound port `8338` should be recommended for public listening nodes.
 - Confirm binary names from release assets.
 - Add local command-test records before promoting examples.
+- Confirm canonical repository/source path before public-link polish.
 
 ## Sources
 
-- BitcoinII README: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/README.md
-- `src/kernel/chainparams.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/kernel/chainparams.cpp
-- `share/examples/bitcoinII.conf`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/share/examples/bitcoinII.conf
+- Current observed BitcoinII Core repository: https://github.com/Bitcoin-II/BitcoinII-Core
+- `src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/chainparams.cpp
+- `share/examples/bitcoinII.conf`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/share/examples/bitcoinII.conf
 - [Command testing status](../verification/command-testing.md)
 - [Source atlas: chainparams.cpp](../developers/source-atlas/chainparams-cpp.md)
 - [Source atlas: startup initialization](../developers/source-atlas/init-cpp.md)
@@ -106,4 +107,4 @@ Do not treat these as working instructions until a matching command-test record 
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** Network values are source-backed. Platform setup instructions, release asset names, sync behavior, pruning guidance, and node command examples still need testing.
+**Notes:** Network values are source-backed. Platform setup instructions, release asset names, sync behavior, pruning guidance, and node command examples still need testing. Source links use the current observed repository path, but canonical repository status still needs confirmation.
