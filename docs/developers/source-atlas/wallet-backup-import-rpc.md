@@ -152,16 +152,17 @@ No upstream comparison has been completed, so this page does not claim whether b
 - Which rescan failure cases should be documented for operators?
 - Which platform path examples are accurate for BitcoinII releases?
 - Which commands should be avoided entirely in exchange/service guides?
+- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
 
 ## Sources
 
-- `src/wallet/rpc/backup.cpp`
-- `src/wallet/rpc/wallet.cpp`
-- `src/wallet/wallet.h`
-- `src/wallet/load.cpp`
+- Current observed `main` `src/wallet/rpc/backup.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/backup.cpp
+- Current observed `main` `src/wallet/rpc/wallet.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/wallet.cpp
+- Current observed `main` `src/wallet/wallet.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/wallet.h
+- Current observed `main` `src/wallet/load.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/load.cpp
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a first-pass backup/import/restore RPC review. Commands have not been run. Public examples, platform paths, exact recovery workflows, and upstream comparison remain open.
+**Notes:** This is a first-pass backup/import/restore RPC review. Commands have not been run. Public examples, platform paths, exact recovery workflows, upstream comparison, and release-versus-main comparison remain open.
