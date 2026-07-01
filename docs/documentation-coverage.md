@@ -137,9 +137,10 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Area | Status | Notes |
 |---|---|---|
 | Root README | Partial | Refreshed for polish phase and current source-backed coverage. |
-| Docs README | Partial | Refreshed with best starting points and untested-command caution. |
+| Docs README | Partial | Refreshed with best starting points, untested-command caution, and legal/reuse posture link. |
 | Contributing guide | Framework | Refreshed as private-review workflow with evidence rules, status rules, and feedback buckets. |
-| Private review handoff | Framework | Updated after contribution workflow and feedback-bucket work. |
+| Legal and reuse posture | Framework | Added private-review-only posture because no repository license file was found. |
+| Private review handoff | Framework | Updated after contribution workflow, feedback-bucket work, and legal/reuse note. |
 | Developer README | Partial | Links reading order, verification workflow, source review guide, source atlas, local development, build, testing, and release verification. |
 | Repository map | Partial | Refreshed through mempool/broadcast RPC. Needs polish pass rather than immediate new navigation work. |
 | Source tree guide | Partial | Refreshed through mempool/broadcast RPC. Needs polish pass rather than immediate new navigation work. |
@@ -156,7 +157,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. License/reuse posture note.
+1. Add reviewer start flow to root README.
 2. Final stale wording scan.
 3. Final untested-command scan.
 4. Build/test command smoke-test record framework.
