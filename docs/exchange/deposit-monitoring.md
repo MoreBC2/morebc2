@@ -2,13 +2,13 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Summary
 
 This page is a draft framework for BitcoinII (BC2) deposit-monitoring documentation for exchanges and service providers.
 
-It is not final operational guidance. Confirmation counts, command examples, and chain-reorganization handling still need review.
+It is not final operational guidance. Confirmation counts, command examples, release paths, and chain-reorganization handling still need review.
 
 ## Goals
 
@@ -31,6 +31,8 @@ Current source-backed values relevant to this topic:
 - Mainnet RPC port from generated config: `8332`.
 - Block header hash path: double-SHA256 via `HashWriter::GetHash()`.
 
+These anchors are useful for service documentation, but they do not by themselves define an exchange confirmation policy.
+
 ## Confirmation policy
 
 MoreBC2 has not yet verified a recommended BitcoinII confirmation count for exchanges.
@@ -52,7 +54,7 @@ bitcoinII-cli getblock <blockhash>
 bitcoinII-cli getblockhash <height>
 ```
 
-These commands need to be tested against a running BitcoinII Core node before being marked verified.
+These commands are placeholder examples. They need to be tested against a running BitcoinII Core node and recorded in [Command testing status](../verification/command-testing.md) before being marked verified or used as operator instructions.
 
 ## Chain reorganization handling
 
@@ -68,6 +70,7 @@ MoreBC2 has not yet documented BitcoinII-specific reorganization risk or recomme
 - Confirm whether `txindex` is needed for non-wallet transaction lookups.
 - Confirm explorer/API backup methods.
 - Document reorganization-handling examples.
+- Confirm whether deposit monitoring should use wallet RPC, raw transaction RPC, explorer API fallback, or a combination.
 
 ## Related pages
 
@@ -75,15 +78,16 @@ MoreBC2 has not yet documented BitcoinII-specific reorganization risk or recomme
 - [Exchange integration package](integration-package.md)
 - [RPC overview](../developers/rpc-overview.md)
 - [RPC configuration](../configuration/rpc-configuration.md)
+- [Command testing status](../verification/command-testing.md)
 - [Known unknowns](../verification/known-unknowns.md)
 
 ## Sources
 
-- `src/kernel/chainparams.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/kernel/chainparams.cpp
-- `share/examples/bitcoinII.conf`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/share/examples/bitcoinII.conf
+- `src/kernel/chainparams.cpp` in the current observed BitcoinII Core repository: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/chainparams.cpp
+- `share/examples/bitcoinII.conf` in the current observed BitcoinII Core repository: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/share/examples/bitcoinII.conf
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a framework. Command examples and confirmation policy need testing/review before use in production documentation.
+**Notes:** This is a framework. Command examples and confirmation policy need testing/review before use in production documentation. Source links now use the current observed repository path, but canonical repository status still needs confirmation.
