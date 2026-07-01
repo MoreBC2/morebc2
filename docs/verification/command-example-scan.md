@@ -83,15 +83,16 @@ Priority pages:
 | 2026-06-30 | wallet command examples | `docs/wallets/wallet-guide.md` | No blocking issue found | No change | Wallet guide lists commands under command-testing status and warns sensitive/state-changing commands stay out of beginner docs until tested. |
 | 2026-06-30 | mining command examples | `docs/mining/mining-overview.md` | No blocking issue found | No change | Mining overview links command-testing status and marks block/header submission commands as not for normal user examples. |
 | 2026-06-30 | service checklist command wording | `docs/exchange/service-integration-checklist.md` | No blocking issue found | No change | Checklist says required commands must be tested and does not provide copy/paste examples. |
+| 2026-06-30 | RPC overview inventory | `docs/developers/rpc-overview.md` | No blocking issue found | No change | RPC overview labels command forms as unverified placeholders and warns not to copy them into user guides as working examples. |
+| 2026-06-30 | node command inventory | `docs/nodes/node-guide.md` | No command-labeling issue found; stale source links updated separately | `8e4a749` | Node guide links to command-testing status and warns not to treat listed commands as working instructions. |
+| 2026-06-30 | configuration command/setup wording | `docs/configuration/configuration-overview.md`, `docs/configuration/rpc-configuration.md` | No command-labeling issue found; stale source links updated separately | `062686f`, `b1272f8` | Configuration pages say setup/auth examples are untested and link command-testing status. |
+| 2026-06-30 | command tracker itself | `docs/verification/command-testing.md` | No blocking issue found | No change | Command tracker correctly labels entries as Placeholder, Source-observed, Locally tested, Verified, Needs recheck, or Do not publish. |
 
 ## Still to scan
 
-- `docs/developers/rpc-overview.md`
-- `docs/verification/command-testing.md`
-- `docs/nodes/node-guide.md`
-- `docs/configuration/configuration-overview.md`
-- `docs/configuration/rpc-configuration.md`
 - Any remaining command blocks found by repository search.
+- Developer workflow pages such as build, testing, local development, and release verification.
+- Source Atlas pages that include command examples or command-shaped snippets.
 
 ## Known acceptable cases
 
@@ -122,4 +123,4 @@ It is acceptable to list command names when:
 
 **Status:** Draft
 **Primary sources checked:** Current MoreBC2 command tracker, RPC overview, node, wallet, mining, exchange, and configuration pages
-**Notes:** This page now records the first command-example scan pass. Additional command-heavy pages still need review before private review.
+**Notes:** This page now records command-example scans across the main user/service-facing command pages. Remaining developer workflow and Source Atlas snippets should still be checked before private review.
