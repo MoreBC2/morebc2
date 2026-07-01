@@ -15,6 +15,7 @@ For a quick project-level orientation, start with:
 - [Project status](../PROJECT_STATUS.md)
 - [Repository audit](AUDIT.md)
 - [Documentation coverage](documentation-coverage.md)
+- [Private review handoff](REVIEW_HANDOFF.md)
 - [Documentation polish plan](POLISH_PLAN.md)
 
 For a technical reader, start with:
@@ -29,6 +30,7 @@ For a technical reader, start with:
 
 - [Repository audit](AUDIT.md)
 - [Documentation coverage](documentation-coverage.md)
+- [Private review handoff](REVIEW_HANDOFF.md)
 - [Documentation polish plan](POLISH_PLAN.md)
 
 ## Main sections
@@ -44,7 +46,7 @@ For a technical reader, start with:
 - [Mining](mining/README.md) — mining guides and pool information.
 - [Wallets](wallets/README.md) — wallet resources and user guides.
 - [Nodes](nodes/README.md) — node operation and network resources.
-- [Ecosystem](ecosystem/README.md) — wallets, explorers, pools, exchanges, tools, and services.
+- [Ecosystem](ecosystem/README.md) — wallets, explorers, pools, exchanges, tools, APIs, and services.
 - [Encyclopedia](encyclopedia/README.md) — concept explainers and cross-linked background pages.
 - [Verification](verification/README.md) — open verification work, known unknowns, and source-backed status tracking.
 - [Site](site/README.md) — public website planning.
@@ -54,6 +56,12 @@ For a technical reader, start with:
 The repository has many source-reviewed pages, but not all examples are tested.
 
 Before using a command in production, check whether the relevant page says the command was actually run. If it does not, treat the command as source-observed and untested.
+
+## Private review caution
+
+Before opening the repo to new readers or agents, use [Private review handoff](REVIEW_HANDOFF.md).
+
+That page explains what is ready for narrow review, what should not be changed broadly yet, and which public-launch blockers remain.
 
 ## Rule of thumb
 
