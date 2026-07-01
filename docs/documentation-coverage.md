@@ -40,11 +40,11 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 | Source area | Status | Notes |
 |---|---|---|
-| `src/kernel/chainparams.cpp` | Reviewed | Mainnet parameters documented; release-branch comparison has started and moving chain-data fields need release/main labels. |
+| `src/kernel/chainparams.cpp` | Reviewed | Refreshed with source-version caveats; stale BIP9 warning height and stale chain-data snapshot values corrected. Moving chain-data fields still need release/main labeling across downstream docs. |
 | `src/init.cpp` | Partial | Startup orchestration first pass exists. GUI, daemon, shutdown, and option-level details pending. |
-| `src/pow.cpp` | Reviewed | Difficulty retarget and PoW checks documented; `v29.1.0` spot check matches the Bitcoin-style retarget model. |
+| `src/pow.cpp` | Reviewed | Difficulty retarget and PoW checks documented; `v29.1.0` spot check matches the Bitcoin-style retarget model and source links were refreshed. |
 | `src/consensus/tx_check.*` | Reviewed | Context-independent transaction checks first pass exists. Upstream comparison pending. |
-| `src/consensus/tx_verify.*` | Reviewed | Finality, sequence locks, operation-cost helpers, and input checks first pass exists. |
+| `src/consensus/tx_verify.*` | Reviewed | Finality, sequence locks, operation-count helpers, and input checks first pass exists. |
 | `src/script/interpreter.*` | Partial | First-pass script-engine map exists. Full flag caller mapping and upstream comparison pending. |
 | `src/validation.cpp` | Partial | Major validation, connection, reorg, mempool acceptance paths reviewed. Large file still not fully exhausted. |
 | `src/validationinterface.*` | Partial | First-pass validation notification interface map exists. Subscriber call sites pending. |
@@ -68,8 +68,8 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | `src/wallet/rpc/transactions.cpp` | Partial | First-pass wallet transaction listing, listsinceblock, gettransaction, abandon, and rescan-related review exists. Commands untested. |
 | Block lifecycle path | Reviewed | Consolidated source-atlas lifecycle page exists. |
 | `src/txmempool.*` | Partial | Core mempool structure and many functions reviewed. Policy details pending. |
-| `src/kernel/mempool_entry.h` | Reviewed | First-pass entry metadata review exists. |
-| `src/kernel/disconnected_transactions.*` | Reviewed | First-pass disconnected transaction pool exists. |
+| `src/kernel/mempool_entry.h` | Reviewed | First-pass entry metadata review exists; source-link cleanup still pending. |
+| `src/kernel/disconnected_transactions.*` | Reviewed | First-pass disconnected transaction pool exists; source-link cleanup still pending. |
 | `src/primitives/block.*` | Partial | Block hash path reviewed; broader primitive review pending. |
 | `src/hash.h` | Partial | Double-SHA256 hashing behavior reviewed. Broader hash utility review pending. |
 | `src/consensus/amount.h` | Partial | COIN/MAX_MONEY documented; broader consensus files pending. |
@@ -123,7 +123,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | History README | Partial | Normalized for dated-source and archive/current-status separation. |
 | Verification README | Partial | Normalized for verification workflow, review feedback buckets, stale-wording scan, command-example scan, command tracking, release tracking, and priority unknowns. |
 | Review feedback buckets | Framework | Added feedback taxonomy and narrow assignment guidance for private review. |
-| Stale wording scan | Partial | Targeted orientation, exchange, wallet, mining, ecosystem, node/config, old-path, and developer workflow scans recorded. Source Atlas scan still pending. |
+| Stale wording scan | Partial | Targeted orientation, exchange, wallet, mining, ecosystem, node/config, old-path, developer workflow, and initial Source Atlas scans recorded. Remaining Source Atlas pages pending. |
 | Command example scan | Partial | Scans recorded for exchange, wallet, mining, RPC overview, node, configuration, command tracker, and developer workflow pages. Remaining Source Atlas snippets pending. |
 | Known unknowns | Partial | Refreshed as short executive list linked to full backlog. |
 | Open questions backlog | Partial | Consolidated with priority labels, evidence needs, and public/private review blockers. |
@@ -160,7 +160,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. Scan Source Atlas pages with `Reviewed` status.
+1. Continue Source Atlas page scan.
 2. Build/test command smoke-test record framework.
 3. Network RPC or P2P source review.
 4. Continue release artifact verification when full release asset data is available.
