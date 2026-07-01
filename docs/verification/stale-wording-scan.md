@@ -20,7 +20,7 @@ Before private review, search for wording that may imply:
 - Draft pages are complete.
 - Source-reviewed commands are locally tested.
 - Ecosystem resources are active without direct checks.
-- Release binaries are verified without hashes/signatures.
+- Release files are verified without direct review.
 - Source values from `main` automatically match the current release tag.
 - Public APIs can replace running a local node for service workflows.
 - BitcoinII uses unverified consensus behavior.
@@ -71,15 +71,15 @@ For each flagged phrase, decide:
 | 2026-06-30 | ecosystem active/official/recommended wording | `docs/ecosystem/explorers.md`, `docs/ecosystem/mining-pools.md`, `docs/ecosystem/exchanges.md`, `docs/ecosystem/wallets.md` | Wallet ecosystem page had stale release path and stale release-process link | `c109759` | Wallet listing now distinguishes current observed release URL from legacy/redirected URL and links release verification pages. Other ecosystem listing pages remained conservative. |
 | 2026-06-30 | node/config/RPC source-link path check | `docs/nodes/node-guide.md`, `docs/configuration/configuration-overview.md`, `docs/configuration/rpc-configuration.md` | Older repository source links found and updated | `8e4a749`, `062686f`, `b1272f8` | Links now use current observed repository path and include canonical-path caveats. |
 | 2026-06-30 | old repository path search | repository search for `BitcoinII-Dev/BitcoinII` | No remaining matches returned by repository search after updates | No further change | This does not prove every external link is perfect, but the known old path no longer appears in search results. |
+| 2026-06-30 | developer workflow wording | `docs/developers/local-development.md`, `docs/developers/build-system.md`, `docs/developers/testing.md`, `docs/developers/release-verification.md`, `docs/developers/release-process.md` | Release-process page had stale release list and old release path | `a5aaf58` | Developer workflow pages keep build, test, and release-check examples unverified. Release-process page now points to current observed release path and release tracking pages. |
 
 ## Still to scan
 
-The orientation, exchange, wallet, mining, ecosystem framework/listing, node, configuration, and RPC configuration pages are in decent shape after this pass.
+The orientation, exchange, wallet, mining, ecosystem framework/listing, node, configuration, RPC configuration, and developer workflow pages are in decent shape after this pass.
 
 Still scan next:
 
 - Source Atlas pages with `Reviewed` status.
-- Developer workflow pages for outdated release or command wording.
 - Any remaining command blocks found by repository search.
 
 ## Known acceptable uses
@@ -94,10 +94,9 @@ Some terms are acceptable in limited contexts:
 
 ## Next actions
 
-1. Continue command-example scan across remaining command blocks.
-2. Scan Source Atlas pages with `Reviewed` status for overconfident labels or stale source-ref wording.
-3. Scan developer workflow pages for stale command/release wording.
-4. Update documentation coverage after each scan batch.
+1. Scan Source Atlas pages with `Reviewed` status for overconfident labels or stale source-ref wording.
+2. Search remaining command blocks, if any.
+3. Update documentation coverage after each scan batch.
 
 ## Related pages
 
@@ -111,5 +110,5 @@ Some terms are acceptable in limited contexts:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current MoreBC2 review workflow, coverage dashboard, targeted orientation/exchange/wallet/mining/ecosystem pages, node/configuration pages, and old-path repository search
-**Notes:** This page now records targeted stale-wording passes through the main private-review orientation, user/service-facing framework pages, and known old repository path checks. Source Atlas and developer workflow pages still need scanning before private review.
+**Primary sources checked:** Current MoreBC2 review workflow, coverage dashboard, targeted orientation/exchange/wallet/mining/ecosystem pages, node/configuration pages, old-path repository search, and developer workflow pages
+**Notes:** This page now records targeted stale-wording passes through the main private-review orientation, user/service-facing framework pages, known old repository path checks, and developer workflow pages. Source Atlas pages still need scanning before private review.
