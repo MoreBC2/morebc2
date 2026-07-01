@@ -69,7 +69,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Block lifecycle path | Reviewed | Consolidated source-atlas lifecycle page exists. |
 | `src/txmempool.*` | Partial | Core mempool structure and many functions reviewed. Policy details pending. |
 | `src/kernel/mempool_entry.h` | Reviewed | First-pass entry metadata review exists. |
-| `src/kernel/disconnected_transactions.*` | Reviewed | First-pass disconnected transaction pool review exists. |
+| `src/kernel/disconnected_transactions.*` | Reviewed | First-pass disconnected transaction pool exists. |
 | `src/primitives/block.*` | Partial | Block hash path reviewed; broader primitive review pending. |
 | `src/hash.h` | Partial | Double-SHA256 hashing behavior reviewed. Broader hash utility review pending. |
 | `src/consensus/amount.h` | Partial | COIN/MAX_MONEY documented; broader consensus files pending. |
@@ -86,7 +86,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Consensus overview | Partial | Strong PoW and amount notes exist; transaction-helper and script-engine material has been refreshed. |
 | Checkpoints | Framework | Existence documented; checkpoint list should distinguish `v29.1.0` from `main`. |
 | Releases | Partial | Current and legacy release-page observations refreshed; release source comparison and artifact checklist added; full asset verification still pending. |
-| Explorer resources | Framework | Active explorer checks pending. |
+| Explorer resources | Framework | Expanded with API framework links and endpoint-check expectations; active explorer checks pending. |
 | Configuration README | Partial | Normalized for source-observed configuration anchors and local-testing rules. |
 | Encyclopedia README | Partial | Normalized for concept pages, Source Atlas links, and BitcoinII-specific claim rules. |
 | News README | Partial | Normalized for dated factual update rules and source expectations. |
@@ -100,7 +100,8 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Exchange integration | Framework | Good structure exists; confirmations/contact/release verification pending. |
 | Deposit monitoring | Framework | Needs RPC testing and confirmation policy. |
 | Service integration checklist | Framework | Useful checklist; each item needs evidence links. |
-| Ecosystem README | Partial | Normalized for listing rules, direct-check requirements, and active-service caution. |
+| Ecosystem README | Partial | Linked API framework and added API-specific listing caution. |
+| Ecosystem APIs | Framework | Added API listing and endpoint-test framework. No live APIs verified yet. |
 | Ecosystem wallets | Framework | Conservative listing model exists. |
 | Ecosystem explorers | Framework | Direct explorer checks pending. |
 | Ecosystem mining pools | Framework | Direct pool checks pending. |
@@ -152,11 +153,11 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. Continue release artifact verification: full current asset list and manifest/signature status.
-2. Explorer/API documentation framework.
-3. Build/test command smoke-test record.
-4. Network RPC or P2P source review.
-5. Glossary cross-linking during future page updates.
+1. Build/test command smoke-test record framework.
+2. Network RPC or P2P source review.
+3. Glossary cross-linking during future page updates.
+4. Continue release artifact verification when full release asset data is available.
+5. Direct ecosystem checks for explorers, APIs, pools, and exchanges.
 
 ## Verification
 
