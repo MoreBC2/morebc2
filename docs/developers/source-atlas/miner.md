@@ -204,19 +204,20 @@ The reviewed file structure appears Bitcoin-style, but no upstream comparison ha
 - Which block-template tests are most relevant for MoreBC2?
 - Does BitcoinII differ from upstream Bitcoin Core in template construction or package selection?
 - Which external operation instructions can be verified from current primary sources?
+- Confirm whether `v29.1.0` differs from current `main` for these files before upgrading status.
 
 ## Sources
 
-- `src/node/miner.h`
-- `src/node/miner.cpp`
-- `src/node/mini_miner.h`
-- `src/node/mini_miner.cpp`
-- `src/pow.cpp`
-- `src/validation.cpp`
-- `src/rpc/mining.cpp`
+- Current observed `main` `src/node/miner.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/miner.h
+- Current observed `main` `src/node/miner.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/miner.cpp
+- Current observed `main` `src/node/mini_miner.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/mini_miner.h
+- Current observed `main` `src/node/mini_miner.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/mini_miner.cpp
+- Current observed `main` `src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/pow.cpp
+- Current observed `main` `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.cpp
+- Current observed `main` `src/rpc/mining.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/mining.cpp
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a first-pass block-template and MiniMiner review. RPC caller paths, subsidy schedule, local commands, external operation guides, and upstream comparison remain open.
+**Notes:** This is a first-pass block-template and MiniMiner review. RPC caller paths, subsidy schedule, local commands, external operation guides, upstream comparison, and release-versus-main comparison remain open.
