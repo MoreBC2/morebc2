@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Needs Review
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Source files
 
@@ -41,19 +41,21 @@ MoreBC2 currently cites these files for:
 - [Consensus overview](../../documentation/consensus-overview.md)
 - [Network specifications](../../documentation/network-specifications.md)
 - [Proof-of-work](../../encyclopedia/proof-of-work.md)
+- [Hash helpers](hash-h.md)
 
 ## Open questions
 
 - Confirm whether any BitcoinII-specific changes exist in block primitives beyond naming/header changes.
 - Confirm whether related serialization behavior should be documented for developers.
+- Confirm whether `v29.1.0` differs from current `main` for these files before upgrading status.
 
 ## Sources
 
-- `src/primitives/block.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/primitives/block.h
-- `src/primitives/block.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/primitives/block.cpp
+- Current observed `main` `src/primitives/block.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/primitives/block.h
+- Current observed `main` `src/primitives/block.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/primitives/block.cpp
 
 ## Verification
 
 **Status:** Needs Review
 **Primary sources checked:** Yes
-**Notes:** Block structure and hash call path have been checked from source, but this page should be reviewed against the current release branch before being marked Verified.
+**Notes:** Block structure and hash call path have been checked from source, but this page should be reviewed against `v29.1.0` and current `main` before being marked Verified.
