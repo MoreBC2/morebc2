@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Purpose
 
@@ -19,7 +19,7 @@ Mempool acceptance affects:
 - Replacement policy.
 - Package submission.
 - Fee filtering.
-- Script checking before unconfirmed transactions are stored.
+- Input checks before unconfirmed transactions are stored.
 - Reorg transaction re-addition.
 
 ## Main reviewed entry points
@@ -94,7 +94,7 @@ Reviewed behavior:
 - If `max_tx_fee` is set, first calls `ProcessTransaction(..., test_accept=true)` and rejects if the transaction would exceed the maximum fee.
 - Calls `ProcessTransaction(..., test_accept=false)` to submit the transaction to the mempool.
 - Adds the txid to the mempool's unbroadcast set when relay is requested.
-- Optionally waits for validation-interface callbacks so wallet/RPC users do not see stale wallet state immediately after broadcast.
+- Optionally waits for validation-interface events so wallet/RPC users do not see stale wallet state immediately after broadcast.
 - Relays the transaction through peer manager when relay is requested.
 
 ## `MempoolAcceptResult`
@@ -161,11 +161,11 @@ Reviewed fields include:
 - Package feerate.
 - Transaction reference and txid.
 - Validation state.
-- Precomputed transaction data for script checks.
+- Precomputed transaction data for input checks.
 
 ## `PreChecks`
 
-`PreChecks` runs policy checks before expensive script checks.
+`PreChecks` runs policy checks before expensive input checks.
 
 Reviewed behavior:
 
@@ -184,11 +184,11 @@ Reviewed behavior:
 - Requires sequence locks to be satisfied for the next block.
 - Calls `Consensus::CheckTxInputs` using next-block height.
 - Applies input standardness and witness standardness checks when required.
-- Calculates sigop cost.
+- Calculates operation cost.
 - Applies fee deltas from `PrioritiseTransaction`.
 - Tracks whether the transaction spends a coinbase output.
 - Constructs a `CTxMemPoolEntry`.
-- Rejects transactions over standard sigop-cost limits.
+- Rejects transactions over standard operation-cost limits.
 - Enforces minimum relay fee except for allowed bypass cases.
 - Enforces mempool minimum fee when package-feerate logic does not apply.
 - Calculates mempool ancestors and applies ancestor/descendant limits.
@@ -228,10 +228,10 @@ Reviewed behavior:
 
 Reviewed behavior:
 
-- Re-runs script checks using current block script flags.
+- Re-runs input checks using current block script flags.
 - Uses `GetBlockScriptFlags` from the active chain tip.
 - Uses `CheckInputsFromMempoolAndCache`.
-- Treats failure after policy script success as a serious internal bug path.
+- Treats failure after policy input success as a serious internal bug path.
 
 ## `Finalize`
 
@@ -262,7 +262,7 @@ AcceptSingleTransaction
 Reviewed behavior:
 
 - Assumes transactions have already been successfully validated as a package.
-- Runs consensus script checks for each transaction.
+- Runs consensus input checks for each transaction.
 - Recalculates mempool ancestors after prior package transactions have been submitted.
 - Calls `Finalize` for each transaction.
 - Builds success results with effective feerate information.
@@ -277,7 +277,7 @@ Reviewed behavior from this pass:
 - Calculates total package virtual size and modified fees.
 - Uses aggregate package feerate when package feerates are enabled.
 - Applies package ancestor/descendant limits when more than one transaction is being evaluated.
-- Runs policy script checks for each workspace.
+- Runs policy input checks for each workspace.
 - Supports test-accept results without insertion.
 - Calls `SubmitPackage` after successful validation.
 
@@ -314,11 +314,11 @@ Reviewed behavior:
 Reviewed behavior relevant to mempool acceptance:
 
 - Returns true for coinbase transactions.
-- Checks the script execution cache first.
+- Checks the input execution cache first.
 - Initializes spent-output data for signature checking when needed.
-- Runs per-input script checks.
-- Distinguishes some non-mandatory standard-script failures from mandatory consensus failures.
-- Caches successful full script checks when requested.
+- Runs per-input checks.
+- Distinguishes some non-mandatory standard-check failures from mandatory consensus failures.
+- Caches successful full input checks when requested.
 
 ## Relationship to mempool and reorg docs
 
@@ -328,7 +328,7 @@ Mempool acceptance uses the mempool structures documented in:
 - `CTxMemPoolEntry`
 - `CCoinsViewMemPool`
 
-During reorg processing, `MaybeUpdateMempoolForReorg` re-adds eligible disconnected transactions through `AcceptToMemoryPool`, which uses this acceptance pipeline.
+During reorg processing, `MaybeUpdateMempoolForReorg` re-adds eligible transactions from blocks that left the active chain through `AcceptToMemoryPool`, which uses this acceptance pipeline.
 
 ## BitcoinII-specific notes
 
@@ -349,17 +349,18 @@ This reviewed code shows BitcoinII naming and fork metadata. This pass has not i
 - Review replacement-policy helper functions and policy documentation.
 - Review functional tests for mempool acceptance.
 - Review RPC caller paths such as `testmempoolaccept` and transaction broadcast RPCs.
+- Confirm whether `v29.1.0` differs from current `main` for these paths before upgrading status.
 
 ## Sources
 
-- `src/validation.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/validation.cpp
-- `src/validation.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/validation.h
-- `src/node/transaction.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/node/transaction.cpp
-- `src/txmempool.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/txmempool.h
-- `src/txmempool.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/txmempool.cpp
+- Current observed `main` `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.cpp
+- Current observed `main` `src/validation.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.h
+- Current observed `main` `src/node/transaction.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/transaction.cpp
+- Current observed `main` `src/txmempool.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/txmempool.h
+- Current observed `main` `src/txmempool.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/txmempool.cpp
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a transaction acceptance audit with public wrapper and broadcast caller notes. Replacement policy, RPC paths, tests, and the exact `ProcessTransaction` implementation still need separate review.
+**Notes:** This is a transaction acceptance audit with public wrapper and broadcast caller notes. Replacement policy, RPC paths, tests, exact `ProcessTransaction` implementation, and release-versus-main comparison still need separate review.
