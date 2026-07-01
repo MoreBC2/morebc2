@@ -123,8 +123,8 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | History README | Partial | Normalized for dated-source and archive/current-status separation. |
 | Verification README | Partial | Normalized for verification workflow, review feedback buckets, stale-wording scan, command-example scan, command tracking, release tracking, and priority unknowns. |
 | Review feedback buckets | Framework | Added feedback taxonomy and narrow assignment guidance for private review. |
-| Stale wording scan | Partial | Targeted orientation, exchange, wallet, mining, ecosystem, node/config, and old-path scans recorded. Source Atlas and developer workflow scans still pending. |
-| Command example scan | Partial | Scans recorded for exchange, wallet, mining, RPC overview, node, configuration, and command tracker pages. Remaining developer workflow/Source Atlas snippets pending. |
+| Stale wording scan | Partial | Targeted orientation, exchange, wallet, mining, ecosystem, node/config, old-path, and developer workflow scans recorded. Source Atlas scan still pending. |
+| Command example scan | Partial | Scans recorded for exchange, wallet, mining, RPC overview, node, configuration, command tracker, and developer workflow pages. Remaining Source Atlas snippets pending. |
 | Known unknowns | Partial | Refreshed as short executive list linked to full backlog. |
 | Open questions backlog | Partial | Consolidated with priority labels, evidence needs, and public/private review blockers. |
 | Command testing status | Framework | Added command-test tracker, status labels, untested inventory, and test-record template. |
@@ -149,9 +149,10 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Developer reading order | Framework | Updated to include current Source Atlas and developer workflow paths; should be refreshed after polish. |
 | Source review guide | Framework | Created as contributor workflow; should be tested on future source reviews. |
 | Verification standards | Framework | Practical workflow page exists; evidence scale remains the root confidence model. |
-| Local development environment | Framework | Defines safe test-record workflow; commands still need actual testing. |
-| Build system guide | Partial | First-pass CMake/source-doc review exists. Commands still need actual testing. |
-| Testing guide | Partial | First-pass unit, wallet, CTest, and functional test-runner review exists. Commands still need actual testing. |
+| Local development environment | Framework | Developer workflow scan found no blocking command-label issue. Commands still need actual testing. |
+| Build system guide | Partial | First-pass CMake/source-doc review exists; developer workflow scan found no blocking command-label issue. Commands still need actual testing. |
+| Testing guide | Partial | First-pass unit, wallet, CTest, and functional test-runner review exists; developer workflow scan found no blocking command-label issue. Commands still need actual testing. |
+| Release process guide | Partial | Refreshed current observed release path and caveats. Full release artifact checks still pending. |
 | Release verification guide | Partial | Current release-page observations, source comparison, artifact checklist, and verification gaps recorded; asset verification still pending. |
 | Documentation polish plan | Framework | Broad cleanup plan exists and should guide the next phase. |
 | Developer glossary | Partial | Refreshed with RPC, PSBT, broadcast, package, and wallet-history terminology. |
@@ -159,12 +160,11 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. Scan developer workflow pages for command/release wording.
-2. Scan Source Atlas pages with `Reviewed` status.
-3. Build/test command smoke-test record framework.
-4. Network RPC or P2P source review.
-5. Continue release artifact verification when full release asset data is available.
-6. Direct ecosystem checks for explorers, APIs, pools, and exchanges.
+1. Scan Source Atlas pages with `Reviewed` status.
+2. Build/test command smoke-test record framework.
+3. Network RPC or P2P source review.
+4. Continue release artifact verification when full release asset data is available.
+5. Direct ecosystem checks for explorers, APIs, pools, and exchanges.
 
 ## Verification
 
