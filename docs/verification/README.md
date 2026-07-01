@@ -17,6 +17,7 @@ Verification pages should help MoreBC2 keep uncertainty visible instead of hidin
 - [Open questions backlog](open-questions.md)
 - [Known unknowns](known-unknowns.md)
 - [Review feedback buckets](review-feedback-buckets.md)
+- [Stale wording scan](stale-wording-scan.md)
 - [Command testing status](command-testing.md)
 - [Release source comparison notes](release-source-comparison.md)
 - [Release artifact checklist](release-artifact-checklist.md)
@@ -32,6 +33,8 @@ Verification pages should help MoreBC2 keep uncertainty visible instead of hidin
 6. Leave a note explaining what changed.
 
 For review notes, use [Review feedback buckets](review-feedback-buckets.md) to keep feedback narrow and actionable.
+
+For stale wording or overconfident language, use [Stale wording scan](stale-wording-scan.md).
 
 For command examples, also add or update a record in [Command testing status](command-testing.md).
 
@@ -128,4 +131,4 @@ Items in this queue should not be treated as verified documentation until moved 
 
 **Status:** Draft
 **Primary sources checked:** Current verification section structure
-**Notes:** This section README tracks verification workflow, feedback buckets, command-test tracking, release-check tracking, and priority unknowns. It does not verify BitcoinII protocol behavior.
+**Notes:** This section README tracks verification workflow, feedback buckets, stale-wording scan, command-test tracking, release-check tracking, and priority unknowns. It does not verify BitcoinII protocol behavior.
