@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-06-30
 
 ## Purpose
 
@@ -244,16 +244,17 @@ This page does not yet fully document block file allocation, pruning, or block s
 - Review net-processing caller paths for incoming network blocks and headers.
 - Review disk import and reindex paths more deeply.
 - Decide whether this page should later split into network block acceptance and disk/reindex block acceptance.
+- Confirm whether `v29.1.0` differs from current `main` for these paths before upgrading status.
 
 ## Sources
 
-- `src/validation.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/validation.cpp
-- `src/validation.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/validation.h
-- `src/pow.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/pow.cpp
-- `src/kernel/chainparams.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/kernel/chainparams.cpp
+- Current observed `main` `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.cpp
+- Current observed `main` `src/validation.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.h
+- Current observed `main` `src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/pow.cpp
+- Current observed `main` `src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/chainparams.cpp
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This page consolidates reviewed block acceptance and activation behavior. It should be expanded after reviewing block storage, pruning, net-processing caller paths, and validation-interface callbacks.
+**Notes:** This page consolidates reviewed block acceptance and activation behavior. It should be expanded after reviewing block storage, pruning, net-processing caller paths, validation-interface callbacks, and release-versus-main differences.
