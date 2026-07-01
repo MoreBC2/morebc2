@@ -128,17 +128,18 @@ No upstream comparison has been completed, so this page does not claim whether c
 - How should immature coinbase outputs be explained for miners?
 - How should watch-only and avoid-reuse behavior be explained to non-developers?
 - Which output-selection workflows map to GUI coin-control behavior?
+- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
 
 ## Sources
 
-- `src/wallet/rpc/coins.cpp`
-- `src/wallet/receive.h`
-- `src/wallet/spend.h`
-- `src/wallet/coincontrol.h`
-- `src/wallet/wallet.h`
+- Current observed `main` `src/wallet/rpc/coins.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/coins.cpp
+- Current observed `main` `src/wallet/receive.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/receive.h
+- Current observed `main` `src/wallet/spend.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/spend.h
+- Current observed `main` `src/wallet/coincontrol.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/coincontrol.h
+- Current observed `main` `src/wallet/wallet.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/wallet.h
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a first-pass wallet coins/balances RPC review. Commands have not been run. Public examples, exchange/service recommendations, GUI mapping, and upstream comparison remain open.
+**Notes:** This is a first-pass wallet coins/balances RPC review. Commands have not been run. Public examples, exchange/service recommendations, GUI mapping, upstream comparison, and release-versus-main comparison remain open.
