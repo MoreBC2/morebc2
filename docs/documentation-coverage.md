@@ -2,7 +2,7 @@
 
 **Category:** Project maintenance
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-01
 
 ## Summary
 
@@ -41,37 +41,37 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Source area | Status | Notes |
 |---|---|---|
 | `src/kernel/chainparams.cpp` | Reviewed | Refreshed with source-version caveats; stale BIP9 warning height and stale chain-data snapshot values corrected. Moving chain-data fields still need release/main labeling across downstream docs. |
-| `src/init.cpp` | Partial | Startup orchestration first pass exists. GUI, daemon, shutdown, and option-level details pending. |
+| `src/init.cpp` | Partial | Startup orchestration first pass exists; source links refreshed and release-versus-main comparison remains open. |
 | `src/pow.cpp` | Reviewed | Difficulty retarget and PoW checks documented; `v29.1.0` spot check matches the Bitcoin-style retarget model and source links were refreshed. |
-| `src/consensus/tx_check.*` | Reviewed | Context-independent transaction checks first pass exists. Upstream comparison pending. |
-| `src/consensus/tx_verify.*` | Reviewed | Finality, sequence locks, operation-count helpers, and input checks first pass exists. |
+| `src/consensus/tx_check.*` | Reviewed | Source links refreshed; context-independent transaction checks first pass exists. Upstream and release-versus-main comparisons pending. |
+| `src/consensus/tx_verify.*` | Reviewed | Source links refreshed; finality, sequence locks, operation-count helpers, and input checks first pass exists. Upstream and release-versus-main comparisons pending. |
 | `src/script/interpreter.*` | Partial | First-pass script-engine map exists. Full flag caller mapping and upstream comparison pending. |
 | `src/validation.cpp` | Partial | Major validation, connection, reorg, mempool acceptance paths reviewed. Large file still not fully exhausted. |
-| `src/validationinterface.*` | Partial | First-pass validation notification interface map exists. Subscriber call sites pending. |
-| `src/node/blockstorage.*` | Partial | First-pass block storage, pruning, reindex, and import map exists. Undo-read and failure-recovery details pending. |
-| `src/node/miner.*` | Partial | First-pass candidate-block template assembly and package selection review exists. |
-| `src/node/mini_miner.*` | Partial | First-pass fee/ordering simulation helper review exists. Caller paths pending. |
-| `src/rpc/mining.cpp` | Partial | First-pass mining RPC, getblocktemplate, submitblock, submitheader, and mining-info review exists. Commands untested. |
-| `src/rpc/blockchain.cpp` | Partial | First-pass blockchain RPC, block lookup, pruning, UTXO stats, scans, and chainstate review exists. Commands untested. |
-| `src/rpc/rawtransaction.cpp` | Partial | First-pass raw transaction lookup, decode, construction, explicit-key signing, and PSBT review exists. Commands untested. |
-| `src/rpc/mempool.cpp` | Partial | First-pass transaction relay, mempool acceptance testing, mempool inspection, persistence, orphan, and package RPC review exists. Commands untested. |
-| `src/wallet/init.cpp` | Partial | First-pass wallet option, parameter interaction, and loader construction review exists. |
-| `src/wallet/load.*` | Partial | First-pass wallet verification, loading, start, flush, stop, and unload review exists. |
-| `src/wallet/context.*` | Partial | First-pass shared wallet context review exists. |
+| `src/validationinterface.*` | Partial | First-pass validation event interface map exists; source links refreshed and subscriber call sites pending. |
+| `src/node/blockstorage.*` | Partial | First-pass block storage, pruning, reindex, and import map exists; source links refreshed. Undo-read and failure-recovery details pending. |
+| `src/node/miner.*` | Partial | First-pass candidate-block template assembly and package selection review exists; source links refreshed. |
+| `src/node/mini_miner.*` | Partial | First-pass fee/ordering simulation helper review exists; source links refreshed. Caller paths pending. |
+| `src/rpc/mining.cpp` | Partial | First-pass mining RPC, getblocktemplate, submitblock, submitheader, and mining-info review exists. Commands untested; source links refreshed. |
+| `src/rpc/blockchain.cpp` | Partial | First-pass blockchain RPC, block lookup, pruning, UTXO stats, scans, and chainstate review exists. Commands untested; source links refreshed. |
+| `src/rpc/rawtransaction.cpp` | Partial | First-pass raw transaction lookup, decode, construction, explicit-key signing, and PSBT review exists. Commands untested; source links refreshed. |
+| `src/rpc/mempool.cpp` | Partial | First-pass transaction relay, mempool acceptance testing, mempool inspection, persistence, orphan, and package RPC review exists. Commands untested; source links refreshed. |
+| `src/wallet/init.cpp` | Partial | First-pass wallet option, parameter interaction, and loader construction review exists; source links refreshed. |
+| `src/wallet/load.*` | Partial | First-pass wallet verification, loading, start, flush, stop, and unload review exists; source links refreshed. |
+| `src/wallet/context.*` | Partial | First-pass shared wallet context review exists; source links refreshed. |
 | `src/wallet/wallet.h` | Partial | Startup-adjacent declarations and defaults reviewed. Deeper wallet internals pending. |
-| `src/wallet/rpc/wallet.cpp` | Partial | First-pass wallet RPC registration, management, creation, loading, migration, and status exists. Commands untested. |
-| `src/wallet/rpc/addresses.cpp` | Partial | First-pass address, change address, label, grouping, and multisig RPC exists. Commands untested. |
-| `src/wallet/rpc/backup.cpp` | Partial | First-pass backup, restore, legacy import, descriptor import, export, and rescan-related review exists. Commands untested. |
-| `src/wallet/rpc/spend.cpp` | Partial | First-pass wallet send, funding, fee setting, fee bumping, signing, and PSBT review exists. Commands untested. |
-| `src/wallet/rpc/encrypt.cpp` | Partial | First-pass wallet timed unlock, relock, and first-time encryption review exists. Commands untested. |
-| `src/wallet/rpc/coins.cpp` | Partial | First-pass received amount, balance, output locking, and listunspent review exists. Commands untested. |
-| `src/wallet/rpc/transactions.cpp` | Partial | First-pass wallet transaction listing, listsinceblock, gettransaction, abandon, and rescan-related review exists. Commands untested. |
-| Block lifecycle path | Reviewed | Consolidated source-atlas lifecycle page exists. |
-| `src/txmempool.*` | Partial | Core mempool structure and many functions reviewed. Policy details pending. |
+| `src/wallet/rpc/wallet.cpp` | Partial | First-pass wallet RPC registration, management, creation, loading, migration, and status exists. Commands untested; source links refreshed. |
+| `src/wallet/rpc/addresses.cpp` | Partial | First-pass address, change address, label, grouping, and multisig RPC exists. Commands untested; source links refreshed. |
+| `src/wallet/rpc/backup.cpp` | Partial | First-pass backup, restore, legacy import, descriptor import, export, and rescan-related review exists. Commands untested; source links refreshed. |
+| `src/wallet/rpc/spend.cpp` | Partial | First-pass wallet send, funding, fee setting, fee bumping, signing, and PSBT review exists. Commands untested; source links refreshed. |
+| `src/wallet/rpc/encrypt.cpp` | Partial | First-pass wallet timed unlock, relock, and first-time encryption review exists. Commands untested; source links refreshed. |
+| `src/wallet/rpc/coins.cpp` | Partial | First-pass received amount, balance, output locking, and listunspent review exists. Commands untested; source links refreshed. |
+| `src/wallet/rpc/transactions.cpp` | Partial | First-pass wallet transaction listing, listsinceblock, gettransaction, local abandoned-state handling, and rescan-related review exists. Commands untested; source links refreshed. |
+| Block lifecycle path | Reviewed | Source links refreshed in block-acceptance page; block acceptance/activation first pass exists. Storage, pruning, net-processing, callbacks/events, and release-versus-main comparison pending. |
+| `src/txmempool.*` | Partial | Core mempool structure and many functions reviewed; stale source links refreshed. Policy details pending. |
 | `src/kernel/mempool_entry.h` | Reviewed | First-pass entry metadata review exists; source links refreshed and release-versus-main comparison remains open. |
 | `src/kernel/disconnected_transactions.*` | Reviewed | First-pass disconnected transaction pool exists; source links refreshed and release-versus-main comparison remains open. |
-| `src/primitives/block.*` | Partial | Block hash path reviewed; broader primitive review pending. |
-| `src/hash.h` | Partial | Double-SHA256 hashing behavior reviewed. Broader hash utility review pending. |
+| `src/primitives/block.*` | Needs recheck | Block hash path reviewed; source links refreshed. Broader primitive and release/main comparison pending. |
+| `src/hash.h` | Needs recheck | Double-SHA256 hashing behavior reviewed; source link refreshed. Broader hash utility and release/main comparison pending. |
 | `src/consensus/amount.h` | Partial | COIN/MAX_MONEY documented; broader consensus files pending. |
 | Other RPC internals | Not started | Network, utility, CLI, and remaining wallet internals still pending. |
 
@@ -123,8 +123,8 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | History README | Partial | Normalized for dated-source and archive/current-status separation. |
 | Verification README | Partial | Normalized for verification workflow, review feedback buckets, stale-wording scan, command-example scan, command tracking, release tracking, and priority unknowns. |
 | Review feedback buckets | Framework | Added feedback taxonomy and narrow assignment guidance for private review. |
-| Stale wording scan | Partial | Targeted orientation, exchange, wallet, mining, ecosystem, node/config, old-path, developer workflow, and Source Atlas scans recorded. Remaining Source Atlas pages pending. |
-| Command example scan | Partial | Scans recorded for exchange, wallet, mining, RPC overview, node, configuration, command tracker, and developer workflow pages. Remaining Source Atlas snippets pending. |
+| Stale wording scan | Partial | Targeted orientation, exchange, wallet, mining, ecosystem, node/config, old-path, developer workflow, and Source Atlas scans recorded. Known stale source path and stale BIP9 value no longer appear in repo search. |
+| Command example scan | Partial | Scans recorded for exchange, wallet, mining, RPC overview, node, configuration, command tracker, developer workflow, and Source Atlas RPC/wallet pages. Remaining repository-wide command-term search pending. |
 | Known unknowns | Partial | Refreshed as short executive list linked to full backlog. |
 | Open questions backlog | Partial | Consolidated with priority labels, evidence needs, and public/private review blockers. |
 | Command testing status | Framework | Added command-test tracker, status labels, untested inventory, and test-record template. |
@@ -160,8 +160,8 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. Continue Source Atlas page scan.
-2. Build/test command smoke-test record framework.
+1. Repository-wide command-term search.
+2. Safe command smoke-test plan.
 3. Network RPC or P2P source review.
 4. Continue release artifact verification when full release asset data is available.
 5. Direct ecosystem checks for explorers, APIs, pools, and exchanges.
@@ -170,4 +170,4 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 **Status:** Draft
 **Primary sources checked:** Repository docs and current section indexes
-**Notes:** This dashboard should be updated whenever a major source audit, polish pass, or architecture page is added.
+**Notes:** This dashboard was refreshed after the Source Atlas stale source-link cleanup and scan-tracker updates.
