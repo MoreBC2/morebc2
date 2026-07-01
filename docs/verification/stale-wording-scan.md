@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-01
 
 ## Summary
 
@@ -76,15 +76,17 @@ For each flagged phrase, decide:
 | 2026-06-30 | Source Atlas mempool helper pages | `docs/developers/source-atlas/disconnected-transactions.md`, `docs/developers/source-atlas/mempool-entry.md` | Both pages had old source links; mempool-entry first edit was blocked, then completed with softened wording | `433ac2a`, `ef84bd0` | Source links now use current observed repository path. Both pages keep Draft status and add release-versus-main comparison as an open item. |
 | 2026-06-30 | Source Atlas transaction and block lifecycle pages | `docs/developers/source-atlas/transaction-consensus.md`, `docs/developers/source-atlas/block-acceptance.md` | Both pages had source lists without current observed repository links and lacked release-versus-main open items | `07b96c6`, `3ba46fc` | Source links now use current observed repository path. Both pages keep Draft status and add release-versus-main comparison as an open item. |
 | 2026-06-30 | Source Atlas validation interface and block storage pages | `docs/developers/source-atlas/validation-interface.md`, `docs/developers/source-atlas/block-storage.md` | Both pages had plain source lists and lacked release-versus-main open items; validation-interface first edit was blocked, then completed with softer event wording | `91a5e00`, `5a2344d` | Source links now use current observed repository path. Both pages keep Draft status and add release-versus-main comparison as an open item. |
+| 2026-07-01 | Source Atlas remaining source-link cleanup | `docs/developers/source-atlas/*` targeted pages | Known old source path and stale BIP9 value searches now return no results | Recent Source Atlas cleanup commits | Updated remaining wallet, RPC, startup, mempool, miner, hash, and block primitive pages with current observed source links and release-versus-main open items. |
 
 ## Still to scan
 
-The orientation, exchange, wallet, mining, ecosystem framework/listing, node, configuration, RPC configuration, developer workflow, chainparams, PoW, mempool helper, transaction-consensus, block-acceptance, validation-interface, and block-storage pages are in decent shape after this pass.
+The main orientation, service-facing, developer workflow, and Source Atlas source-link cleanup passes are now in decent shape.
 
 Still scan next:
 
-- Remaining Source Atlas pages with important lifecycle or RPC status.
-- Any remaining command blocks found by repository search.
+- Remaining command-shaped examples across the repo.
+- Ecosystem pages that require live checks.
+- Release asset pages when artifact data is available.
 
 ## Known acceptable uses
 
@@ -98,9 +100,9 @@ Some terms are acceptable in limited contexts:
 
 ## Next actions
 
-1. Continue Source Atlas scan for overconfident labels or stale source-ref wording.
-2. Search remaining command blocks, if any.
-3. Update documentation coverage after each scan batch.
+1. Scan remaining command-shaped examples.
+2. Update documentation coverage in small chunks.
+3. Prepare a safe command smoke-test plan.
 
 ## Related pages
 
@@ -115,4 +117,4 @@ Some terms are acceptable in limited contexts:
 
 **Status:** Draft
 **Primary sources checked:** Current MoreBC2 review workflow, coverage dashboard, targeted orientation/exchange/wallet/mining/ecosystem pages, node/configuration pages, old-path repository search, developer workflow pages, and Source Atlas source-ref scan
-**Notes:** This page now records targeted stale-wording passes through the main private-review orientation, user/service-facing framework pages, known old repository path checks, developer workflow pages, and Source Atlas source-ref checks. Remaining Source Atlas pages still need scanning before private review.
+**Notes:** This page now records targeted stale-wording passes through the main private-review orientation, user/service-facing framework pages, known old repository path checks, developer workflow pages, and Source Atlas source-ref checks. The known stale source path and stale BIP9 warning-height issue no longer appear in repository search results.
