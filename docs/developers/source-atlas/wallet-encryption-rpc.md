@@ -47,8 +47,8 @@ Reviewed behavior includes:
 - Returning a specific null-character warning path for certain passphrase mismatch cases.
 - Topping up the keypool after unlock.
 - Recording a relock time.
-- Scheduling a later wallet lock callback without holding the wallet mutex.
-- Letting a newer unlock call supersede an older scheduled lock callback.
+- Scheduling a later wallet lock event without holding the wallet mutex.
+- Letting a newer unlock call supersede an older scheduled lock event.
 
 ## walletpassphrasechange
 
@@ -123,15 +123,16 @@ No upstream comparison has been completed, so this page does not claim whether e
 - Which GUI flows map to these RPC commands?
 - Which wallet database formats or wallet types affect encryption behavior?
 - Which support warnings should be added around passphrase handling?
+- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
 
 ## Sources
 
-- `src/wallet/rpc/encrypt.cpp`
-- `src/wallet/wallet.h`
-- `src/wallet/rpc/backup.cpp`
+- Current observed `main` `src/wallet/rpc/encrypt.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/encrypt.cpp
+- Current observed `main` `src/wallet/wallet.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/wallet.h
+- Current observed `main` `src/wallet/rpc/backup.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/backup.cpp
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a first-pass encryption/passphrase RPC review. Commands have not been run. Public examples, GUI mapping, backup workflow, and upstream comparison remain open.
+**Notes:** This is a first-pass encryption/passphrase RPC review. Commands have not been run. Public examples, GUI mapping, backup workflow, upstream comparison, and release-versus-main comparison remain open.
