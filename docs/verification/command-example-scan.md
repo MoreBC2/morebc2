@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-01
 
 ## Summary
 
@@ -89,11 +89,13 @@ Priority pages:
 | 2026-06-30 | command tracker itself | `docs/verification/command-testing.md` | No blocking issue found | No change | Command tracker correctly labels entries as Placeholder, Source-observed, Locally tested, Verified, Needs recheck, or Do not publish. |
 | 2026-06-30 | developer build/test command blocks | `docs/developers/local-development.md`, `docs/developers/build-system.md`, `docs/developers/testing.md` | No blocking issue found | No change | Build and test commands are explicitly described as untested or future record shapes. Local-development page explains test-record workflow rather than verified commands. |
 | 2026-06-30 | release checking command wording | `docs/developers/release-verification.md`, `docs/developers/release-process.md` | Release-process page had stale current-release wording and old release path | `a5aaf58` | Release-process page now points to current observed release path and keeps download checking unverified. |
+| 2026-07-01 | Source Atlas RPC command inventory | `docs/developers/source-atlas/rpc-mining.md`, `docs/developers/source-atlas/rpc-blockchain.md`, `docs/developers/source-atlas/rpc-rawtransaction.md`, `docs/developers/source-atlas/rpc-mempool.md` | No blocking issue found after cleanup | Recent Source Atlas cleanup commits | RPC Source Atlas pages are source-review inventories, keep Draft status, and state that commands have not been run. Live broadcast and block/header submission remain separated from dry-run or read-only workflows. |
+| 2026-07-01 | Source Atlas wallet command inventory | `docs/developers/source-atlas/wallet-rpc.md`, `wallet-backup-import-rpc.md`, `wallet-spend-rpc.md`, `wallet-encryption-rpc.md`, `wallet-coins-rpc.md`, `wallet-transactions-rpc.md` | No blocking issue found after cleanup | Recent wallet Source Atlas cleanup commits | Wallet Source Atlas pages keep commands as source-observed inventories. Spend, key, passphrase, restore, rescan, and encryption examples remain untested and should not become beginner copy/paste guidance. |
 
 ## Still to scan
 
 - Any remaining command blocks found by repository search.
-- Source Atlas pages that include command examples or command-shaped snippets.
+- Any new user-facing command examples added after this scan.
 
 ## Known acceptable cases
 
@@ -123,5 +125,5 @@ It is acceptable to list command names when:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current MoreBC2 command tracker, RPC overview, node, wallet, mining, exchange, configuration, and developer workflow pages
-**Notes:** This page now records command-example scans across the main user/service-facing and developer workflow command pages. Remaining Source Atlas snippets should still be checked before private review.
+**Primary sources checked:** Current MoreBC2 command tracker, RPC overview, node, wallet, mining, exchange, configuration, developer workflow pages, and Source Atlas RPC/wallet pages
+**Notes:** This page now records command-example scans across the main user/service-facing, developer workflow, and Source Atlas RPC/wallet command inventory pages. Remaining repository-wide command-term searches should still be checked before private review.
