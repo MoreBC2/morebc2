@@ -200,7 +200,7 @@ Reviewed behavior includes:
 
 - Decoding the supplied block hex.
 - Updating uncommitted block structures when the previous block index is known.
-- Registering a temporary validation-interface listener to capture `BlockChecked` result for the submitted block.
+- Registering a temporary validation event listener to capture `BlockChecked` result for the submitted block.
 - Calling `ProcessNewBlock` with force processing and minimum-proof-of-work checked.
 - Returning duplicate, inconclusive, null, or BIP22-style validation results depending on outcome.
 
@@ -246,17 +246,18 @@ No upstream comparison has been completed, so this page does not claim whether m
 - Which public mining software or pool tooling actually uses `getblocktemplate` for BitcoinII today?
 - How should satoshi-vs-BC2 amount units be highlighted in service integration docs?
 - Should hidden generation RPCs be documented only in developer/testing sections?
+- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
 
 ## Sources
 
-- `src/rpc/mining.cpp`
-- `src/node/miner.h`
-- `src/node/miner.cpp`
-- `src/validationinterface.h`
-- `src/validation.cpp`
+- Current observed `main` `src/rpc/mining.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/mining.cpp
+- Current observed `main` `src/node/miner.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/miner.h
+- Current observed `main` `src/node/miner.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/miner.cpp
+- Current observed `main` `src/validationinterface.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validationinterface.h
+- Current observed `main` `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.cpp
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a first-pass mining RPC review. Commands have not been run; examples, exact operator guidance, upstream comparison, and service integration recommendations remain open.
+**Notes:** This is a first-pass mining RPC review. Commands have not been run; examples, exact operator guidance, upstream comparison, service integration recommendations, and release-versus-main comparison remain open.
