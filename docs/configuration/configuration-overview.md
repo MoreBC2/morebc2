@@ -78,10 +78,11 @@ Separate source-observed defaults from recommended operator settings.
 - Confirm platform-specific service setup.
 - Add tested configuration records for local node startup.
 - Confirm release binary names before writing copy/paste command examples.
+- Confirm canonical repository/source path before public-link polish.
 
 ## Sources
 
-- `share/examples/bitcoinII.conf`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/share/examples/bitcoinII.conf
+- `share/examples/bitcoinII.conf` in the current observed repository: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/share/examples/bitcoinII.conf
 - [Command testing status](../verification/command-testing.md)
 - [RPC configuration](rpc-configuration.md)
 - [Node configuration](node-configuration.md)
@@ -90,4 +91,4 @@ Separate source-observed defaults from recommended operator settings.
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** General config-file behavior is based on the generated example config. Platform-specific instructions, startup commands, service setup examples, and release binary names still need testing.
+**Notes:** General config-file behavior is based on the generated example config. Platform-specific instructions, startup commands, service setup examples, and release binary names still need testing. Source links use the current observed repository path, but canonical repository status still needs confirmation.
