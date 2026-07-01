@@ -79,7 +79,19 @@ Priority pages:
 
 | Date | Search term | Files checked | Issues found | Fix commit | Notes |
 |---|---|---|---|---|---|
-| TBD | TBD | TBD | TBD | TBD | TBD |
+| 2026-06-30 | `bitcoinII-cli` deposit examples | `docs/exchange/deposit-monitoring.md` | Command block needed clearer placeholder/test-tracker wording | `8e7c539` | Deposit command examples now explicitly say they are placeholder examples and link to command-testing status. |
+| 2026-06-30 | wallet command examples | `docs/wallets/wallet-guide.md` | No blocking issue found | No change | Wallet guide lists commands under command-testing status and warns sensitive/state-changing commands stay out of beginner docs until tested. |
+| 2026-06-30 | mining command examples | `docs/mining/mining-overview.md` | No blocking issue found | No change | Mining overview links command-testing status and marks block/header submission commands as not for normal user examples. |
+| 2026-06-30 | service checklist command wording | `docs/exchange/service-integration-checklist.md` | No blocking issue found | No change | Checklist says required commands must be tested and does not provide copy/paste examples. |
+
+## Still to scan
+
+- `docs/developers/rpc-overview.md`
+- `docs/verification/command-testing.md`
+- `docs/nodes/node-guide.md`
+- `docs/configuration/configuration-overview.md`
+- `docs/configuration/rpc-configuration.md`
+- Any remaining command blocks found by repository search.
 
 ## Known acceptable cases
 
@@ -92,7 +104,7 @@ It is acceptable to list command names when:
 
 ## Next actions
 
-1. Search for command terms.
+1. Search remaining command terms.
 2. Check whether each page clearly labels the command status.
 3. Move or soften risky examples if needed.
 4. Record any fixes here.
@@ -109,5 +121,5 @@ It is acceptable to list command names when:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current MoreBC2 command tracker, RPC overview, node, wallet, mining, and configuration pages
-**Notes:** This page defines the final command-example scan. It does not prove any command works.
+**Primary sources checked:** Current MoreBC2 command tracker, RPC overview, node, wallet, mining, exchange, and configuration pages
+**Notes:** This page now records the first command-example scan pass. Additional command-heavy pages still need review before private review.
