@@ -25,6 +25,7 @@ Each page should explain one important source file in plain language, link it to
 - [blockchain RPC](rpc-blockchain.md)
 - [network RPC](rpc-network.md)
 - [P2P protocol primitives](protocol.md)
+- [net connection management](net-connection-management.md)
 - [net processing handshake](net-processing-handshake.md)
 - [net processing address relay](net-processing-address-relay.md)
 - [net processing block and header relay](net-processing-block-relay.md)
@@ -72,4 +73,4 @@ Each source atlas page should include:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** The atlas starts with files already reviewed for MoreBC2 core technical pages. Network RPC, protocol primitives, net-processing handshake, address sharing, block/header sharing, transaction sharing, peer health/stale-tip checks, and send-loop slices now have first-pass source reviews. Remaining lower-level network review should focus on lower-level `net.cpp`, banman, DNS seed/addrman callers, and release-versus-main comparison.
+**Notes:** The atlas starts with files already reviewed for MoreBC2 core technical pages. Network RPC, protocol primitives, lower-level connection management, net-processing handshake, address sharing, block/header sharing, transaction sharing, peer health/stale-tip checks, and send-loop slices now have first-pass source reviews. Remaining lower-level network review should focus on banman, addrman/fixed-seed details, DNS seed caller follow-up, and release-versus-main comparison.
