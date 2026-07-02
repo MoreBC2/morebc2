@@ -30,7 +30,7 @@ RPC can be used to:
 - Build, decode, and analyze raw transactions and PSBTs.
 - Inspect mempool state and test transaction acceptance.
 
-## Verified configuration notes
+## Source-observed configuration notes
 
 The generated example configuration file includes RPC settings for:
 
@@ -305,4 +305,4 @@ For service docs, MoreBC2 should distinguish:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** Port and config-option notes are source-backed. Mining, blockchain, network, raw transaction, mempool, and wallet RPC groups have first-pass source review. Command examples are placeholders until matching local test records exist.
+**Notes:** Port and config-option notes are source-observed from generated/example configuration material. Mining, blockchain, network, raw transaction, mempool, and wallet RPC groups have first-pass source review. Command examples are placeholders until matching local test records exist.
