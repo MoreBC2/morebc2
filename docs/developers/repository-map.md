@@ -28,6 +28,7 @@ This is not a full source audit. It is a navigation aid that should be expanded 
 | `src/node/miner.*` | Candidate block-template assembly and mempool package selection | E1 partial |
 | `src/node/mini_miner.*` | Fee and ordering simulation helper | E1 partial |
 | `src/protocol.h` / `src/protocol.cpp` | Message names, message headers, service flags, address serialization, inventory helpers | E1 partial |
+| `src/net.h` / `src/net.cpp` | Lower-level connection management, local address helpers, transports, socket send/receive, seed-node/DNS-seed paths | E1 partial |
 | `src/net_processing.h` / `src/net_processing.cpp` | Peer handshake, address sharing, block/header sharing, transaction sharing, peer health checks, send-loop behavior | E1 partial |
 | `src/rpc/net.cpp` | Network RPC, peer status, ban-list, address-manager, manual peer commands | E1 partial |
 | `src/rpc/mining.cpp` | Mining RPC, candidate template, block/header submission, mining status | E1 partial |
@@ -121,6 +122,8 @@ Reviewed or partially reviewed:
 
 - `src/protocol.h`
 - `src/protocol.cpp`
+- `src/net.h`
+- `src/net.cpp`
 - `src/net_processing.h`
 - `src/net_processing.cpp`
 - `src/rpc/net.cpp`
@@ -129,6 +132,7 @@ Related MoreBC2 pages:
 
 - [Source atlas: protocol primitives](source-atlas/protocol.md)
 - [Source atlas: network RPC](source-atlas/rpc-network.md)
+- [Source atlas: connection management](source-atlas/net-connection-management.md)
 - [Source atlas: peer handshake](source-atlas/net-processing-handshake.md)
 - [Source atlas: address sharing](source-atlas/net-processing-address-relay.md)
 - [Source atlas: block and header sharing](source-atlas/net-processing-block-relay.md)
@@ -143,11 +147,11 @@ Related MoreBC2 pages:
 
 Questions:
 
-- Which lower-level connection-management behavior in `src/net.cpp` should become user-facing node documentation?
 - Which banman behavior needs a separate review?
-- Which DNS seed and addrman paths should be connected to startup and node-operation docs?
+- Which addrman and fixed-seed paths should be reviewed more deeply?
 - Which P2P details differ, if any, between current `main` and `v29.1.0`?
 - Which network details should stay developer-only rather than appearing in service-provider guides?
+- Which connection-management details belong in user-facing node troubleshooting docs?
 
 ### Wallet startup and lifecycle
 
@@ -356,4 +360,4 @@ Questions:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This map was refreshed after adding network Source Atlas slices through the send-loop review. Target lists are not claims of implementation details until reviewed.
+**Notes:** This map was refreshed after adding network Source Atlas slices through lower-level connection-management review. Target lists are not claims of implementation details until reviewed.
