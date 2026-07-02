@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-02
 
 ## Summary
 
@@ -14,10 +14,20 @@ This section is still a framework. It should not be sent as final exchange docum
 
 ## Current pages
 
+### BC2 integration package
+
 - [Exchange integration package](integration-package.md)
 - [Exchange operator guide](operator-guide.md)
 - [Deposit monitoring](deposit-monitoring.md)
 - [Service integration checklist](service-integration-checklist.md)
+
+### Listing readiness and exchange research
+
+- [Native coin exchange listing guide](native-coin-listing-guide.md)
+- [Exchange listing target matrix](exchange-listing-targets.md)
+- [Exchange readiness checklist](exchange-readiness-checklist.md)
+- [Exchange listing packet template](listing-packet-template.md)
+- [Why native coins get rejected by exchanges](why-native-coins-get-rejected.md)
 
 ## Source-backed anchors
 
@@ -56,6 +66,7 @@ This section is still a framework. It should not be sent as final exchange docum
 
 ## Rules
 
+- Treat BC2 as a native coin, not a token, unless official sources say otherwise.
 - Do not recommend confirmation counts until a policy is source-backed or clearly labeled as a draft risk model.
 - Do not list a service as active without direct current checking.
 - Do not present untested RPC commands as production instructions.
@@ -63,6 +74,7 @@ This section is still a framework. It should not be sent as final exchange docum
 - Do not recommend exposing RPC publicly.
 - Keep release-verification status visible.
 - Keep technical-contact status visible until confirmed from official or maintainer sources.
+- Treat third-party listing-fee estimates as unconfirmed unless the exchange publishes the fee directly.
 
 ## Related pages
 
@@ -76,4 +88,4 @@ This section is still a framework. It should not be sent as final exchange docum
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This section has source-backed anchors, but it remains a framework. Release verification, confirmation policy, contact process, direct ecosystem checks, and tested RPC examples are still required before final service-provider use.
+**Notes:** This section has source-backed anchors and first-pass exchange listing research, but it remains a framework. Release verification, confirmation policy, contact process, direct ecosystem checks, and tested RPC examples are still required before final service-provider use.
