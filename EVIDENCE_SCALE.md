@@ -4,11 +4,13 @@ The evidence scale explains how much confidence readers should place in a claim.
 
 A page can contain multiple claims with different evidence levels. Use the strongest evidence available, and label uncertainty clearly.
 
+These evidence labels are not the same as page status. A Draft page may contain source-backed notes, and a page should not be marked Verified until the page-level verification standard is met.
+
 ## Evidence levels
 
-### E1 — Source Code Verified
+### E1 — Source-code evidence
 
-The claim is verified directly against current BitcoinII source code.
+The claim is checked directly against current BitcoinII source code.
 
 Use for:
 
@@ -23,9 +25,9 @@ Example:
 
 > Target block spacing is defined in source as `10 * 60` seconds.
 
-### E2 — Release Verified
+### E2 — Release-page evidence
 
-The claim is verified against official release notes, release assets, tags, or related release metadata.
+The claim is checked against official release notes, release assets, tags, or related release metadata.
 
 Use for:
 
@@ -35,9 +37,9 @@ Use for:
 - Release notes
 - Checksums/signatures if published with releases
 
-### E3 — Official Documentation Verified
+### E3 — Official-document evidence
 
-The claim is verified against an official website, official documentation, or official project repository README.
+The claim is checked against an official website, official documentation, or official project repository README.
 
 Use for:
 
@@ -46,9 +48,9 @@ Use for:
 - General project positioning
 - User-facing statements
 
-### E4 — Live Network / Explorer Verified
+### E4 — Explorer or live-network evidence
 
-The claim is verified against a public explorer, node output, or live network observation.
+The claim is checked against a public explorer, node output, or live network observation.
 
 Use for:
 
@@ -61,9 +63,9 @@ Caution:
 
 Live observations can change. Include the date checked.
 
-### E5 — Tested Locally
+### E5 — Local-test evidence
 
-The claim is verified by running commands or software locally.
+The claim is checked by running commands or software locally.
 
 Use for:
 
@@ -76,7 +78,7 @@ Caution:
 
 Include operating system, version, command used, and date tested.
 
-### E6 — Developer Statement
+### E6 — Developer statement
 
 The claim is based on a public statement from a relevant developer or maintainer.
 
@@ -90,7 +92,7 @@ Caution:
 
 A developer statement is not the same as implemented code.
 
-### E7 — Community Discussion
+### E7 — Community discussion
 
 The claim comes from community discussion, Discord, Reddit, Telegram, or similar sources.
 
@@ -106,7 +108,7 @@ Caution:
 
 Community discussion must not be presented as current implementation.
 
-### E8 — Third-Party Summary
+### E8 — Third-party summary
 
 The claim comes from an external article, aggregator, exchange page, or non-official listing.
 
@@ -125,7 +127,7 @@ Verify against stronger sources when possible.
 
 ### High confidence
 
-Most important claims are E1, E2, or E3.
+Most important claims are E1, E2, or E3 and have been reviewed for the target page.
 
 ### Medium confidence
 
@@ -145,7 +147,7 @@ Use wording like:
 
 - Needs verification.
 - Based on community discussion only.
-- Not currently verified against source code.
+- Not currently checked against source code.
 - This should not be treated as implemented behavior.
 - Current source code has not yet been checked.
 
