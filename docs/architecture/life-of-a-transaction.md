@@ -2,7 +2,7 @@
 
 **Category:** Architecture
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-02
 
 ## Summary
 
@@ -112,7 +112,19 @@ Reviewed RPC commands expose parts of this state through `getrawmempool`, `getme
 
 The reviewed broadcast path relays through peer manager when relay is requested.
 
-MoreBC2 has not yet audited the full P2P relay path, so this page does not document peer announcement, inventory, or compact-block behavior in detail.
+The first-pass P2P transaction relay source slice now documents:
+
+- transaction relay setup from handshake
+- transaction inventory announcements
+- txid versus wtxid relay behavior
+- transaction relay being skipped during initial block download
+- full `tx` message handling
+- interaction with the transaction download manager
+- valid and invalid transaction post-processing
+- orphan transaction reconsideration
+- related `mempool`, bloom filter, `feefilter`, and `notfound` behavior
+
+This still does not mean network propagation is guaranteed. Relay behavior remains policy-bound, peer-dependent, and not locally tested by MoreBC2.
 
 ## Step 7: Mining and block inclusion
 
@@ -157,7 +169,7 @@ Reviewed reorg behavior includes:
 ## What is not fully reviewed yet
 
 - Lower-level wallet transaction construction internals.
-- P2P transaction relay internals.
+- Transaction request scheduling and send-loop behavior.
 - Fee estimation.
 - Replacement policy in full detail.
 - Tested service-safe examples for transaction lookup, dry-run checks, and broadcast.
@@ -174,6 +186,7 @@ Reviewed reorg behavior includes:
 - [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
 - [Source atlas: mempool accept](../developers/source-atlas/mempool-accept.md)
 - [Source atlas: txmempool](../developers/source-atlas/txmempool.md)
+- [Source atlas: net processing transaction relay](../developers/source-atlas/net-processing-transaction-relay.md)
 - [Source atlas: block template assembly](../developers/source-atlas/miner.md)
 - [Source atlas: block lifecycle](../developers/source-atlas/block-acceptance.md)
 
@@ -181,4 +194,4 @@ Reviewed reorg behavior includes:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This explainer is built from reviewed wallet RPC, raw transaction RPC, mempool RPC, mempool acceptance, transaction acceptance, block-template, block acceptance, and reorg notes. Lower-level wallet internals, P2P relay, fee estimation, and tested service examples still need deeper review.
+**Notes:** This explainer is built from reviewed wallet RPC, raw transaction RPC, mempool RPC, mempool acceptance, transaction acceptance, P2P transaction relay, block-template, block acceptance, and reorg notes. Lower-level wallet internals, transaction send-loop behavior, fee estimation, and tested service examples still need deeper review.
