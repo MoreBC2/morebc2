@@ -46,6 +46,7 @@ Known use from review:
 - Block and header sharing.
 - Transaction sharing.
 - Peer health and stale-tip checks.
+- Peer send-loop behavior.
 
 Related pages:
 
@@ -62,10 +63,10 @@ Related pages:
 - [Source atlas: block and header sharing](source-atlas/net-processing-block-relay.md)
 - [Source atlas: transaction sharing](source-atlas/net-processing-transaction-relay.md)
 - [Source atlas: peer health and stale-tip checks](source-atlas/net-processing-peer-eviction.md)
+- [Source atlas: send loop](source-atlas/net-processing-send-loop.md)
 
 Still needed:
 
-- Send-loop behavior.
 - Lower-level `src/net.cpp` connection management.
 - Banman behavior.
 - DNS seed and addrman caller paths.
@@ -366,4 +367,4 @@ When adding a directory to this guide, include:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This guide was refreshed after adding first-pass network Source Atlas slices. It remains conservative and only gives detailed notes for files already reviewed.
+**Notes:** This guide was refreshed after adding first-pass network Source Atlas slices through the send-loop review. It remains conservative and only gives detailed notes for files already reviewed.
