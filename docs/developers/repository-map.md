@@ -28,7 +28,7 @@ This is not a full source audit. It is a navigation aid that should be expanded 
 | `src/node/miner.*` | Candidate block-template assembly and mempool package selection | E1 partial |
 | `src/node/mini_miner.*` | Fee and ordering simulation helper | E1 partial |
 | `src/protocol.h` / `src/protocol.cpp` | Message names, message headers, service flags, address serialization, inventory helpers | E1 partial |
-| `src/net_processing.h` / `src/net_processing.cpp` | Peer handshake, address sharing, block/header sharing, transaction sharing, peer health checks | E1 partial |
+| `src/net_processing.h` / `src/net_processing.cpp` | Peer handshake, address sharing, block/header sharing, transaction sharing, peer health checks, send-loop behavior | E1 partial |
 | `src/rpc/net.cpp` | Network RPC, peer status, ban-list, address-manager, manual peer commands | E1 partial |
 | `src/rpc/mining.cpp` | Mining RPC, candidate template, block/header submission, mining status | E1 partial |
 | `src/rpc/blockchain.cpp` | Blockchain RPC, block lookup, pruning, UTXO scans, chainstate status | E1 partial |
@@ -134,6 +134,7 @@ Related MoreBC2 pages:
 - [Source atlas: block and header sharing](source-atlas/net-processing-block-relay.md)
 - [Source atlas: transaction sharing](source-atlas/net-processing-transaction-relay.md)
 - [Source atlas: peer health and stale-tip checks](source-atlas/net-processing-peer-eviction.md)
+- [Source atlas: peer send loop](source-atlas/net-processing-send-loop.md)
 - [Architecture overview](../architecture/architecture-overview.md)
 - [Life of a transaction](../architecture/life-of-a-transaction.md)
 - [Life of a block](../architecture/life-of-a-block.md)
@@ -142,7 +143,6 @@ Related MoreBC2 pages:
 
 Questions:
 
-- Which send-loop behavior should be reviewed next?
 - Which lower-level connection-management behavior in `src/net.cpp` should become user-facing node documentation?
 - Which banman behavior needs a separate review?
 - Which DNS seed and addrman paths should be connected to startup and node-operation docs?
@@ -216,7 +216,7 @@ Reviewed or partially reviewed:
 - `src/txmempool.h`
 - `src/kernel/mempool_entry.h`
 - Mempool acceptance portions of `src/validation.cpp`
-- Transaction-sharing portions of `src/net_processing.cpp`
+- Transaction-sharing and send-loop portions of `src/net_processing.cpp`
 
 Related MoreBC2 pages:
 
@@ -226,14 +226,15 @@ Related MoreBC2 pages:
 - [Source atlas: mempool source](source-atlas/txmempool.md)
 - [Source atlas: mempool and transaction broadcast RPC](source-atlas/rpc-mempool.md)
 - [Source atlas: transaction sharing](source-atlas/net-processing-transaction-relay.md)
+- [Source atlas: peer send loop](source-atlas/net-processing-send-loop.md)
 
 Questions:
 
 - What replacement-policy details still need review?
 - Which mempool defaults should be documented for operators?
 - Which package acceptance behaviors need deeper explanation?
-- Which transaction-sharing send-loop behavior needs a separate page?
 - Which RPCs expose mempool/package acceptance state?
+- Which send-loop details should stay developer-only?
 
 ### Block storage, pruning, and reindex
 
@@ -355,4 +356,4 @@ Questions:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This map was refreshed after adding network Source Atlas slices for protocol primitives, network RPC, peer handshake, address sharing, block/header sharing, transaction sharing, and peer health/stale-tip checks. Target lists are not claims of implementation details until reviewed.
+**Notes:** This map was refreshed after adding network Source Atlas slices through the send-loop review. Target lists are not claims of implementation details until reviewed.
