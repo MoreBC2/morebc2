@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-01
 
 ## Summary
 
@@ -12,7 +12,7 @@ This page documents only source-backed general mining behavior and leaves pool/s
 
 Mining command examples are not verified until local test records exist.
 
-## What is verified from source
+## What current source review shows
 
 Current checked source shows:
 
