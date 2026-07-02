@@ -2,7 +2,7 @@
 
 **Category:** Project maintenance
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-07-01
 
 ## Summary
 
@@ -24,14 +24,14 @@ The numbers below are manually maintained for now. If MoreBC2 later becomes a st
 
 | Evidence level | Current use |
 |---|---|
-| E1 — Source Code Verified | Network specs, consensus behavior, genesis values, hashing path |
-| E2 — Release Verified | Release observations |
-| E3 — Official Documentation Verified | README/project description/license |
-| E4 — Explorer Verified | Not yet used |
-| E5 — Tested Locally | Not yet used |
-| E6 — Developer Statement | Not yet used |
-| E7 — Community Discussion | Used only for open discussion context, not implementation |
-| E8 — Third-Party Summary | Not yet used in core docs |
+| E1 — Source-code evidence | Network specs, consensus behavior, genesis values, hashing path |
+| E2 — Release-page evidence | Release observations needing recheck |
+| E3 — Official-document evidence | README/project description/license |
+| E4 — Explorer or live-network evidence | Not yet used |
+| E5 — Local-test evidence | Not yet used |
+| E6 — Developer statement | Not yet used |
+| E7 — Community discussion | Used only for open discussion context, not implementation |
+| E8 — Third-party summary | Not yet used in core docs |
 
 ## Priority verification targets
 
@@ -62,4 +62,4 @@ Eventually this page should show:
 
 **Status:** Draft
 **Primary sources checked:** Not applicable
-**Notes:** This is a project-maintenance dashboard, not a BitcoinII technical source.
+**Notes:** This is a project-maintenance dashboard, not a BitcoinII technical source. Evidence labels are confidence categories, not page-level Verified status.
