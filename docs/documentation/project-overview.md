@@ -2,15 +2,15 @@
 
 **Category:** Documentation
 **Status:** Needs Review
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-07-01
 
 ## Summary
 
 BitcoinII is a peer-to-peer cryptocurrency network and BitcoinII Core is the reference node and wallet software for connecting to that network.
 
-This page only includes statements that were checked against public BitcoinII project resources or source code. Anything still uncertain should remain listed under **Open items**.
+This page only includes statements checked against public BitcoinII project resources or source code during prior review. Anything still uncertain should remain listed under **Open items**.
 
-## Verified statements
+## Source-backed statements needing review
 
 ### Project name
 
@@ -32,11 +32,12 @@ The source file header in `src/kernel/chainparams.cpp` says BitcoinII was forked
 
 The repository README also describes BitcoinII as a “Sister Chain” that currently follows Bitcoin development and upgrade paths unless Bitcoin development ceases.
 
-## Official/public resources checked
+## Public resources checked during prior review
 
 - Website: https://bitcoin-ii.org/
-- Repository/release path shown in project README: https://github.com/BitcoinII-Dev/BitcoinII
-- Release page: https://github.com/BitcoinII-Dev/BitcoinII/releases
+- Current observed repository/release path: https://github.com/Bitcoin-II/BitcoinII-Core
+- Legacy or redirected repository path observed in older docs: https://github.com/BitcoinII-Dev/BitcoinII
+- Current observed release page: https://github.com/Bitcoin-II/BitcoinII-Core/releases
 - Source file checked: `src/kernel/chainparams.cpp`
 - README checked: `README.md`
 
@@ -50,10 +51,11 @@ These should not be filled in from memory:
 - Official X account review.
 - Official Reddit link review.
 - Current maintainer/contact process.
-- Whether `BitcoinII-Dev/BitcoinII` is the intended canonical GitHub path long-term.
+- Whether `Bitcoin-II/BitcoinII-Core` is the intended canonical GitHub path long-term.
+- How older `BitcoinII-Dev/BitcoinII` links should be described after redirect review.
 
 ## Verification
 
 **Status:** Needs Review
-**Primary sources checked:** Yes
-**Notes:** The statements above are intentionally narrow. The ticker, social links, and maintainer/contact details need further confirmation before this page is marked Verified.
+**Primary sources checked:** Partially
+**Notes:** The statements above are intentionally narrow and remain under review. The ticker, canonical repository path, social links, and maintainer/contact details need further confirmation before this page is marked Verified.
