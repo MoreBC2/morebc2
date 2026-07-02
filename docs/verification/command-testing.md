@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-07-01
+**Last reviewed:** 2026-07-02
 
 ## Summary
 
@@ -49,10 +49,30 @@ The first recommended testing order is documented in the [command smoke-test pla
 | Command | Current status | Notes |
 |---|---|---|
 | `bitcoinII-cli getblockchaininfo` | Placeholder | Phase 1 smoke-test candidate. Needs disposable/local node record. |
-| `bitcoinII-cli getnetworkinfo` | Placeholder | Phase 1 smoke-test candidate. Network RPC source review is still pending. |
+| `bitcoinII-cli getnetworkinfo` | Placeholder | Phase 1 smoke-test candidate. Network RPC source review exists, but command is not locally tested. |
 | `bitcoinII-cli getblockcount` | Placeholder | Phase 1 smoke-test candidate. Needs basic node command record. |
 | `bitcoinII-cli getbestblockhash` | Placeholder | Phase 1 smoke-test candidate. Needs basic node command record. |
 | `bitcoinII-cli getdifficulty` | Placeholder | Needs node command record and network context. |
+| `bitcoinII-cli getmempoolinfo` | Placeholder | Phase 1 smoke-test candidate. Needs local node record. |
+| `bitcoinII-cli getmininginfo` | Placeholder | Phase 1 smoke-test candidate. Needs node command record. |
+
+### Network and peer status commands
+
+Network RPC source review exists, but these commands still need local test records before use as instructions.
+
+| Command | Current status | Notes |
+|---|---|---|
+| `bitcoinII-cli getconnectioncount` | Placeholder | Read-only network status candidate after local node is running. |
+| `bitcoinII-cli getpeerinfo` | Placeholder | Read-only peer detail candidate. Output depends on live peer state. |
+| `bitcoinII-cli getnettotals` | Placeholder | Read-only traffic summary candidate. Needs local node record. |
+| `bitcoinII-cli getnodeaddresses` | Placeholder | Address-manager output depends on node state and peer discovery. |
+| `bitcoinII-cli getaddrmaninfo` | Placeholder | Address-manager summary; keep developer/operator-focused until tested. |
+| `bitcoinII-cli ping` | Placeholder | State-changing peer ping request, but low-risk compared with wallet or chain-data commands. Needs local node record. |
+| `bitcoinII-cli setnetworkactive true` | Do not publish | Changes network-active state. Keep out of beginner docs until a dedicated operator workflow exists. |
+| `bitcoinII-cli addnode ...` | Do not publish | Changes manual peer state. Needs careful operator context. |
+| `bitcoinII-cli disconnectnode ...` | Do not publish | Disconnects peers. Operator-only after testing. |
+| `bitcoinII-cli setban ...` | Do not publish | Alters ban list. Operator-only after testing and banman review. |
+| `bitcoinII-cli clearbanned` | Do not publish | Alters ban list. Operator-only after testing and banman review. |
 
 ### Wallet status and address commands
 
@@ -82,7 +102,6 @@ These commands should not appear in beginner docs until they are tested, caveate
 
 | Command | Current status | Notes |
 |---|---|---|
-| `bitcoinII-cli getmininginfo` | Placeholder | Phase 1 smoke-test candidate. Needs node command record. |
 | `bitcoinII-cli getblocktemplate '{"rules":["segwit"]}'` | Placeholder | Needs local node record and context. Do after basic node checks. |
 | `bitcoinII-cli submitblock <hex>` | Do not publish | Advanced/live path; avoid normal docs until dedicated safe workflow exists. |
 | `bitcoinII-cli submitheader <hex>` | Do not publish | Advanced/live path; avoid normal docs until dedicated safe workflow exists. |
@@ -99,14 +118,13 @@ These commands should not appear in beginner docs until they are tested, caveate
 | `bitcoinII-cli finalizepsbt <psbt>` | Placeholder | Needs harmless PSBT fixture. |
 | `bitcoinII-cli signrawtransactionwithkey ...` | Do not publish | Handles supplied private key material; avoid normal docs. |
 
-### Mempool and relay commands
+### Mempool and transaction-sharing commands
 
 | Command | Current status | Notes |
 |---|---|---|
 | `bitcoinII-cli testmempoolaccept '["signedhex"]'` | Placeholder | Phase 3 smoke-test candidate only after harmless fixture exists. |
 | `bitcoinII-cli sendrawtransaction <hex>` | Placeholder | Live submission path; keep out of early smoke tests except regtest-only plan. |
 | `bitcoinII-cli getrawmempool true` | Placeholder | Needs local node record. |
-| `bitcoinII-cli getmempoolinfo` | Placeholder | Phase 1 smoke-test candidate. Needs local node record. |
 | `bitcoinII-cli getmempoolentry <txid>` | Placeholder | Needs mempool fixture. |
 | `bitcoinII-cli submitpackage ...` | Do not publish | Experimental/advanced; avoid normal docs until deeper review and tests. |
 
@@ -141,6 +159,7 @@ bitcoinII-cli example
 Once a command has a test record:
 
 - Basic node commands can move into node/configuration docs.
+- Network status commands can move into node/operator docs.
 - Wallet commands can move into wallet docs.
 - Read-only service commands can move into exchange/service docs.
 - Raw transaction and PSBT examples can move into developer docs.
@@ -149,5 +168,5 @@ Once a command has a test record:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current MoreBC2 RPC, wallet, node, mining, configuration pages, and command smoke-test plan
-**Notes:** This page is a tracking tool. It does not prove that any listed command works until a test record is added.
+**Primary sources checked:** Current MoreBC2 RPC, wallet, node, mining, configuration pages, command smoke-test plan, and first-pass network RPC source review
+**Notes:** This page is a tracking tool. It does not prove that any listed command works until a test record is added. It was refreshed after network RPC source review, but no network command is locally tested yet.
