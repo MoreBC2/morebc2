@@ -20,24 +20,26 @@ Architecture pages should stay conservative. If a relationship has not been veri
 - [Life of a reorganization](life-of-a-reorg.md)
 - [Block validation flow](block-validation-flow.md)
 - [Mempool flow](mempool-flow.md)
+- [Peer communication model](peer-communication-model.md)
 
 ## P2P Source Atlas support
 
-A standalone peer-communication architecture page is still pending, but Source Atlas now has first-pass P2P slices for:
+Peer communication now has a Draft architecture model and first-pass Source Atlas support for:
 
 - [P2P protocol primitives](../developers/source-atlas/protocol.md)
 - [Network RPC](../developers/source-atlas/rpc-network.md)
+- [Net connection management](../developers/source-atlas/net-connection-management.md)
 - [Net processing handshake](../developers/source-atlas/net-processing-handshake.md)
 - [Net processing address relay](../developers/source-atlas/net-processing-address-relay.md)
 - [Net processing block and header relay](../developers/source-atlas/net-processing-block-relay.md)
 - [Net processing transaction relay](../developers/source-atlas/net-processing-transaction-relay.md)
 - [Net processing peer eviction and stale-tip checks](../developers/source-atlas/net-processing-peer-eviction.md)
+- [Net processing send loop](../developers/source-atlas/net-processing-send-loop.md)
 
 These pages are source-observed first-pass reviews, not live-network tests or final protocol specifications.
 
 ## Planned pages
 
-- Peer communication model
 - Node lifecycle
 - RPC flow
 - Wallet flow
@@ -55,4 +57,4 @@ These pages are source-observed first-pass reviews, not live-network tests or fi
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This section is being created as a framework for source-backed architecture documentation. P2P behavior now has Source Atlas support, but a dedicated architecture flow page is still pending.
+**Notes:** This section is being created as a framework for source-backed architecture documentation. P2P behavior now has both Source Atlas support and a Draft architecture model, but live testing and release comparison remain pending.
