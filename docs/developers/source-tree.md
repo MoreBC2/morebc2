@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-02
 
 ## Summary
 
@@ -25,6 +25,10 @@ Currently reviewed or partially reviewed files:
 - `src/txmempool.cpp`
 - `src/txmempool.h`
 - `src/hash.h`
+- `src/protocol.h`
+- `src/protocol.cpp`
+- `src/net_processing.h`
+- `src/net_processing.cpp`
 
 Known use from review:
 
@@ -36,6 +40,12 @@ Known use from review:
 - Mempool acceptance paths.
 - Mempool storage and indexing.
 - Hash helper paths.
+- Network message primitives.
+- Peer handshake and early feature negotiation.
+- Address sharing.
+- Block and header sharing.
+- Transaction sharing.
+- Peer health and stale-tip checks.
 
 Related pages:
 
@@ -44,7 +54,22 @@ Related pages:
 - [Consensus model](../architecture/consensus-model.md)
 - [Block validation flow](../architecture/block-validation-flow.md)
 - [Mempool flow](../architecture/mempool-flow.md)
+- [Architecture overview](../architecture/architecture-overview.md)
 - [Source atlas: validation interface](source-atlas/validation-interface.md)
+- [Source atlas: protocol primitives](source-atlas/protocol.md)
+- [Source atlas: peer handshake](source-atlas/net-processing-handshake.md)
+- [Source atlas: address sharing](source-atlas/net-processing-address-relay.md)
+- [Source atlas: block and header sharing](source-atlas/net-processing-block-relay.md)
+- [Source atlas: transaction sharing](source-atlas/net-processing-transaction-relay.md)
+- [Source atlas: peer health and stale-tip checks](source-atlas/net-processing-peer-eviction.md)
+
+Still needed:
+
+- Send-loop behavior.
+- Lower-level `src/net.cpp` connection management.
+- Banman behavior.
+- DNS seed and addrman caller paths.
+- Release-versus-main comparison.
 
 ### `src/node/`
 
@@ -91,6 +116,7 @@ Currently reviewed or partially reviewed files:
 
 - `src/rpc/mining.cpp`
 - `src/rpc/blockchain.cpp`
+- `src/rpc/net.cpp`
 - `src/rpc/rawtransaction.cpp`
 - `src/rpc/mempool.cpp`
 
@@ -106,6 +132,8 @@ Known use from review:
 - Pruning and block-data RPCs.
 - UTXO set and descriptor scan RPCs.
 - Chainstate and deployment status RPCs.
+- Network status and peer inspection RPCs.
+- Address manager, ban-list, manual peer, and hidden network-test RPCs.
 - Raw transaction lookup and decoding RPCs.
 - Unsigned transaction construction RPCs.
 - Explicit-key signing RPCs.
@@ -118,6 +146,7 @@ Related pages:
 
 - [Source atlas: mining RPC](source-atlas/rpc-mining.md)
 - [Source atlas: blockchain RPC](source-atlas/rpc-blockchain.md)
+- [Source atlas: network RPC](source-atlas/rpc-network.md)
 - [Source atlas: raw transaction RPC](source-atlas/rpc-rawtransaction.md)
 - [Source atlas: mempool and transaction broadcast RPC](source-atlas/rpc-mempool.md)
 - [Source atlas: block template assembly](source-atlas/miner.md)
@@ -126,7 +155,7 @@ Related pages:
 
 Still needed:
 
-- Network RPC files.
+- Remaining RPC groups.
 - Remaining RPC examples tested against a local node.
 - Service-safe RPC command recommendations.
 
@@ -304,9 +333,9 @@ Known use from review:
 
 These areas should be mapped later:
 
-- `src/net.*`
-- `src/net_processing.*`
-- `src/protocol.*`
+- lower-level `src/net.cpp` and `src/net.h`
+- banman-related files
+- DNS seed and addrman caller paths
 - other `src/rpc/` files
 - other `src/wallet/` files
 - `src/qt/`
@@ -337,4 +366,4 @@ When adding a directory to this guide, include:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This guide is intentionally conservative and only gives detailed notes for files already reviewed.
+**Notes:** This guide was refreshed after adding first-pass network Source Atlas slices. It remains conservative and only gives detailed notes for files already reviewed.
