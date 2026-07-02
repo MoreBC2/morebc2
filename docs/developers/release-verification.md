@@ -2,7 +2,7 @@
 
 **Category:** Developer guide
 **Status:** Draft
-**Last reviewed:** 2026-07-01
+**Last reviewed:** 2026-07-02
 
 ## Summary
 
@@ -32,12 +32,14 @@ If any step is missing, document the gap clearly.
 
 ## Current finding
 
-MoreBC2 has checked public GitHub release pages during prior review, a source-tree verification helper, source-ref comparison, a release-process document, and one workflow related to a macOS artifact.
+MoreBC2 rechecked the public GitHub release page on 2026-07-02 after private-review audit feedback flagged release-currentness and date wording.
 
-Current observations needing recheck:
+Current observations:
 
-- Observed release path during prior review: `https://github.com/Bitcoin-II/BitcoinII-Core/releases`.
-- Observed release title during prior review: `BitcoinII Core v29.1.0`.
+- Observed release path: `https://github.com/Bitcoin-II/BitcoinII-Core/releases`.
+- Observed release title: `BitcoinII Core v29.1.0`.
+- The `v29.1.0` GitHub release page showed a `Latest` marker during the 2026-07-02 recheck.
+- The rendered page showed release timestamp text as `27 Nov 04:22`, without a year in the visible unauthenticated HTML.
 - The `v29.1.0` GitHub release page showed a GitHub verified commit marker and assets count during that pass.
 - The source tree includes `contrib/verify-binaries/README.md`, which describes a checksum-and-signature model using `SHA256SUMS` and `SHA256SUMS.asc`.
 - The source tree includes `doc/release-process.md`, which describes Guix build attestations, signed tags, checksum files, and signature files.
@@ -45,7 +47,7 @@ Current observations needing recheck:
 
 Current caveats:
 
-- MoreBC2 has not rechecked the release page after the private-review audit flagged currentness/date risk.
+- MoreBC2 has not resolved the exact `v29.1.0` release timestamp from API metadata or an authenticated GitHub view.
 - MoreBC2 has not confirmed that the GitHub release path is canonical.
 - MoreBC2 has not confirmed the full `v29.1.0` release asset list.
 - MoreBC2 has not confirmed that current BitcoinII releases publish `SHA256SUMS` and `SHA256SUMS.asc`.
@@ -111,7 +113,7 @@ Use [Release artifact checklist](../verification/release-artifact-checklist.md) 
 
 | Version | Release path | Hash checked | Checksum file | Signature | Status | Notes |
 |---|---|---:|---|---|---|---|
-| v29.1.0 | `Bitcoin-II/BitcoinII-Core` | No | Needs review | Needs review | Needs Review | Observed during prior review; currentness/date, source comparison, and artifact checklist still need direct recheck. |
+| v29.1.0 | `Bitcoin-II/BitcoinII-Core` | No | Needs review | Needs review | Needs Review | Rechecked 2026-07-02; GitHub page showed Latest marker, but exact timestamp, full asset list, checksums, and signatures still need direct verification. |
 | v0.27.1 | redirected legacy path | No | Needs review | Needs review | Needs Review | Observed on redirected legacy repository path; not confirmed as current canonical path. |
 | v0.27.0 | redirected legacy path | No | Needs review | Needs review | Needs Review | Genesis release observed on redirected legacy path; not independently verified. |
 
@@ -178,7 +180,7 @@ MoreBC2 should track whether BitcoinII releases meet that kind of standard witho
 
 ## Open questions
 
-- Recheck the observed `v29.1.0` release page date, currentness, and asset list.
+- Confirm the exact `v29.1.0` release timestamp with API metadata or authenticated GitHub view.
 - Is `Bitcoin-II/BitcoinII-Core` the canonical release repository?
 - Are BitcoinII release tags signed?
 - Are BitcoinII release commits GitHub-verified for all current releases?
@@ -194,4 +196,4 @@ MoreBC2 should track whether BitcoinII releases meet that kind of standard witho
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This guide defines the release verification standard and records prior release-page, source-comparison, workflow, and process-document observations. It still does not verify a specific BitcoinII release binary, and release currentness/date observations need recheck.
+**Notes:** This guide defines the release verification standard and records release-page, source-comparison, workflow, and process-document observations. The release page was rechecked on 2026-07-02, but this still does not verify a specific BitcoinII release binary.
