@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-01
 
 ## Summary
 
@@ -12,7 +12,7 @@ The generated example configuration file is `share/examples/bitcoinII.conf`.
 
 This page is source-observed from configuration material. It is not a tested platform setup guide yet.
 
-## What is verified from the generated config
+## What the generated config says
 
 The generated example config states that:
 
@@ -91,4 +91,4 @@ Separate source-observed defaults from recommended operator settings.
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** General config-file behavior is based on the generated example config. Platform-specific instructions, startup commands, service setup examples, and release binary names still need testing. Source links use the current observed repository path, but canonical repository status still needs confirmation.
+**Notes:** General config-file behavior is source-observed from the generated example config. Platform-specific instructions, startup commands, service setup examples, and release binary names still need testing. Source links use the current observed repository path, but canonical repository status still needs confirmation.
