@@ -85,12 +85,13 @@ Then read the current network group:
 
 17. [protocol primitives](source-atlas/protocol.md)
 18. [network RPC](source-atlas/rpc-network.md)
-19. [peer handshake](source-atlas/net-processing-handshake.md)
-20. [address sharing](source-atlas/net-processing-address-relay.md)
-21. [block and header sharing](source-atlas/net-processing-block-relay.md)
-22. [transaction sharing](source-atlas/net-processing-transaction-relay.md)
-23. [peer health and stale-tip checks](source-atlas/net-processing-peer-eviction.md)
-24. [peer send loop](source-atlas/net-processing-send-loop.md)
+19. [connection management](source-atlas/net-connection-management.md)
+20. [peer handshake](source-atlas/net-processing-handshake.md)
+21. [address sharing](source-atlas/net-processing-address-relay.md)
+22. [block and header sharing](source-atlas/net-processing-block-relay.md)
+23. [transaction sharing](source-atlas/net-processing-transaction-relay.md)
+24. [peer health and stale-tip checks](source-atlas/net-processing-peer-eviction.md)
+25. [peer send loop](source-atlas/net-processing-send-loop.md)
 
 Goal:
 
@@ -135,6 +136,7 @@ Read based on what you are trying to do:
 - [Node configuration](../configuration/node-configuration.md)
 - [RPC configuration](../configuration/rpc-configuration.md)
 - [Network RPC source review](source-atlas/rpc-network.md)
+- [Connection management source review](source-atlas/net-connection-management.md)
 - [Source atlas index](source-atlas/README.md)
 
 ### Wallet users and maintainers
@@ -178,4 +180,4 @@ Start by improving one of these:
 
 **Status:** Draft
 **Primary sources checked:** Repository navigation and current documentation structure
-**Notes:** This reading order was refreshed after the network Source Atlas slices through the send-loop review and the exchange-listing documentation batch were added. It should be updated whenever major sections are added, renamed, or reorganized.
+**Notes:** This reading order was refreshed after the network Source Atlas slices through lower-level connection management and the exchange-listing documentation batch were added. It should be updated whenever major sections are added, renamed, or reorganized.
