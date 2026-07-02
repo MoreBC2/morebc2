@@ -28,6 +28,7 @@ Each page should explain one important source file in plain language, link it to
 - [net processing handshake](net-processing-handshake.md)
 - [net processing address relay](net-processing-address-relay.md)
 - [net processing block and header relay](net-processing-block-relay.md)
+- [net processing transaction relay](net-processing-transaction-relay.md)
 - [raw transaction RPC](rpc-rawtransaction.md)
 - [mempool and transaction broadcast RPC](rpc-mempool.md)
 - [wallet startup](wallet-startup.md)
@@ -69,4 +70,4 @@ Each source atlas page should include:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** The atlas starts with files already reviewed for MoreBC2 core technical pages. Network RPC, protocol primitives, net-processing handshake, address-relay, and block/header-relay slices now have first-pass source reviews; remaining lower-level peer-processing review is still open.
+**Notes:** The atlas starts with files already reviewed for MoreBC2 core technical pages. Network RPC, protocol primitives, net-processing handshake, address-relay, block/header-relay, and transaction-relay slices now have first-pass source reviews; remaining lower-level peer-processing review is still open.
