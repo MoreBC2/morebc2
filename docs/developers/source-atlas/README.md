@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-07-01
+**Last reviewed:** 2026-07-02
 
 ## Summary
 
@@ -25,6 +25,7 @@ Each page should explain one important source file in plain language, link it to
 - [blockchain RPC](rpc-blockchain.md)
 - [network RPC](rpc-network.md)
 - [P2P protocol primitives](protocol.md)
+- [net processing handshake](net-processing-handshake.md)
 - [raw transaction RPC](rpc-rawtransaction.md)
 - [mempool and transaction broadcast RPC](rpc-mempool.md)
 - [wallet startup](wallet-startup.md)
@@ -66,4 +67,4 @@ Each source atlas page should include:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** The atlas starts with files already reviewed for MoreBC2 core technical pages. Network RPC and protocol primitives have first-pass source reviews; lower-level peer-processing review remains open.
+**Notes:** The atlas starts with files already reviewed for MoreBC2 core technical pages. Network RPC, protocol primitives, and a first net-processing handshake slice now have first-pass source reviews; remaining lower-level peer-processing review is still open.
