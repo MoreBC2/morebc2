@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-07-01
+**Last reviewed:** 2026-07-02
 
 ## Summary
 
@@ -21,6 +21,8 @@ Before private review, find command examples that may need clearer labeling, esp
 - `bitcoinII-qt`
 - `bitcoinII.conf`
 - `getblockchaininfo`
+- `getnetworkinfo`
+- `getpeerinfo`
 - `getwalletinfo`
 - `getnewaddress`
 - `sendtoaddress`
@@ -34,6 +36,11 @@ Before private review, find command examples that may need clearer labeling, esp
 - `backupwallet`
 - `restorewallet`
 - `rescanblockchain`
+- `addnode`
+- `disconnectnode`
+- `setban`
+- `clearbanned`
+- `setnetworkactive`
 
 ## Required handling
 
@@ -56,6 +63,8 @@ These should not appear as beginner copy/paste guidance:
 - Private-key or explicit-key signing commands.
 - Raw transaction live submission commands.
 - Block/header submission commands.
+- Manual peer or ban-list commands without operator context.
+- Network-active state changes without operator context.
 - Pruning/reindex/import commands without context.
 - RPC exposure/authentication examples without a security caveat.
 
@@ -67,6 +76,7 @@ Priority pages:
 - `docs/README.md`
 - `docs/developers/rpc-overview.md`
 - `docs/verification/command-testing.md`
+- `docs/verification/command-smoke-test-plan.md`
 - `docs/nodes/node-guide.md`
 - `docs/wallets/wallet-guide.md`
 - `docs/mining/mining-overview.md`
@@ -89,13 +99,17 @@ Priority pages:
 | 2026-06-30 | command tracker itself | `docs/verification/command-testing.md` | No blocking issue found | No change | Command tracker correctly labels entries as Placeholder, Source-observed, Locally tested, Verified, Needs recheck, or Do not publish. |
 | 2026-06-30 | developer build/test command blocks | `docs/developers/local-development.md`, `docs/developers/build-system.md`, `docs/developers/testing.md` | No blocking issue found | No change | Build and test commands are explicitly described as untested or future record shapes. Local-development page explains test-record workflow rather than verified commands. |
 | 2026-06-30 | release checking command wording | `docs/developers/release-verification.md`, `docs/developers/release-process.md` | Release-process page had stale current-release wording and old release path | `a5aaf58` | Release-process page now points to current observed release path and keeps download checking unverified. |
-| 2026-07-01 | Source Atlas RPC command inventory | `docs/developers/source-atlas/rpc-mining.md`, `docs/developers/source-atlas/rpc-blockchain.md`, `docs/developers/source-atlas/rpc-rawtransaction.md`, `docs/developers/source-atlas/rpc-mempool.md` | No blocking issue found after cleanup | Recent Source Atlas cleanup commits | RPC Source Atlas pages are source-review inventories, keep Draft status, and state that commands have not been run. Live broadcast and block/header submission remain separated from dry-run or read-only workflows. |
+| 2026-07-01 | Source Atlas RPC command inventory | `docs/developers/source-atlas/rpc-mining.md`, `docs/developers/source-atlas/rpc-blockchain.md`, `docs/developers/source-atlas/rpc-rawtransaction.md`, `docs/developers/source-atlas/rpc-mempool.md` | No blocking issue found after cleanup | Recent Source Atlas cleanup commits | RPC Source Atlas pages are source-review inventories, keep Draft status, and state that commands have not been run. Live submission and block/header submission remain separated from dry-run or read-only workflows. |
 | 2026-07-01 | Source Atlas wallet command inventory | `docs/developers/source-atlas/wallet-rpc.md`, `wallet-backup-import-rpc.md`, `wallet-spend-rpc.md`, `wallet-encryption-rpc.md`, `wallet-coins-rpc.md`, `wallet-transactions-rpc.md` | No blocking issue found after cleanup | Recent wallet Source Atlas cleanup commits | Wallet Source Atlas pages keep commands as source-observed inventories. Spend, key, passphrase, restore, rescan, and encryption examples remain untested and should not become beginner copy/paste guidance. |
+| 2026-07-02 | Network RPC command inventory | `docs/developers/source-atlas/rpc-network.md`, `docs/verification/command-testing.md`, `docs/verification/command-smoke-test-plan.md` | Network commands needed explicit tracking after network RPC source review | `a5960c4`, `21ef11d` | Added read-only network status candidates and kept manual peer, ban-list, and network-active commands out of early testing. No network command has a local test record yet. |
+| 2026-07-02 | Old-path/stale-value repository search spot check | repository search for `BitcoinII-Dev/BitcoinII`, `MinBIP9WarningHeight 292`, and `292` | Search returned no matches, but search reliability is not treated as complete proof | No change | Direct page cleanup already fixed known stale references. A more reliable local grep or full checkout should still be used before public release. |
 
 ## Still to scan
 
-- Any remaining command blocks found by repository search.
+- Any remaining command blocks found by repository search or full local grep.
 - Any new user-facing command examples added after this scan.
+- Release verification command examples when artifact data becomes available.
+- Ecosystem/service command examples after live service checks.
 
 ## Known acceptable cases
 
@@ -108,15 +122,16 @@ It is acceptable to list command names when:
 
 ## Next actions
 
-1. Search remaining command terms.
+1. Use a full local checkout or more reliable grep to scan remaining command terms.
 2. Check whether each page clearly labels the command status.
 3. Move or soften risky examples if needed.
 4. Record any fixes here.
-5. Update documentation coverage.
+5. Update documentation coverage after command-tracker changes.
 
 ## Related pages
 
 - [Command testing status](command-testing.md)
+- [Command smoke-test plan](command-smoke-test-plan.md)
 - [Stale wording scan](stale-wording-scan.md)
 - [Review feedback buckets](review-feedback-buckets.md)
 - [RPC overview](../developers/rpc-overview.md)
@@ -125,5 +140,5 @@ It is acceptable to list command names when:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current MoreBC2 command tracker, RPC overview, node, wallet, mining, exchange, configuration, developer workflow pages, and Source Atlas RPC/wallet pages
-**Notes:** This page now records command-example scans across the main user/service-facing, developer workflow, and Source Atlas RPC/wallet command inventory pages. Remaining repository-wide command-term searches should still be checked before private review.
+**Primary sources checked:** Current MoreBC2 command tracker, RPC overview, node, wallet, mining, exchange, configuration, developer workflow pages, Source Atlas RPC/wallet/network pages, and command smoke-test plan
+**Notes:** This page now records command-example scans across the main user/service-facing, developer workflow, Source Atlas RPC/wallet/network command inventory pages, and updated command tracker/smoke-test plan. Remaining repository-wide command-term searches should still be checked with a full local grep before public release.
