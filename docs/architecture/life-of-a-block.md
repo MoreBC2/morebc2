@@ -2,7 +2,7 @@
 
 **Category:** Architecture
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-02
 
 ## Summary
 
@@ -47,6 +47,8 @@ A block may arrive from:
 
 The reviewed general full-block entry point is `ProcessNewBlock`. Reviewed mining RPC paths also include block/header submission commands.
 
+The first-pass P2P block/header relay slice now documents network-facing block and header paths, including `headers`, `getheaders`, `getblocks`, full-block receive behavior, compact-block receive structure, and `getblocktxn` behavior.
+
 ## Step 3: Header checks
 
 Headers are handled through `AcceptBlockHeader`.
@@ -60,6 +62,8 @@ Reviewed header checks include:
 - Timestamp checks.
 - Checkpoint restrictions when checkpoints are enabled.
 - Version checks after relevant deployments are active.
+
+The P2P header-relay slice documents how received headers can reach `ProcessNewBlockHeaders`, but validation rules remain tied to the block validation pages and source files.
 
 ## Step 4: Context-free block checks
 
@@ -188,7 +192,9 @@ That is covered in [Life of a reorganization](life-of-a-reorg.md).
 
 ## What is not fully reviewed yet
 
-- Network block relay caller paths.
+- Block/header send-loop behavior.
+- Compact-block reconstruction branches in full detail.
+- Block download timeout and stalling behavior.
 - Full undo-read behavior.
 - Full pruning failure and recovery behavior.
 - Wallet/index subscriber behavior after notifications.
@@ -206,6 +212,7 @@ That is covered in [Life of a reorganization](life-of-a-reorg.md).
 - [Source atlas: block template assembly](../developers/source-atlas/miner.md)
 - [Source atlas: mining RPC](../developers/source-atlas/rpc-mining.md)
 - [Source atlas: blockchain RPC](../developers/source-atlas/rpc-blockchain.md)
+- [Source atlas: net processing block and header relay](../developers/source-atlas/net-processing-block-relay.md)
 - [Consensus overview](../documentation/consensus-overview.md)
 - [Proof-of-work](../encyclopedia/proof-of-work.md)
 
@@ -213,4 +220,4 @@ That is covered in [Life of a reorganization](life-of-a-reorg.md).
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This explainer is based on reviewed block acceptance, validation, best-chain activation, UTXO connection, block-storage, undo-writing, validation-interface, candidate-template, mining RPC, and blockchain RPC notes. P2P, full undo-read behavior, pruning recovery, and wallet/index subscriber behavior need deeper review.
+**Notes:** This explainer is based on reviewed block acceptance, validation, best-chain activation, UTXO connection, block-storage, undo-writing, validation-interface, candidate-template, mining RPC, blockchain RPC, and first-pass P2P block/header relay notes. Send-loop behavior, compact-block reconstruction details, full undo-read behavior, pruning recovery, and wallet/index subscriber behavior need deeper review.
