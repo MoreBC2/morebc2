@@ -2,13 +2,13 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-02
 
 ## Summary
 
-This page maps the reviewed BitcoinII Core mempool architecture from `src/txmempool.h`, `src/txmempool.cpp`, reviewed validation flow, and reviewed mempool RPC behavior.
+This page maps the reviewed BitcoinII Core mempool architecture from `src/txmempool.h`, `src/txmempool.cpp`, reviewed validation flow, reviewed mempool RPC behavior, and the first-pass P2P transaction-relay slice.
 
-It is intentionally partial. It focuses on mempool structure, ancestor and descendant tracking, transaction acceptance, reorg repair behavior, reviewed mempool functions, and RPC surfaces that expose or affect mempool state.
+It is intentionally partial. It focuses on mempool structure, ancestor and descendant tracking, transaction acceptance, reorg repair behavior, reviewed mempool functions, RPC surfaces that expose or affect mempool state, and the source-observed boundary between local mempool acceptance and peer relay.
 
 ## What the mempool stores
 
@@ -134,6 +134,26 @@ AcceptPackage
 
 Reviewed mempool RPC behavior also includes experimental package submission. Package policy needs deeper review before MoreBC2 makes service-provider recommendations.
 
+## P2P relay relationship
+
+The mempool and P2P relay paths overlap but are not the same thing.
+
+The first-pass P2P transaction relay slice shows:
+
+- peer transaction-relay state is shaped by handshake behavior
+- txid versus wtxid relay affects which inventory messages are accepted
+- transaction inventory announcements can be ignored during initial block download
+- full `tx` messages are passed through the transaction download manager before mempool validation
+- accepted transactions can be relayed onward through peer manager
+- invalid transactions can interact with orphan/package reconsideration logic
+- `mempool`, bloom filter, `feefilter`, and `notfound` messages affect transaction-relay behavior around the mempool
+
+Important boundary:
+
+- Local mempool acceptance does not guarantee broad network propagation.
+- P2P relay does not guarantee block inclusion.
+- Block inclusion and confirmations remain separate lifecycle stages.
+
 ## Reorg repair flow
 
 Reorg handling is special because transactions from disconnected blocks may be re-added while descendants are already present in the mempool.
@@ -198,6 +218,7 @@ Adding transactions and changing the chain tip require both locks until consiste
 - Replacement-policy helper functions.
 - Full package policy behavior.
 - Fee estimation interaction.
+- Transaction request scheduling and send-loop behavior.
 - Functional tests for mempool acceptance.
 - Tested RPC examples for dry-run acceptance, live submission, and mempool inspection.
 
@@ -208,6 +229,7 @@ Adding transactions and changing the chain tip require both locks until consiste
 - [Mempool entry](../developers/source-atlas/mempool-entry.md)
 - [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
 - [Source atlas: raw transaction RPC](../developers/source-atlas/rpc-rawtransaction.md)
+- [Source atlas: net processing transaction relay](../developers/source-atlas/net-processing-transaction-relay.md)
 - [Source atlas: validation.cpp](../developers/source-atlas/validation-cpp.md)
 - [Disconnected transactions](../developers/source-atlas/disconnected-transactions.md)
 - [Block validation flow](block-validation-flow.md)
@@ -222,9 +244,10 @@ Adding transactions and changing the chain tip require both locks until consiste
 - `src/txmempool.cpp`
 - `src/kernel/mempool_entry.h`
 - `src/rpc/mempool.cpp`
+- `src/net_processing.cpp`
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a first-pass mempool architecture, transaction-acceptance, and mempool-RPC map. It should be expanded after deeper review of public caller paths, replacement policy, tests, and local RPC examples.
+**Notes:** This is a first-pass mempool architecture, transaction-acceptance, mempool-RPC, and P2P transaction-relay map. It should be expanded after deeper review of public caller paths, replacement policy, transaction send-loop behavior, tests, and local RPC examples.
