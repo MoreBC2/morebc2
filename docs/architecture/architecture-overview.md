@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-02
 
 ## Summary
 
@@ -128,6 +128,7 @@ Reviewed mempool topics include:
 - Reorg interaction through disconnected transaction handling.
 - Mempool and broadcast RPC surfaces.
 - Dry-run acceptance checks and live transaction broadcast behavior.
+- First-pass P2P transaction relay handling.
 
 Related:
 
@@ -137,6 +138,7 @@ Related:
 - [Source atlas: mempool source](../developers/source-atlas/txmempool.md)
 - [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
 - [Source atlas: raw transaction RPC](../developers/source-atlas/rpc-rawtransaction.md)
+- [Source atlas: net processing transaction relay](../developers/source-atlas/net-processing-transaction-relay.md)
 
 ## Blocks, chainstate, and reorgs
 
@@ -152,6 +154,7 @@ Reviewed block lifecycle topics include:
 - Reconsidering disconnected block transactions for mempool entry.
 - Block storage, pruning-adjacent, reindex, and import paths.
 - Blockchain RPC surfaces for block and chainstate inspection.
+- First-pass P2P block and header relay handling.
 
 Related:
 
@@ -163,6 +166,40 @@ Related:
 - [Source atlas: mining RPC](../developers/source-atlas/rpc-mining.md)
 - [Source atlas: blockchain RPC](../developers/source-atlas/rpc-blockchain.md)
 - [Source atlas: disconnected transactions](../developers/source-atlas/disconnected-transactions.md)
+- [Source atlas: net processing block and header relay](../developers/source-atlas/net-processing-block-relay.md)
+
+## Peer-to-peer networking
+
+Reviewed P2P material is still first-pass and source-observed, but it now covers more than network RPC.
+
+Current anchors include:
+
+- P2P message names, headers, service flags, address serialization, and inventory helpers.
+- Network RPC commands for peer and network status.
+- Peer handshake and early feature negotiation.
+- Address relay and peer-discovery-adjacent behavior.
+- Block and header relay.
+- Transaction relay.
+- Peer eviction, stale-tip checks, discouragement, and ping timeout behavior.
+
+Still pending:
+
+- Dedicated peer communication architecture page.
+- Send-loop behavior.
+- Lower-level `src/net.cpp` connection management.
+- Banman behavior.
+- Release-versus-main comparison.
+- Live-network tests.
+
+Related:
+
+- [Source atlas: P2P protocol primitives](../developers/source-atlas/protocol.md)
+- [Source atlas: network RPC](../developers/source-atlas/rpc-network.md)
+- [Source atlas: net processing handshake](../developers/source-atlas/net-processing-handshake.md)
+- [Source atlas: net processing address relay](../developers/source-atlas/net-processing-address-relay.md)
+- [Source atlas: net processing block and header relay](../developers/source-atlas/net-processing-block-relay.md)
+- [Source atlas: net processing transaction relay](../developers/source-atlas/net-processing-transaction-relay.md)
+- [Source atlas: net processing peer eviction and stale-tip checks](../developers/source-atlas/net-processing-peer-eviction.md)
 
 ## User and service interfaces
 
@@ -171,7 +208,7 @@ Reviewed interface-level material is still partial but now broader than the init
 Current anchors include:
 
 - RPC overview pages.
-- Mining, blockchain, raw transaction, mempool/broadcast, and wallet RPC source-atlas pages.
+- Mining, blockchain, network, raw transaction, mempool/broadcast, and wallet RPC source-atlas pages.
 - Wallet startup and wallet RPC source-atlas pages.
 - Exchange integration framework.
 - Configuration pages.
@@ -179,7 +216,6 @@ Current anchors include:
 
 Still pending:
 
-- Network RPC files.
 - CLI source review.
 - GUI entry paths.
 - Lower-level wallet internals.
@@ -192,15 +228,19 @@ Related:
 - [Configuration](../configuration/README.md)
 - [Wallets](../wallets/README.md)
 - [Nodes](../nodes/README.md)
+- [Source atlas: network RPC](../developers/source-atlas/rpc-network.md)
 - [Source atlas: wallet RPC](../developers/source-atlas/wallet-rpc.md)
 - [Source atlas: wallet spend and PSBT RPC](../developers/source-atlas/wallet-spend-rpc.md)
 - [Source atlas: wallet transaction history RPC](../developers/source-atlas/wallet-transactions-rpc.md)
 
 ## Areas still needing deeper review
 
-- Peer-to-peer message handling.
+- Dedicated peer communication model.
+- Send-loop behavior.
+- Lower-level `src/net.cpp` connection management.
+- Banman behavior.
 - DNS seed consumption and peer discovery internals.
-- Network RPC and CLI paths.
+- CLI source review.
 - Wallet database internals, key-management internals, and GUI flows.
 - Local command testing.
 - Validation-interface subscriber behavior.
@@ -216,6 +256,7 @@ This page does not claim:
 - That unreviewed files are identical to Bitcoin Core.
 - That Draft architecture pages are final specifications.
 - That source-observed command behavior has been locally tested.
+- That P2P behavior has been live-network tested.
 
 ## Related pages
 
@@ -241,9 +282,14 @@ This page does not claim:
 - `src/node/miner.*`
 - `src/rpc/mining.cpp`
 - `src/rpc/blockchain.cpp`
+- `src/rpc/net.cpp`
 - `src/rpc/rawtransaction.cpp`
 - `src/rpc/mempool.cpp`
 - `src/wallet/rpc/*` reviewed groups
+- `src/protocol.h`
+- `src/protocol.cpp`
+- `src/net_processing.h`
+- `src/net_processing.cpp`
 - `src/primitives/block.*`
 - `src/hash.h`
 
@@ -251,4 +297,4 @@ This page does not claim:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This overview summarizes current MoreBC2 architecture and Source Atlas coverage. It should be updated whenever major subsystems are newly reviewed.
+**Notes:** This overview summarizes current MoreBC2 architecture and Source Atlas coverage. It was refreshed after first-pass P2P Source Atlas slices were added for protocol primitives, network RPC, handshake, address relay, block/header relay, transaction relay, and peer eviction/stale-tip checks.
