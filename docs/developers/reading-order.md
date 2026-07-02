@@ -90,6 +90,7 @@ Then read the current network group:
 21. [block and header sharing](source-atlas/net-processing-block-relay.md)
 22. [transaction sharing](source-atlas/net-processing-transaction-relay.md)
 23. [peer health and stale-tip checks](source-atlas/net-processing-peer-eviction.md)
+24. [peer send loop](source-atlas/net-processing-send-loop.md)
 
 Goal:
 
@@ -177,4 +178,4 @@ Start by improving one of these:
 
 **Status:** Draft
 **Primary sources checked:** Repository navigation and current documentation structure
-**Notes:** This reading order was refreshed after the network Source Atlas slices and exchange-listing documentation batch were added. It should be updated whenever major sections are added, renamed, or reorganized.
+**Notes:** This reading order was refreshed after the network Source Atlas slices through the send-loop review and the exchange-listing documentation batch were added. It should be updated whenever major sections are added, renamed, or reorganized.
