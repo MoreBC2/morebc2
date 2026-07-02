@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-07-01
 
 ## Summary
 
@@ -16,7 +16,7 @@ Checkpoint data is defined in:
 
 - `src/kernel/chainparams.cpp`
 
-## What is currently verified
+## What has been observed so far
 
 The reviewed source shows mainnet checkpoint data for multiple heights, including early rule activation heights and later chain heights.
 
@@ -66,7 +66,7 @@ MoreBC2 should be careful not to overstate what checkpoints do. A full explanati
 
 ## Sources
 
-- `src/kernel/chainparams.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/kernel/chainparams.cpp
+- `src/kernel/chainparams.cpp`: current observed source path is `Bitcoin-II/BitcoinII-Core`
 
 ## Verification
 
