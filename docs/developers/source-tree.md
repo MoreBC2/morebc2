@@ -27,6 +27,8 @@ Currently reviewed or partially reviewed files:
 - `src/hash.h`
 - `src/protocol.h`
 - `src/protocol.cpp`
+- `src/net.h`
+- `src/net.cpp`
 - `src/net_processing.h`
 - `src/net_processing.cpp`
 
@@ -41,6 +43,11 @@ Known use from review:
 - Mempool storage and indexing.
 - Hash helper paths.
 - Network message primitives.
+- Lower-level connection management.
+- Local address discovery and advertisement helpers.
+- Socket send/receive handling.
+- V1/V2 transport handling.
+- DNS seed and seed-node connection paths.
 - Peer handshake and early feature negotiation.
 - Address sharing.
 - Block and header sharing.
@@ -58,6 +65,7 @@ Related pages:
 - [Architecture overview](../architecture/architecture-overview.md)
 - [Source atlas: validation interface](source-atlas/validation-interface.md)
 - [Source atlas: protocol primitives](source-atlas/protocol.md)
+- [Source atlas: net connection management](source-atlas/net-connection-management.md)
 - [Source atlas: peer handshake](source-atlas/net-processing-handshake.md)
 - [Source atlas: address sharing](source-atlas/net-processing-address-relay.md)
 - [Source atlas: block and header sharing](source-atlas/net-processing-block-relay.md)
@@ -67,9 +75,8 @@ Related pages:
 
 Still needed:
 
-- Lower-level `src/net.cpp` connection management.
 - Banman behavior.
-- DNS seed and addrman caller paths.
+- Addrman internals and fixed-seed behavior.
 - Release-versus-main comparison.
 
 ### `src/node/`
@@ -334,9 +341,8 @@ Known use from review:
 
 These areas should be mapped later:
 
-- lower-level `src/net.cpp` and `src/net.h`
 - banman-related files
-- DNS seed and addrman caller paths
+- deeper addrman and fixed-seed behavior
 - other `src/rpc/` files
 - other `src/wallet/` files
 - `src/qt/`
@@ -367,4 +373,4 @@ When adding a directory to this guide, include:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This guide was refreshed after adding first-pass network Source Atlas slices through the send-loop review. It remains conservative and only gives detailed notes for files already reviewed.
+**Notes:** This guide was refreshed after adding first-pass network Source Atlas slices through lower-level connection-management review. It remains conservative and only gives detailed notes for files already reviewed.
