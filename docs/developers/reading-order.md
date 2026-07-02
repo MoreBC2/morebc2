@@ -2,7 +2,7 @@
 
 **Category:** Developer guide
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-02
 
 ## Summary
 
@@ -81,6 +81,16 @@ Read:
 15. [block primitives](source-atlas/block-primitives.md)
 16. [hash.h](source-atlas/hash-h.md)
 
+Then read the current network group:
+
+17. [protocol primitives](source-atlas/protocol.md)
+18. [network RPC](source-atlas/rpc-network.md)
+19. [peer handshake](source-atlas/net-processing-handshake.md)
+20. [address sharing](source-atlas/net-processing-address-relay.md)
+21. [block and header sharing](source-atlas/net-processing-block-relay.md)
+22. [transaction sharing](source-atlas/net-processing-transaction-relay.md)
+23. [peer health and stale-tip checks](source-atlas/net-processing-peer-eviction.md)
+
 Goal:
 
 Move from conceptual understanding to implementation details.
@@ -111,6 +121,10 @@ Read based on what you are trying to do:
 - [Exchange integration package](../exchange/integration-package.md)
 - [Service integration checklist](../exchange/service-integration-checklist.md)
 - [Deposit monitoring](../exchange/deposit-monitoring.md)
+- [Native coin exchange listing guide](../exchange/native-coin-listing-guide.md)
+- [Exchange listing target matrix](../exchange/exchange-listing-targets.md)
+- [Exchange readiness checklist](../exchange/exchange-readiness-checklist.md)
+- [Exchange listing packet template](../exchange/listing-packet-template.md)
 - [Release verification guide](release-verification.md)
 
 ### Node operators
@@ -119,6 +133,8 @@ Read based on what you are trying to do:
 - [Configuration](../configuration/README.md)
 - [Node configuration](../configuration/node-configuration.md)
 - [RPC configuration](../configuration/rpc-configuration.md)
+- [Network RPC source review](source-atlas/rpc-network.md)
+- [Source atlas index](source-atlas/README.md)
 
 ### Wallet users and maintainers
 
@@ -161,4 +177,4 @@ Start by improving one of these:
 
 **Status:** Draft
 **Primary sources checked:** Repository navigation and current documentation structure
-**Notes:** This reading order should be updated whenever major sections are added, renamed, or reorganized.
+**Notes:** This reading order was refreshed after the network Source Atlas slices and exchange-listing documentation batch were added. It should be updated whenever major sections are added, renamed, or reorganized.
