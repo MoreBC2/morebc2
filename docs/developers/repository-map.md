@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-02
 
 ## Summary
 
@@ -27,6 +27,9 @@ This is not a full source audit. It is a navigation aid that should be expanded 
 | `src/node/blockstorage.*` | Block index database, block and undo files, pruning, reindex, import | E1 partial |
 | `src/node/miner.*` | Candidate block-template assembly and mempool package selection | E1 partial |
 | `src/node/mini_miner.*` | Fee and ordering simulation helper | E1 partial |
+| `src/protocol.h` / `src/protocol.cpp` | Message names, message headers, service flags, address serialization, inventory helpers | E1 partial |
+| `src/net_processing.h` / `src/net_processing.cpp` | Peer handshake, address sharing, block/header sharing, transaction sharing, peer health checks | E1 partial |
+| `src/rpc/net.cpp` | Network RPC, peer status, ban-list, address-manager, manual peer commands | E1 partial |
 | `src/rpc/mining.cpp` | Mining RPC, candidate template, block/header submission, mining status | E1 partial |
 | `src/rpc/blockchain.cpp` | Blockchain RPC, block lookup, pruning, UTXO scans, chainstate status | E1 partial |
 | `src/rpc/rawtransaction.cpp` | Raw transaction lookup, decode, unsigned construction, explicit-key signing, and PSBT RPCs | E1 partial |
@@ -112,6 +115,40 @@ Questions:
 - Which consensus constants are BitcoinII-specific beyond already reviewed chain parameters?
 - Which tests cover transaction, script, storage, and notification behavior?
 
+### Peer and network behavior
+
+Reviewed or partially reviewed:
+
+- `src/protocol.h`
+- `src/protocol.cpp`
+- `src/net_processing.h`
+- `src/net_processing.cpp`
+- `src/rpc/net.cpp`
+
+Related MoreBC2 pages:
+
+- [Source atlas: protocol primitives](source-atlas/protocol.md)
+- [Source atlas: network RPC](source-atlas/rpc-network.md)
+- [Source atlas: peer handshake](source-atlas/net-processing-handshake.md)
+- [Source atlas: address sharing](source-atlas/net-processing-address-relay.md)
+- [Source atlas: block and header sharing](source-atlas/net-processing-block-relay.md)
+- [Source atlas: transaction sharing](source-atlas/net-processing-transaction-relay.md)
+- [Source atlas: peer health and stale-tip checks](source-atlas/net-processing-peer-eviction.md)
+- [Architecture overview](../architecture/architecture-overview.md)
+- [Life of a transaction](../architecture/life-of-a-transaction.md)
+- [Life of a block](../architecture/life-of-a-block.md)
+- [Mempool flow](../architecture/mempool-flow.md)
+- [Network specifications](../documentation/network-specifications.md)
+
+Questions:
+
+- Which send-loop behavior should be reviewed next?
+- Which lower-level connection-management behavior in `src/net.cpp` should become user-facing node documentation?
+- Which banman behavior needs a separate review?
+- Which DNS seed and addrman paths should be connected to startup and node-operation docs?
+- Which P2P details differ, if any, between current `main` and `v29.1.0`?
+- Which network details should stay developer-only rather than appearing in service-provider guides?
+
 ### Wallet startup and lifecycle
 
 Reviewed or partially reviewed:
@@ -171,6 +208,33 @@ Questions:
 - Which descriptor-vs-legacy behaviors need user-facing explanation?
 - Which build flags affect wallet RPC availability?
 
+### Mempool and transaction policy
+
+Reviewed or partially reviewed:
+
+- `src/txmempool.cpp`
+- `src/txmempool.h`
+- `src/kernel/mempool_entry.h`
+- Mempool acceptance portions of `src/validation.cpp`
+- Transaction-sharing portions of `src/net_processing.cpp`
+
+Related MoreBC2 pages:
+
+- [Mempool flow](../architecture/mempool-flow.md)
+- [Life of a transaction](../architecture/life-of-a-transaction.md)
+- [Source atlas: mempool accept](source-atlas/mempool-accept.md)
+- [Source atlas: mempool source](source-atlas/txmempool.md)
+- [Source atlas: mempool and transaction broadcast RPC](source-atlas/rpc-mempool.md)
+- [Source atlas: transaction sharing](source-atlas/net-processing-transaction-relay.md)
+
+Questions:
+
+- What replacement-policy details still need review?
+- Which mempool defaults should be documented for operators?
+- Which package acceptance behaviors need deeper explanation?
+- Which transaction-sharing send-loop behavior needs a separate page?
+- Which RPCs expose mempool/package acceptance state?
+
 ### Block storage, pruning, and reindex
 
 Reviewed or partially reviewed:
@@ -213,218 +277,56 @@ Questions:
 - Which external operation docs can be verified from primary sources?
 - Which tests cover candidate block assembly and package selection?
 
-### Mining RPC
+### RPC groups
 
 Reviewed or partially reviewed:
 
 - `src/rpc/mining.cpp`
+- `src/rpc/blockchain.cpp`
+- `src/rpc/net.cpp`
+- `src/rpc/rawtransaction.cpp`
+- `src/rpc/mempool.cpp`
+- `src/wallet/rpc/*` reviewed groups
 
 Related MoreBC2 pages:
 
+- [RPC overview](rpc-overview.md)
 - [Source atlas: mining RPC](source-atlas/rpc-mining.md)
-- [Source atlas: block template assembly](source-atlas/miner.md)
-- [Mining overview](../mining/mining-overview.md)
-- [RPC overview](rpc-overview.md)
-
-Questions:
-
-- Which mining RPC examples can be safely tested locally?
-- Which mining RPCs belong in user docs versus developer docs?
-- Which external tools actually use `getblocktemplate` with BitcoinII today?
-- How should satoshi-vs-BC2 units be highlighted in service docs?
-
-### Blockchain RPC
-
-Reviewed or partially reviewed:
-
-- `src/rpc/blockchain.cpp`
-
-Related MoreBC2 pages:
-
 - [Source atlas: blockchain RPC](source-atlas/rpc-blockchain.md)
-- [RPC overview](rpc-overview.md)
+- [Source atlas: network RPC](source-atlas/rpc-network.md)
+- [Source atlas: raw transaction RPC](source-atlas/rpc-rawtransaction.md)
+- [Source atlas: mempool and transaction broadcast RPC](source-atlas/rpc-mempool.md)
 - [Deposit monitoring](../exchange/deposit-monitoring.md)
-- [Life of a block](../architecture/life-of-a-block.md)
-- [Life of a reorganization](../architecture/life-of-a-reorg.md)
+- [Service integration checklist](../exchange/service-integration-checklist.md)
 
 Questions:
 
-- Which blockchain RPC examples can be safely tested locally?
+- Which RPC examples can be safely tested locally?
 - Which commands should be included in exchange/service docs?
-- Which pruning and block-data errors should become operator troubleshooting notes?
-- Which scan commands belong in normal docs versus advanced recovery docs?
+- Which commands belong only in advanced or developer docs?
+- Which commands are affected by pruning, indexing, wallet availability, or network state?
 
-### Raw transaction RPC
+### Build, release, and tests
 
-Reviewed or partially reviewed:
-
-- `src/rpc/rawtransaction.cpp`
-
-Related MoreBC2 pages:
-
-- [Source atlas: raw transaction RPC](source-atlas/rpc-rawtransaction.md)
-- [RPC overview](rpc-overview.md)
-- [Service integration checklist](../exchange/service-integration-checklist.md)
-- [Life of a transaction](../architecture/life-of-a-transaction.md)
-
-Questions:
-
-- Which raw transaction examples can be tested safely on regtest?
-- Which raw transaction commands belong in service docs?
-- Which PSBT workflows are safest for service integrations?
-- How should txindex and pruned-node limitations be explained for services?
-
-### Mempool and broadcast RPC
-
-Reviewed or partially reviewed:
-
-- `src/rpc/mempool.cpp`
-
-Related MoreBC2 pages:
-
-- [Source atlas: mempool and transaction broadcast RPC](source-atlas/rpc-mempool.md)
-- [Source atlas: raw transaction RPC](source-atlas/rpc-rawtransaction.md)
-- [RPC overview](rpc-overview.md)
-- [Mempool flow](../architecture/mempool-flow.md)
-- [Life of a transaction](../architecture/life-of-a-transaction.md)
-- [Service integration checklist](../exchange/service-integration-checklist.md)
-
-Questions:
-
-- Which dry-run acceptance examples can be safely tested on regtest?
-- Which live broadcast examples should stay out of beginner docs?
-- Which mempool inspection commands belong in exchange/service docs?
-- How should package submission be documented while marked experimental?
-- Which mempool persistence warnings should be repeated in operator docs?
-
-### Validation notifications
-
-Reviewed or partially reviewed:
-
-- `src/validationinterface.h`
-- `src/validationinterface.cpp`
-
-Related MoreBC2 pages:
-
-- [Source atlas: validation interface](source-atlas/validation-interface.md)
-- [Life of a block](../architecture/life-of-a-block.md)
-- [Life of a reorganization](../architecture/life-of-a-reorg.md)
-- [Mempool flow](../architecture/mempool-flow.md)
-
-Questions:
-
-- Which wallet and index paths subscribe to validation notifications?
-- Which callback ordering details should appear in lifecycle pages?
-- Which callbacks are user-visible through wallet balance or index update behavior?
-
-### Mempool and transaction policy
-
-Reviewed or partially reviewed:
-
-- `src/txmempool.cpp`
-- `src/txmempool.h`
-- `src/kernel/mempool_entry.h`
-- Mempool acceptance portions of `src/validation.cpp`
-
-Related MoreBC2 pages:
-
-- [Mempool flow](../architecture/mempool-flow.md)
-- [Life of a transaction](../architecture/life-of-a-transaction.md)
-- [Source atlas: mempool accept](source-atlas/mempool-accept.md)
-- [Source atlas: mempool source](source-atlas/txmempool.md)
-- [Source atlas: mempool and transaction broadcast RPC](source-atlas/rpc-mempool.md)
-
-Questions:
-
-- What replacement-policy details still need review?
-- Which mempool defaults should be documented for operators?
-- Which package acceptance behaviors need deeper explanation?
-- Which RPCs expose mempool/package acceptance state?
-
-### Networking
-
-Likely files/directories to review:
-
-- `src/net.cpp`
-- `src/net.h`
-- `src/net_processing.cpp`
-- `src/net_processing.h`
-- `src/protocol.cpp`
-- `src/protocol.h`
-
-Questions:
-
-- Where are peer-to-peer messages defined?
-- Where are peer connection settings handled?
-- Where are DNS seeds consumed during startup?
-- How do blocks and transactions move from peers into validation?
-
-### RPC
-
-Reviewed or partially reviewed:
-
-- `src/rpc/mining.cpp`
-- `src/rpc/blockchain.cpp`
-- `src/rpc/rawtransaction.cpp`
-- `src/rpc/mempool.cpp`
-- `src/wallet/rpc/wallet.cpp`
-- `src/wallet/rpc/addresses.cpp`
-- `src/wallet/rpc/backup.cpp`
-- `src/wallet/rpc/spend.cpp`
-- `src/wallet/rpc/encrypt.cpp`
-- `src/wallet/rpc/coins.cpp`
-- `src/wallet/rpc/transactions.cpp`
-
-Likely files/directories to review next:
-
-- network RPC files
-- other `src/rpc/` files
-- `src/bitcoinII-cli.cpp`
-- remaining `src/wallet/` internals
-
-Questions:
-
-- Which RPC commands are available?
-- Are any commands BitcoinII-specific?
-- Which commands are safest to document for exchanges?
-- Which examples have been tested locally?
-
-### Wallet
-
-Reviewed or partially reviewed:
-
-- `src/wallet/init.cpp`
-- `src/wallet/load.*`
-- `src/wallet/context.*`
-- startup-adjacent parts of `src/wallet/wallet.h`
-- `src/wallet/rpc/wallet.cpp`
-- `src/wallet/rpc/addresses.cpp`
-- `src/wallet/rpc/backup.cpp`
-- `src/wallet/rpc/spend.cpp`
-- `src/wallet/rpc/encrypt.cpp`
-- `src/wallet/rpc/coins.cpp`
-- `src/wallet/rpc/transactions.cpp`
-
-Likely files/directories to review next:
-
-- other `src/wallet/` internals
-- `src/qt/` wallet paths
-
-Questions:
-
-- Which wallet behavior should be documented for users and exchanges?
-- What backup and restore guidance is source-backed or tested?
-- Which wallet RPCs are safest for service documentation?
-
-### Build and release
-
-Likely files/directories to review:
+Likely files/directories to continue reviewing:
 
 - `depends/`
 - `cmake/`
 - `contrib/`
 - `.github/workflows/`
 - `doc/`
+- `test/`
+- `src/test/`
+- `src/wallet/test/`
+
+Related MoreBC2 pages:
+
+- [Build system guide](build-system.md)
+- [Testing guide](testing.md)
+- [Release process guide](release-process.md)
+- [Release verification guide](release-verification.md)
+- [Release source comparison](../verification/release-source-comparison.md)
+- [Release artifact checklist](../verification/release-artifact-checklist.md)
 
 Questions:
 
@@ -432,17 +334,6 @@ Questions:
 - Which platforms have release assets?
 - What release verification material exists?
 - Are checksums, signatures, or signed tags published?
-
-### Tests
-
-Likely files/directories to review:
-
-- `test/`
-- `src/test/`
-- `src/wallet/test/`
-
-Questions:
-
 - Which tests are inherited from Bitcoin Core?
 - Are there BitcoinII-specific tests?
 - Which tests can contributors run locally?
@@ -464,4 +355,4 @@ Questions:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This map includes verified files already reviewed plus likely next review targets. Target lists are not claims of implementation details until reviewed.
+**Notes:** This map was refreshed after adding network Source Atlas slices for protocol primitives, network RPC, peer handshake, address sharing, block/header sharing, transaction sharing, and peer health/stale-tip checks. Target lists are not claims of implementation details until reviewed.
