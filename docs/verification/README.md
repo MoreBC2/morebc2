@@ -16,6 +16,8 @@ Verification pages should help MoreBC2 keep uncertainty visible instead of hidin
 
 - [Open questions backlog](open-questions.md)
 - [Known unknowns](known-unknowns.md)
+- [Private review readiness](private-review-readiness.md)
+- [Narrow private review assignments](private-review-assignments.md)
 - [Review feedback buckets](review-feedback-buckets.md)
 - [Stale wording scan](stale-wording-scan.md)
 - [Command example scan](command-example-scan.md)
@@ -33,6 +35,8 @@ Verification pages should help MoreBC2 keep uncertainty visible instead of hidin
 4. Decide whether it blocks private review, public launch, or only future polish.
 5. Move verified results into the correct documentation page.
 6. Leave a note explaining what changed.
+
+For private review planning, use [Private review readiness](private-review-readiness.md) and [Narrow private review assignments](private-review-assignments.md).
 
 For review notes, use [Review feedback buckets](review-feedback-buckets.md) to keep feedback narrow and actionable.
 
@@ -68,9 +72,9 @@ For release checks, also update [Release source comparison notes](release-source
 
 **Question:** How should users verify BitcoinII release downloads?
 
-**Current evidence:** Source-tree verification and release-process docs describe checksum/signature style workflows, but current release assets and signatures still need direct checking.
+**Current evidence:** Source-tree verification and release-process docs describe checksum/signature style workflows, but current release assets still need direct checking.
 
-**Needed source:** Release assets, checksum files, signatures, signed tags, trusted keys, or maintainer statement.
+**Needed source:** Release assets, checksum files, signed tags, trusted keys, or maintainer statement.
 
 **Status:** Needs Review
 
@@ -86,7 +90,7 @@ For release checks, also update [Release source comparison notes](release-source
 
 **Question:** How should exchanges, explorers, pools, or wallet developers contact BitcoinII maintainers for integration support?
 
-**Needed source:** Official website, repository contact info, Discord maintainer statement, or project-maintained contact page.
+**Needed source:** Official website, repository contact info, maintainer statement, or project-maintained contact page.
 
 **Status:** Needs Review
 
@@ -122,7 +126,7 @@ For release checks, also update [Release source comparison notes](release-source
 - Keep current facts, historical facts, research ideas, and discussion proposals separate.
 - Record the source type used: source code, release artifact, official website, archive, maintainer statement, local test, or current direct check.
 - Command examples should remain unverified until run locally with environment details.
-- Release artifact claims should remain unverified until assets, hashes, and any available signatures are checked directly.
+- Release artifact claims should remain unverified until assets and hashes are checked directly.
 - Ecosystem claims should remain unverified until checked directly and dated.
 
 ## Notes
@@ -134,5 +138,5 @@ Items in this queue should not be treated as verified documentation until moved 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current verification section structure and command smoke-test plan
-**Notes:** This section README tracks verification workflow, feedback buckets, stale-wording scan, command-example scan, command-test tracking, release-check tracking, command smoke-test planning, and priority unknowns. It does not verify BitcoinII protocol behavior.
+**Primary sources checked:** Current verification section structure, private review readiness checklist, narrow assignment cards, and command smoke-test plan
+**Notes:** This section README tracks verification workflow, private-review readiness, narrow assignments, feedback buckets, stale-wording scan, command-example scan, command-test tracking, release-check tracking, command smoke-test planning, and priority unknowns. It does not verify BitcoinII protocol behavior.
