@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Needs Review
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-07-01
 
 ## Summary
 
@@ -26,7 +26,7 @@ The BitcoinII source headers state that the project was forked from Bitcoin Core
 
 The repository README describes BitcoinII as a “Sister Chain” that currently follows Bitcoin development and upgrade paths unless Bitcoin development ceases.
 
-## What is verified today
+## Source-backed notes currently under review
 
 The current MoreBC2 technical drafts have source-backed notes for:
 
@@ -66,15 +66,15 @@ This page does not claim:
 
 ## Sources
 
-- BitcoinII README: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/README.md
-- `src/kernel/chainparams.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/kernel/chainparams.cpp
-- `src/pow.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/pow.cpp
-- `src/primitives/block.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/primitives/block.cpp
-- `src/hash.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/hash.h
-- `share/examples/bitcoinII.conf`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/share/examples/bitcoinII.conf
+- Current observed README: `Bitcoin-II/BitcoinII-Core` `README.md`
+- Current observed chain parameters source: `Bitcoin-II/BitcoinII-Core` `src/kernel/chainparams.cpp`
+- Current observed difficulty source: `Bitcoin-II/BitcoinII-Core` `src/pow.cpp`
+- Current observed block primitive source: `Bitcoin-II/BitcoinII-Core` `src/primitives/block.cpp`
+- Current observed hash source: `Bitcoin-II/BitcoinII-Core` `src/hash.h`
+- Current observed example config: `Bitcoin-II/BitcoinII-Core` `share/examples/bitcoinII.conf`
 
 ## Verification
 
 **Status:** Needs Review
-**Primary sources checked:** Yes
+**Primary sources checked:** Partially
 **Notes:** This page should be reviewed after the source registry confirms canonical links and official public contact channels.
