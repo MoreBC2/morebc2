@@ -70,6 +70,8 @@ Substantial pages should end with:
 
 Use fenced code blocks for commands.
 
+Illustrative command examples in style or template pages should be treated as untested examples unless a matching test record exists.
+
 ```bash
 bitcoinII-cli getblockchaininfo
 ```
