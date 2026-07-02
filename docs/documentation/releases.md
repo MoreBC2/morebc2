@@ -2,43 +2,45 @@
 
 **Category:** Documentation
 **Status:** Needs Review
-**Last reviewed:** 2026-07-01
+**Last reviewed:** 2026-07-02
 
 ## Summary
 
-This page tracks public BitcoinII release information that has been checked from GitHub.
+This page tracks public BitcoinII release information checked from GitHub.
 
 This page does not prove release authenticity. It records release-page observations and gaps that still need verification.
 
 ## Public release page observation
 
-The public BitcoinII Core release page observed by MoreBC2 during prior review was:
+The public BitcoinII Core release page rechecked by MoreBC2 on 2026-07-02 was:
 
 - `https://github.com/Bitcoin-II/BitcoinII-Core/releases`
 
-Older links such as `https://github.com/BitcoinII-Dev/BitcoinII/releases` were observed redirecting to a different GitHub repository path observed as `KvantaMechanic/BitcoinII`.
+Older links such as `https://github.com/BitcoinII-Dev/BitcoinII/releases` have previously been observed redirecting to a different GitHub repository path observed as `KvantaMechanic/BitcoinII`.
 
 This repository-path split remains a public-launch blocker until the canonical release/source path is confirmed by maintainers or official project material.
 
-## Releases observed during prior review
+## Releases observed
 
 ### BitcoinII Core v29.1.0
 
-Observed on the `Bitcoin-II/BitcoinII-Core` release page during prior review:
+Observed on the `Bitcoin-II/BitcoinII-Core` release page during the 2026-07-02 recheck:
 
 - Release title shown: `BitcoinII Core v29.1.0`
+- Page shows a `Latest` marker for this release.
 - Tag shown: `v29.1.0`
-- Release date rendered by GitHub page context during that pass: `2026-11-27 04:22`
+- Release timestamp rendered by GitHub page context: `27 Nov 04:22`
 - Release commit shown: `3f2a352`
 - GitHub page marked the release commit as created on GitHub.com and signed with GitHub's verified signature system.
 - GitHub page showed GPG key ID `B5690EEEBB952194`.
 - Release note shown: `Mandatory release including updated seed server and blockchain checkpoints. Previous v29 releases are now fully deprecated and should not be used.`
 - Assets observed: 12 assets.
 
-Recheck caveat:
+Date caveat:
 
-- The rendered release date above needs human recheck before MoreBC2 treats it as a current factual release date.
-- This page should not call `v29.1.0` the current latest release until the release page, date, tag, and asset list are rechecked directly.
+- GitHub's unauthenticated rendered HTML showed `27 Nov 04:22` without a year in the visible text during this recheck.
+- MoreBC2 should not infer the year from that rendered text alone.
+- The earlier `2026-11-27 04:22` note should be treated as a rendering/interpretation risk, not as confirmed release metadata.
 
 Verification caveats:
 
@@ -50,7 +52,7 @@ Verification caveats:
 
 ### Legacy observed release path: v0.27.1
 
-Observed on the redirected `KvantaMechanic/BitcoinII` release page:
+Observed on the redirected `KvantaMechanic/BitcoinII` release page during earlier review:
 
 - Tag shown: `v0.27.1`
 - Release date shown by GitHub page: `2025-11-29 04:04`
@@ -80,7 +82,7 @@ Verification caveats:
 
 ### Legacy observed release: v0.27.0
 
-Observed on the redirected legacy release page:
+Observed on the redirected legacy release page during earlier review:
 
 - Release title shown: `Genesis Release`
 - Tag shown: `v0.27.0`
@@ -112,7 +114,8 @@ However, this source-tree helper is not enough by itself to prove the current Bi
 | Question | Current status | Notes |
 |---|---|---|
 | Release page path observed | Partial | Observed path is `Bitcoin-II/BitcoinII-Core/releases`. Canonical status still needs confirmation. |
-| Latest-release claim | Needs Review | `BitcoinII Core v29.1.0` was observed during prior review, but currentness and rendered date need recheck. |
+| Latest-release marker observed | Partial | `BitcoinII Core v29.1.0` showed a GitHub `Latest` marker during the 2026-07-02 recheck. |
+| Release date resolved | Needs Review | Rendered HTML showed `27 Nov 04:22` without a year. Do not infer the year from the rendered text alone. |
 | Release asset list complete | Needs Review | GitHub rendered page showed 12 assets but not full names in this pass. |
 | Asset hashes independently calculated | Not done | No binaries downloaded. |
 | Checksum manifest found | Needs Review | Not confirmed for current releases. |
@@ -123,7 +126,7 @@ However, this source-tree helper is not enough by itself to prove the current Bi
 
 ## Open items
 
-- Recheck the `v29.1.0` release page date and currentness.
+- Confirm the exact `v29.1.0` release timestamp with API metadata or authenticated GitHub view.
 - Confirm canonical repository and release path.
 - Fetch full asset list for `v29.1.0`.
 - Confirm whether release assets include Windows GUI and CLI downloads.
@@ -136,9 +139,9 @@ However, this source-tree helper is not enough by itself to prove the current Bi
 
 ## Sources
 
-- Release page observed during prior review: `https://github.com/Bitcoin-II/BitcoinII-Core/releases`
-- Release tag page observed during prior review: `https://github.com/Bitcoin-II/BitcoinII-Core/releases/tag/v29.1.0`
-- Legacy redirected release page: `https://github.com/BitcoinII-Dev/BitcoinII/releases`
+- Release page rechecked 2026-07-02: `https://github.com/Bitcoin-II/BitcoinII-Core/releases`
+- Release tag page rechecked 2026-07-02: `https://github.com/Bitcoin-II/BitcoinII-Core/releases/tag/v29.1.0`
+- Legacy redirected release page observed during earlier review: `https://github.com/BitcoinII-Dev/BitcoinII/releases`
 - `contrib/verify-binaries/README.md` in `Bitcoin-II/BitcoinII-Core`
 - [Release verification guide](../developers/release-verification.md)
 - [Open questions backlog](../verification/open-questions.md)
@@ -147,4 +150,4 @@ However, this source-tree helper is not enough by itself to prove the current Bi
 
 **Status:** Needs Review
 **Primary sources checked:** Partially
-**Notes:** GitHub release pages and source-tree verification-helper text were checked during prior review. MoreBC2 has not rechecked release currentness after the private-review audit, downloaded binaries, calculated hashes, verified manifests, verified detached signatures, or confirmed trusted release keys.
+**Notes:** GitHub release pages and source-tree verification-helper text were checked, and the release page was rechecked on 2026-07-02. MoreBC2 has not downloaded binaries, calculated hashes, verified manifests, verified detached signatures, confirmed trusted release keys, or resolved the exact release timestamp from API metadata.
