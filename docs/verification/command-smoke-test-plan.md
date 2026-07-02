@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-07-01
+**Last reviewed:** 2026-07-02
 
 ## Summary
 
@@ -18,6 +18,7 @@ The first pass should prove that a BitcoinII binary can:
 
 - Start with a disposable data directory.
 - Answer basic local status RPCs.
+- Answer basic peer/network status RPCs when network is enabled.
 - Create or load a temporary wallet only when wallet testing is explicitly intended.
 - Shut down cleanly.
 - Produce enough environment details for repeatable documentation.
@@ -27,7 +28,7 @@ The first pass should prove that a BitcoinII binary can:
 Do not include these in the first smoke-test pass:
 
 - Mainnet spend commands.
-- Live transaction broadcast commands.
+- Live transaction submission commands.
 - Private-key dump/import commands.
 - Real wallet passphrases.
 - Restore tests using real backups.
@@ -35,6 +36,8 @@ Do not include these in the first smoke-test pass:
 - Production data directories.
 - Pruning/reindex/import tests on a real node.
 - Block/header submission on a public network.
+- Manual peer changes on a public network.
+- Ban-list changes without a dedicated operator test plan.
 
 All first-pass tests should use a disposable directory and a clearly documented chain mode.
 
@@ -52,6 +55,7 @@ Each test record should include:
 - Chain mode.
 - Data directory path type, not private local secrets.
 - Whether wallet support was enabled.
+- Whether networking was enabled.
 - Expected result.
 - Actual result.
 - Pass/fail status.
@@ -67,6 +71,7 @@ Before testing commands, record:
 - Whether binary verification was completed.
 - Operating system.
 - Whether the test uses daemon/CLI, GUI, or both.
+- Whether network connections are enabled.
 
 If binary verification has not been completed, say so clearly.
 
@@ -84,6 +89,27 @@ These should be the first candidates after a disposable node starts:
 | `getblockcount` | Confirm active height lookup works | Low | Placeholder |
 
 These commands should be run only against a local node with local RPC authentication.
+
+## Phase 1B: read-only network status checks
+
+Only run these after Phase 1 is documented.
+
+These are read-only or low-impact status checks, but their output depends on network mode, peer state, and whether the node is allowed to connect to peers.
+
+| Candidate command | Purpose | Risk level | Status before test |
+|---|---|---|---|
+| `getconnectioncount` | Confirm peer count output shape | Low | Placeholder |
+| `getpeerinfo` | Confirm peer detail output shape | Low | Placeholder |
+| `getnettotals` | Confirm network byte counter output shape | Low | Placeholder |
+| `getnodeaddresses` | Confirm address-manager output shape | Low/Medium | Placeholder |
+| `getaddrmaninfo` | Confirm address-manager summary output shape | Low/Medium | Placeholder |
+| `ping` | Confirm ping request is accepted and later reflected in peer state | Low/Medium | Placeholder |
+
+Notes:
+
+- `getpeerinfo` can be empty when the node has no peers.
+- `getnodeaddresses` and `getaddrmaninfo` depend on address-manager state.
+- `ping` requests a network action and should be treated as lower risk than wallet/spend commands, but still not a pure read-only command.
 
 ## Phase 2: temporary wallet checks
 
@@ -109,7 +135,7 @@ Only run after Phase 1 and Phase 2 are documented.
 | `decoderawtransaction` | Confirm decode behavior on known fixture transaction | Low | Placeholder |
 | `decodescript` | Confirm script decode behavior on known fixture script | Low | Placeholder |
 
-Do not use live broadcast in this phase.
+Do not use live submission in this phase.
 
 ## Commands to keep out of early testing
 
@@ -135,6 +161,11 @@ Do not include these until there is a separate disposable-wallet or regtest plan
 - `pruneblockchain`
 - `invalidateblock`
 - `reconsiderblock`
+- `addnode`
+- `disconnectnode`
+- `setban`
+- `clearbanned`
+- `setnetworkactive`
 
 Some of these can eventually be tested safely, but they need dedicated disposable setups and stronger notes.
 
@@ -152,6 +183,7 @@ Some of these can eventually be tested safely, but they need dedicated disposabl
 **Chain mode:** main / testnet / signet / regtest / unknown
 **Data directory:** disposable / existing / other
 **Wallet enabled:** yes / no
+**Network enabled:** yes / no
 **Command:** `bitcoinII-cli -datadir=<disposable-dir> getblockchaininfo`
 **Expected result:** JSON chain status output
 **Actual result:** summary only, no secrets
@@ -171,10 +203,11 @@ A command should move from Locally tested to Verified only after another environ
 - [Command example scan](command-example-scan.md)
 - [Stale wording scan](stale-wording-scan.md)
 - [RPC overview](../developers/rpc-overview.md)
+- [Network RPC source review](../developers/source-atlas/rpc-network.md)
 - [Local development](../developers/local-development.md)
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** MoreBC2 command trackers and source-atlas RPC inventory pages
-**Notes:** This plan intentionally avoids live broadcast, real-wallet, private-key, restore, pruning, reindex, and block-submission tests. It is a planning page, not evidence that commands work.
+**Primary sources checked:** MoreBC2 command trackers, source-atlas RPC inventory pages, and network RPC source review
+**Notes:** This plan intentionally avoids live submission, real-wallet, private-key, restore, pruning, reindex, block-submission, manual-peer, and ban-list tests. It is a planning page, not evidence that commands work.
