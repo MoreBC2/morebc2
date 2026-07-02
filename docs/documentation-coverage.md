@@ -25,17 +25,17 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 | Area | Status | Notes |
 |---|---|---|
-| Architecture overview | Partial | Refreshed with current Source Atlas, wallet/RPC, mempool, block-template, and service-interface links. Needs P2P Source Atlas link refresh after net-processing slice work. |
+| Architecture overview | Partial | Refreshed with P2P Source Atlas links, wallet/RPC, mempool, block-template, and service-interface links. Dedicated peer communication architecture page still pending. |
 | Node startup | Partial | Built from first-pass startup-path review, now including wallet loader/startup notes. GUI, daemon, shutdown details pending. |
 | Consensus model | Partial | Refreshed with script-engine, mempool RPC, policy/service-surface, and reorg-history links. Full flag caller mapping still pending. |
-| Life of a transaction | Partial | Refreshed with wallet RPC, raw transaction RPC, mempool/broadcast RPC, dry-run acceptance, and block-template links. Net-processing transaction relay slice now exists and should be linked in a future architecture refresh. |
-| Life of a block | Partial | Refreshed with candidate-template, mining RPC, blockchain RPC, and wallet-history visibility links. Net-processing block/header relay slice now exists and should be linked in a future architecture refresh. |
+| Life of a transaction | Partial | Refreshed with wallet RPC, raw transaction RPC, mempool/broadcast RPC, dry-run acceptance, block-template links, and P2P transaction-sharing slice. Transaction send-loop behavior and tests pending. |
+| Life of a block | Partial | Refreshed with candidate-template, mining RPC, blockchain RPC, wallet-history visibility links, and P2P block/header-sharing slice. Compact-block details and send-loop behavior pending. |
 | Life of a reorganization | Partial | Refreshed with wallet transaction-history RPC, mempool RPC, service visibility, and pruned-node caveats. Wallet/index/P2P internals still need deeper review. |
 | Block validation flow | Reviewed | Strong first-pass flow map exists. |
-| Mempool flow | Partial | Refreshed with mempool RPC, dry-run distinction, mempool inspection, and persistence notes. Replacement policy, P2P transaction relay, and tests pending. |
+| Mempool flow | Partial | Refreshed with mempool RPC, dry-run distinction, mempool inspection, persistence notes, and local-mempool-versus-peer-sharing boundary. Replacement policy, send-loop behavior, and tests pending. |
 | Wallet flow | Partial | First-pass wallet startup/lifecycle, wallet RPC, backup/import, spend/PSBT, encryption, coins/balances, and transaction-history RPC review exists. Wallet database internals pending. |
 | Candidate block flow | Partial | First-pass template assembly and mining RPC review exists. External-operation docs pending. |
-| P2P flow | Partial | New Source Atlas slices cover protocol primitives, network RPC, handshake, address relay, block/header relay, transaction relay, and peer eviction/stale-tip checks. Send-loop behavior, lower-level `net.cpp`, banman, and release comparison remain open. |
+| P2P flow | Partial | Source Atlas slices cover protocol primitives, network RPC, handshake, address sharing, block/header sharing, transaction sharing, and peer health/stale-tip checks. Send-loop behavior, lower-level `net.cpp`, banman, and release comparison remain open. |
 
 ## Source atlas coverage
 
@@ -54,9 +54,9 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | `src/node/mini_miner.*` | Partial | First-pass fee/ordering simulation helper review exists; source links refreshed. Caller paths pending. |
 | `src/rpc/mining.cpp` | Partial | First-pass mining RPC, getblocktemplate, submitblock, submitheader, and mining-info review exists. Commands untested; source links refreshed. |
 | `src/rpc/blockchain.cpp` | Partial | First-pass blockchain RPC, block lookup, pruning, UTXO stats, scans, and chainstate review exists. Commands untested; source links refreshed. |
-| `src/rpc/net.cpp` | Partial | First-pass network RPC, peer status, network status, address-manager, ban-list, manual peer, and hidden testing command review exists. Commands untested; lower-level P2P source slices now partially reduce the prior gap. |
+| `src/rpc/net.cpp` | Partial | First-pass network RPC, peer status, network status, address-manager, ban-list, manual peer, and hidden testing command review exists. Commands untested; command tracker now separates read-only candidates from operator-only/manual-peer and ban-list commands. |
 | `src/protocol.h` / `src/protocol.cpp` | Partial | First-pass P2P protocol primitives review exists for message headers, message names, service flags, address serialization, and inventory helpers. Release/main comparison remains open. |
-| `src/net_processing.h` / `src/net_processing.cpp` | Partial | First-pass slices now exist for handshake, address relay, block/header relay, transaction relay, and peer eviction/stale-tip checks. Send-loop behavior, lower-level net connection management, banman, release/main comparison, and upstream comparison remain open. |
+| `src/net_processing.h` / `src/net_processing.cpp` | Partial | First-pass slices now exist for handshake, address sharing, block/header sharing, transaction sharing, and peer health/stale-tip checks. Send-loop behavior, lower-level net connection management, banman, release/main comparison, and upstream comparison remain open. |
 | `src/rpc/rawtransaction.cpp` | Partial | First-pass raw transaction lookup, decode, construction, explicit-key signing, and PSBT review exists. Commands untested; source links refreshed. |
 | `src/rpc/mempool.cpp` | Partial | First-pass transaction relay, mempool acceptance testing, mempool inspection, persistence, orphan, and package RPC review exists. Commands untested; source links refreshed. |
 | `src/wallet/init.cpp` | Partial | First-pass wallet option, parameter interaction, and loader construction review exists; source links refreshed. |
@@ -86,7 +86,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Documentation README | Partial | Normalized for current-doc boundaries, source-backed anchors, and untested-command caution. |
 | What is BitcoinII | Partial | Needs final source review and public wording pass. |
 | Project overview | Partial | Needs current source/official-source review. |
-| Network specifications | Partial | Strong source-backed values exist; current release branch comparison has started. P2P slice links should be added in a future refresh. |
+| Network specifications | Partial | Refreshed current observed source path, corrected stale BIP9 and moving chain-data values, and linked P2P Source Atlas slices. Release branch comparison and live-node review still pending. |
 | Consensus overview | Partial | Strong PoW and amount notes exist; transaction-helper and script-engine material has been refreshed. |
 | Checkpoints | Framework | Existence documented; checkpoint list should distinguish `v29.1.0` from `main`. |
 | Releases | Partial | Current and legacy release-page observations refreshed; release source comparison and artifact checklist added; full asset verification still pending. |
@@ -130,12 +130,12 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | History README | Partial | Normalized for dated-source and archive/current-status separation. |
 | Verification README | Partial | Normalized for verification workflow, review feedback buckets, stale-wording scan, command-example scan, command tracking, release tracking, smoke-test planning, and priority unknowns. |
 | Review feedback buckets | Framework | Added feedback taxonomy and narrow assignment guidance for private review. |
-| Stale wording scan | Partial | Targeted orientation, exchange, wallet, mining, ecosystem, node/config, old-path, developer workflow, and Source Atlas scans recorded. Known stale source path and stale BIP9 value no longer appear in repo search. |
-| Command example scan | Partial | Scans recorded for exchange, wallet, mining, RPC overview, node, configuration, command tracker, developer workflow, and Source Atlas RPC/wallet pages. Remaining repository-wide command-term search pending. |
+| Stale wording scan | Partial | Updated through status-label cleanup, release-page recheck, network navigation refresh, and network-specification cleanup. Remaining scans: command examples, fresh old-path check, release assets, live ecosystem. |
+| Command example scan | Partial | Updated through exchange, wallet, mining, RPC overview, node/config, developer workflow, Source Atlas RPC/wallet/network pages, command tracker, and smoke-test plan. Full local grep still pending. |
 | Known unknowns | Partial | Refreshed as short executive list linked to full backlog. |
 | Open questions backlog | Partial | Consolidated with priority labels, evidence needs, and public/private review blockers. |
-| Command testing status | Framework | Added command-test tracker, smoke-test-plan links, status labels, untested inventory, and test-record template. |
-| Command smoke-test plan | Framework | Added safe phased plan for harmless node checks, temporary-wallet checks, and later dry-run transaction checks. |
+| Command testing status | Framework | Refreshed with network status command candidates and operator-only network commands. No command is locally tested yet. |
+| Command smoke-test plan | Framework | Refreshed with Phase 1B read-only network status checks and explicit exclusions for manual peer/ban-list/network-active commands. |
 | Release source comparison notes | Partial | Added `v29.1.0` versus `main` comparison and source spot checks. |
 | Release artifact checklist | Framework | Added asset-inventory table, workflow observation, release-process notes, and future test-record template. |
 | Configuration overview | Partial | Command/config testing status added; stale source links updated. Platform examples and startup commands pending. |
@@ -152,9 +152,9 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Legal and reuse posture | Framework | Added private-review-only posture because no repository license file was found. |
 | Private review handoff | Framework | Updated after contribution workflow, feedback-bucket work, and legal/reuse note. |
 | Developer README | Partial | Links reading order, verification workflow, source review guide, source atlas, local development, build, testing, and release verification. |
-| Repository map | Partial | Refreshed through mempool/broadcast RPC. Needs P2P Source Atlas link refresh after net-processing slice work. |
-| Source tree guide | Partial | Refreshed through mempool/broadcast RPC. Needs P2P Source Atlas link refresh after net-processing slice work. |
-| Developer reading order | Framework | Updated to include current Source Atlas and developer workflow paths; should be refreshed after P2P and polish work. |
+| Repository map | Partial | Refreshed with network/P2P source slices, network RPC, and updated next-review targets. |
+| Source tree guide | Partial | Refreshed with protocol, net-processing, and network RPC reviewed areas; unreviewed list now focuses on lower-level `net.cpp`, banman, DNS seed/addrman callers, and remaining sections. |
+| Developer reading order | Framework | Updated to include current network Source Atlas group and exchange-listing docs. |
 | Source review guide | Framework | Created as contributor workflow; should be tested on future source reviews. |
 | Verification standards | Framework | Practical workflow page exists; evidence scale remains the root confidence model. |
 | Local development environment | Framework | Developer workflow scan found no blocking command-label issue. Commands still need actual testing. |
@@ -168,15 +168,15 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 
 ## Current priority order
 
-1. Refresh architecture/navigation pages to link the new P2P Source Atlas slices.
-2. Continue lower-level network review with send-loop behavior, `src/net.cpp`, and banman.
-3. Safe command smoke-test execution when a BitcoinII binary/environment is available.
-4. Continue release artifact verification when full release asset data is available.
-5. Direct ecosystem checks for explorers, APIs, pools, and exchanges.
-6. Repository-wide command-term search recheck with a more reliable method.
+1. Continue lower-level network review with send-loop behavior, `src/net.cpp`, banman, and DNS seed/addrman callers.
+2. Safe command smoke-test execution when a BitcoinII binary/environment is available.
+3. Continue release artifact verification when full release asset data is available.
+4. Direct ecosystem checks for explorers, APIs, pools, and exchanges.
+5. Repository-wide command-term and stale-path recheck with a full local grep or more reliable method.
+6. Build the dedicated peer communication architecture page after one more lower-level network review pass.
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Repository docs and current section indexes
-**Notes:** This dashboard was refreshed after adding net-processing handshake, address-relay, block/header-relay, transaction-relay, and peer-eviction/stale-tip source atlas slices, plus the current exchange-listing documentation batch.
+**Notes:** This dashboard was refreshed after network Source Atlas/navigation work, network specifications cleanup, command-tracker updates, command smoke-test plan updates, and command-example scan updates. It remains a project-management tracker, not a claim that commands or live services are verified.
