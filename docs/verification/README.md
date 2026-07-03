@@ -83,9 +83,9 @@ For release checks, also update [Release source comparison notes](release-source
 
 **Question:** Do the reviewed network/P2P source files differ between `v29.1.0` and current observed `main`?
 
-**Current evidence:** The network release comparison records that the reviewed network/P2P files did not appear in the GitHub changed-file list when comparing `v29.1.0` to `main`.
+**Current evidence:** The network release comparison records that the reviewed network/P2P files did not appear in the GitHub changed-file list when comparing `v29.1.0` to `main`; selected blob-SHA spot checks for key files also matched across both refs.
 
-**Needed source:** Optional blob-level spot checks and reviewer confirmation.
+**Needed source:** Reviewer confirmation and any remaining optional header-file spot checks.
 
 **Status:** Partial
 
@@ -149,5 +149,5 @@ Items in this queue should not be treated as verified documentation until moved 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current verification section structure, private review readiness checklist, narrow assignment cards, command smoke-test plan, and network release comparison
+**Primary sources checked:** Current verification section structure, private review readiness checklist, narrow assignment cards, command smoke-test plan, network release comparison, and selected network file blob-SHA spot checks
 **Notes:** This section README tracks verification workflow, private-review readiness, narrow assignments, feedback buckets, stale-wording scan, command-example scan, command-test tracking, release-check tracking, command smoke-test planning, network release comparison, and priority unknowns. It does not verify BitcoinII protocol behavior.
