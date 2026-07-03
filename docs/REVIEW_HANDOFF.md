@@ -2,7 +2,7 @@
 
 **Category:** Project maintenance
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-02
 
 ## Summary
 
@@ -12,18 +12,19 @@ It is meant for private review, not public launch.
 
 ## Current recommendation
 
-MoreBC2 is closer to invite-only review now that a contribution workflow, feedback-bucket system, and legal/reuse posture note exist.
+MoreBC2 is now ready for **first narrow invite-only review**.
 
-It is not ready for broad public launch.
+It is not ready for broad review or public launch.
 
-A trusted reviewer or agent can be useful now if their task is narrow and clearly framed:
+A trusted reviewer or agent can be useful now only if their task is narrow and clearly framed:
 
-- Find stale links.
-- Check navigation.
-- Check terminology consistency.
-- Review one source-backed page against one source file.
-- Review whether Draft/Partial/Reviewed labels are clear.
-- Review open questions and unknowns.
+- Check command-safety wording.
+- Check release-verification wording.
+- Check one source-backed page against one source file.
+- Check one P2P wording lane against the reviewed source boundaries.
+- Check one network test-plan lane for reproducibility and caveats.
+- Check ecosystem pages for unsupported active-service claims.
+- Check whether Draft/Partial/Reviewed labels are clear.
 
 Do not ask a reviewer or agent to treat the repository as final public documentation yet.
 
@@ -31,21 +32,24 @@ Do not ask a reviewer or agent to treat the repository as final public documenta
 
 - Root and docs indexes have been refreshed.
 - Section READMEs have been normalized.
-- `CONTRIBUTING.md` now defines a private-review workflow.
+- `CONTRIBUTING.md` defines a private-review workflow.
 - Review feedback buckets exist.
 - Legal/reuse posture note exists.
 - Architecture lifecycle pages have been cross-linked to newer Source Atlas pages.
-- Source Atlas has meaningful first-pass coverage across consensus, validation, mempool, storage, wallet, mining, raw transaction, and RPC areas.
+- Source Atlas has meaningful first-pass coverage across consensus, validation, mempool, storage, wallet, mining, RPC, and peer/network areas.
 - Wallet guide has first-pass source-reviewed wallet RPC coverage.
-- RPC overview now distinguishes source-reviewed command groups from untested examples.
+- RPC overview distinguishes source-reviewed command groups from untested examples.
 - Command testing tracker exists.
-- Release source comparison and artifact checklist exist.
+- Command smoke-test plan exists.
+- Release source comparison, network release comparison, and release artifact checklist exist.
+- Network test coverage map and network test run plan exist.
 - Ecosystem/API framework exists without claiming live services are active.
 - Open questions and known unknowns are centralized enough for private review.
+- Narrow private-review assignment cards exist.
 
 ## Minimum before inviting reviewers
 
-These should be done before inviting people or agents to review the repo:
+These should be in place before inviting people or agents to review the repo:
 
 ### 1. Contribution and review workflow
 
@@ -55,6 +59,7 @@ Current anchors:
 
 - [`CONTRIBUTING.md`](../CONTRIBUTING.md)
 - [Review feedback buckets](verification/review-feedback-buckets.md)
+- [Private review assignments](verification/private-review-assignments.md)
 
 Still needed before public contribution:
 
@@ -83,7 +88,7 @@ Still needed before public launch:
 
 ### 3. Reviewer start page
 
-Status: **Mostly done for private review**
+Status: **Ready for first narrow private review**
 
 Suggested flow:
 
@@ -91,15 +96,18 @@ Suggested flow:
 2. `docs/README.md`
 3. `PROJECT_STATUS.md`
 4. `docs/REVIEW_HANDOFF.md`
-5. `docs/LEGAL_REUSE.md`
-6. `docs/documentation-coverage.md`
-7. `docs/verification/known-unknowns.md`
-8. `docs/verification/open-questions.md`
-9. One assigned review target
+5. `docs/verification/private-review-readiness.md`
+6. `docs/verification/private-review-assignments.md`
+7. `docs/LEGAL_REUSE.md`
+8. `docs/documentation-coverage.md`
+9. `docs/verification/known-unknowns.md`
+10. `docs/verification/open-questions.md`
+11. One assigned review target
 
 Still useful:
 
-- Add this flow to the root README before inviting reviewers.
+- Keep reviewer assignments one lane at a time.
+- Prefer command and release wording review before technical network review.
 
 ### 4. Issue labels or feedback buckets
 
@@ -133,20 +141,29 @@ Needed:
 - Search for `Verified` labels and confirm they are deserved.
 - Search for ecosystem entries that might imply active/recommended status without a direct check.
 
-Status: **Needed before private review**
+Status: **Useful before broader review, but not a blocker for one or two narrow assignments**
 
 ## Good first assignments for new agents
 
 Use narrow assignments. Avoid broad requests like "review everything."
 
-### Agent task: Navigation review
+### Agent task: Command safety review
 
 Ask the agent to:
 
-- Start from `README.md` and `docs/README.md`.
-- Follow every major section link.
-- Identify broken links, confusing loops, and missing next-step links.
-- Do not change technical claims.
+- Review `docs/verification/command-smoke-test-plan.md`, `docs/verification/command-testing.md`, and `docs/verification/command-example-scan.md`.
+- Confirm each untested example is clearly labeled.
+- Flag any command that should move later or be marked Do not publish.
+- Do not run commands.
+- Do not mark anything tested.
+
+### Agent task: Release verification wording
+
+Ask the agent to:
+
+- Review `docs/developers/release-verification.md`, `docs/verification/release-source-comparison.md`, `docs/verification/network-release-comparison.md`, and `docs/verification/release-artifact-checklist.md`.
+- Check that source comparison, GitHub UI verification, binary artifact verification, checksum verification, and live release-asset checks remain separate.
+- Do not claim release files are verified unless hashes/signatures/assets were checked directly.
 
 ### Agent task: Source-backed claim review
 
@@ -155,21 +172,31 @@ Ask the agent to:
 - Pick one Source Atlas page.
 - Compare it against the source file and ref named in the page.
 - Report mismatches only.
-- Do not infer behavior outside the reviewed lines.
+- Do not infer behavior outside the reviewed source area.
 
-### Agent task: Command example review
+### Agent task: P2P wording boundary review
 
 Ask the agent to:
 
-- Search for `bitcoinII-cli` and code blocks containing commands.
-- Confirm each untested example links to or matches `docs/verification/command-testing.md`.
-- Do not mark anything tested.
+- Review one P2P Source Atlas page or the peer communication model.
+- Check that it stays inside the reviewed source boundary.
+- Flag any live-network, peer-count, seed-reachability, or propagation claim that needs live evidence.
+- Do not mark P2P docs Verified.
+
+### Agent task: Network test-plan review
+
+Ask the agent to:
+
+- Review `docs/verification/network-test-coverage-map.md` and `docs/verification/network-test-run-plan.md`.
+- Confirm the plan separates observed test files from actual test results.
+- Confirm unit tests, functional tests, and user-facing smoke tests stay separate.
+- Do not mark tests passed.
 
 ### Agent task: Ecosystem review
 
 Ask the agent to:
 
-- Check one explorer, pool, exchange, or API at a time.
+- Check one explorer, pool, exchange, or API page at a time.
 - Record URL, date, observed status, and evidence level.
 - Do not call anything official unless an official source says so.
 
@@ -178,13 +205,13 @@ Ask the agent to:
 Ask the agent to:
 
 - Capture the full `v29.1.0` release asset list.
-- Check whether `SHA256SUMS` and `SHA256SUMS.asc` exist.
+- Check whether checksum and signature artifacts exist.
 - Do not download or run binaries unless explicitly assigned.
 - Update `docs/verification/release-artifact-checklist.md`.
 
 ## Not ready for agents yet
 
-Avoid these assignments until the repo has tighter workflow rules:
+Avoid these assignments until there is a dedicated reason and a tighter test environment:
 
 - Rewriting many pages at once.
 - Promoting Draft pages to Verified.
@@ -193,6 +220,8 @@ Avoid these assignments until the repo has tighter workflow rules:
 - Writing wallet movement or recovery guides.
 - Making public launch claims.
 - Changing consensus claims without source review.
+- Running tests on production data directories.
+- Treating developer functional tests as beginner node guidance.
 
 ## Public launch blockers
 
@@ -216,11 +245,11 @@ Please review conservatively. Do not assume Draft or Partial pages are final. If
 
 Useful feedback: broken links, stale wording, source mismatches, unclear status labels, missing verification notes, and unsupported claims.
 
-Please do not add live ecosystem listings, install instructions, wallet movement instructions, release-verification claims, or reuse/publication claims unless you have direct evidence and a test record or permission.
+Please do not add live ecosystem listings, install instructions, wallet movement instructions, release-verification claims, test-pass claims, or reuse/publication claims unless you have direct evidence and a test record or permission.
 ```
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current MoreBC2 project status, documentation coverage, verification queue, contribution guide, feedback buckets, legal/reuse note, and recent polish work
-**Notes:** This page is a handoff checklist for private review. It does not verify BitcoinII protocol behavior.
+**Primary sources checked:** Current MoreBC2 project status, documentation coverage, verification queue, private review readiness, private review assignments, contribution guide, feedback buckets, legal/reuse note, command safety plan, release comparison docs, network comparison docs, and network test planning docs
+**Notes:** This page is a handoff checklist for private review. It does not verify BitcoinII protocol behavior or public-launch readiness.
