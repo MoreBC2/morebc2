@@ -24,7 +24,7 @@ Local node startup
   -> block/header sharing
   -> transaction sharing
   -> periodic send loop
-  -> peer health checks and cleanup
+  -> peer health / peer-list checks / cleanup
 ```
 
 ## Layer 1: lower-level connection management
@@ -189,11 +189,13 @@ Related:
 - [Source atlas: net processing transaction relay](../developers/source-atlas/net-processing-transaction-relay.md)
 - [Source atlas: net processing send loop](../developers/source-atlas/net-processing-send-loop.md)
 
-## Layer 7: peer health and cleanup
+## Layer 7: peer health, peer-list state, and cleanup
 
-Reviewed peer-health behavior includes:
+Reviewed behavior includes:
 
-- discouragement and disconnect handling
+- explicit peer-list entries versus probabilistic discouragement
+- peer-list load/dump behavior
+- selected misbehavior trigger paths
 - manual-peer and permission exceptions
 - outbound peer usefulness checks
 - extra outbound peer behavior
@@ -204,10 +206,11 @@ Reviewed peer-health behavior includes:
 
 Important boundary:
 
-Peer health logic is not a guarantee that the node always selects the best possible peers. It is a set of source-observed rules and heuristics.
+Peer health logic is not a guarantee that the node always selects the best possible peers. It is a set of source-observed rules and heuristics. Peer-list and discouragement behavior is also not a complete denial-of-service defense.
 
 Related:
 
+- [Source atlas: peer list management](../developers/source-atlas/banman.md)
 - [Source atlas: net processing peer eviction and stale-tip checks](../developers/source-atlas/net-processing-peer-eviction.md)
 - [Source atlas: net connection management](../developers/source-atlas/net-connection-management.md)
 
@@ -215,9 +218,9 @@ Related:
 
 Still needing deeper review:
 
-- Ban-list/discouragement internals.
 - Addrman internals.
 - Fixed-seed fallback behavior.
+- Peer-list RPC command implementation details.
 - Release-versus-main comparison.
 - Live-network command testing.
 - Which details belong in beginner node docs versus developer-only docs.
@@ -245,4 +248,4 @@ This page does not claim:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This page summarizes first-pass Source Atlas network slices. It should be updated after ban-list/discouragement internals, addrman/fixed-seed behavior, release-versus-main comparison, and live-network command testing are completed.
+**Notes:** This page summarizes first-pass Source Atlas network slices. It should be updated after addrman/fixed-seed behavior, peer-list RPC details, release-versus-main comparison, and live-network command testing are completed.
