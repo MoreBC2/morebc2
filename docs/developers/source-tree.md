@@ -16,6 +16,8 @@ The guide should be expanded only as directories and files are directly reviewed
 
 Currently reviewed or partially reviewed files:
 
+- `src/banman.h`
+- `src/banman.cpp`
 - `src/init.cpp`
 - `src/pow.cpp`
 - `src/validation.cpp`
@@ -34,6 +36,7 @@ Currently reviewed or partially reviewed files:
 
 Known use from review:
 
+- Peer list and discouragement management.
 - Startup orchestration.
 - Proof-of-work and difficulty retargeting.
 - Block validation and best-chain activation.
@@ -64,6 +67,7 @@ Related pages:
 - [Mempool flow](../architecture/mempool-flow.md)
 - [Architecture overview](../architecture/architecture-overview.md)
 - [Source atlas: validation interface](source-atlas/validation-interface.md)
+- [Source atlas: peer list management](source-atlas/banman.md)
 - [Source atlas: protocol primitives](source-atlas/protocol.md)
 - [Source atlas: net connection management](source-atlas/net-connection-management.md)
 - [Source atlas: peer handshake](source-atlas/net-processing-handshake.md)
@@ -75,9 +79,9 @@ Related pages:
 
 Still needed:
 
-- Banman behavior.
 - Addrman internals and fixed-seed behavior.
 - Release-versus-main comparison.
+- Peer list RPC/test follow-up.
 
 ### `src/node/`
 
@@ -141,12 +145,12 @@ Known use from review:
 - UTXO set and descriptor scan RPCs.
 - Chainstate and deployment status RPCs.
 - Network status and peer inspection RPCs.
-- Address manager, ban-list, manual peer, and hidden network-test RPCs.
+- Address manager, peer-list, manual peer, and hidden network-test RPCs.
 - Raw transaction lookup and decoding RPCs.
 - Unsigned transaction construction RPCs.
 - Explicit-key signing RPCs.
 - PSBT creation, update, joining, finalization, and analysis RPCs.
-- Raw transaction broadcast and dry-run acceptance RPCs.
+- Raw transaction submission and dry-run acceptance RPCs.
 - Mempool entry, ancestor, descendant, prevout-spend, and summary RPCs.
 - Mempool save/import, orphan-inspection, and package-submission RPCs.
 
@@ -156,7 +160,7 @@ Related pages:
 - [Source atlas: blockchain RPC](source-atlas/rpc-blockchain.md)
 - [Source atlas: network RPC](source-atlas/rpc-network.md)
 - [Source atlas: raw transaction RPC](source-atlas/rpc-rawtransaction.md)
-- [Source atlas: mempool and transaction broadcast RPC](source-atlas/rpc-mempool.md)
+- [Source atlas: mempool and transaction RPC](source-atlas/rpc-mempool.md)
 - [Source atlas: block template assembly](source-atlas/miner.md)
 - [Mining overview](../mining/mining-overview.md)
 - [RPC overview](rpc-overview.md)
@@ -341,7 +345,6 @@ Known use from review:
 
 These areas should be mapped later:
 
-- banman-related files
 - deeper addrman and fixed-seed behavior
 - other `src/rpc/` files
 - other `src/wallet/` files
@@ -373,4 +376,4 @@ When adding a directory to this guide, include:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This guide was refreshed after adding first-pass network Source Atlas slices through lower-level connection-management review. It remains conservative and only gives detailed notes for files already reviewed.
+**Notes:** This guide was refreshed after adding first-pass network Source Atlas slices through peer list management. It remains conservative and only gives detailed notes for files already reviewed.
