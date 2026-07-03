@@ -28,12 +28,14 @@ Peer communication now has a Draft architecture model and first-pass Source Atla
 
 - [P2P protocol primitives](../developers/source-atlas/protocol.md)
 - [Network RPC](../developers/source-atlas/rpc-network.md)
+- [Address manager](../developers/source-atlas/addrman.md)
+- [Peer list management](../developers/source-atlas/banman.md)
 - [Net connection management](../developers/source-atlas/net-connection-management.md)
 - [Net processing handshake](../developers/source-atlas/net-processing-handshake.md)
 - [Net processing address relay](../developers/source-atlas/net-processing-address-relay.md)
 - [Net processing block and header relay](../developers/source-atlas/net-processing-block-relay.md)
 - [Net processing transaction relay](../developers/source-atlas/net-processing-transaction-relay.md)
-- [Net processing peer eviction and stale-tip checks](../developers/source-atlas/net-processing-peer-eviction.md)
+- [Net processing peer health and stale-tip checks](../developers/source-atlas/net-processing-peer-eviction.md)
 - [Net processing send loop](../developers/source-atlas/net-processing-send-loop.md)
 
 These pages are source-observed first-pass reviews, not live-network tests or final protocol specifications.
@@ -57,4 +59,4 @@ These pages are source-observed first-pass reviews, not live-network tests or fi
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This section is being created as a framework for source-backed architecture documentation. P2P behavior now has both Source Atlas support and a Draft architecture model, but live testing and release comparison remain pending.
+**Notes:** This section is being created as a framework for source-backed architecture documentation. P2P behavior now has Source Atlas support through address-manager review and a Draft architecture model, but live testing and release comparison remain pending.
