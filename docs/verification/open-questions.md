@@ -323,13 +323,13 @@ Priority labels:
 
 **Question:** What network and peer-communication areas still need review after the first-pass P2P Source Atlas work?
 
-**Needed evidence:** Follow-up review of address-manager callers, peer-list RPC details, optional blob-level release spot checks, live-network checks, and any missing `net.cpp` edge cases.
+**Needed evidence:** Follow-up review of stale-tip coverage, DNS/seed test coverage, peer-list RPC details, live-network checks, and any missing `net.cpp` edge cases.
 
 **Priority:** Future improvement
 
 **Status:** Partial
 
-**Notes:** First-pass pages now exist for protocol primitives, network RPC, lower-level connection management, address manager, peer-list management, handshake, address sharing, block/header sharing, transaction sharing, peer health/stale-tip checks, and send-loop behavior. Network release comparison records that these reviewed P2P/network files did not appear in the GitHub changed-file list for `v29.1.0` to `main`.
+**Notes:** First-pass pages now exist for protocol primitives, network RPC, lower-level connection management, address manager, peer-list management, handshake, address sharing, block/header sharing, transaction sharing, peer health/stale-tip checks, and send-loop behavior. Network release comparison records that these reviewed P2P/network files did not appear in the GitHub changed-file list for `v29.1.0` to `main`. Network test mapping now identifies relevant unit and functional tests including `rpc_net.py`, `p2p_eviction.py`, and `p2p_getaddr_caching.py`; stale-tip and DNS/seed-specific test coverage remain less clear.
 
 ### Network RPC and CLI source review
 
@@ -359,7 +359,9 @@ Priority labels:
 
 **Priority:** Future improvement
 
-**Status:** Needs Review
+**Status:** Partial
+
+**Notes:** Network test coverage mapping now exists and has been expanded with targeted checks for network RPC, peer eviction, and address-response caching. It remains a mapping only, not a local test-run record.
 
 ## Documentation polish and review process
 
@@ -408,5 +410,5 @@ Priority labels:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Existing MoreBC2 open questions, audit findings, coverage dashboard, current section README rules, and network release comparison
-**Notes:** This backlog was refreshed after first-pass network Source Atlas work through address-manager review and network release comparison. Items should move out of this page only after the relevant documentation is updated and sourced. Some local page questions may remain where they help the reader understand that exact page.
+**Primary sources checked:** Existing MoreBC2 open questions, audit findings, coverage dashboard, current section README rules, network release comparison, and network test coverage map
+**Notes:** This backlog was refreshed after first-pass network Source Atlas work through address-manager review, network release comparison, and network test coverage expansion. Items should move out of this page only after the relevant documentation is updated and sourced. Some local page questions may remain where they help the reader understand that exact page.
