@@ -24,6 +24,7 @@ Each page should explain one important source file in plain language, link it to
 - [mining RPC](rpc-mining.md)
 - [blockchain RPC](rpc-blockchain.md)
 - [network RPC](rpc-network.md)
+- [banman](banman.md)
 - [P2P protocol primitives](protocol.md)
 - [net connection management](net-connection-management.md)
 - [net processing handshake](net-processing-handshake.md)
@@ -33,7 +34,7 @@ Each page should explain one important source file in plain language, link it to
 - [net processing peer eviction and stale-tip checks](net-processing-peer-eviction.md)
 - [net processing send loop](net-processing-send-loop.md)
 - [raw transaction RPC](rpc-rawtransaction.md)
-- [mempool and transaction broadcast RPC](rpc-mempool.md)
+- [mempool and transaction RPC](rpc-mempool.md)
 - [wallet startup](wallet-startup.md)
 - [wallet RPC](wallet-rpc.md)
 - [wallet backup/import RPC](wallet-backup-import-rpc.md)
@@ -73,4 +74,4 @@ Each source atlas page should include:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** The atlas starts with files already reviewed for MoreBC2 core technical pages. Network RPC, protocol primitives, lower-level connection management, net-processing handshake, address sharing, block/header sharing, transaction sharing, peer health/stale-tip checks, and send-loop slices now have first-pass source reviews. Remaining lower-level network review should focus on banman, addrman/fixed-seed details, DNS seed caller follow-up, and release-versus-main comparison.
+**Notes:** The atlas starts with files already reviewed for MoreBC2 core technical pages. Network RPC, peer list management, protocol primitives, lower-level connection management, net-processing handshake, address sharing, block/header sharing, transaction sharing, peer health/stale-tip checks, and send-loop slices now have first-pass source reviews. Remaining lower-level network review should focus on addrman/fixed-seed details, release-versus-main comparison, and missing RPC/test follow-up.
