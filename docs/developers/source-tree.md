@@ -16,8 +16,12 @@ The guide should be expanded only as directories and files are directly reviewed
 
 Currently reviewed or partially reviewed files:
 
+- `src/addrman.h`
+- `src/addrman.cpp`
+- `src/addrman_impl.h`
 - `src/banman.h`
 - `src/banman.cpp`
+- `src/chainparamsseeds.h`
 - `src/init.cpp`
 - `src/pow.cpp`
 - `src/validation.cpp`
@@ -36,6 +40,9 @@ Currently reviewed or partially reviewed files:
 
 Known use from review:
 
+- Address-manager new/tried tables.
+- Address quality, selection, serialization, and tried-collision handling.
+- Seed array context.
 - Peer list and discouragement management.
 - Startup orchestration.
 - Proof-of-work and difficulty retargeting.
@@ -67,6 +74,7 @@ Related pages:
 - [Mempool flow](../architecture/mempool-flow.md)
 - [Architecture overview](../architecture/architecture-overview.md)
 - [Source atlas: validation interface](source-atlas/validation-interface.md)
+- [Source atlas: address manager](source-atlas/addrman.md)
 - [Source atlas: peer list management](source-atlas/banman.md)
 - [Source atlas: protocol primitives](source-atlas/protocol.md)
 - [Source atlas: net connection management](source-atlas/net-connection-management.md)
@@ -79,8 +87,8 @@ Related pages:
 
 Still needed:
 
-- Addrman internals and fixed-seed behavior.
 - Release-versus-main comparison.
+- Address-manager caller/test follow-up.
 - Peer list RPC/test follow-up.
 
 ### `src/node/`
@@ -245,6 +253,7 @@ Known use from review:
 - Mainnet chain parameters.
 - Genesis block construction/checks.
 - DNS seed list.
+- Seed array assignment.
 - Address prefixes.
 - Consensus deployment heights and parameters visible in chain parameters.
 - Mempool entry metadata.
@@ -345,7 +354,6 @@ Known use from review:
 
 These areas should be mapped later:
 
-- deeper addrman and fixed-seed behavior
 - other `src/rpc/` files
 - other `src/wallet/` files
 - `src/qt/`
@@ -376,4 +384,4 @@ When adding a directory to this guide, include:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This guide was refreshed after adding first-pass network Source Atlas slices through peer list management. It remains conservative and only gives detailed notes for files already reviewed.
+**Notes:** This guide was refreshed after adding first-pass network Source Atlas slices through address-manager review. It remains conservative and only gives detailed notes for files already reviewed.
