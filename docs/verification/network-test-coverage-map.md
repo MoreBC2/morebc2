@@ -28,6 +28,20 @@ MoreBC2 now has first-pass Source Atlas pages for:
 
 The next verification step is to understand what upstream/current test files already exist before recommending local smoke tests or deeper reviewer assignments.
 
+## Search notes
+
+Targeted searches were attempted for peer eviction, stale-tip behavior, DNS/seed behavior, and network RPC coverage.
+
+Observations:
+
+- `test/functional/p2p_eviction.py` exists and directly covers inbound peer eviction behavior.
+- `test/functional/p2p_getaddr_caching.py` exists and covers cached address responses.
+- `test/functional/rpc_net.py` exists and directly covers `src/rpc/net.cpp` RPC surfaces.
+- Direct search for a stale-tip-specific functional test did not identify a dedicated `p2p_stale_tip_eviction.py` file in the checked path.
+- Direct search for DNS-seed/fixed-seed functional coverage did not identify a specific functional test; source review remains the main evidence for seed-array and DNS-seed paths so far.
+
+These notes are only search observations, not exhaustive proof.
+
 ## Unit test files observed
 
 | Test file | Relevant reviewed area | Observed coverage hints |
@@ -41,9 +55,12 @@ The next verification step is to understand what upstream/current test files alr
 
 | Test file | Relevant reviewed area | Observed coverage hints |
 |---|---|---|
+| `test/functional/rpc_net.py` | Network RPC and address-manager RPC surfaces | Test docstring says it tests RPC calls related to net and that tests correspond to `rpc/net.cpp`. Observed run list includes `getconnectioncount`, `getpeerinfo`, `getnettotals`, `getnetworkinfo`, `addnode`, `getaddednodeinfo`, service flags, `getnodeaddresses`, `addpeeraddress`, `sendmsgtopeer`, `getaddrmaninfo`, and `getrawaddrman`. |
 | `test/functional/p2p_addr_relay.py` | Address relay and addrman interaction | Test docstring says it tests addr relay. Observed code uses `msg_addr`, `msg_getaddr`, address receiver behavior, relay token behavior, and address-content checks. |
 | `test/functional/p2p_addrv2_relay.py` | ADDRV2 relay and negotiation | Test docstring says it tests addrv2 relay. Observed code checks disconnection when `sendaddrv2` is sent after verack, creates addrv2 messages, and checks addrv2 message content is relayed and added to addrman. |
+| `test/functional/p2p_getaddr_caching.py` | Address response caching | Test docstring says it tests addr response caching. Observed code fills addrman using `addpeeraddress`, checks `getnodeaddresses`, sends repeated addr requests, compares cached responses per bind, and checks response changes after mock time advances. |
 | `test/functional/p2p_invalid_messages.py` | Protocol parsing and invalid-message handling | Test docstring says it tests node responses to invalid network messages. Observed run list includes duplicate version, magic bytes, checksum, message size, message type, addrv2 edge cases, oversized inv/getdata/headers, invalid proof-of-work headers, noncontinuous headers, and resource-exhaustion cases. |
+| `test/functional/p2p_eviction.py` | Peer eviction | Test docstring says it tests node eviction logic. Observed notes say the test is limited because address/netgroup eviction criteria cannot currently be tested in the framework; observed code protects peers by block, transaction, and ping behavior before triggering one eviction. |
 | `test/functional/p2p_sendheaders.py` | Header announcements and block/header sharing | Test docstring describes behavior of headers messages to announce blocks, including null/non-null locators, sendheaders behavior, large reorg behavior, direct fetch behavior, and headers that do not connect. |
 | `test/functional/p2p_compactblocks.py` | Compact block behavior | Test docstring says it tests compact blocks. Observed imports include compact-block message classes, `sendcmpct`, `cmpctblock`, `getblocktxn`, `blocktxn`, `getheaders`, headers, inv, and block/tx messages. |
 | `test/functional/p2p_tx_download.py` | Transaction download and transaction sharing | Test docstring says it tests transaction download behavior. Observed code uses txid/wtxid inventory, `getdata`, notfound, tx messages, peer delays, request-in-flight constants, and multiple peer connection types. |
@@ -54,17 +71,17 @@ The next verification step is to understand what upstream/current test files alr
 
 | MoreBC2 page | Relevant observed tests | Current confidence |
 |---|---|---|
-| [Addrman](../developers/source-atlas/addrman.md) | `src/test/addrman_tests.cpp`, `test/functional/p2p_addr_relay.py`, `test/functional/p2p_addrv2_relay.py` | Tests exist, but MoreBC2 has not run them locally. |
-| [Banman](../developers/source-atlas/banman.md) | `src/test/banman_tests.cpp`, `test/functional/p2p_permissions.py` | Tests exist, but coverage appears narrower for BanMan than addrman. MoreBC2 has not run them locally. |
-| [Net connection management](../developers/source-atlas/net-connection-management.md) | `src/test/net_tests.cpp`, `src/test/netbase_tests.cpp`, `test/functional/p2p_invalid_messages.py`, `test/functional/p2p_permissions.py` | Tests exist for selected helpers and invalid-message behavior; lower-level socket-loop coverage still needs deeper mapping. |
-| [P2P protocol primitives](../developers/source-atlas/protocol.md) | `src/test/net_tests.cpp`, `src/test/netbase_tests.cpp`, `test/functional/p2p_invalid_messages.py` | Tests exist for address serialization and invalid message handling; protocol-message coverage needs fuller review. |
+| [Addrman](../developers/source-atlas/addrman.md) | `src/test/addrman_tests.cpp`, `test/functional/rpc_net.py`, `test/functional/p2p_addr_relay.py`, `test/functional/p2p_addrv2_relay.py`, `test/functional/p2p_getaddr_caching.py` | Tests exist for addrman unit behavior, address RPC surfaces, relay insertion, addrv2 relay, and cached address responses. MoreBC2 has not run them locally. |
+| [Banman](../developers/source-atlas/banman.md) | `src/test/banman_tests.cpp`, `test/functional/p2p_permissions.py`; `setban`/`listbanned`/`clearbanned` functional coverage still needs targeted review | Tests exist, but observed coverage appears narrower for BanMan than addrman. MoreBC2 has not run them locally. |
+| [Net connection management](../developers/source-atlas/net-connection-management.md) | `src/test/net_tests.cpp`, `src/test/netbase_tests.cpp`, `test/functional/rpc_net.py`, `test/functional/p2p_invalid_messages.py`, `test/functional/p2p_permissions.py`, `test/functional/p2p_eviction.py` | Tests exist for selected helpers, node connection-type state, net RPC behavior, invalid-message behavior, permissions, and eviction. Lower-level socket-loop coverage still needs deeper mapping. |
+| [P2P protocol primitives](../developers/source-atlas/protocol.md) | `src/test/net_tests.cpp`, `src/test/netbase_tests.cpp`, `test/functional/p2p_invalid_messages.py`, `test/functional/p2p_addrv2_relay.py`, `test/functional/p2p_sendtxrcncl.py` | Tests exist for address serialization, invalid message handling, addrv2 behavior, and tx-reconciliation signaling. Protocol-message coverage needs fuller review. |
 | [Net processing handshake](../developers/source-atlas/net-processing-handshake.md) | `test/functional/p2p_invalid_messages.py`, `test/functional/p2p_sendtxrcncl.py`, `test/functional/p2p_permissions.py` | Tests exist for duplicate version, pre-verack behavior, tx reconciliation signaling, and permissions. MoreBC2 has not run them locally. |
-| [Net processing address relay](../developers/source-atlas/net-processing-address-relay.md) | `test/functional/p2p_addr_relay.py`, `test/functional/p2p_addrv2_relay.py` | Directly relevant functional tests exist. MoreBC2 has not run them locally. |
+| [Net processing address relay](../developers/source-atlas/net-processing-address-relay.md) | `test/functional/p2p_addr_relay.py`, `test/functional/p2p_addrv2_relay.py`, `test/functional/p2p_getaddr_caching.py` | Directly relevant functional tests exist for address relay, addrv2 relay, and cached getaddr-style responses. MoreBC2 has not run them locally. |
 | [Net processing block and header relay](../developers/source-atlas/net-processing-block-relay.md) | `test/functional/p2p_sendheaders.py`, `test/functional/p2p_compactblocks.py`, `test/functional/p2p_invalid_messages.py` | Directly relevant functional tests exist for header announcements, compact blocks, and invalid header/message cases. |
 | [Net processing transaction relay](../developers/source-atlas/net-processing-transaction-relay.md) | `test/functional/p2p_tx_download.py`, `test/functional/p2p_sendtxrcncl.py`, `test/functional/p2p_permissions.py` | Directly relevant functional tests exist for transaction download, tx reconciliation signaling, and permissions. |
-| [Net processing peer eviction and stale-tip checks](../developers/source-atlas/net-processing-peer-eviction.md) | `test/functional/p2p_permissions.py`; additional eviction/stale-tip tests still need search | Coverage likely exists but is not fully mapped. Needs deeper targeted search. |
-| [Net processing send loop](../developers/source-atlas/net-processing-send-loop.md) | `test/functional/p2p_sendheaders.py`, `test/functional/p2p_tx_download.py`, `test/functional/p2p_compactblocks.py`, `test/functional/p2p_addr_relay.py` | Relevant behavior is exercised across several functional tests, but send-loop coverage is indirect and not locally run by MoreBC2. |
-| [Network RPC](../developers/source-atlas/rpc-network.md) | `src/test/net_tests.cpp`; RPC-specific functional tests still need search | Network status command testing remains separate from source-test coverage. |
+| [Net processing peer eviction and stale-tip checks](../developers/source-atlas/net-processing-peer-eviction.md) | `test/functional/p2p_eviction.py`, `test/functional/p2p_permissions.py`; stale-tip-specific coverage still needs search/review | Peer eviction coverage exists. Stale-tip coverage is not fully mapped and may be indirect or in another test file. MoreBC2 has not run the tests locally. |
+| [Net processing send loop](../developers/source-atlas/net-processing-send-loop.md) | `test/functional/p2p_sendheaders.py`, `test/functional/p2p_tx_download.py`, `test/functional/p2p_compactblocks.py`, `test/functional/p2p_addr_relay.py`, `test/functional/p2p_getaddr_caching.py` | Relevant behavior is exercised across several functional tests, but send-loop coverage is indirect and not locally run by MoreBC2. |
+| [Network RPC](../developers/source-atlas/rpc-network.md) | `test/functional/rpc_net.py`, `src/test/net_tests.cpp` | Direct RPC-specific functional coverage exists for many `rpc/net.cpp` commands, including hidden address-manager RPC surfaces. Network status command smoke testing remains separate. |
 
 ## What this map does not prove
 
@@ -83,7 +100,7 @@ It only records observed test files and likely relevance.
 ## Recommended next steps
 
 1. Review the full contents of each listed test file.
-2. Search for additional peer eviction, stale-tip, DNS seed, addrman, net-processing, and network RPC tests.
+2. Search for additional stale-tip, DNS seed, peer-list RPC, and socket-loop tests.
 3. Compare key test files between `v29.1.0` and `main` if test docs will mention release behavior.
 4. Add a local test command plan for a small subset of network tests.
 5. Keep user-facing command smoke tests separate from developer test-suite execution.
