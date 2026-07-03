@@ -26,6 +26,7 @@ Verification pages should help MoreBC2 keep uncertainty visible instead of hidin
 - [Release source comparison notes](release-source-comparison.md)
 - [Network release comparison](network-release-comparison.md)
 - [Network test coverage map](network-test-coverage-map.md)
+- [Network test run plan](network-test-run-plan.md)
 - [Release artifact checklist](release-artifact-checklist.md)
 - [Documentation coverage](../documentation-coverage.md)
 
@@ -46,7 +47,7 @@ For stale wording or overconfident language, use [Stale wording scan](stale-word
 
 For command examples, also use [Command example scan](command-example-scan.md), [Command testing status](command-testing.md), and the [Command smoke-test plan](command-smoke-test-plan.md).
 
-For release checks, also update [Release source comparison notes](release-source-comparison.md), [Network release comparison](network-release-comparison.md), [Network test coverage map](network-test-coverage-map.md), or [Release artifact checklist](release-artifact-checklist.md).
+For release checks and developer test planning, also update [Release source comparison notes](release-source-comparison.md), [Network release comparison](network-release-comparison.md), [Network test coverage map](network-test-coverage-map.md), [Network test run plan](network-test-run-plan.md), or [Release artifact checklist](release-artifact-checklist.md).
 
 ## Open verification items
 
@@ -94,11 +95,21 @@ For release checks, also update [Release source comparison notes](release-source
 
 **Question:** Which existing test files appear to cover the reviewed network/P2P source areas?
 
-**Current evidence:** The network test coverage map identifies observed unit and functional test files for addrman, banman, net, netbase, address relay, addrv2 relay, invalid messages, sendheaders, compact blocks, transaction download, permissions, and tx-reconciliation signaling.
+**Current evidence:** The network test coverage map identifies observed unit and functional test files for addrman, banman, net, netbase, address relay, addrv2 relay, invalid messages, sendheaders, compact blocks, transaction download, permissions, tx-reconciliation signaling, network RPC, peer eviction, and address-response caching.
 
 **Needed source:** Full test-file review and local test execution records.
 
 **Status:** Partial
+
+### Network test execution plan
+
+**Question:** Which network tests should MoreBC2 run first when a BitcoinII build/test environment is available?
+
+**Current evidence:** The network test run plan defines a staged execution plan for focused unit tests, `rpc_net.py`, address relay tests, peer-message tests, block/header tests, transaction-sharing tests, and peer eviction tests.
+
+**Needed source:** Actual local test command records.
+
+**Status:** Framework
 
 ### Recommended exchange confirmations
 
@@ -150,6 +161,7 @@ For release checks, also update [Release source comparison notes](release-source
 - Command examples should remain unverified until run locally with environment details.
 - Release artifact claims should remain unverified until assets and hashes are checked directly.
 - Ecosystem claims should remain unverified until checked directly and dated.
+- Developer test-suite plans should remain separate from user-facing command smoke tests.
 
 ## Notes
 
@@ -160,5 +172,5 @@ Items in this queue should not be treated as verified documentation until moved 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current verification section structure, private review readiness checklist, narrow assignment cards, command smoke-test plan, network release comparison, selected network file blob-SHA spot checks, and network test coverage map
-**Notes:** This section README tracks verification workflow, private-review readiness, narrow assignments, feedback buckets, stale-wording scan, command-example scan, command-test tracking, release-check tracking, command smoke-test planning, network release comparison, network test coverage mapping, and priority unknowns. It does not verify BitcoinII protocol behavior.
+**Primary sources checked:** Current verification section structure, private review readiness checklist, narrow assignment cards, command smoke-test plan, network release comparison, selected network file blob-SHA spot checks, network test coverage map, and network test run plan
+**Notes:** This section README tracks verification workflow, private-review readiness, narrow assignments, feedback buckets, stale-wording scan, command-example scan, command-test tracking, release-check tracking, command smoke-test planning, network release comparison, network test coverage mapping, network test execution planning, and priority unknowns. It does not verify BitcoinII protocol behavior.
