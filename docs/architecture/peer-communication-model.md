@@ -15,6 +15,7 @@ It is not a final protocol specification and it is not based on live-network tes
 ```text
 Local node startup
   -> network component setup
+  -> seed and address-manager state
   -> listening sockets, if enabled
   -> outbound connection attempts, if enabled
   -> peer object creation
@@ -55,7 +56,34 @@ Related:
 - [Source atlas: net connection management](../developers/source-atlas/net-connection-management.md)
 - [Source atlas: network RPC](../developers/source-atlas/rpc-network.md)
 
-## Layer 2: P2P protocol primitives
+## Layer 2: address manager and seed state
+
+Address-manager state is handled mainly in `src/addrman.h`, `src/addrman.cpp`, and `src/addrman_impl.h`.
+
+Reviewed behavior includes:
+
+- new and tried address tables
+- randomized bucket placement
+- address quality checks
+- probabilistic peer selection
+- service-bit updates
+- connection attempt tracking
+- successful-address handling
+- tried-table collision handling
+- `peers.dat` serialization and deserialization
+- selected seed-array and DNS-seed context
+
+Important boundary:
+
+Addrman stores and selects candidate peer addresses. It does not prove those addresses are currently reachable. Source-observed DNS seeds and seed arrays are also not live reachability checks.
+
+Related:
+
+- [Source atlas: address manager](../developers/source-atlas/addrman.md)
+- [Source atlas: net connection management](../developers/source-atlas/net-connection-management.md)
+- [Network specifications](../documentation/network-specifications.md)
+
+## Layer 3: P2P protocol primitives
 
 Protocol primitives define the shape and names of peer messages and related identifiers.
 
@@ -76,7 +104,7 @@ Related:
 
 - [Source atlas: P2P protocol primitives](../developers/source-atlas/protocol.md)
 
-## Layer 3: handshake and feature negotiation
+## Layer 4: handshake and feature negotiation
 
 The peer handshake and early feature negotiation are handled in `src/net_processing.cpp`.
 
@@ -104,7 +132,7 @@ Related:
 
 - [Source atlas: net processing handshake](../developers/source-atlas/net-processing-handshake.md)
 
-## Layer 4: address sharing and peer discovery
+## Layer 5: address sharing and peer discovery
 
 Address sharing is one way nodes learn about other peers.
 
@@ -119,19 +147,18 @@ Reviewed behavior includes:
 - address-manager insertion
 - address-fetch connection behavior
 
-Lower-level seed behavior also exists in `src/net.cpp`, including seed-node and DNS-seed paths. Deeper addrman and fixed-seed behavior still needs separate review.
-
 Important boundary:
 
-MoreBC2 should not claim that a configured seed or discovered address is currently live without a direct check.
+MoreBC2 should not claim that a configured seed, stored address, or discovered address is currently live without a direct check.
 
 Related:
 
+- [Source atlas: address manager](../developers/source-atlas/addrman.md)
 - [Source atlas: net connection management](../developers/source-atlas/net-connection-management.md)
 - [Source atlas: net processing address relay](../developers/source-atlas/net-processing-address-relay.md)
 - [Network specifications](../documentation/network-specifications.md)
 
-## Layer 5: block and header sharing
+## Layer 6: block and header sharing
 
 Block and header peer behavior is reviewed in `net_processing` slices.
 
@@ -158,7 +185,7 @@ Related:
 - [Source atlas: net processing block and header relay](../developers/source-atlas/net-processing-block-relay.md)
 - [Source atlas: net processing send loop](../developers/source-atlas/net-processing-send-loop.md)
 
-## Layer 6: transaction sharing
+## Layer 7: transaction sharing
 
 Transaction sharing is related to mempool state, but they are not the same thing.
 
@@ -189,7 +216,7 @@ Related:
 - [Source atlas: net processing transaction relay](../developers/source-atlas/net-processing-transaction-relay.md)
 - [Source atlas: net processing send loop](../developers/source-atlas/net-processing-send-loop.md)
 
-## Layer 7: peer health, peer-list state, and cleanup
+## Layer 8: peer health, peer-list state, and cleanup
 
 Reviewed behavior includes:
 
@@ -218,11 +245,11 @@ Related:
 
 Still needing deeper review:
 
-- Addrman internals.
-- Fixed-seed fallback behavior.
+- Address-manager caller paths.
 - Peer-list RPC command implementation details.
 - Release-versus-main comparison.
 - Live-network command testing.
+- Live seed reachability checks, if needed.
 - Which details belong in beginner node docs versus developer-only docs.
 
 ## What this page does not claim
@@ -232,7 +259,7 @@ This page does not claim:
 - that peer behavior has been live tested by MoreBC2
 - that current `main` exactly matches the latest release branch
 - that every network edge case has been reviewed
-- that DNS seeds, fixed seeds, explorers, or services are currently live
+- that DNS seeds, seed arrays, explorers, or services are currently live
 - that transaction sharing guarantees confirmation
 - that peer count or propagation behavior is guaranteed
 
@@ -248,4 +275,4 @@ This page does not claim:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This page summarizes first-pass Source Atlas network slices. It should be updated after addrman/fixed-seed behavior, peer-list RPC details, release-versus-main comparison, and live-network command testing are completed.
+**Notes:** This page summarizes first-pass Source Atlas network slices. It should be updated after address-manager caller details, peer-list RPC details, release-versus-main comparison, and live-network command testing are completed.
