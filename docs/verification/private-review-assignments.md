@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-07-01
+**Last reviewed:** 2026-07-02
 
 ## Summary
 
@@ -72,7 +72,7 @@ Please do not mark anything Verified unless the assigned evidence standard is me
 **Reviewer should check:**
 
 - Are commands clearly marked Placeholder, Source-observed, Locally tested, Verified, Needs recheck, or Do not publish?
-- Are spend, live broadcast, private-key, passphrase, restore, rescan, pruning, reindex, and block-submission commands kept out of beginner workflows?
+- Are spend, live submission, private-key, passphrase, restore, rescan, pruning, reindex, and block-submission commands kept out of beginner workflows?
 - Is the Phase 1/2/3 smoke-test order conservative enough?
 - Does any command block look like copy/paste tested guidance?
 
@@ -194,35 +194,78 @@ Also review:
 
 ## Assignment 6: P2P wording boundary check
 
-**Goal:** Ensure P2P pages only claim what the reviewed files support.
+**Goal:** Ensure peer-communication pages only claim what the reviewed files support.
 
 **Pages to review:**
 
-- `docs/developers/source-atlas/rpc-network.md`
+- `docs/architecture/peer-communication-model.md`
+- `docs/developers/source-atlas/addrman.md`
+- `docs/developers/source-atlas/banman.md`
+- `docs/developers/source-atlas/net-connection-management.md`
 - `docs/developers/source-atlas/protocol.md`
-- `docs/developers/rpc-overview.md`
+- `docs/developers/source-atlas/rpc-network.md`
+- `docs/developers/source-atlas/net-processing-handshake.md`
+- `docs/developers/source-atlas/net-processing-address-relay.md`
+- `docs/developers/source-atlas/net-processing-block-relay.md`
+- `docs/developers/source-atlas/net-processing-transaction-relay.md`
+- `docs/developers/source-atlas/net-processing-peer-eviction.md`
+- `docs/developers/source-atlas/net-processing-send-loop.md`
 - `docs/documentation/network-specifications.md`
 
 **Reviewer should check:**
 
-- Does protocol wording stay limited to message names, headers, service flags, addresses, and inventory primitives?
-- Does network RPC wording stay limited to RPC behavior and not lower-level peer-processing assumptions?
-- Are v2 transport/BIP324 notes cautious enough?
-- Are live network/default behavior claims avoided unless source-backed?
+- Does each page stay inside its reviewed source boundary?
+- Are live-node, service, seed, and peer-count claims avoided unless directly checked?
+- Are release-vs-main notes consistent with `docs/verification/network-release-comparison.md`?
+- Are source-reviewed behaviors still Draft unless tested or reviewed by a trusted reviewer?
+- Are protocol, connection, address-manager, peer-list, and peer-processing layers kept separate enough?
 
 **Reviewer should not do:**
 
-- Do not infer runtime defaults from protocol names alone.
-- Do not explain full peer-processing behavior until `net_processing` has been reviewed.
+- Do not infer live behavior from source names alone.
+- Do not collapse all P2P behavior into one broad claim.
 - Do not mark P2P docs Verified.
+- Do not add beginner node instructions from developer Source Atlas notes.
 
 **Expected output:**
 
-- Any wording that should be moved to lower-level P2P review.
-- Any runtime behavior claim that needs source support.
-- Any missing open questions.
+- Any wording that crosses source-review boundaries.
+- Any runtime behavior claim that needs source support or live test evidence.
+- Any missing caveats or open questions.
 
-## Assignment 7: Private-review workflow check
+## Assignment 7: Network test-plan review
+
+**Goal:** Check whether the network test coverage map and run plan are clear, cautious, and reproducible.
+
+**Pages to review:**
+
+- `docs/verification/network-test-coverage-map.md`
+- `docs/verification/network-test-run-plan.md`
+- `docs/verification/network-release-comparison.md`
+- `docs/verification/command-smoke-test-plan.md`
+- `docs/verification/command-testing.md`
+
+**Reviewer should check:**
+
+- Does the coverage map avoid claiming tests were run?
+- Are unit tests, functional tests, and user-facing command smoke tests clearly separated?
+- Does the run plan collect enough environment details for future test records?
+- Are state-changing developer test cases kept separate from beginner command guidance?
+- Are remaining weak spots, such as stale-tip-specific coverage and seed reachability, still visible?
+
+**Reviewer should not do:**
+
+- Do not mark tests passed unless actual command output is provided.
+- Do not convert developer test-run planning into user instructions.
+- Do not remove caveats around release binaries or live network behavior.
+
+**Expected output:**
+
+- Missing fields needed before a future test run.
+- Any plan step that sounds like a completed result.
+- Any test category that should be postponed or separated.
+
+## Assignment 8: Private-review workflow check
 
 **Goal:** Make sure the private-review workflow itself is understandable and constrained.
 
@@ -264,7 +307,16 @@ Start with only one or two assignments:
 1. Command safety review.
 2. Release verification wording.
 
-These are lower-risk than asking someone to validate consensus or P2P behavior, and they directly reduce the chance that readers misunderstand Draft pages as ready instructions.
+These are lower-risk than asking someone to validate consensus or peer behavior, and they directly reduce the chance that readers misunderstand Draft pages as ready instructions.
+
+## Second-wave invitations
+
+After the first two reviews, use one narrow network assignment at a time:
+
+1. P2P wording boundary check.
+2. Network test-plan review.
+
+These should remain review-only unless a dedicated local test environment is explicitly assigned.
 
 ## Related pages
 
@@ -272,11 +324,14 @@ These are lower-risk than asking someone to validate consensus or P2P behavior, 
 - [Private review handoff](../REVIEW_HANDOFF.md)
 - [Review feedback buckets](review-feedback-buckets.md)
 - [Command smoke-test plan](command-smoke-test-plan.md)
+- [Network release comparison](network-release-comparison.md)
+- [Network test coverage map](network-test-coverage-map.md)
+- [Network test run plan](network-test-run-plan.md)
 - [Release artifact checklist](release-artifact-checklist.md)
 - [Documentation coverage](../documentation-coverage.md)
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Private review readiness checklist, review handoff, coverage dashboard, command and release verification pages, ecosystem framework pages, Source Atlas index
+**Primary sources checked:** Private review readiness checklist, review handoff, coverage dashboard, command and release verification pages, network release comparison, network test coverage map, network test run plan, ecosystem framework pages, Source Atlas index
 **Notes:** These assignments are designed for narrow private review. They are not proof that the assigned pages are correct.
