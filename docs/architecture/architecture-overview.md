@@ -23,6 +23,7 @@ Start here, then move outward:
 5. [Life of a reorganization](life-of-a-reorg.md)
 6. [Block validation flow](block-validation-flow.md)
 7. [Mempool flow](mempool-flow.md)
+8. [Peer communication model](peer-communication-model.md)
 
 The architecture pages explain flows.
 
@@ -44,6 +45,7 @@ BitcoinII Core node
       +-- RPC server, if enabled
       +-- Wallet clients, if enabled
       +-- Peer-to-peer networking
+      +-- Address manager and seed state
       +-- Mempool and transaction sharing policy
       +-- Block and transaction validation
       +-- Chainstate and UTXO view
@@ -178,6 +180,8 @@ Current anchors include:
 
 - P2P message names, headers, service flags, address serialization, and inventory helpers.
 - Lower-level connection management, including local address helpers, outbound creation, inbound admission, disconnect cleanup, socket send/receive handling, transport handling, and DNS seed/seed-node paths.
+- Address-manager behavior, including new/tried tables, quality checks, probabilistic selection, serialized peer-address state, and seed-array context.
+- Peer-list and discouragement management.
 - Network RPC commands for peer and network status.
 - Peer handshake and early feature negotiation.
 - Address sharing and peer-discovery-adjacent behavior.
@@ -188,15 +192,17 @@ Current anchors include:
 
 Still pending:
 
-- Dedicated peer communication architecture page.
-- Ban-list/discouragement internals.
-- Deeper addrman and fixed-seed behavior.
 - Release-versus-main comparison.
+- Address-manager caller-path follow-up.
+- Peer-list RPC follow-up.
 - Live-network tests.
 
 Related:
 
+- [Peer communication model](peer-communication-model.md)
 - [Source atlas: P2P protocol primitives](../developers/source-atlas/protocol.md)
+- [Source atlas: address manager](../developers/source-atlas/addrman.md)
+- [Source atlas: peer list management](../developers/source-atlas/banman.md)
 - [Source atlas: network RPC](../developers/source-atlas/rpc-network.md)
 - [Source atlas: net connection management](../developers/source-atlas/net-connection-management.md)
 - [Source atlas: net processing handshake](../developers/source-atlas/net-processing-handshake.md)
@@ -234,6 +240,7 @@ Related:
 - [Wallets](../wallets/README.md)
 - [Nodes](../nodes/README.md)
 - [Source atlas: network RPC](../developers/source-atlas/rpc-network.md)
+- [Source atlas: address manager](../developers/source-atlas/addrman.md)
 - [Source atlas: net connection management](../developers/source-atlas/net-connection-management.md)
 - [Source atlas: wallet RPC](../developers/source-atlas/wallet-rpc.md)
 - [Source atlas: wallet spend and PSBT RPC](../developers/source-atlas/wallet-spend-rpc.md)
@@ -241,9 +248,8 @@ Related:
 
 ## Areas still needing deeper review
 
-- Dedicated peer communication model.
-- Ban-list/discouragement internals.
-- Deeper addrman and fixed-seed behavior.
+- Address-manager caller details.
+- Peer-list RPC details.
 - CLI source review.
 - Wallet database internals, key-management internals, and GUI flows.
 - Local command testing.
@@ -261,6 +267,7 @@ This page does not claim:
 - That Draft architecture pages are final specifications.
 - That source-observed command behavior has been locally tested.
 - That P2P behavior has been live-network tested.
+- That source-observed seed entries or stored addresses are currently reachable.
 
 ## Related pages
 
@@ -277,6 +284,7 @@ This page does not claim:
 - BitcoinII source repository currently reviewed through MoreBC2 Source Atlas entries.
 - `src/init.cpp`
 - `src/kernel/chainparams.cpp`
+- `src/chainparamsseeds.h`
 - `src/pow.cpp`
 - `src/validation.cpp`
 - `src/txmempool.*`
@@ -290,6 +298,8 @@ This page does not claim:
 - `src/rpc/rawtransaction.cpp`
 - `src/rpc/mempool.cpp`
 - `src/wallet/rpc/*` reviewed groups
+- `src/addrman.*`
+- `src/banman.*`
 - `src/protocol.h`
 - `src/protocol.cpp`
 - `src/net.h`
@@ -303,4 +313,4 @@ This page does not claim:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This overview summarizes current MoreBC2 architecture and Source Atlas coverage. It was refreshed after first-pass P2P Source Atlas slices were added through lower-level connection management, protocol primitives, network RPC, handshake, address sharing, block/header sharing, transaction sharing, peer health/stale-tip checks, and send-loop behavior.
+**Notes:** This overview summarizes current MoreBC2 architecture and Source Atlas coverage. It was refreshed after first-pass P2P Source Atlas slices were added through address-manager review, peer-list management, lower-level connection management, protocol primitives, network RPC, handshake, address sharing, block/header sharing, transaction sharing, peer health/stale-tip checks, and send-loop behavior.
