@@ -16,7 +16,8 @@ This is not a full source audit. It is a navigation aid that should be expanded 
 |---|---|---|
 | `README.md` | Project description, license, wallet/node overview | E3 |
 | `src/init.cpp` | Startup orchestration, chainstate loading, RPC warmup, index/wallet loading, final startup handoff | E1 partial |
-| `src/kernel/chainparams.cpp` | Mainnet parameters, genesis block, DNS seeds, address prefixes | E1 |
+| `src/kernel/chainparams.cpp` | Mainnet parameters, genesis block, DNS seeds, seed array assignment, address prefixes | E1 |
+| `src/chainparamsseeds.h` | Source-observed seed array context | E1 partial |
 | `src/pow.cpp` | Difficulty adjustment and proof-of-work target checks | E1 |
 | `src/consensus/tx_check.*` | Context-independent transaction checks | E1 |
 | `src/consensus/tx_verify.*` | Finality, sequence locks, operation-cost helpers, input checks | E1 |
@@ -27,14 +28,16 @@ This is not a full source audit. It is a navigation aid that should be expanded 
 | `src/node/blockstorage.*` | Block index database, block and undo files, pruning, reindex, import | E1 partial |
 | `src/node/miner.*` | Candidate block-template assembly and mempool package selection | E1 partial |
 | `src/node/mini_miner.*` | Fee and ordering simulation helper | E1 partial |
+| `src/addrman.h` / `src/addrman.cpp` / `src/addrman_impl.h` | Address-manager tables, quality checks, selection, serialization, tried-collision behavior | E1 partial |
+| `src/banman.h` / `src/banman.cpp` | Peer-list and discouragement management | E1 partial |
 | `src/protocol.h` / `src/protocol.cpp` | Message names, message headers, service flags, address serialization, inventory helpers | E1 partial |
 | `src/net.h` / `src/net.cpp` | Lower-level connection management, local address helpers, transports, socket send/receive, seed-node/DNS-seed paths | E1 partial |
 | `src/net_processing.h` / `src/net_processing.cpp` | Peer handshake, address sharing, block/header sharing, transaction sharing, peer health checks, send-loop behavior | E1 partial |
-| `src/rpc/net.cpp` | Network RPC, peer status, ban-list, address-manager, manual peer commands | E1 partial |
+| `src/rpc/net.cpp` | Network RPC, peer status, peer-list commands, address-manager, manual peer commands | E1 partial |
 | `src/rpc/mining.cpp` | Mining RPC, candidate template, block/header submission, mining status | E1 partial |
 | `src/rpc/blockchain.cpp` | Blockchain RPC, block lookup, pruning, UTXO scans, chainstate status | E1 partial |
 | `src/rpc/rawtransaction.cpp` | Raw transaction lookup, decode, unsigned construction, explicit-key signing, and PSBT RPCs | E1 partial |
-| `src/rpc/mempool.cpp` | Transaction broadcast, mempool acceptance testing, mempool inspection, persistence, orphan, and package RPCs | E1 partial |
+| `src/rpc/mempool.cpp` | Transaction submission, mempool acceptance testing, mempool inspection, persistence, orphan, and package RPCs | E1 partial |
 | `src/wallet/init.cpp` | Wallet options, parameter interaction, wallet loader construction | E1 partial |
 | `src/wallet/load.*` | Wallet verification, loading, start, flush, stop, unload | E1 partial |
 | `src/wallet/context.*` | Shared wallet context and wallet list state | E1 partial |
@@ -120,6 +123,12 @@ Questions:
 
 Reviewed or partially reviewed:
 
+- `src/addrman.h`
+- `src/addrman.cpp`
+- `src/addrman_impl.h`
+- `src/banman.h`
+- `src/banman.cpp`
+- `src/chainparamsseeds.h`
 - `src/protocol.h`
 - `src/protocol.cpp`
 - `src/net.h`
@@ -130,6 +139,8 @@ Reviewed or partially reviewed:
 
 Related MoreBC2 pages:
 
+- [Source atlas: address manager](source-atlas/addrman.md)
+- [Source atlas: peer list management](source-atlas/banman.md)
 - [Source atlas: protocol primitives](source-atlas/protocol.md)
 - [Source atlas: network RPC](source-atlas/rpc-network.md)
 - [Source atlas: connection management](source-atlas/net-connection-management.md)
@@ -140,6 +151,7 @@ Related MoreBC2 pages:
 - [Source atlas: peer health and stale-tip checks](source-atlas/net-processing-peer-eviction.md)
 - [Source atlas: peer send loop](source-atlas/net-processing-send-loop.md)
 - [Architecture overview](../architecture/architecture-overview.md)
+- [Peer communication model](../architecture/peer-communication-model.md)
 - [Life of a transaction](../architecture/life-of-a-transaction.md)
 - [Life of a block](../architecture/life-of-a-block.md)
 - [Mempool flow](../architecture/mempool-flow.md)
@@ -147,11 +159,11 @@ Related MoreBC2 pages:
 
 Questions:
 
-- Which banman behavior needs a separate review?
-- Which addrman and fixed-seed paths should be reviewed more deeply?
+- Which address-manager caller paths still need deeper review?
+- Which peer-list RPC details need a separate review?
 - Which P2P details differ, if any, between current `main` and `v29.1.0`?
 - Which network details should stay developer-only rather than appearing in service-provider guides?
-- Which connection-management details belong in user-facing node troubleshooting docs?
+- Which connection-management and address-manager details belong in user-facing node troubleshooting docs?
 
 ### Wallet startup and lifecycle
 
@@ -228,7 +240,7 @@ Related MoreBC2 pages:
 - [Life of a transaction](../architecture/life-of-a-transaction.md)
 - [Source atlas: mempool accept](source-atlas/mempool-accept.md)
 - [Source atlas: mempool source](source-atlas/txmempool.md)
-- [Source atlas: mempool and transaction broadcast RPC](source-atlas/rpc-mempool.md)
+- [Source atlas: mempool and transaction RPC](source-atlas/rpc-mempool.md)
 - [Source atlas: transaction sharing](source-atlas/net-processing-transaction-relay.md)
 - [Source atlas: peer send loop](source-atlas/net-processing-send-loop.md)
 
@@ -300,7 +312,7 @@ Related MoreBC2 pages:
 - [Source atlas: blockchain RPC](source-atlas/rpc-blockchain.md)
 - [Source atlas: network RPC](source-atlas/rpc-network.md)
 - [Source atlas: raw transaction RPC](source-atlas/rpc-rawtransaction.md)
-- [Source atlas: mempool and transaction broadcast RPC](source-atlas/rpc-mempool.md)
+- [Source atlas: mempool and transaction RPC](source-atlas/rpc-mempool.md)
 - [Deposit monitoring](../exchange/deposit-monitoring.md)
 - [Service integration checklist](../exchange/service-integration-checklist.md)
 
@@ -360,4 +372,4 @@ Questions:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This map was refreshed after adding network Source Atlas slices through lower-level connection-management review. Target lists are not claims of implementation details until reviewed.
+**Notes:** This map was refreshed after adding network Source Atlas slices through address-manager review. Target lists are not claims of implementation details until reviewed.
