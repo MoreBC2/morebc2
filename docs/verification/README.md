@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-07-01
+**Last reviewed:** 2026-07-02
 
 ## Summary
 
@@ -24,6 +24,7 @@ Verification pages should help MoreBC2 keep uncertainty visible instead of hidin
 - [Command testing status](command-testing.md)
 - [Command smoke-test plan](command-smoke-test-plan.md)
 - [Release source comparison notes](release-source-comparison.md)
+- [Network release comparison](network-release-comparison.md)
 - [Release artifact checklist](release-artifact-checklist.md)
 - [Documentation coverage](../documentation-coverage.md)
 
@@ -44,7 +45,7 @@ For stale wording or overconfident language, use [Stale wording scan](stale-word
 
 For command examples, also use [Command example scan](command-example-scan.md), [Command testing status](command-testing.md), and the [Command smoke-test plan](command-smoke-test-plan.md).
 
-For release checks, also update [Release source comparison notes](release-source-comparison.md) or [Release artifact checklist](release-artifact-checklist.md).
+For release checks, also update [Release source comparison notes](release-source-comparison.md), [Network release comparison](network-release-comparison.md), or [Release artifact checklist](release-artifact-checklist.md).
 
 ## Open verification items
 
@@ -77,6 +78,16 @@ For release checks, also update [Release source comparison notes](release-source
 **Needed source:** Release assets, checksum files, signed tags, trusted keys, or maintainer statement.
 
 **Status:** Needs Review
+
+### Network release comparison
+
+**Question:** Do the reviewed network/P2P source files differ between `v29.1.0` and current observed `main`?
+
+**Current evidence:** The network release comparison records that the reviewed network/P2P files did not appear in the GitHub changed-file list when comparing `v29.1.0` to `main`.
+
+**Needed source:** Optional blob-level spot checks and reviewer confirmation.
+
+**Status:** Partial
 
 ### Recommended exchange confirmations
 
@@ -138,5 +149,5 @@ Items in this queue should not be treated as verified documentation until moved 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current verification section structure, private review readiness checklist, narrow assignment cards, and command smoke-test plan
-**Notes:** This section README tracks verification workflow, private-review readiness, narrow assignments, feedback buckets, stale-wording scan, command-example scan, command-test tracking, release-check tracking, command smoke-test planning, and priority unknowns. It does not verify BitcoinII protocol behavior.
+**Primary sources checked:** Current verification section structure, private review readiness checklist, narrow assignment cards, command smoke-test plan, and network release comparison
+**Notes:** This section README tracks verification workflow, private-review readiness, narrow assignments, feedback buckets, stale-wording scan, command-example scan, command-test tracking, release-check tracking, command smoke-test planning, network release comparison, and priority unknowns. It does not verify BitcoinII protocol behavior.
