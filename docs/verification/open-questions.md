@@ -93,7 +93,9 @@ Priority labels:
 
 **Priority:** Blocks public launch
 
-**Status:** Needs Review
+**Status:** Partial
+
+**Notes:** Network release comparison now records that the reviewed P2P/network files did not appear in the GitHub changed-file list when comparing `v29.1.0` to `main`. `src/kernel/chainparams.cpp` did appear in the changed-file list and remains version-sensitive.
 
 ### Binary names and platform release assets
 
@@ -321,13 +323,13 @@ Priority labels:
 
 **Question:** What network and peer-communication areas still need review after the first-pass P2P Source Atlas work?
 
-**Needed evidence:** Follow-up review of address-manager callers, peer-list RPC details, release-versus-main comparison, live-network checks, and any missing `net.cpp` edge cases.
+**Needed evidence:** Follow-up review of address-manager callers, peer-list RPC details, optional blob-level release spot checks, live-network checks, and any missing `net.cpp` edge cases.
 
 **Priority:** Future improvement
 
 **Status:** Partial
 
-**Notes:** First-pass pages now exist for protocol primitives, network RPC, lower-level connection management, address manager, peer-list management, handshake, address sharing, block/header sharing, transaction sharing, peer health/stale-tip checks, and send-loop behavior.
+**Notes:** First-pass pages now exist for protocol primitives, network RPC, lower-level connection management, address manager, peer-list management, handshake, address sharing, block/header sharing, transaction sharing, peer health/stale-tip checks, and send-loop behavior. Network release comparison records that these reviewed P2P/network files did not appear in the GitHub changed-file list for `v29.1.0` to `main`.
 
 ### Network RPC and CLI source review
 
@@ -371,7 +373,7 @@ Priority labels:
 
 **Status:** Partial
 
-**Notes:** Architecture overview, architecture index, peer communication model, developer reading order, source tree guide, repository map, and coverage dashboard were refreshed through the address-manager review. Remaining cross-link work should focus on smaller lifecycle pages and any new pages added later.
+**Notes:** Architecture overview, architecture index, peer communication model, developer reading order, source tree guide, repository map, and coverage dashboard were refreshed through address-manager review and network release comparison. Remaining cross-link work should focus on smaller lifecycle pages and any new pages added later.
 
 ### Terminology and glossary cleanup
 
@@ -406,5 +408,5 @@ Priority labels:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Existing MoreBC2 open questions, audit findings, coverage dashboard, and current section README rules
-**Notes:** This backlog was refreshed after first-pass network Source Atlas work through address-manager review. Items should move out of this page only after the relevant documentation is updated and sourced. Some local page questions may remain where they help the reader understand that exact page.
+**Primary sources checked:** Existing MoreBC2 open questions, audit findings, coverage dashboard, current section README rules, and network release comparison
+**Notes:** This backlog was refreshed after first-pass network Source Atlas work through address-manager review and network release comparison. Items should move out of this page only after the relevant documentation is updated and sourced. Some local page questions may remain where they help the reader understand that exact page.
