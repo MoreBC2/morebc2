@@ -37,6 +37,7 @@ Read these next:
 6. [Life of a reorganization](../architecture/life-of-a-reorg.md)
 7. [Block validation flow](../architecture/block-validation-flow.md)
 8. [Mempool flow](../architecture/mempool-flow.md)
+9. [Peer communication model](../architecture/peer-communication-model.md)
 
 Goal:
 
@@ -86,12 +87,13 @@ Then read the current network group:
 17. [protocol primitives](source-atlas/protocol.md)
 18. [network RPC](source-atlas/rpc-network.md)
 19. [connection management](source-atlas/net-connection-management.md)
-20. [peer handshake](source-atlas/net-processing-handshake.md)
-21. [address sharing](source-atlas/net-processing-address-relay.md)
-22. [block and header sharing](source-atlas/net-processing-block-relay.md)
-23. [transaction sharing](source-atlas/net-processing-transaction-relay.md)
-24. [peer health and stale-tip checks](source-atlas/net-processing-peer-eviction.md)
-25. [peer send loop](source-atlas/net-processing-send-loop.md)
+20. [peer list management](source-atlas/banman.md)
+21. [peer handshake](source-atlas/net-processing-handshake.md)
+22. [address sharing](source-atlas/net-processing-address-relay.md)
+23. [block and header sharing](source-atlas/net-processing-block-relay.md)
+24. [transaction sharing](source-atlas/net-processing-transaction-relay.md)
+25. [peer health and stale-tip checks](source-atlas/net-processing-peer-eviction.md)
+26. [peer send loop](source-atlas/net-processing-send-loop.md)
 
 Goal:
 
@@ -137,6 +139,7 @@ Read based on what you are trying to do:
 - [RPC configuration](../configuration/rpc-configuration.md)
 - [Network RPC source review](source-atlas/rpc-network.md)
 - [Connection management source review](source-atlas/net-connection-management.md)
+- [Peer list management source review](source-atlas/banman.md)
 - [Source atlas index](source-atlas/README.md)
 
 ### Wallet users and maintainers
@@ -180,4 +183,4 @@ Start by improving one of these:
 
 **Status:** Draft
 **Primary sources checked:** Repository navigation and current documentation structure
-**Notes:** This reading order was refreshed after the network Source Atlas slices through lower-level connection management and the exchange-listing documentation batch were added. It should be updated whenever major sections are added, renamed, or reorganized.
+**Notes:** This reading order was refreshed after the network Source Atlas slices through peer list management and the exchange-listing documentation batch were added. It should be updated whenever major sections are added, renamed, or reorganized.
