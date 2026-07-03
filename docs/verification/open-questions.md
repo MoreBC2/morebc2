@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-02
 
 ## Summary
 
@@ -319,13 +319,15 @@ Priority labels:
 
 ### Network and P2P architecture
 
-**Question:** How do peers, messages, block relay, and transaction relay work in BitcoinII Core?
+**Question:** What network and peer-communication areas still need review after the first-pass P2P Source Atlas work?
 
-**Needed evidence:** Source review of `src/net.*`, `src/net_processing.*`, and `src/protocol.*` plus architecture cross-links.
+**Needed evidence:** Follow-up review of address-manager callers, peer-list RPC details, release-versus-main comparison, live-network checks, and any missing `net.cpp` edge cases.
 
 **Priority:** Future improvement
 
-**Status:** Needs Review
+**Status:** Partial
+
+**Notes:** First-pass pages now exist for protocol primitives, network RPC, lower-level connection management, address manager, peer-list management, handshake, address sharing, block/header sharing, transaction sharing, peer health/stale-tip checks, and send-loop behavior.
 
 ### Network RPC and CLI source review
 
@@ -361,13 +363,15 @@ Priority labels:
 
 ### Architecture and Source Atlas cross-link pass
 
-**Question:** Which architecture pages need links to the newer Source Atlas RPC and wallet pages?
+**Question:** Which architecture pages need links to the newer Source Atlas RPC, wallet, and P2P pages?
 
 **Needed evidence:** Cross-link review across architecture pages and Source Atlas entries.
 
 **Priority:** Blocks private review
 
-**Status:** Needs Review
+**Status:** Partial
+
+**Notes:** Architecture overview, architecture index, peer communication model, developer reading order, source tree guide, repository map, and coverage dashboard were refreshed through the address-manager review. Remaining cross-link work should focus on smaller lifecycle pages and any new pages added later.
 
 ### Terminology and glossary cleanup
 
@@ -403,4 +407,4 @@ Priority labels:
 
 **Status:** Draft
 **Primary sources checked:** Existing MoreBC2 open questions, audit findings, coverage dashboard, and current section README rules
-**Notes:** This is a contributor backlog. Items should move out of this page only after the relevant documentation is updated and sourced. Some local page questions may remain where they help the reader understand that exact page.
+**Notes:** This backlog was refreshed after first-pass network Source Atlas work through address-manager review. Items should move out of this page only after the relevant documentation is updated and sourced. Some local page questions may remain where they help the reader understand that exact page.
