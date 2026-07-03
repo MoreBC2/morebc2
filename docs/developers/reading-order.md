@@ -87,13 +87,14 @@ Then read the current network group:
 17. [protocol primitives](source-atlas/protocol.md)
 18. [network RPC](source-atlas/rpc-network.md)
 19. [connection management](source-atlas/net-connection-management.md)
-20. [peer list management](source-atlas/banman.md)
-21. [peer handshake](source-atlas/net-processing-handshake.md)
-22. [address sharing](source-atlas/net-processing-address-relay.md)
-23. [block and header sharing](source-atlas/net-processing-block-relay.md)
-24. [transaction sharing](source-atlas/net-processing-transaction-relay.md)
-25. [peer health and stale-tip checks](source-atlas/net-processing-peer-eviction.md)
-26. [peer send loop](source-atlas/net-processing-send-loop.md)
+20. [address manager](source-atlas/addrman.md)
+21. [peer list management](source-atlas/banman.md)
+22. [peer handshake](source-atlas/net-processing-handshake.md)
+23. [address sharing](source-atlas/net-processing-address-relay.md)
+24. [block and header sharing](source-atlas/net-processing-block-relay.md)
+25. [transaction sharing](source-atlas/net-processing-transaction-relay.md)
+26. [peer health and stale-tip checks](source-atlas/net-processing-peer-eviction.md)
+27. [peer send loop](source-atlas/net-processing-send-loop.md)
 
 Goal:
 
@@ -139,6 +140,7 @@ Read based on what you are trying to do:
 - [RPC configuration](../configuration/rpc-configuration.md)
 - [Network RPC source review](source-atlas/rpc-network.md)
 - [Connection management source review](source-atlas/net-connection-management.md)
+- [Address manager source review](source-atlas/addrman.md)
 - [Peer list management source review](source-atlas/banman.md)
 - [Source atlas index](source-atlas/README.md)
 
@@ -183,4 +185,4 @@ Start by improving one of these:
 
 **Status:** Draft
 **Primary sources checked:** Repository navigation and current documentation structure
-**Notes:** This reading order was refreshed after the network Source Atlas slices through peer list management and the exchange-listing documentation batch were added. It should be updated whenever major sections are added, renamed, or reorganized.
+**Notes:** This reading order was refreshed after the network Source Atlas slices through address-manager review and the exchange-listing documentation batch were added. It should be updated whenever major sections are added, renamed, or reorganized.
