@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Needs Review
-**Last reviewed:** 2026-07-02
+**Last reviewed:** 2026-07-04
 
 ## Summary
 
@@ -48,6 +48,8 @@ Verification caveats:
 - MoreBC2 did not download binaries.
 - MoreBC2 did not calculate independent hashes.
 - MoreBC2 did not verify any detached signature or signed checksum manifest.
+- MoreBC2 did not identify a BitcoinII trusted release-key source.
+- MoreBC2 did not prove release binaries match reviewed source files.
 - GitHub's verified signature marker is useful metadata, but it is not the same as verifying a downloaded release binary against a signed checksum manifest.
 
 ### Legacy observed release path: v0.27.1
@@ -79,6 +81,7 @@ Verification caveats:
 
 - This appears on a redirected legacy repository path, not the current observed `Bitcoin-II/BitcoinII-Core` path.
 - MoreBC2 should not treat this as the current release path until the canonical path is confirmed.
+- Legacy asset naming does not prove the current `v29.1.0` asset list.
 
 ### Legacy observed release: v0.27.0
 
@@ -122,6 +125,7 @@ However, this source-tree helper is not enough by itself to prove the current Bi
 | Detached signature found | Needs Review | Not confirmed for current releases. |
 | Release tag signature checked | Needs Review | GitHub verified commit marker observed, but tag-signature status was not independently checked. |
 | Trusted release keys identified | Needs Review | GitHub key ID observed, but BitcoinII trust model is not confirmed. |
+| Source comparison performed | Partial | Release source comparison and network release comparison exist, but source comparison does not verify release binaries. |
 | Exchange-grade verification path confirmed | No | Requires manifest/signature/key workflow or maintainer-approved alternative. |
 
 ## Open items
@@ -144,6 +148,9 @@ However, this source-tree helper is not enough by itself to prove the current Bi
 - Legacy redirected release page observed during earlier review: `https://github.com/BitcoinII-Dev/BitcoinII/releases`
 - `contrib/verify-binaries/README.md` in `Bitcoin-II/BitcoinII-Core`
 - [Release verification guide](../developers/release-verification.md)
+- [Release artifact checklist](../verification/release-artifact-checklist.md)
+- [Release source comparison notes](../verification/release-source-comparison.md)
+- [Network release comparison](../verification/network-release-comparison.md)
 - [Open questions backlog](../verification/open-questions.md)
 
 ## Verification
