@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-07-02
+**Last reviewed:** 2026-07-04
 
 ## Summary
 
@@ -25,9 +25,10 @@ Verification pages should help MoreBC2 keep uncertainty visible instead of hidin
 - [Command smoke-test plan](command-smoke-test-plan.md)
 - [Release source comparison notes](release-source-comparison.md)
 - [Network release comparison](network-release-comparison.md)
+- [Release asset inventory attempt](release-asset-inventory-attempt.md)
+- [Release artifact checklist](release-artifact-checklist.md)
 - [Network test coverage map](network-test-coverage-map.md)
 - [Network test run plan](network-test-run-plan.md)
-- [Release artifact checklist](release-artifact-checklist.md)
 - [Documentation coverage](../documentation-coverage.md)
 
 ## How to use this queue
@@ -47,7 +48,7 @@ For stale wording or overconfident language, use [Stale wording scan](stale-word
 
 For command examples, also use [Command example scan](command-example-scan.md), [Command testing status](command-testing.md), and the [Command smoke-test plan](command-smoke-test-plan.md).
 
-For release checks and developer test planning, also update [Release source comparison notes](release-source-comparison.md), [Network release comparison](network-release-comparison.md), [Network test coverage map](network-test-coverage-map.md), [Network test run plan](network-test-run-plan.md), or [Release artifact checklist](release-artifact-checklist.md).
+For release checks and developer test planning, also update [Release source comparison notes](release-source-comparison.md), [Network release comparison](network-release-comparison.md), [Release asset inventory attempt](release-asset-inventory-attempt.md), [Release artifact checklist](release-artifact-checklist.md), [Network test coverage map](network-test-coverage-map.md), or [Network test run plan](network-test-run-plan.md).
 
 ## Open verification items
 
@@ -75,9 +76,19 @@ For release checks and developer test planning, also update [Release source comp
 
 **Question:** How should users verify BitcoinII release downloads?
 
-**Current evidence:** Source-tree verification and release-process docs describe checksum/signature style workflows, but current release assets still need direct checking.
+**Current evidence:** Release verification docs now separate release-page observation, source comparison, workflow artifact observation, checksum/manifest evidence, signature evidence, trusted-key evidence, local hash calculation, and binary verification. Current release assets still need direct inventory and checking.
 
 **Needed source:** Release assets, checksum files, signed tags, trusted keys, or maintainer statement.
+
+**Status:** Needs Review
+
+### Release asset inventory
+
+**Question:** What exact assets are attached to `v29.1.0`?
+
+**Current evidence:** The release asset inventory attempt records that the rendered page showed 12 assets, but full names, sizes, and URLs have not been captured.
+
+**Needed source:** GitHub API metadata, authenticated GitHub release page, maintainer-provided list, or manual capture with names/sizes/URLs.
 
 **Status:** Needs Review
 
@@ -172,5 +183,5 @@ Items in this queue should not be treated as verified documentation until moved 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current verification section structure, private review readiness checklist, narrow assignment cards, command smoke-test plan, network release comparison, selected network file blob-SHA spot checks, network test coverage map, and network test run plan
-**Notes:** This section README tracks verification workflow, private-review readiness, narrow assignments, feedback buckets, stale-wording scan, command-example scan, command-test tracking, release-check tracking, command smoke-test planning, network release comparison, network test coverage mapping, network test execution planning, and priority unknowns. It does not verify BitcoinII protocol behavior.
+**Primary sources checked:** Current verification section structure, private review readiness checklist, narrow assignment cards, command smoke-test plan, release verification cleanup, release asset inventory attempt, network release comparison, selected network file blob-SHA spot checks, network test coverage map, and network test run plan
+**Notes:** This section README tracks verification workflow, private-review readiness, narrow assignments, feedback buckets, stale-wording scan, command-example scan, command-test tracking, release-check tracking, release asset inventory, command smoke-test planning, network release comparison, network test coverage mapping, network test execution planning, and priority unknowns. It does not verify BitcoinII protocol behavior.
