@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-07-02
+**Last reviewed:** 2026-07-04
 
 ## Summary
 
@@ -77,11 +77,13 @@ Priority labels:
 
 **Question:** How should users verify BitcoinII release downloads?
 
-**Needed evidence:** Checksums, checksum manifests, signatures, signed tags, reproducible-build notes, maintainer instructions, or official release documentation.
+**Needed evidence:** Full asset list, checksums, checksum manifests, signatures, signed tags, reproducible-build notes, trusted key source, maintainer instructions, or official release documentation.
 
 **Priority:** Blocks public launch
 
 **Status:** Needs Review
+
+**Notes:** Release verification docs now separate release-page observation, source comparison, workflow artifact observation, checksum/manifest evidence, signature evidence, trusted-key evidence, local hash calculation, and binary verification. No downloaded release binary is verified yet.
 
 ### Current release branch
 
@@ -95,7 +97,7 @@ Priority labels:
 
 **Status:** Partial
 
-**Notes:** Network release comparison now records that the reviewed P2P/network files did not appear in the GitHub changed-file list when comparing `v29.1.0` to `main`. `src/kernel/chainparams.cpp` did appear in the changed-file list and remains version-sensitive.
+**Notes:** Network release comparison now records that the reviewed P2P/network files did not appear in the GitHub changed-file list when comparing `v29.1.0` to `main`. `src/kernel/chainparams.cpp` did appear in the changed-file list and remains version-sensitive. Source comparison still does not verify release binaries.
 
 ### Binary names and platform release assets
 
@@ -103,11 +105,13 @@ Priority labels:
 
 **Why it matters:** Wallet, node, and RPC examples need correct binary names and platform expectations.
 
-**Needed evidence:** Current release assets and/or official build documentation.
+**Needed evidence:** Current full release asset inventory with names, sizes, URLs, and dates captured.
 
 **Priority:** Blocks public launch
 
 **Status:** Needs Review
+
+**Notes:** GitHub rendered page showed 12 assets during the 2026-07-02 recheck, but MoreBC2 has not captured the full `v29.1.0` asset list.
 
 ## Consensus and validation
 
@@ -410,5 +414,5 @@ Priority labels:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Existing MoreBC2 open questions, audit findings, coverage dashboard, current section README rules, network release comparison, and network test coverage map
-**Notes:** This backlog was refreshed after first-pass network Source Atlas work through address-manager review, network release comparison, and network test coverage expansion. Items should move out of this page only after the relevant documentation is updated and sourced. Some local page questions may remain where they help the reader understand that exact page.
+**Primary sources checked:** Existing MoreBC2 open questions, audit findings, coverage dashboard, current section README rules, network release comparison, network test coverage map, and release verification cleanup
+**Notes:** This backlog was refreshed after first-pass network Source Atlas work through address-manager review, network release comparison, network test coverage expansion, and release verification cleanup. Items should move out of this page only after the relevant documentation is updated and sourced. Some local page questions may remain where they help the reader understand that exact page.
