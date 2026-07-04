@@ -2,7 +2,7 @@
 
 **Category:** Developer guide
 **Status:** Draft
-**Last reviewed:** 2026-07-02
+**Last reviewed:** 2026-07-04
 
 ## Summary
 
@@ -30,6 +30,20 @@ release binary
 
 If any step is missing, document the gap clearly.
 
+## Keep these evidence types separate
+
+Do not combine these into a single broad "verified release" statement:
+
+| Evidence type | What it can support | What it cannot support by itself |
+|---|---|---|
+| GitHub release page observed | Release exists at an observed path and has visible metadata. | Binary authenticity. |
+| GitHub verified commit marker | GitHub says the commit was signed or verified in its UI. | Downloaded release asset verification. |
+| Source comparison | Whether source files differ between refs. | Whether binaries were built from that source. |
+| Workflow artifact | A workflow produced an artifact. | That the artifact is a release asset or safe for users. |
+| Checksum file | A hash list exists. | Authenticity unless the checksum source is trusted. |
+| Signed checksum file | A stronger authenticity path if the key is trusted. | Trust if the signing key source is unknown. |
+| Locally calculated SHA256 | The downloaded file's hash. | Authenticity unless matched against trusted data. |
+
 ## Current finding
 
 MoreBC2 rechecked the public GitHub release page on 2026-07-02 after private-review audit feedback flagged release-currentness and date wording.
@@ -44,6 +58,7 @@ Current observations:
 - The source tree includes `contrib/verify-binaries/README.md`, which describes a checksum-and-signature model using `SHA256SUMS` and `SHA256SUMS.asc`.
 - The source tree includes `doc/release-process.md`, which describes Guix build attestations, signed tags, checksum files, and signature files.
 - A post-release workflow on `main` targets `v29.1.0` for a macOS arm64 DMG artifact.
+- A network source comparison page now records that reviewed P2P/network source files did not appear changed between `v29.1.0` and `main`, with selected blob-SHA spot checks.
 
 Current caveats:
 
@@ -52,9 +67,10 @@ Current caveats:
 - MoreBC2 has not confirmed the full `v29.1.0` release asset list.
 - MoreBC2 has not confirmed that current BitcoinII releases publish `SHA256SUMS` and `SHA256SUMS.asc`.
 - MoreBC2 has not confirmed trusted BitcoinII release keys.
-- MoreBC2 has not downloaded binaries or calculated independent hashes.
+- MoreBC2 has not downloaded release binaries or calculated independent hashes.
 - MoreBC2 has not verified detached signatures.
 - MoreBC2 has not confirmed that workflow artifacts are attached to the release page.
+- MoreBC2 has not proved release binaries match reviewed source files.
 
 Therefore, MoreBC2 should still treat release verification as **Needs Review**, not Verified.
 
@@ -113,7 +129,7 @@ Use [Release artifact checklist](../verification/release-artifact-checklist.md) 
 
 | Version | Release path | Hash checked | Checksum file | Signature | Status | Notes |
 |---|---|---:|---|---|---|---|
-| v29.1.0 | `Bitcoin-II/BitcoinII-Core` | No | Needs review | Needs review | Needs Review | Rechecked 2026-07-02; GitHub page showed Latest marker, but exact timestamp, full asset list, checksums, and signatures still need direct verification. |
+| v29.1.0 | `Bitcoin-II/BitcoinII-Core` | No | Needs review | Needs review | Needs Review | Rechecked 2026-07-02; GitHub page showed Latest marker, but exact timestamp, full asset list, checksums, signatures, and trusted-key path still need direct verification. |
 | v0.27.1 | redirected legacy path | No | Needs review | Needs review | Needs Review | Observed on redirected legacy repository path; not confirmed as current canonical path. |
 | v0.27.0 | redirected legacy path | No | Needs review | Needs review | Needs Review | Genesis release observed on redirected legacy path; not independently verified. |
 
@@ -171,6 +187,8 @@ Do not claim:
 - A community-posted hash is equivalent to a signed maintainer manifest.
 - A release workflow is exchange-grade until the full chain is checked.
 - A workflow artifact is the same as a release asset unless it is confirmed on the release page.
+- A source comparison proves release binaries match source.
+- A GitHub verified commit marker verifies downloaded release assets.
 
 ## Relationship to BasicSwap-style standards
 
@@ -196,4 +214,4 @@ MoreBC2 should track whether BitcoinII releases meet that kind of standard witho
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This guide defines the release verification standard and records release-page, source-comparison, workflow, and process-document observations. The release page was rechecked on 2026-07-02, but this still does not verify a specific BitcoinII release binary.
+**Notes:** This guide defines the release verification standard and records release-page, source-comparison, network-comparison, workflow, and process-document observations. The release page was rechecked on 2026-07-02, but this still does not verify a specific BitcoinII release binary.
