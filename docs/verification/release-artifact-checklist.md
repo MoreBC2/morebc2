@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-04
 
 ## Summary
 
@@ -10,7 +10,7 @@ This page defines the next release-artifact verification checklist for BitcoinII
 
 It is a working checklist, not a completed verification record.
 
-MoreBC2 has not yet downloaded release binaries or verified checksums/signatures.
+MoreBC2 has not downloaded release binaries, calculated independent hashes, or verified checksum/signature files.
 
 ## Target release
 
@@ -20,6 +20,24 @@ Current target release for this checklist:
 - Release tag: `v29.1.0`
 - Release title observed: `BitcoinII Core v29.1.0`
 - Release commit observed: `3f2a352467750425ec28abe3505a5db5bbc5fa35`
+
+## Evidence buckets
+
+Keep these buckets separate when updating this page:
+
+| Bucket | Meaning | Current status |
+|---|---|---|
+| Release page observed | GitHub release page was viewed and basic fields were recorded. | Partial |
+| Asset inventory observed | Full release asset names, sizes, and URLs captured. | Needs Review |
+| Source comparison observed | Source refs compared against current `main`. | Partial |
+| Checksum/manifest observed | Checksum file or manifest found on release page. | Needs Review |
+| Signature observed | Signature file found for manifest or assets. | Needs Review |
+| Trusted key identified | BitcoinII-trusted release key source identified. | Needs Review |
+| Hash calculated | MoreBC2 independently calculated a downloaded asset hash. | Not done |
+| Signature checked | MoreBC2 verified a signature with a trusted key. | Not done |
+| Binary verified | Downloaded binary tied to signed checksum/key process. | Not done |
+
+Do not collapse these buckets into one generic "release verified" claim.
 
 ## Artifact inventory status
 
@@ -75,6 +93,27 @@ Important caveat:
 
 The release-process document appears to be inherited/adapted from Bitcoin Core-style release procedures. MoreBC2 should not assume that the current BitcoinII `v29.1.0` GitHub release actually followed every step until the actual release assets and signatures are checked.
 
+## Minimum acceptable release-asset record
+
+For each release asset, a future verification record should include:
+
+| Field | Required before saying checked? |
+|---|---|
+| Release URL | Yes |
+| Asset name | Yes |
+| Asset size | Yes |
+| Asset URL captured | Yes |
+| Download date | Yes, if downloaded |
+| Download method | Yes, if downloaded |
+| Calculated SHA256 | Yes, if hash checked |
+| Checksum manifest name | Yes, if manifest exists |
+| Manifest entry matched | Yes, if manifest exists |
+| Signature file name | Yes, if signature exists |
+| Signature verification command | Yes, if signature checked |
+| Trusted key source | Yes, if signature checked |
+| Pass/fail status | Yes, after checks |
+| Notes and gaps | Always |
+
 ## Artifact verification steps to perform
 
 For `v29.1.0`, a future verifier should:
@@ -95,9 +134,9 @@ For `v29.1.0`, a future verifier should:
 
 Fill this in during the next verification pass.
 
-| Asset name | Size | Platform | Type | URL captured | SHA256 calculated | In manifest | Signature checked | Status |
-|---|---:|---|---|---|---|---|---|---|
-| TBD | TBD | TBD | TBD | No | No | Needs Review | Needs Review | Needs Review |
+| Asset name | Size | Platform | Type | URL captured | Downloaded | SHA256 calculated | In manifest | Signature checked | Status |
+|---|---:|---|---|---|---|---|---|---|---|
+| TBD | TBD | TBD | TBD | No | No | No | Needs Review | Needs Review | Needs Review |
 
 ## Suggested command record
 
@@ -131,12 +170,15 @@ Do not claim yet that:
 - `v29.1.0` assets are exchange-grade verified.
 - A GitHub workflow artifact is equivalent to a release asset.
 - A GitHub verified commit marker verifies downloaded release binaries.
+- Source comparison proves release binaries match source.
+- The current release process fully follows the inherited source-tree release-process document.
 
 ## Related pages
 
 - [BitcoinII releases](../documentation/releases.md)
 - [Release verification guide](../developers/release-verification.md)
 - [Release source comparison notes](release-source-comparison.md)
+- [Network release comparison](network-release-comparison.md)
 - [Command testing status](command-testing.md)
 - [Open questions backlog](open-questions.md)
 
@@ -144,4 +186,4 @@ Do not claim yet that:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This checklist is based on current release-page observations, the macOS arm64 workflow, and the source-tree release process document. No release binaries have been downloaded or verified.
+**Notes:** This checklist is based on current release-page observations, the macOS arm64 workflow, the source-tree release process document, and current release verification docs. No release binaries have been downloaded or verified.
