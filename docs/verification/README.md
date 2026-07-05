@@ -6,7 +6,7 @@
 
 ## Summary
 
-This section tracks claims, values, links, examples, and pages that need checking.
+This section tracks claims, values, links, examples, review packets, and verification tasks that are not ready to become verified documentation.
 
 Use this section when something is important but not ready to become verified documentation.
 
@@ -18,6 +18,9 @@ Verification pages should help MoreBC2 keep uncertainty visible instead of hidin
 - [Known unknowns](known-unknowns.md)
 - [Private review readiness](private-review-readiness.md)
 - [Narrow private review assignments](private-review-assignments.md)
+- [First review packet: command safety](first-review-packet-command-safety.md)
+- [First review packet: release verification wording](first-review-packet-release-wording.md)
+- [Codex task prompts](codex-task-prompts.md)
 - [Review feedback buckets](review-feedback-buckets.md)
 - [Stale wording scan](stale-wording-scan.md)
 - [Command example scan](command-example-scan.md)
@@ -41,15 +44,17 @@ Verification pages should help MoreBC2 keep uncertainty visible instead of hidin
 5. Move verified results into the correct documentation page.
 6. Leave a note explaining what changed.
 
-For private review planning, use [Private review readiness](private-review-readiness.md) and [Narrow private review assignments](private-review-assignments.md).
+For private review planning, use [Private review readiness](private-review-readiness.md), [Narrow private review assignments](private-review-assignments.md), and the first review packets.
 
 For review notes, use [Review feedback buckets](review-feedback-buckets.md) to keep feedback narrow and actionable.
 
+For local-agent or Codex work, use [Codex task prompts](codex-task-prompts.md). These prompts are for tasks that need a real checkout, stronger grep, local tooling, API metadata, or simulated review.
+
 For stale wording or overconfident language, use [Stale wording scan](stale-wording-scan.md).
 
-For command examples, also use [Command example scan](command-example-scan.md), [Command testing status](command-testing.md), and the [Command smoke-test plan](command-smoke-test-plan.md).
+For command examples, also use [Command example scan](command-example-scan.md), [Command testing status](command-testing.md), the [Command smoke-test plan](command-smoke-test-plan.md), and the command-safety review packet.
 
-For release checks, also update [Release source comparison notes](release-source-comparison.md), [Network release comparison](network-release-comparison.md), [Release asset inventory attempt](release-asset-inventory-attempt.md), or [Release artifact checklist](release-artifact-checklist.md).
+For release checks, also update [Release source comparison notes](release-source-comparison.md), [Network release comparison](network-release-comparison.md), [Release asset inventory attempt](release-asset-inventory-attempt.md), [Release artifact checklist](release-artifact-checklist.md), and the release wording review packet.
 
 For ecosystem checks, use [Ecosystem direct check plan](ecosystem-direct-check-plan.md) before updating explorer, API, pool, exchange, wallet, or resource pages.
 
@@ -77,11 +82,31 @@ For developer test planning, update [Network test coverage map](network-test-cov
 
 **Status:** Needs Review
 
+### First private review packets
+
+**Question:** Which parts can be opened first for narrow private review?
+
+**Current evidence:** Command-safety and release-wording packets now exist with review rules, page lists, feedback format, and copy/paste assignment notes.
+
+**Needed source:** Actual reviewer feedback.
+
+**Status:** Ready for narrow review
+
+### Local-agent / Codex tasks
+
+**Question:** Which tasks should be handed to Codex or another local repo agent?
+
+**Current evidence:** Codex prompts now exist for stale-wording grep, command-shaped example audit, release asset inventory capture, Markdown link checking, and packet dry run.
+
+**Needed source:** Codex/local-agent output or patches.
+
+**Status:** Framework
+
 ### Release verification model
 
 **Question:** How should users verify BitcoinII release downloads?
 
-**Current evidence:** Release verification docs now separate release-page observation, source comparison, workflow artifact observation, checksum/manifest evidence, signature evidence, trusted-key evidence, local hash calculation, and binary verification. Current release assets still need direct inventory and checking.
+**Current evidence:** Release verification docs separate release-page observation, source comparison, workflow artifact observation, checksum/manifest evidence, signature evidence, trusted-key evidence, local hash calculation, and binary verification. Current release assets still need direct inventory and checking.
 
 **Needed source:** Release assets, checksum files, signed tags, trusted keys, or maintainer statement.
 
@@ -198,5 +223,5 @@ Items in this queue should not be treated as verified documentation until moved 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current verification section structure, private review readiness checklist, narrow assignment cards, command smoke-test plan, release verification cleanup, release asset inventory attempt, ecosystem direct check plan, network release comparison, selected network file blob-SHA spot checks, network test coverage map, and network test run plan
-**Notes:** This section README tracks verification workflow, private-review readiness, narrow assignments, feedback buckets, stale-wording scan, command-example scan, command-test tracking, release-check tracking, release asset inventory, ecosystem direct-check planning, command smoke-test planning, network release comparison, network test coverage mapping, network test execution planning, and priority unknowns. It does not verify BitcoinII protocol behavior.
+**Primary sources checked:** Current verification section structure, private review readiness checklist, narrow assignment cards, first review packets, Codex task prompts, command smoke-test plan, release verification cleanup, release asset inventory attempt, ecosystem direct check plan, network release comparison, selected network file blob-SHA spot checks, network test coverage map, and network test run plan
+**Notes:** This section README tracks verification workflow, private-review readiness, narrow assignments, first review packets, local-agent prompts, feedback buckets, stale-wording scan, command-example scan, command-test tracking, release-check tracking, release asset inventory, ecosystem direct-check planning, command smoke-test planning, network release comparison, network test coverage mapping, network test execution planning, and priority unknowns. It does not verify BitcoinII protocol behavior.
