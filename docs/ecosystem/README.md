@@ -2,15 +2,17 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-04
 
 ## Summary
 
 This section tracks BitcoinII (BC2) ecosystem resources such as wallets, explorers, mining pools, exchanges, resources, services, APIs, and community projects.
 
-Nothing should be listed as active until it has been directly checked.
+Nothing should be listed as active until it has been directly checked and dated.
 
-Ecosystem pages are time-sensitive. Every listing should include a review date, status, and evidence level.
+Ecosystem pages are time-sensitive. Every listing should include a review date, status, evidence level, and notes about what was and was not checked.
+
+Use [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md) before adding or promoting any ecosystem listing.
 
 ## Current pages
 
@@ -34,18 +36,36 @@ Ecosystem pages are time-sensitive. Every listing should include a review date, 
 - Merchants
 - Educational resources
 
+## Status labels
+
+Use these labels consistently with the ecosystem check plan:
+
+| Label | Meaning |
+|---|---|
+| Needs Review | No current direct check recorded. |
+| Observed | Page or service was reachable, but function was not fully tested. |
+| Partially checked | Some function was checked, but important gaps remain. |
+| Active, dated check | Direct check supports active status on a specific date. |
+| Unreachable | Direct check failed on a specific date. |
+| Historical / legacy | Mentioned for history only, not current availability. |
+| Do not recommend | Evidence suggests users should not be directed there. |
+
+Avoid `Verified` for ecosystem services unless MoreBC2 later adopts a repeatable ecosystem verification policy.
+
 ## Listing format
 
 ```md
 ### Name
 
 **Category:** Wallet / Explorer / API / Pool / Exchange / Resource / Other
-**Status:** Active / Needs Review / Offline / Historical
+**Status:** Needs Review / Observed / Partially checked / Active, dated check / Unreachable / Historical / Do not recommend
 **Official:** Yes / No / Unknown
 **URL:**
 **Maintainer:** Unknown unless public
 **Last checked:** YYYY-MM-DD
 **Evidence level:** E1-E8
+**What was checked:**
+**What was not checked:**
 **Notes:**
 ```
 
@@ -58,7 +78,7 @@ Ecosystem pages are time-sensitive. Every listing should include a review date, 
 
 ## Rules
 
-- Do not list a service as active without checking it.
+- Do not list a service as active without checking it directly and dating the check.
 - Do not call a service official unless an official source says so.
 - Record last checked dates.
 - Mark uncertain listings as Needs Review.
@@ -67,9 +87,11 @@ Ecosystem pages are time-sensitive. Every listing should include a review date, 
 - Prefer direct checks over copied community lists.
 - Link relevant service-integration docs for services that need node/RPC behavior.
 - Do not imply a public API can replace running a local node for critical service workflows.
+- Do not recommend downloads until release/download verification is separately handled.
 
 ## Related pages
 
+- [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md)
 - [Exchange integration](../exchange/README.md)
 - [Wallet guide](../wallets/wallet-guide.md)
 - [Mining README](../mining/README.md)
@@ -82,5 +104,5 @@ Ecosystem pages are time-sensitive. Every listing should include a review date, 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** No current ecosystem checks completed in this index
+**Primary sources checked:** Ecosystem framework pages and ecosystem direct check plan
 **Notes:** This is a framework. Specific ecosystem listings still need direct verification before being described as active, reliable, official, or recommended.
