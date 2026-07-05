@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-04
 
 ## Summary
 
@@ -10,19 +10,26 @@ This page tracks BitcoinII (BC2) wallet resources in the ecosystem.
 
 Nothing should be marked active, official, or recommended until directly verified.
 
+Use [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md) and release-verification pages before promoting wallet/download listings.
+
 ## Listing format
 
 ```md
 ### Wallet name
 
-**Status:** Active / Needs Review / Historical / Offline
+**Status:** Needs Review / Observed / Partially checked / Active, dated check / Unreachable / Historical / Do not recommend
 **Official:** Yes / No / Unknown
 **Type:** GUI / CLI / Full node / Mobile / Web / Hardware / Other
-**URL:** 
-**Source:** 
+**URL:**
+**Source:**
+**Version:** Unknown unless verified
+**Download type:** Unknown unless verified
+**Checksum/signature available:** Unknown unless verified
 **Last checked:** YYYY-MM-DD
 **Evidence level:** E1-E8
-**Notes:** 
+**What was checked:**
+**What was not checked:**
+**Notes:**
 ```
 
 ## Current known wallet source
@@ -35,8 +42,10 @@ Nothing should be marked active, official, or recommended until directly verifie
 **Current observed release URL:** https://github.com/Bitcoin-II/BitcoinII-Core/releases
 **Legacy/redirected release URL:** https://github.com/BitcoinII-Dev/BitcoinII/releases
 **Source:** Current release-page observations and source-reviewed wallet files
-**Last checked:** 2026-06-30
+**Last checked:** 2026-07-04
 **Evidence level:** E2/E3
+**What was checked:** Source-reviewed wallet RPC groups and current observed release path.
+**What was not checked:** Canonical release path, complete current asset list, platform-specific downloads, downloaded binary hashes, checksum manifests, signatures, trusted keys, or third-party wallet support.
 **Notes:** MoreBC2 currently observes `Bitcoin-II/BitcoinII-Core` as the active public release path, while older release links may redirect elsewhere. BitcoinII Core source includes wallet functionality and reviewed wallet RPC groups, but the canonical release path, asset list, release verification model, and platform-specific wallet downloads still need review before this listing is promoted.
 
 ## Open items
@@ -50,13 +59,15 @@ Nothing should be marked active, official, or recommended until directly verifie
 
 ## Related pages
 
+- [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md)
 - [Wallet guide](../wallets/wallet-guide.md)
 - [Release verification guide](../developers/release-verification.md)
 - [Release artifact checklist](../verification/release-artifact-checklist.md)
+- [Release asset inventory attempt](../verification/release-asset-inventory-attempt.md)
 - [Known unknowns](../verification/known-unknowns.md)
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Partially
+**Primary sources checked:** Ecosystem direct check plan, current release-page observations, release-verification docs, and source-reviewed wallet files
 **Notes:** This ecosystem page is intentionally conservative. The current observed release path has been updated, but canonical status, release assets, and wallet download verification still need direct review before public use.
