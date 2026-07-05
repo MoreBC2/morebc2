@@ -12,7 +12,7 @@ Local pages may still keep their own open-question sections, but this backlog sh
 
 ## How to read this page
 
-Each item should be treated as unresolved unless a linked page says it has been verified.
+Each item should be treated as unresolved unless a linked page says it has been resolved with evidence.
 
 Priority labels:
 
@@ -27,8 +27,6 @@ Priority labels:
 
 **Question:** Which GitHub path should MoreBC2 treat as the canonical public BitcoinII repository path?
 
-**Why it matters:** Many pages cite source files. Canonical source links should be stable before public launch.
-
 **Needed evidence:** Maintainer-confirmed repository link, official website link, or stable release/source link.
 
 **Priority:** Blocks public launch
@@ -38,8 +36,6 @@ Priority labels:
 ### Official ticker source
 
 **Question:** What is the strongest primary source confirming `BC2` as the ticker?
-
-**Why it matters:** MoreBC2 consistently uses BC2, but the strongest source should be identified.
 
 **Needed evidence:** Official website, README, release note, UI/help text, exchange listing, or maintainer statement.
 
@@ -51,8 +47,6 @@ Priority labels:
 
 **Question:** What official website and contact path should exchanges, explorers, pools, and wallet developers use?
 
-**Why it matters:** Integration pages need a reliable contact process.
-
 **Needed evidence:** Official website, repository contact info, maintainer statement, or project-maintained contact page.
 
 **Priority:** Blocks public launch
@@ -62,8 +56,6 @@ Priority labels:
 ### Project license and contribution posture
 
 **Question:** What license and contribution workflow should MoreBC2 use before public collaboration?
-
-**Why it matters:** Public contributors need clear licensing, contribution expectations, and review rules.
 
 **Needed evidence:** Repository owner decision, license file review, contribution policy update.
 
@@ -83,13 +75,11 @@ Priority labels:
 
 **Status:** Needs Review
 
-**Notes:** Release verification docs now separate release-page observation, source comparison, workflow artifact observation, checksum/manifest evidence, signature evidence, trusted-key evidence, local hash calculation, and binary verification. No downloaded release binary is verified yet.
+**Notes:** Release docs now separate release-page observation, source comparison, workflow artifact observation, checksum/manifest evidence, signature evidence, trusted-key evidence, local hash calculation, and binary verification. No downloaded release file is checked yet.
 
 ### Current release branch
 
-**Question:** Do the source values documented from `main` match the current public release branch?
-
-**Why it matters:** Network specifications and source-atlas pages should not silently document unreleased values as current network behavior.
+**Question:** Do source values documented from `main` match the current public release branch?
 
 **Needed evidence:** Current release tag/branch comparison against documented values.
 
@@ -97,13 +87,11 @@ Priority labels:
 
 **Status:** Partial
 
-**Notes:** Network release comparison now records that the reviewed P2P/network files did not appear in the GitHub changed-file list when comparing `v29.1.0` to `main`. `src/kernel/chainparams.cpp` did appear in the changed-file list and remains version-sensitive. Source comparison still does not verify release binaries.
+**Notes:** Network release comparison records that reviewed network/P2P files did not appear in the GitHub changed-file list when comparing `v29.1.0` to `main`; selected blob spot checks also matched. `src/kernel/chainparams.cpp` remains version-sensitive. Source comparison still does not verify release files.
 
 ### Binary names and platform release assets
 
-**Question:** Which binaries, installers, archives, and platform assets are officially published for BitcoinII Core?
-
-**Why it matters:** Wallet, node, and RPC examples need correct binary names and platform expectations.
+**Question:** Which binaries, installers, archives, and platform assets are published for BitcoinII Core `v29.1.0`?
 
 **Needed evidence:** Current full release asset inventory with names, sizes, URLs, and dates captured.
 
@@ -111,7 +99,7 @@ Priority labels:
 
 **Status:** Needs Review
 
-**Notes:** GitHub rendered page showed 12 assets during the 2026-07-02 recheck, but MoreBC2 has not captured the full `v29.1.0` asset list.
+**Notes:** GitHub rendered page showed 12 assets during the 2026-07-02 recheck, but MoreBC2 has not captured the full asset list. The release asset inventory attempt tracks this gap.
 
 ## Consensus and validation
 
@@ -187,17 +175,7 @@ Priority labels:
 
 **Status:** Needs Review
 
-### Mempool option defaults
-
-**Question:** What are the default mempool limits, expiry rules, relay fees, and standardness settings?
-
-**Needed evidence:** Source/default-argument review and local command output.
-
-**Priority:** Future improvement
-
-**Status:** Needs Review
-
-### RPC command verification
+### RPC command records
 
 **Question:** Which RPC examples have been tested against a running BitcoinII Core node?
 
@@ -209,19 +187,9 @@ Priority labels:
 
 ### Read-only service RPC recommendations
 
-**Question:** Which reviewed RPC commands are safe enough to recommend for exchanges, explorers, and services after testing?
+**Question:** Which reviewed RPC commands are appropriate to recommend for exchanges, explorers, and services after testing?
 
 **Needed evidence:** Command testing, service-integration review, and separation of read-only vs state-changing commands.
-
-**Priority:** Blocks public launch
-
-**Status:** Needs Review
-
-### Transaction relay and dry-run guidance
-
-**Question:** How should MoreBC2 document transaction relay, dry-run acceptance checks, and package submission safely?
-
-**Needed evidence:** Local regtest examples, mempool RPC review, and service-oriented risk notes.
 
 **Priority:** Blocks public launch
 
@@ -231,7 +199,7 @@ Priority labels:
 
 ### Wallet backup and restore process
 
-**Question:** What wallet backup/restore guidance is verified for BitcoinII Core?
+**Question:** What wallet backup/restore guidance is checked for BitcoinII Core?
 
 **Needed evidence:** Temporary-wallet tests, release-version notes, and wallet RPC/source review.
 
@@ -241,7 +209,7 @@ Priority labels:
 
 ### Wallet access-state workflow
 
-**Question:** What wallet encryption, timed unlock, relock, and access-phrase update workflow can be safely documented for users?
+**Question:** What wallet encryption, timed unlock, relock, and access-phrase update workflow can be documented for users?
 
 **Needed evidence:** Temporary-wallet tests and source-reviewed command behavior.
 
@@ -271,11 +239,23 @@ Priority labels:
 
 ## Ecosystem and service status
 
+### Ecosystem direct checks
+
+**Question:** Which explorers, APIs, pools, exchanges, wallets, and resources can be described as currently reachable or active?
+
+**Needed evidence:** Direct dated checks using the ecosystem direct-check plan.
+
+**Priority:** Blocks public launch
+
+**Status:** Framework
+
+**Notes:** The check plan and refreshed listing templates now exist. Actual dated checks have not been performed.
+
 ### Active explorers
 
-**Question:** Which BitcoinII explorers are active, synced, and reliable?
+**Question:** Which BitcoinII explorers are reachable, synced, and useful?
 
-**Needed evidence:** Direct explorer checks, sync status, API availability, uptime notes, and review dates.
+**Needed evidence:** Direct explorer checks, sync comparison, API availability, and review dates.
 
 **Priority:** Blocks public launch
 
@@ -283,7 +263,7 @@ Priority labels:
 
 ### Active mining pools
 
-**Question:** Which mining pools support BitcoinII today, and what are their fees/payout rules?
+**Question:** Which mining pools support BitcoinII today, and what are their fee and payout rules?
 
 **Needed evidence:** Direct pool checks, payout model notes, pool status, and review dates.
 
@@ -311,21 +291,11 @@ Priority labels:
 
 **Status:** Needs direct checks
 
-### Explorer/API framework
-
-**Question:** What explorer/API fields and endpoints should MoreBC2 document for service integrators?
-
-**Needed evidence:** Direct explorer/API checks, service-provider needs, and current endpoint behavior.
-
-**Priority:** Blocks public launch
-
-**Status:** Needs Review
-
 ## Architecture and source review still needed
 
 ### Network and P2P architecture
 
-**Question:** What network and peer-communication areas still need review after the first-pass P2P Source Atlas work?
+**Question:** What network and peer-communication areas still need review after the first-pass Source Atlas work?
 
 **Needed evidence:** Follow-up review of stale-tip coverage, DNS/seed test coverage, peer-list RPC details, live-network checks, and any missing `net.cpp` edge cases.
 
@@ -333,7 +303,7 @@ Priority labels:
 
 **Status:** Partial
 
-**Notes:** First-pass pages now exist for protocol primitives, network RPC, lower-level connection management, address manager, peer-list management, handshake, address sharing, block/header sharing, transaction sharing, peer health/stale-tip checks, and send-loop behavior. Network release comparison records that these reviewed P2P/network files did not appear in the GitHub changed-file list for `v29.1.0` to `main`. Network test mapping now identifies relevant unit and functional tests including `rpc_net.py`, `p2p_eviction.py`, and `p2p_getaddr_caching.py`; stale-tip and DNS/seed-specific test coverage remain less clear.
+**Notes:** Source pages, release comparison, test coverage map, and test run plan exist. Runtime tests and live checks remain open.
 
 ### Network RPC and CLI source review
 
@@ -355,23 +325,23 @@ Priority labels:
 
 **Status:** Needs Review
 
-### Functional test mapping
+### Developer test execution
 
-**Question:** Which unit and functional tests cover the reviewed source areas?
+**Question:** Which mapped unit and functional tests have actually been run by MoreBC2?
 
-**Needed evidence:** Test tree review and local test command records.
+**Needed evidence:** Local test records with environment, ref, command, result, and notes.
 
 **Priority:** Future improvement
 
-**Status:** Partial
+**Status:** Framework
 
-**Notes:** Network test coverage mapping now exists and has been expanded with targeted checks for network RPC, peer eviction, and address-response caching. It remains a mapping only, not a local test-run record.
+**Notes:** Network test coverage mapping and a test run plan exist, but no local test-run record exists yet.
 
 ## Documentation polish and review process
 
 ### Architecture and Source Atlas cross-link pass
 
-**Question:** Which architecture pages need links to the newer Source Atlas RPC, wallet, and P2P pages?
+**Question:** Which architecture pages need links to newer Source Atlas RPC, wallet, and P2P pages?
 
 **Needed evidence:** Cross-link review across architecture pages and Source Atlas entries.
 
@@ -379,11 +349,9 @@ Priority labels:
 
 **Status:** Partial
 
-**Notes:** Architecture overview, architecture index, peer communication model, developer reading order, source tree guide, repository map, and coverage dashboard were refreshed through address-manager review and network release comparison. Remaining cross-link work should focus on smaller lifecycle pages and any new pages added later.
-
 ### Terminology and glossary cleanup
 
-**Question:** Which terms from the wallet/RPC/mempool/source-review work should be added or cross-linked in the glossaries?
+**Question:** Which terms from wallet/RPC/mempool/source-review work should be added or cross-linked in the glossaries?
 
 **Needed evidence:** Glossary review against current architecture and Source Atlas pages.
 
@@ -414,5 +382,5 @@ Priority labels:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Existing MoreBC2 open questions, audit findings, coverage dashboard, current section README rules, network release comparison, network test coverage map, and release verification cleanup
-**Notes:** This backlog was refreshed after first-pass network Source Atlas work through address-manager review, network release comparison, network test coverage expansion, and release verification cleanup. Items should move out of this page only after the relevant documentation is updated and sourced. Some local page questions may remain where they help the reader understand that exact page.
+**Primary sources checked:** Verification README, known unknowns, coverage dashboard, release verification docs, release asset inventory attempt, ecosystem direct-check plan, network release comparison, and network test run plan
+**Notes:** This backlog was synchronized after the latest catch-up sweep. Items should move out of this page only after the relevant documentation is updated and sourced.
