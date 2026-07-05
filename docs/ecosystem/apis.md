@@ -2,7 +2,7 @@
 
 **Category:** Ecosystem
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-04
 
 ## Summary
 
@@ -11,6 +11,8 @@ This page tracks BitcoinII (BC2) public API resources such as explorer APIs, ser
 No API should be listed as active or recommended until it has been directly checked and dated.
 
 This page is a framework. It does not list any verified active APIs yet.
+
+Use [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md) before adding or promoting API listings.
 
 ## API categories
 
@@ -32,7 +34,7 @@ Potential API categories include:
 ### API name
 
 **Category:** Explorer / Pool / Exchange / Community / Other
-**Status:** Active / Needs Review / Offline / Historical
+**Status:** Needs Review / Observed / Partially checked / Active, dated check / Unreachable / Historical / Do not recommend
 **Official:** Yes / No / Unknown
 **Base URL:**
 **Documentation URL:**
@@ -42,6 +44,8 @@ Potential API categories include:
 **Supports:** Blocks / transactions / addresses / mempool / stats / other
 **Authentication:** None / API key / Unknown
 **Rate limits:** Unknown unless documented
+**What was checked:**
+**What was not checked:**
 **Notes:**
 ```
 
@@ -55,9 +59,11 @@ For each checked endpoint, record:
 **Date checked:** YYYY-MM-DD
 **Checked by:**
 **Base URL:**
+**Request method:** GET / POST / other
 **Request:**
+**Response status:**
 **Expected result:**
-**Actual result:**
+**Actual result summary:**
 **Status:** Pass / Fail / Partial
 **Notes:**
 ```
@@ -111,6 +117,7 @@ Do not claim yet that:
 
 ## Related pages
 
+- [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md)
 - [Explorers](explorers.md)
 - [Explorer resources](../documentation/explorer-resources.md)
 - [Exchange integration](../exchange/README.md)
@@ -122,5 +129,5 @@ Do not claim yet that:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** No current API checks completed
+**Primary sources checked:** Ecosystem direct check plan and existing API framework
 **Notes:** This page defines an API listing and endpoint-test framework. It does not verify any live BitcoinII API.
