@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-04
 
 ## Summary
 
@@ -10,15 +10,15 @@ This page lists the highest-level things MoreBC2 does not know yet.
 
 A known unknown is not a failure. It is an invitation to verify.
 
-For the full working list, use the [open questions backlog](open-questions.md).
+For the full working list, use the [open questions backlog](open-questions.md) and [verification queue](README.md).
 
 ## Highest-priority known unknowns
 
 ### Canonical public repository path
 
-MoreBC2 currently references BitcoinII source paths that may appear under different GitHub owner paths or redirects.
+MoreBC2 currently observes `Bitcoin-II/BitcoinII-Core` for current source and release work, while older paths may redirect elsewhere.
 
-**Needed:** Stable maintainer-confirmed canonical source path.
+**Needed:** Stable maintainer-confirmed canonical source and release path.
 
 **Blocks:** Public launch.
 
@@ -32,9 +32,19 @@ BC2 is used throughout the ecosystem, but MoreBC2 still needs the strongest offi
 
 ### Release verification model
 
-MoreBC2 has not yet confirmed whether BitcoinII releases use checksum manifests, detached signatures, signed tags, GitHub-only checksums, reproducible builds, or another process.
+MoreBC2 has release-page observations, source comparison notes, a network release comparison, a release asset inventory attempt, and an artifact checklist.
 
-**Needed:** Release asset review and maintainer confirmation if necessary.
+It still has not confirmed the full `v29.1.0` asset list, checksum/manifest files, detached signatures, trusted release keys, independently calculated hashes, or binary-to-source verification.
+
+**Needed:** Complete asset inventory, checksum/signature/key review, local hash records, and maintainer confirmation if necessary.
+
+**Blocks:** Public launch.
+
+### Full release asset inventory
+
+The rendered release page previously showed 12 assets for `v29.1.0`, but MoreBC2 has not captured the full asset names, sizes, or URLs.
+
+**Needed:** GitHub API metadata, authenticated GitHub release page, maintainer-provided list, or manual capture.
 
 **Blocks:** Public launch.
 
@@ -54,27 +64,11 @@ MoreBC2 has not confirmed the preferred contact process for exchanges, explorers
 
 **Blocks:** Public launch.
 
-### Active explorers
+### Active ecosystem resources
 
-MoreBC2 has not yet verified current active explorers.
+MoreBC2 now has an ecosystem direct-check plan and refreshed templates, but it has not performed dated direct checks for active explorers, APIs, pools, exchanges, wallets, or community resources.
 
-**Needed:** Direct checks, sync status, uptime notes, and source links.
-
-**Blocks:** Public launch.
-
-### Active mining pools
-
-MoreBC2 has not yet verified current active mining pools.
-
-**Needed:** Direct pool checks, payout model notes, and source links.
-
-**Blocks:** Public launch.
-
-### Active exchanges
-
-MoreBC2 has not yet verified current active exchanges or pairs.
-
-**Needed:** Direct exchange checks and dates reviewed.
+**Needed:** Direct checks with URL, date, observed status, what was checked, what was not checked, and evidence level.
 
 **Blocks:** Public launch.
 
@@ -86,22 +80,30 @@ MoreBC2 has many source-observed command notes, but most examples have not been 
 
 **Blocks:** Private review if labeling is unclear; public launch for user-facing guides.
 
+### Developer test execution
+
+MoreBC2 has a network test coverage map and network test run plan, but it has not run the mapped tests.
+
+**Needed:** Actual local test command records with environment, ref, command, result, and notes.
+
+**Blocks:** Public claims that behavior has been tested.
+
 ### Architecture and Source Atlas link drift
 
-The Source Atlas has grown quickly. Architecture pages may need links to newer wallet, raw transaction, and mempool RPC pages.
+The Source Atlas has grown quickly. Architecture pages, glossaries, and dashboards can drift after new pages are added.
 
-**Needed:** Cross-link and terminology pass.
+**Needed:** Periodic cross-link, terminology, and dashboard synchronization passes.
 
-**Blocks:** Private review.
+**Blocks:** Private review if navigation/status becomes confusing.
 
 ## Rule
 
 Do not fill unknowns from memory.
 
-When an unknown is resolved, move the verified result to the correct documentation page and leave a note in the verification index or backlog.
+When an unknown is resolved, move the result to the correct documentation page and leave a note in the verification index or backlog.
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Open questions backlog and current coverage dashboard
+**Primary sources checked:** Open questions backlog, verification queue, current coverage dashboard, release asset inventory attempt, ecosystem direct-check plan, network test run plan
 **Notes:** This page is a short executive list. The detailed backlog is `open-questions.md`.
