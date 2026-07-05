@@ -27,6 +27,7 @@ Verification pages should help MoreBC2 keep uncertainty visible instead of hidin
 - [Network release comparison](network-release-comparison.md)
 - [Release asset inventory attempt](release-asset-inventory-attempt.md)
 - [Release artifact checklist](release-artifact-checklist.md)
+- [Ecosystem direct check plan](ecosystem-direct-check-plan.md)
 - [Network test coverage map](network-test-coverage-map.md)
 - [Network test run plan](network-test-run-plan.md)
 - [Documentation coverage](../documentation-coverage.md)
@@ -48,7 +49,11 @@ For stale wording or overconfident language, use [Stale wording scan](stale-word
 
 For command examples, also use [Command example scan](command-example-scan.md), [Command testing status](command-testing.md), and the [Command smoke-test plan](command-smoke-test-plan.md).
 
-For release checks and developer test planning, also update [Release source comparison notes](release-source-comparison.md), [Network release comparison](network-release-comparison.md), [Release asset inventory attempt](release-asset-inventory-attempt.md), [Release artifact checklist](release-artifact-checklist.md), [Network test coverage map](network-test-coverage-map.md), or [Network test run plan](network-test-run-plan.md).
+For release checks, also update [Release source comparison notes](release-source-comparison.md), [Network release comparison](network-release-comparison.md), [Release asset inventory attempt](release-asset-inventory-attempt.md), or [Release artifact checklist](release-artifact-checklist.md).
+
+For ecosystem checks, use [Ecosystem direct check plan](ecosystem-direct-check-plan.md) before updating explorer, API, pool, exchange, wallet, or resource pages.
+
+For developer test planning, update [Network test coverage map](network-test-coverage-map.md) or [Network test run plan](network-test-run-plan.md).
 
 ## Open verification items
 
@@ -91,6 +96,16 @@ For release checks and developer test planning, also update [Release source comp
 **Needed source:** GitHub API metadata, authenticated GitHub release page, maintainer-provided list, or manual capture with names/sizes/URLs.
 
 **Status:** Needs Review
+
+### Ecosystem direct checks
+
+**Question:** How should MoreBC2 check explorers, APIs, pools, exchanges, wallets, and community resources before making active-service claims?
+
+**Current evidence:** The ecosystem direct check plan defines required fields, status labels, evidence rules, and per-resource check templates.
+
+**Needed source:** Actual dated direct checks for each ecosystem resource.
+
+**Status:** Framework
 
 ### Network release comparison
 
@@ -183,5 +198,5 @@ Items in this queue should not be treated as verified documentation until moved 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current verification section structure, private review readiness checklist, narrow assignment cards, command smoke-test plan, release verification cleanup, release asset inventory attempt, network release comparison, selected network file blob-SHA spot checks, network test coverage map, and network test run plan
-**Notes:** This section README tracks verification workflow, private-review readiness, narrow assignments, feedback buckets, stale-wording scan, command-example scan, command-test tracking, release-check tracking, release asset inventory, command smoke-test planning, network release comparison, network test coverage mapping, network test execution planning, and priority unknowns. It does not verify BitcoinII protocol behavior.
+**Primary sources checked:** Current verification section structure, private review readiness checklist, narrow assignment cards, command smoke-test plan, release verification cleanup, release asset inventory attempt, ecosystem direct check plan, network release comparison, selected network file blob-SHA spot checks, network test coverage map, and network test run plan
+**Notes:** This section README tracks verification workflow, private-review readiness, narrow assignments, feedback buckets, stale-wording scan, command-example scan, command-test tracking, release-check tracking, release asset inventory, ecosystem direct-check planning, command smoke-test planning, network release comparison, network test coverage mapping, network test execution planning, and priority unknowns. It does not verify BitcoinII protocol behavior.
