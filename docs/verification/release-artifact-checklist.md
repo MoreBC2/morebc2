@@ -10,7 +10,7 @@ This page defines the next release-artifact verification checklist for BitcoinII
 
 It is a working checklist, not a completed verification record.
 
-MoreBC2 has not downloaded release binaries, calculated independent hashes, or verified checksum/signature files.
+MoreBC2 has captured uploaded release asset metadata for `v29.1.0`, but has not downloaded release binaries, calculated independent hashes, or verified checksum/signature files.
 
 ## Target release
 
@@ -20,6 +20,7 @@ Current target release for this checklist:
 - Release tag: `v29.1.0`
 - Release title observed: `BitcoinII Core v29.1.0`
 - Release commit observed: `3f2a352467750425ec28abe3505a5db5bbc5fa35`
+- GitHub API published_at observed: `2025-11-27T04:22:39Z`
 
 ## Evidence buckets
 
@@ -27,10 +28,10 @@ Keep these buckets separate when updating this page:
 
 | Bucket | Meaning | Current status |
 |---|---|---|
-| Release page observed | GitHub release page was viewed and basic fields were recorded. | Partial |
-| Asset inventory observed | Full release asset names, sizes, and URLs captured. | Needs Review |
+| Release page/API observed | GitHub release page and API metadata were viewed and basic fields were recorded. | Partial |
+| Uploaded asset inventory observed | Uploaded release asset names, sizes, and URLs captured from GitHub API metadata. | Partial |
 | Source comparison observed | Source refs compared against current `main`. | Partial |
-| Checksum/manifest observed | Checksum file or manifest found on release page. | Needs Review |
+| Checksum/manifest observed | Checksum file or manifest found on release page or another official source. | Needs Review |
 | Signature observed | Signature file found for manifest or assets. | Needs Review |
 | Trusted key identified | BitcoinII-trusted release key source identified. | Needs Review |
 | Hash calculated | MoreBC2 independently calculated a downloaded asset hash. | Not done |
@@ -43,19 +44,33 @@ Do not collapse these buckets into one generic "release verified" claim.
 
 | Item | Status | Notes |
 |---|---|---|
-| Full release asset names | Needs Review | GitHub rendered page showed 12 assets, but MoreBC2 has not captured the full asset list. |
-| Asset sizes | Needs Review | Not captured. |
-| Asset download URLs | Needs Review | Not captured. |
-| Source archive names | Needs Review | GitHub-generated source archives likely exist, but final release asset names still need capture. |
-| Windows GUI asset | Needs Review | Not confirmed for `v29.1.0`. |
-| Windows CLI asset | Needs Review | Not confirmed for `v29.1.0`. |
-| Linux GUI assets | Needs Review | Not confirmed for `v29.1.0`. |
-| Linux CLI assets | Needs Review | Not confirmed for `v29.1.0`. |
-| macOS GUI assets | Partial | A post-release workflow exists for a macOS arm64 DMG artifact, but this does not prove it is attached to the release page. |
-| macOS CLI assets | Needs Review | Not confirmed for `v29.1.0`. |
-| Checksum manifest | Needs Review | Not confirmed on the release page. |
-| Manifest signature | Needs Review | Not confirmed on the release page. |
+| Full uploaded release asset names | Partial | GitHub API reports 10 uploaded assets and names are now captured. |
+| Uploaded asset sizes | Partial | Captured from GitHub API metadata. |
+| Uploaded asset download URLs | Partial | Captured by Codex report from GitHub API metadata. |
+| Source archive names | Needs Review | Earlier rendered page showed 12 assets; difference likely includes GitHub-generated source archives. These should be listed separately if needed. |
+| Windows GUI asset | Partial | `BitcoinII-29.1.0-x86_64-win64-GUI.zip` observed by API metadata. |
+| Windows CLI asset | Partial | `BitcoinII-29.1.0-x86_64-win64-CLI.zip` observed by API metadata. |
+| Linux GUI assets | Partial | aarch64, arm gnueabihf, and x86_64 Linux GUI archives observed by API metadata. |
+| Linux CLI assets | Partial | aarch64, arm gnueabihf, and x86_64 Linux CLI archives observed by API metadata. |
+| macOS assets | Partial | arm64 and x86_64 apple-darwin zip archives observed by API metadata. CLI/GUI split is not explicit in the filename. |
+| Checksum manifest | Needs Review | No uploaded asset name appears to be a checksum manifest. This does not prove no checksum exists elsewhere. |
+| Manifest signature | Needs Review | No uploaded asset name appears to be a detached signature file. This does not prove no signature exists elsewhere. |
 | Trusted release key list | Needs Review | Not confirmed. |
+
+## Uploaded asset table
+
+| Asset name | Size bytes | Platform | Type | Downloaded | SHA256 calculated | In manifest | Signature checked | Status |
+|---|---:|---|---|---|---|---|---|---|
+| `BitcoinII-29.1.0-aarch64-linux-CLI.tar.gz` | 7,313,922 | Linux aarch64 | CLI archive | No | No | Needs Review | Needs Review | Inventory only |
+| `BitcoinII-29.1.0-aarch64-linux-GUI.tar.gz` | 19,831,620 | Linux aarch64 | GUI archive | No | No | Needs Review | Needs Review | Inventory only |
+| `BitcoinII-29.1.0-arm-linux-gnueabihf-CLI.tar.gz` | 6,820,132 | Linux arm gnueabihf | CLI archive | No | No | Needs Review | Needs Review | Inventory only |
+| `BitcoinII-29.1.0-arm-linux-gnueabihf-GUI.tar.gz` | 17,911,678 | Linux arm gnueabihf | GUI archive | No | No | Needs Review | Needs Review | Inventory only |
+| `BitcoinII-29.1.0-arm64-apple-darwin.zip` | 15,810,838 | macOS arm64 | Archive | No | No | Needs Review | Needs Review | Inventory only |
+| `BitcoinII-29.1.0-x86_64-apple-darwin.zip` | 17,133,023 | macOS x86_64 | Archive | No | No | Needs Review | Needs Review | Inventory only |
+| `BitcoinII-29.1.0-x86_64-linux-CLI.tar.gz` | 7,812,863 | Linux x86_64 | CLI archive | No | No | Needs Review | Needs Review | Inventory only |
+| `BitcoinII-29.1.0-x86_64-linux-GUI.tar.gz` | 20,480,068 | Linux x86_64 | GUI archive | No | No | Needs Review | Needs Review | Inventory only |
+| `BitcoinII-29.1.0-x86_64-win64-CLI.zip` | 7,987,528 | Windows x86_64 | CLI archive | No | No | Needs Review | Needs Review | Inventory only |
+| `BitcoinII-29.1.0-x86_64-win64-GUI.zip` | 19,362,931 | Windows x86_64 | GUI archive | No | No | Needs Review | Needs Review | Inventory only |
 
 ## Workflow observation
 
@@ -118,25 +133,16 @@ For each release asset, a future verification record should include:
 
 For `v29.1.0`, a future verifier should:
 
-1. Capture the complete GitHub release asset list.
-2. Record each asset name, size, and download URL.
-3. Identify whether `SHA256SUMS` exists.
-4. Identify whether `SHA256SUMS.asc` or another signature file exists.
-5. Identify any detached signature files for individual assets, if present.
-6. Identify which signing key or keys are trusted by the BitcoinII project.
-7. Download at least one release asset in a safe environment.
-8. Calculate SHA256 for the downloaded asset.
-9. Compare the calculated hash to the checksum manifest if one exists.
-10. Verify the manifest signature if one exists.
-11. Record all commands and results in a local test record.
-
-## Suggested asset table
-
-Fill this in during the next verification pass.
-
-| Asset name | Size | Platform | Type | URL captured | Downloaded | SHA256 calculated | In manifest | Signature checked | Status |
-|---|---:|---|---|---|---|---|---|---|---|
-| TBD | TBD | TBD | TBD | No | No | No | Needs Review | Needs Review | Needs Review |
+1. Decide whether GitHub-generated source archives should be tracked separately from uploaded assets.
+2. Identify whether `SHA256SUMS` exists on the release page or another official source.
+3. Identify whether `SHA256SUMS.asc` or another signature file exists.
+4. Identify any detached signature files for individual assets, if present.
+5. Identify which signing key or keys are trusted by the BitcoinII project.
+6. Download at least one release asset in a safe environment.
+7. Calculate SHA256 for the downloaded asset.
+8. Compare the calculated hash to the checksum manifest if one exists.
+9. Verify the manifest signature if one exists.
+10. Record all commands and results in a local test record.
 
 ## Suggested command record
 
@@ -170,6 +176,7 @@ Do not claim yet that:
 - `v29.1.0` assets are exchange-grade verified.
 - A GitHub workflow artifact is equivalent to a release asset.
 - A GitHub verified commit marker verifies downloaded release binaries.
+- GitHub API digest fields are independent MoreBC2 hash checks.
 - Source comparison proves release binaries match source.
 - The current release process fully follows the inherited source-tree release-process document.
 
@@ -177,6 +184,7 @@ Do not claim yet that:
 
 - [BitcoinII releases](../documentation/releases.md)
 - [Release verification guide](../developers/release-verification.md)
+- [Release asset inventory attempt](release-asset-inventory-attempt.md)
 - [Release source comparison notes](release-source-comparison.md)
 - [Network release comparison](network-release-comparison.md)
 - [Command testing status](command-testing.md)
@@ -186,4 +194,4 @@ Do not claim yet that:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This checklist is based on current release-page observations, the macOS arm64 workflow, the source-tree release process document, and current release verification docs. No release binaries have been downloaded or verified.
+**Notes:** This checklist is based on release-page observations, Codex GitHub API asset inventory report, the macOS arm64 workflow, the source-tree release process document, and current release verification docs. No release binaries have been downloaded or verified.
