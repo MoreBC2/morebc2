@@ -42,7 +42,7 @@ Before public sharing it still needs:
 - Final license decision.
 - Tested local command examples before any command guide is marked Verified.
 - Active ecosystem/explorer/API/exchange checks from direct sources.
-- Full release asset inventory and release artifact checks.
+- Release hash/signature/trusted-key checks or a clearly documented gap if the project does not publish those materials.
 - At least one outside reviewer for core technical claims.
 - Confirmation policy for exchange/service docs.
 
@@ -61,7 +61,9 @@ Before public sharing it still needs:
 - RPC overview tracks mining, blockchain, network, raw transaction, mempool, and wallet RPC groups.
 - Wallet guide has source-backed startup, address, backup/import, spend/PSBT, encryption, coin/balance, and transaction-history notes.
 - Command testing tracker and command smoke-test plan exist, and major user/operator pages link to command safety material.
-- Release source comparison, network release comparison, release asset inventory attempt, and artifact checklist exist.
+- Codex command-shaped audit found no blocker for first narrow private review, and the suggested command wording fixes were applied.
+- Release source comparison, network release comparison, release asset inventory attempt, release verification guide, and artifact checklist exist.
+- Release metadata is now clearer: uploaded assets, generated source archives, external public signature-repo checks, lightweight tag metadata, and GitHub-reported commit signature metadata are recorded.
 - Network test coverage map and network test run plan exist.
 - Ecosystem direct-check plan exists, and ecosystem templates were refreshed around dated evidence fields.
 - Verification queue exists and tracks important unresolved questions.
@@ -75,8 +77,9 @@ Before public sharing it still needs:
 - Source Atlas pages and architecture pages overlap enough that future consistency checks will still be useful.
 - Glossary cross-linking has improved, but it is not complete enough for public review.
 - Command examples are still mostly untested and must remain clearly marked as placeholders or draft material.
-- Release artifacts are not verified yet.
-- Full `v29.1.0` release asset names, sizes, URLs, hashes, signatures, and trusted keys are not captured.
+- Release binaries are not verified yet.
+- `v29.1.0` uploaded assets and generated source archives are recorded, but hashes, checksum manifests, signatures, trusted keys, and independent binary checks are not complete.
+- The `v29.1.0` tag appears lightweight; GitHub reports the tagged commit signature as valid, but MoreBC2 has not independently verified that signature and this does not verify binaries.
 - Ecosystem and service pages are mostly frameworks until active services are checked directly.
 - Peer/network behavior has strong first-pass source review, but runtime tests and live network checks remain open.
 
@@ -108,7 +111,7 @@ Public launch after:
 - Known unknowns remain centralized.
 - License choice is final.
 - Issues and contribution workflow are ready.
-- Release verification model is checked against actual releases.
+- Release verification model is checked against actual releases or its gaps are clearly documented.
 - Active ecosystem resources are directly checked and dated.
 - At least one outside reviewer has checked core claims.
 
@@ -124,7 +127,7 @@ Public launch after:
 | RPC documentation | Partial | Major RPC groups are source-reviewed, but command examples are not locally tested. |
 | Wallet documentation | Partial | Major wallet RPC groups are source-reviewed, but platform guides, database internals, GUI flows, and tested examples are pending. |
 | Network/P2P documentation | Partial | First-pass source reviews, release comparison, selected blob checks, test coverage mapping, and test-run planning exist. Runtime tests and live checks remain open. |
-| Release verification | Partial | Release page observations, source comparison, network comparison, release asset inventory attempt, and artifact checklist exist; release files/manifests/signatures are not verified. |
+| Release verification | Partial | Release page/API observations, uploaded asset inventory, generated source archive metadata, external public signature-repo checks, lightweight tag metadata, source comparison, network comparison, release asset inventory attempt, artifact checklist, and release verification guide exist; release files/manifests/signatures are not verified. |
 | Exchange integration | Framework | Useful structure exists; confirmation policy and direct service checks remain unverified. |
 | Ecosystem directory | Framework | Direct-check plan and conservative templates exist; active services still need direct checks. |
 | Developer onboarding | Partial | Reading order, repository map, source tree guide, source review guide, local dev, build, testing, release verification, contributing guide, legal/reuse posture, private-review handoff, readiness checklist, assignment cards, and root reviewer flow exist. |
@@ -133,17 +136,16 @@ Public launch after:
 
 ## Immediate next actions
 
-1. Refresh `known-unknowns.md` so it matches the current verification queue and coverage dashboard.
-2. Record the latest stale-wording sweep attempt and identify whether a stronger local grep is needed.
-3. Start the first one or two narrow private-review assignments.
-4. Keep private-review feedback in narrow buckets.
-5. Continue release asset inventory when full asset data is available.
-6. Run command smoke tests only when a disposable BitcoinII environment is available.
-7. Run developer network tests only when a suitable build/test environment is available.
-8. Continue direct ecosystem checks separately from source documentation.
+1. Start dated ecosystem checks, beginning with explorers and public APIs.
+2. Continue first one or two narrow private-review assignments.
+3. Keep private-review feedback in narrow buckets.
+4. Seek maintainer or official-source guidance for release checksum/signature/trusted-key process.
+5. Run command smoke tests only when a disposable BitcoinII environment is available.
+6. Run developer network tests only when a suitable build/test environment is available.
+7. Continue direct ecosystem checks separately from source documentation.
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Repository structure, documentation coverage dashboard, verification queue, private-review readiness checklist, private-review assignments, private-review handoff, contribution guide, legal/reuse posture note, release asset inventory attempt, ecosystem direct-check plan, command smoke-test plan, network release comparison, network test coverage map, network test run plan, and root README reviewer flow
+**Primary sources checked:** Repository structure, documentation coverage dashboard, verification queue, private-review readiness checklist, private-review assignments, private-review handoff, contribution guide, legal/reuse posture note, release asset inventory attempt, release verification guide, ecosystem direct-check plan, command smoke-test plan, network release comparison, network test coverage map, network test run plan, and root README reviewer flow
 **Notes:** This dashboard is a project-management document for MoreBC2. It is not BitcoinII protocol documentation.
