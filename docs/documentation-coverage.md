@@ -28,7 +28,7 @@ It is a project-management dashboard. It is not BitcoinII protocol documentation
 | Architecture pages | Partial | Startup, consensus, transaction lifecycle, block lifecycle, reorg, mempool, wallet, candidate block, and peer communication pages exist. Runtime behavior still needs tests and review. |
 | Source Atlas | Partial | Strong first-pass source notes exist across chain parameters, PoW, validation, storage, mempool, wallet RPC groups, mining RPC, blockchain RPC, network RPC, protocol, connection management, address manager, peer-list management, net-processing slices, raw transaction RPC, and mempool RPC. |
 | Network/P2P documentation | Partial | Source notes, release comparison, selected blob checks, test coverage map, and test run plan exist. Local test execution and live checks are still missing. |
-| Release documentation | Partial | Release observations, source comparison, network comparison, release asset inventory attempt, release artifact checklist, and release verification guide exist. Full asset names, hashes, signatures, trusted keys, and binary checks remain open. |
+| Release documentation | Partial | Release observations, API metadata, uploaded asset inventory, source comparison, network comparison, release artifact checklist, and release verification guide exist. Hash checks, release-file signatures, trusted-key path, generated source archive tracking, and binary checks remain open. |
 | Ecosystem documentation | Framework | Ecosystem direct-check plan exists. Explorer, API, pool, exchange, and wallet templates were refreshed with stricter dated-check fields. No live services are promoted as checked. |
 | Exchange integration | Framework | Native-coin integration docs, listing packet, target matrix, readiness checklist, and service checklist exist. Confirmation policy, contacts, release checks, and direct service checks remain open. |
 | RPC documentation | Partial | Mining, blockchain, network, raw transaction, mempool, and wallet RPC groups have source review. User-facing examples remain untested unless a future local test record says otherwise. |
@@ -47,6 +47,7 @@ This dashboard was brought current with the latest work on:
 - release artifact checklist cleanup,
 - release verification guide cleanup,
 - release asset inventory attempt,
+- GitHub API uploaded-asset metadata captured by Codex,
 - ecosystem direct-check plan,
 - refreshed ecosystem templates,
 - network release comparison,
@@ -59,8 +60,8 @@ This dashboard was brought current with the latest work on:
 | Blocker | Current tracking page |
 |---|---|
 | Canonical repository/release path | [Open questions backlog](verification/open-questions.md) |
-| Release asset inventory | [Release asset inventory attempt](verification/release-asset-inventory-attempt.md) |
-| Release hashes/signatures/trusted keys | [Release artifact checklist](verification/release-artifact-checklist.md) |
+| Generated source archive tracking | [Release asset inventory attempt](verification/release-asset-inventory-attempt.md) |
+| Release hash/signature/key process | [Release artifact checklist](verification/release-artifact-checklist.md) |
 | Local command records | [Command testing status](verification/command-testing.md) |
 | Developer test execution | [Network test run plan](verification/network-test-run-plan.md) |
 | Dated ecosystem checks | [Ecosystem direct check plan](verification/ecosystem-direct-check-plan.md) |
@@ -70,16 +71,15 @@ This dashboard was brought current with the latest work on:
 
 ## Current priority order
 
-1. Refresh `known-unknowns.md` so it matches the current verification queue and this dashboard.
-2. Record the latest stale-wording sweep attempt and decide whether a stronger local grep is needed.
+1. Confirm whether release checksum/signature material exists outside uploaded assets.
+2. Decide whether GitHub-generated source archives should be tracked separately.
 3. Start the first narrow private-review assignment, preferably command safety or release wording.
-4. Capture the full `v29.1.0` release asset inventory when a reliable method is available.
-5. Run command smoke tests only when a disposable BitcoinII environment is available.
-6. Run developer network tests only when a suitable build/test environment is available.
-7. Perform dated ecosystem checks for explorers, APIs, pools, exchanges, and wallets.
+4. Run command smoke tests only when a disposable BitcoinII environment is available.
+5. Run developer network tests only when a suitable build/test environment is available.
+6. Perform dated ecosystem checks for explorers, APIs, pools, exchanges, and wallets.
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Project status, verification README, open questions backlog, release verification docs, release asset inventory attempt, ecosystem direct-check plan, refreshed ecosystem pages, network release comparison, network test coverage map, and network test run plan
-**Notes:** This dashboard is synchronized after the latest release and ecosystem framework work. It remains a tracker, not a claim that commands, tests, release assets, or live services are checked.
+**Primary sources checked:** Project status, verification README, open questions backlog, release verification docs, release asset inventory attempt, Codex API asset inventory report, ecosystem direct-check plan, refreshed ecosystem pages, network release comparison, network test coverage map, and network test run plan
+**Notes:** This dashboard is synchronized after the latest release asset metadata work. It remains a tracker, not a claim that commands, tests, release assets, or live services are checked.
