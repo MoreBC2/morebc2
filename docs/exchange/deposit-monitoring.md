@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-04
 
 ## Summary
 
@@ -35,7 +35,7 @@ These anchors are useful for service documentation, but they do not by themselve
 
 ## Confirmation policy
 
-MoreBC2 has not yet verified a recommended BitcoinII confirmation count for exchanges.
+MoreBC2 has not yet reviewed a recommended BitcoinII confirmation count for exchanges.
 
 Until that is reviewed, this page should not state a final confirmation policy.
 
@@ -55,6 +55,13 @@ bitcoinII-cli getblockhash <height>
 ```
 
 These commands are placeholder examples. They need to be tested against a running BitcoinII Core node and recorded in [Command testing status](../verification/command-testing.md) before being marked verified or used as operator instructions.
+
+Command-specific caveats:
+
+- `getblockchaininfo` and `getnetworkinfo` are status-style node checks, but still need local BitcoinII command records before being used as instructions.
+- `getwalletinfo`, `listtransactions`, and `gettransaction` depend on wallet context and should not be presented as generic exchange guidance until wallet-vs-non-wallet monitoring is reviewed.
+- `getnewaddress` can change wallet state by creating or reserving a new address, so it should not sit in beginner copy/paste guidance.
+- `getblock` and `getblockhash` are lookup-style commands, but examples still need real test records and clear placeholder values.
 
 ## Chain reorganization handling
 
@@ -90,4 +97,4 @@ MoreBC2 has not yet documented BitcoinII-specific reorganization risk or recomme
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a framework. Command examples and confirmation policy need testing/review before use in production documentation. Source links now use the current observed repository path, but canonical repository status still needs confirmation.
+**Notes:** This is a framework. Command examples and confirmation policy need testing/review before use in production documentation. Source links use the current observed repository path, but canonical repository status still needs confirmation.
