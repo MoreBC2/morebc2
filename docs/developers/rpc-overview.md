@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-07-01
+**Last reviewed:** 2026-07-04
 
 ## Summary
 
@@ -219,21 +219,13 @@ The reviewed wallet registration and file-specific passes now cover major wallet
 
 The command forms below are not verified instructions. They are placeholders for future local testing and are tracked in [Command testing status](../verification/command-testing.md).
 
-### Common examples to test later
+### Read-only or status-style placeholders
+
+These are better candidates for early smoke testing, but they are still not working instructions until there are matching test records.
 
 ```bash
 bitcoinII-cli getblockchaininfo
 bitcoinII-cli getnetworkinfo
-bitcoinII-cli getwalletinfo
-bitcoinII-cli getnewaddress
-bitcoinII-cli listtransactions
-bitcoinII-cli gettransaction <txid>
-bitcoinII-cli sendtoaddress <address> <amount>
-```
-
-### Additional reviewed command surfaces to test later
-
-```bash
 bitcoinII-cli getblockcount
 bitcoinII-cli getbestblockhash
 bitcoinII-cli getmininginfo
@@ -241,18 +233,50 @@ bitcoinII-cli getdifficulty
 bitcoinII-cli getconnectioncount
 bitcoinII-cli getpeerinfo
 bitcoinII-cli getnettotals
-bitcoinII-cli getblocktemplate '{"rules":["segwit"]}'
+bitcoinII-cli getrawmempool true
+bitcoinII-cli getmempoolinfo
 bitcoinII-cli listwallets
 bitcoinII-cli listwalletdir
+```
+
+### Lookup and dry-run placeholders
+
+These need fixture values, node state, wallet context, or transaction examples before they can be used as instructions.
+
+```bash
+bitcoinII-cli gettransaction <txid>
 bitcoinII-cli getrawtransaction <txid> 1
 bitcoinII-cli decoderawtransaction <hex>
 bitcoinII-cli testmempoolaccept '["signedhex"]'
-bitcoinII-cli getrawmempool true
-bitcoinII-cli getmempoolinfo
 bitcoinII-cli analyzepsbt <psbt>
 ```
 
-Do not copy these into user guides as working examples until the command-testing page has matching test records.
+### Wallet-state-changing or funds-moving placeholders
+
+These should not sit beside harmless status calls in beginner guidance.
+
+```bash
+bitcoinII-cli getwalletinfo
+bitcoinII-cli getnewaddress
+bitcoinII-cli listtransactions
+bitcoinII-cli sendtoaddress <address> <amount>
+```
+
+Notes:
+
+- `getwalletinfo` and `listtransactions` depend on wallet context.
+- `getnewaddress` can change wallet state by creating or reserving a new address.
+- `sendtoaddress` can move funds and should stay out of normal guides unless a disposable-wallet test record and strong warnings exist.
+
+### Mining and block-template placeholders
+
+```bash
+bitcoinII-cli getblocktemplate '{"rules":["segwit"]}'
+```
+
+Block/header submission examples are intentionally not included here as copyable command lines.
+
+Do not copy any of these into user guides as working examples until the command-testing page has matching test records.
 
 ## Exchange/service-provider caution
 
