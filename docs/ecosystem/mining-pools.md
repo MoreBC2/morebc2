@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-07-04
+**Last reviewed:** 2026-07-06
 
 ## Summary
 
@@ -33,9 +33,48 @@ Use [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md
 **Notes:**
 ```
 
+## Observed mining/stat resources
+
+### MiningPoolStats BitcoinII page
+
+**Status:** Observed / Related / Needs comparison  
+**Official:** No  
+**URL:** `https://miningpoolstats.stream/bitcoinii`  
+**Coin listed as:** `Bitcoin II (BC2)`  
+**Algorithm:** `SHA-256` observed in page title  
+**Fee model:** Not checked  
+**Payout model:** Not checked  
+**Minimum payout:** Not checked  
+**Stratum host/port:** Not checked  
+**Last checked:** 2026-07-06  
+**Evidence level:** E4 public page/data endpoint observation; not E8 pool reliability/sync evidence
+
+**What was checked:**
+
+- Main MiningPoolStats BitcoinII page loaded.
+- Page title identified `Bitcoin II (BC2) SHA-256 | Mining Pools`.
+- Public data endpoint for `bitcoinii` was observed.
+- Public price endpoint for `bitcoinii` was observed.
+- Visible/data endpoint height was `57,398` during the check.
+- Page linked to `https://bitcoinii.ddns.net/explorer`.
+
+**What was not checked:**
+
+- Pool payout correctness.
+- Pool sync status.
+- Pool fee and payout-rule details.
+- Mining account or payout behavior.
+- Stratum host/port details.
+- Whether data endpoints are documented or stable.
+- Whether the reported height is reliable enough to call any explorer synced.
+
+**Notes:**
+
+MiningPoolStats is a related mining/network stats resource, not a general block explorer. Do not treat it as proof of pool payout reliability or explorer sync.
+
 ## Current status
 
-MoreBC2 has not yet verified active BitcoinII mining pools.
+MoreBC2 has observed one related public BitcoinII mining/statistics page, but has not yet verified active BitcoinII mining pools, fee models, payout rules, stratum details, or payout reliability.
 
 ## What to check
 
@@ -56,10 +95,11 @@ Do not claim profitability, safety, or payout reliability without direct dated e
 
 ## Open items
 
-- Verify current pool list.
+- Verify current pool list beyond MiningPoolStats aggregation.
 - Add active dated-check entries only after direct checks.
 - Add configuration examples only after testing.
 - Add mining software compatibility notes only after verification.
+- Compare pool-reported height/status against explorer and/or local node data before any sync claim.
 
 ## Related pages
 
@@ -71,5 +111,5 @@ Do not claim profitability, safety, or payout reliability without direct dated e
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Ecosystem direct check plan and existing mining-pool framework
-**Notes:** No pool is listed as active yet because direct checks have not been completed.
+**Primary sources checked:** Ecosystem direct check plan, existing mining-pool framework, and Codex explorer/API recon report from 2026-07-06
+**Notes:** One related mining/statistics resource is observed. No pool is listed as active or reliable because fee, payout, stratum, sync, and payout behavior checks have not been completed.
