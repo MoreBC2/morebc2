@@ -47,7 +47,7 @@ Do not combine these into a single broad "verified release" statement:
 
 ## Current finding
 
-MoreBC2 rechecked the public GitHub release page on 2026-07-02 after private-review audit feedback flagged release-currentness and date wording. Codex later captured GitHub API asset metadata and searched the upstream source tree for obvious checksum, signature, and trusted-key material.
+MoreBC2 rechecked the public GitHub release page on 2026-07-02 after private-review audit feedback flagged release-currentness and date wording. Codex later captured GitHub API asset metadata and searched for obvious checksum, signature, and trusted-key material.
 
 Current observations:
 
@@ -61,6 +61,7 @@ Current observations:
 - The source tree includes `doc/release-process.md`, which describes Guix build attestations, signed tags, checksum files, and signature files.
 - `contrib/verify-binaries/verify.py` contains `SUMS_FILENAME = 'SHA256SUMS'` and `SIGNATUREFILENAME = 'SHA256SUMS.asc'`, but Codex reported that it still references `bitcoincore.org` and `bitcoin.org` download locations.
 - `contrib/verify-commits/trusted-keys` contains key fingerprints for commit verification, but that is not the same as release binary signature trust.
+- Codex checked obvious public GitHub paths for `guix.sigs` and detached-signature repositories, including `bitcoinII-core/guix.sigs`, `bitcoinII-core/bitcoinII-detached-sigs`, `BitcoinII/guix.sigs`, `BitcoinII/bitcoinII-detached-sigs`, `Bitcoin-II/guix.sigs`, and `Bitcoin-II/bitcoinII-detached-sigs`. These were not publicly found by the GitHub API during that check.
 - A post-release workflow on `main` targets `v29.1.0` for a macOS arm64 DMG artifact.
 - A network source comparison page records that reviewed P2P/network source files did not appear changed between `v29.1.0` and `main`, with selected blob-SHA spot checks.
 
@@ -69,7 +70,7 @@ Current caveats:
 - MoreBC2 has not confirmed that the GitHub release path is canonical.
 - MoreBC2 has not confirmed that current BitcoinII releases publish `SHA256SUMS` and `SHA256SUMS.asc` outside uploaded release assets.
 - MoreBC2 has not confirmed trusted BitcoinII release keys.
-- MoreBC2 has not checked whether external `guix.sigs` or detached-signature repositories contain `v29.1.0` material.
+- MoreBC2 found no public GitHub API evidence at the obvious `guix.sigs` or detached-signature repository paths, but those repositories could be private, renamed, deleted, never created, or hosted elsewhere.
 - MoreBC2 has not downloaded release binaries or calculated independent hashes.
 - MoreBC2 has not verified detached signatures.
 - MoreBC2 has not checked whether the release tag itself is signed.
@@ -134,7 +135,7 @@ Use [Release artifact checklist](../verification/release-artifact-checklist.md) 
 
 | Version | Release path | Asset inventory | Hash checked | Checksum file | Signature | Status | Notes |
 |---|---|---|---:|---|---|---|---|
-| v29.1.0 | `Bitcoin-II/BitcoinII-Core` | Partial | No | Needs review | Needs review | Needs Review | GitHub API reports 10 uploaded assets. No uploaded asset name appears to be a checksum manifest or detached signature file. External checksum/signature/key sources remain unchecked. |
+| v29.1.0 | `Bitcoin-II/BitcoinII-Core` | Partial | No | Needs review | Needs review | Needs Review | GitHub API reports 10 uploaded assets. No uploaded asset name appears to be a checksum manifest or detached signature file. Obvious public GitHub `guix.sigs` and detached-signature repo paths were not found. |
 | v0.27.1 | redirected legacy path | Partial | No | Needs review | Needs review | Needs Review | Observed on redirected legacy repository path; not confirmed as current canonical path. |
 | v0.27.0 | redirected legacy path | Partial | No | Needs review | Needs review | Needs Review | Genesis release observed on redirected legacy path; not independently verified. |
 
@@ -159,6 +160,29 @@ That page describes a stronger release process involving signed tags, Guix build
 MoreBC2 should treat this as source-observed process documentation, not proof that any specific current release completed every step. The actual `v29.1.0` release assets still need direct verification.
 
 Codex's investigation found the release-process and verification docs appear heavily inherited/upstream-style with BitcoinII naming substitutions. They are useful as a model to compare against, but not enough to claim the `v29.1.0` GitHub release completed that process.
+
+## External signature repository check
+
+Codex checked obvious public GitHub paths suggested by the source-tree release-process wording.
+
+Paths checked included:
+
+- `bitcoinII-core/guix.sigs`
+- `bitcoinII-core/bitcoinII-detached-sigs`
+- `BitcoinII/guix.sigs`
+- `BitcoinII/bitcoinII-detached-sigs`
+- `Bitcoin-II/guix.sigs`
+- `Bitcoin-II/bitcoinII-detached-sigs`
+
+Result:
+
+- These paths were not publicly found by the GitHub API during the check.
+- Repository searches for BitcoinII Guix/signature-related terms did not return visible public matches.
+- The owner path `bitcoinII-core` was also not publicly found.
+
+Caveat:
+
+This is a negative public-GitHub visibility check only. It does not prove the material never existed or does not exist elsewhere. The repositories could be private, renamed, deleted, unpublished, or hosted outside GitHub.
 
 ## Verification commands
 
@@ -202,6 +226,7 @@ Do not claim:
 - A source comparison proves release binaries match source.
 - A GitHub verified commit marker verifies downloaded release assets.
 - Source-tree release-process docs prove the current release followed that process.
+- A public-GitHub 404 proves no signature material exists anywhere.
 
 ## Relationship to BasicSwap-style standards
 
@@ -216,7 +241,7 @@ MoreBC2 should track whether BitcoinII releases meet that kind of standard witho
 - Are BitcoinII release commits GitHub-verified for all current releases?
 - Are SHA256 checksum files published outside uploaded GitHub release assets?
 - Are checksum files signed?
-- Do external `guix.sigs` or detached-signature repositories contain `v29.1.0` material?
+- Does release signature material exist in a private, renamed, deleted, external, or non-obvious location?
 - Which key or keys should be trusted for BitcoinII releases?
 - Are release builds reproducible?
 - Are source archives and binary assets generated from the same commit?
@@ -227,4 +252,4 @@ MoreBC2 should track whether BitcoinII releases meet that kind of standard witho
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This guide defines the release verification standard and records release-page, API-asset-inventory, checksum/signature/key-search, source-comparison, network-comparison, workflow, and process-document observations. This still does not verify any BitcoinII release binary.
+**Notes:** This guide defines the release verification standard and records release-page, API-asset-inventory, checksum/signature/key-search, public external-signature-repo check, source-comparison, network-comparison, workflow, and process-document observations. This still does not verify any BitcoinII release binary.
