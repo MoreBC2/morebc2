@@ -32,19 +32,28 @@ BC2 is used throughout the ecosystem, but MoreBC2 still needs the strongest offi
 
 ### Release verification model
 
-MoreBC2 has release-page observations, source comparison notes, a network release comparison, a release asset inventory attempt, and an artifact checklist.
+MoreBC2 has release-page observations, API metadata, uploaded asset inventory, generated source archive metadata, source comparison notes, network release comparison, a release asset inventory page, and an artifact checklist.
 
-It still has not confirmed the full `v29.1.0` asset list, checksum/manifest files, detached signatures, trusted release keys, independently calculated hashes, or binary-to-source verification.
+Known current release findings for `v29.1.0`:
 
-**Needed:** Complete asset inventory, checksum/signature/key review, local hash records, and maintainer confirmation if necessary.
+- GitHub API reports 10 uploaded platform assets.
+- Two GitHub-generated source archives were captured separately.
+- The earlier 12-item rendered-page observation is reconciled as likely 10 uploaded assets plus 2 generated source archive links.
+- No uploaded asset name appears to be a checksum manifest or detached signature file.
+- Obvious public GitHub `guix.sigs` and detached-signature repository paths were not found.
+- The `v29.1.0` tag appears lightweight and points directly to a GitHub-reported verified commit.
+- MoreBC2 has not independently verified the commit signature.
+- MoreBC2 has not downloaded release files, calculated independent hashes, verified signatures, or identified trusted release keys.
+
+**Needed:** Official checksum/signature/key guidance, local hash records, independent signature checks if artifacts exist, and maintainer confirmation if necessary.
 
 **Blocks:** Public launch.
 
-### Full release asset inventory
+### Release trust path
 
-The rendered release page previously showed 12 assets for `v29.1.0`, but MoreBC2 has not captured the full asset names, sizes, or URLs.
+The source tree contains Bitcoin Core-style release-process and verification-helper material, but MoreBC2 has not confirmed that the current BitcoinII `v29.1.0` release followed that process.
 
-**Needed:** GitHub API metadata, authenticated GitHub release page, maintainer-provided list, or manual capture.
+**Needed:** Maintainer-documented release verification process, signed checksum manifest, trusted keys, signed annotated tags, reproducible-build evidence, or another project-approved release trust path.
 
 **Blocks:** Public launch.
 
@@ -74,11 +83,11 @@ MoreBC2 now has an ecosystem direct-check plan and refreshed templates, but it h
 
 ### Untested command examples
 
-MoreBC2 has many source-observed command notes, but most examples have not been run locally.
+MoreBC2 has many source-observed command notes. Codex performed a command-shaped example audit and found no blocker for first narrow private review, but most examples have not been run locally.
 
-**Needed:** Local command records with environment details.
+**Needed:** Local command records with environment details. A stronger local repository-wide grep is still needed before public launch.
 
-**Blocks:** Private review if labeling is unclear; public launch for user-facing guides.
+**Blocks:** Public launch for user-facing guides.
 
 ### Developer test execution
 
@@ -105,5 +114,5 @@ When an unknown is resolved, move the result to the correct documentation page a
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Open questions backlog, verification queue, current coverage dashboard, release asset inventory attempt, ecosystem direct-check plan, network test run plan
+**Primary sources checked:** Open questions backlog, verification queue, current coverage dashboard, release asset inventory attempt, release verification guide, ecosystem direct-check plan, network test run plan
 **Notes:** This page is a short executive list. The detailed backlog is `open-questions.md`.
