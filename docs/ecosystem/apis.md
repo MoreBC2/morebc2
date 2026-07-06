@@ -2,15 +2,13 @@
 
 **Category:** Ecosystem
 **Status:** Draft
-**Last reviewed:** 2026-07-04
+**Last reviewed:** 2026-07-06
 
 ## Summary
 
 This page tracks BitcoinII (BC2) public API resources such as explorer APIs, service APIs, and community-hosted data endpoints.
 
-No API should be listed as active or recommended until it has been directly checked and dated.
-
-This page is a framework. It does not list any verified active APIs yet.
+No API should be listed as active, synced, reliable, or recommended until it has been directly checked and dated with clear limits.
 
 Use [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md) before adding or promoting API listings.
 
@@ -48,6 +46,97 @@ Potential API categories include:
 **What was not checked:**
 **Notes:**
 ```
+
+## Observed public APIs
+
+### BitcoinII Explorer API
+
+**Category:** Explorer  
+**Status:** Partially checked / Needs comparison  
+**Official:** Page claims official explorer; not independently verified  
+**Base URL:** `https://bitcoinii.ddns.net/explorer/api/`  
+**Documentation URL:** Not found  
+**Maintainer:** Unknown  
+**Last checked:** 2026-07-06  
+**Evidence level:** E4 direct harmless GET checks; not E8 synced/reliable service evidence  
+**Supports:** Tip, block lookup, transaction lookup, address lookup, mempool summary  
+**Authentication:** None observed for checked GET endpoints  
+**Rate limits:** Unknown
+
+**Endpoints observed:**
+
+| Endpoint shape | Method | Result summary | Status |
+|---|---|---|---|
+| `/explorer/api/blocks/tip` | GET | Returned JSON; tip hash observed as `0000000000000000230effe4c66d34cc5a97064e0860f462df9920ac4ba96f83`. | Partial |
+| `/explorer/api/block/<hash>` | GET | Returned JSON for a public block hash. | Partial |
+| `/explorer/api/tx/<txid>` | GET | Returned JSON for a public transaction ID. | Partial |
+| `/explorer/api/address/<address>` | GET | Returned JSON for a public address. | Partial |
+| `/explorer/api/mempool/summary` | GET | Returned JSON. | Partial |
+
+**API docs checked:**
+
+| URL path | Result |
+|---|---|
+| `/explorer/api-docs` | 404 |
+| `/explorer/api-doc` | 404 |
+| `/explorer/docs` | 404 |
+| `/explorer/rest` | 404 |
+
+**What was not checked:**
+
+- Endpoint response schemas were not stabilized into public documentation.
+- No local node comparison was performed.
+- No sync claim was made.
+- No POST/search submission was performed.
+- No authentication, rate-limit, or long-term availability claim was checked.
+
+**Notes:**
+
+These public API observations are useful for future explorer documentation, but they should not be used as a sole exchange/service source of truth.
+
+### MiningPoolStats BitcoinII data endpoints
+
+**Category:** Mining/network statistics  
+**Status:** Observed / Related / Needs comparison  
+**Official:** No  
+**Base URL:** `https://data.miningpoolstats.stream/data/`  
+**Documentation URL:** Not found  
+**Maintainer:** MiningPoolStats  
+**Last checked:** 2026-07-06  
+**Evidence level:** E4 public page/data endpoint observation; not E8 synced/reliable service evidence  
+**Supports:** Mining/network stats and price/history data endpoints  
+**Authentication:** None observed for checked public JS endpoints  
+**Rate limits:** Unknown
+
+**Observed related page:** `https://miningpoolstats.stream/bitcoinii`
+
+**Endpoints observed:**
+
+- `https://data.miningpoolstats.stream/data/bitcoinii.js?...`
+- `https://data.miningpoolstats.stream/data/price/bitcoinii.js?...`
+- `https://data.miningpoolstats.stream/data/history/bitcoinii.js?...`
+
+**Observed data:**
+
+- Page title identified `Bitcoin II (BC2) SHA-256 | Mining Pools`.
+- Visible/data endpoint height was `57,398` during the check.
+- Page linked to `https://bitcoinii.ddns.net/explorer`.
+
+**What was not checked:**
+
+- No pool payout correctness.
+- No pool sync status.
+- No mining account or payout behavior.
+- No endpoint stability or formal API documentation.
+- No claim that height is reliable enough to call any explorer synced.
+
+## Broken or unresolved API candidates
+
+| Candidate URL | Date checked | Result | Status |
+|---|---|---|---|
+| `https://bitcoinii.ddns.net/api` | 2026-07-06 | `502 Bad Gateway` | Broken / Needs Review |
+| `https://bitcoinii.ddns.net/explorer/api` | 2026-07-06 | `404 Not Found` | Needs Review |
+| `https://chainz.cryptoid.info/bc2/api.dws?q=getblockcount` | 2026-07-06 | `404 Not Found` | Unrelated / Broken |
 
 ## Endpoint test format
 
@@ -99,21 +188,20 @@ For exchanges and services, API docs should distinguish:
 
 Do not claim yet that:
 
-- Any listed API is active.
-- Any API is official.
+- Any listed API is synced.
+- Any listed API is official without a separate official source.
 - Any API is reliable enough for exchange use.
-- Any endpoint is synced to current chain height.
-- Any API supports mempool data.
-- Any API can replace running a local node.
+- Any endpoint can replace running a local node.
+- MiningPoolStats is a general block explorer.
+- Public API endpoint availability proves long-term service reliability.
 
 ## Planned checks
 
-- Identify active BitcoinII explorers.
-- Check whether each explorer has a public API.
-- Record each API's documentation URL, if present.
-- Test block, transaction, address, and height endpoints.
+- Recheck the BitcoinII Explorer API and record exact response fields before writing endpoint examples.
+- Compare explorer/API height and tip against a local BitcoinII node or another reliable source before any sync claim.
+- Locate formal API documentation if it exists.
 - Check whether response fields are stable enough to document.
-- Add direct check dates and evidence levels.
+- Add direct check dates and evidence levels to any future examples.
 
 ## Related pages
 
@@ -129,5 +217,5 @@ Do not claim yet that:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Ecosystem direct check plan and existing API framework
-**Notes:** This page defines an API listing and endpoint-test framework. It does not verify any live BitcoinII API.
+**Primary sources checked:** Ecosystem direct check plan, existing API framework, and Codex explorer/API recon report from 2026-07-06
+**Notes:** This page records first public API observations. It does not verify sync status, official status, long-term reliability, or exchange suitability.
