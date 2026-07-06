@@ -37,7 +37,8 @@ Do not combine these into a single broad "verified release" statement:
 | Evidence type | What it can support | What it cannot support by itself |
 |---|---|---|
 | GitHub release page/API observed | Release exists at an observed path and has visible/API metadata. | Binary authenticity. |
-| GitHub verified commit marker | GitHub says the commit was signed or verified in its UI. | Downloaded release asset verification. |
+| Lightweight tag ref | A tag name points directly to a commit. | Signed tag evidence, because there is no annotated tag object signature. |
+| GitHub verified commit marker | GitHub says the commit was signed or verified in its UI. | Downloaded release asset verification or signed-tag verification. |
 | GitHub API digest field | GitHub API may expose a digest value for an uploaded asset. | Independent MoreBC2 hash verification or maintainer-signed checksum proof. |
 | Source comparison | Whether source files differ between refs. | Whether binaries were built from that source. |
 | Workflow artifact | A workflow produced an artifact. | That the artifact is a release asset or safe for users. |
@@ -57,6 +58,8 @@ Current observations:
 - GitHub API metadata gives release `published_at` as `2025-11-27T04:22:39Z`.
 - GitHub API metadata reports 10 uploaded release assets for `v29.1.0`.
 - No uploaded asset name appears to be `SHA256SUMS`, `SHA256SUMS.asc`, a checksum manifest, a detached signature file, or a release-key file.
+- The `v29.1.0` tag ref points directly to commit `3f2a352467750425ec28abe3505a5db5bbc5fa35`, so it appears to be a lightweight tag rather than an annotated signed tag object.
+- GitHub commit API metadata reports the tagged commit signature as verified with reason `valid` and `verified_at` of `2025-11-27T04:20:37Z`. MoreBC2 did not independently verify that signature.
 - The source tree includes `contrib/verify-binaries/README.md`, which describes a checksum-and-signature model using `SHA256SUMS` and `SHA256SUMS.asc`.
 - The source tree includes `doc/release-process.md`, which describes Guix build attestations, signed tags, checksum files, and signature files.
 - `contrib/verify-binaries/verify.py` contains `SUMS_FILENAME = 'SHA256SUMS'` and `SIGNATUREFILENAME = 'SHA256SUMS.asc'`, but Codex reported that it still references `bitcoincore.org` and `bitcoin.org` download locations.
@@ -73,7 +76,7 @@ Current caveats:
 - MoreBC2 found no public GitHub API evidence at the obvious `guix.sigs` or detached-signature repository paths, but those repositories could be private, renamed, deleted, never created, or hosted elsewhere.
 - MoreBC2 has not downloaded release binaries or calculated independent hashes.
 - MoreBC2 has not verified detached signatures.
-- MoreBC2 has not checked whether the release tag itself is signed.
+- MoreBC2 has not independently verified the tagged commit signature.
 - MoreBC2 has not confirmed that workflow artifacts are attached to the release page.
 - MoreBC2 has not proved release binaries match reviewed source files.
 
@@ -135,9 +138,30 @@ Use [Release artifact checklist](../verification/release-artifact-checklist.md) 
 
 | Version | Release path | Asset inventory | Hash checked | Checksum file | Signature | Status | Notes |
 |---|---|---|---:|---|---|---|---|
-| v29.1.0 | `Bitcoin-II/BitcoinII-Core` | Partial | No | Needs review | Needs review | Needs Review | GitHub API reports 10 uploaded assets. No uploaded asset name appears to be a checksum manifest or detached signature file. Obvious public GitHub `guix.sigs` and detached-signature repo paths were not found. |
+| v29.1.0 | `Bitcoin-II/BitcoinII-Core` | Partial | No | Needs review | Needs review | Needs Review | GitHub API reports 10 uploaded assets. The tag appears lightweight and points directly to a GitHub-verified commit, but no signed tag object or uploaded checksum/signature asset was found. |
 | v0.27.1 | redirected legacy path | Partial | No | Needs review | Needs review | Needs Review | Observed on redirected legacy repository path; not confirmed as current canonical path. |
 | v0.27.0 | redirected legacy path | Partial | No | Needs review | Needs review | Needs Review | Genesis release observed on redirected legacy path; not independently verified. |
+
+## Tag and commit signature note
+
+Codex checked the `v29.1.0` Git tag metadata.
+
+Observed tag ref:
+
+```text
+refs/tags/v29.1.0 -> commit 3f2a352467750425ec28abe3505a5db5bbc5fa35
+```
+
+Interpretation:
+
+- The tag appears to be lightweight because the ref points directly to a commit object.
+- Because it does not point to a separate annotated tag object, there is no tag-object signature metadata to report.
+- GitHub commit API metadata reports the tagged commit signature as verified with reason `valid` and `verified_at` of `2025-11-27T04:20:37Z`.
+- MoreBC2 did not import keys or independently verify the commit signature.
+
+Boundary:
+
+Commit signature metadata is not release binary verification, and it is not evidence of a signed annotated Git tag.
 
 ## Source-tree helper caveat
 
@@ -225,6 +249,7 @@ Do not claim:
 - A workflow artifact is the same as a release asset unless it is confirmed on the release page.
 - A source comparison proves release binaries match source.
 - A GitHub verified commit marker verifies downloaded release assets.
+- A GitHub verified commit marker proves a signed annotated tag exists.
 - Source-tree release-process docs prove the current release followed that process.
 - A public-GitHub 404 proves no signature material exists anywhere.
 
@@ -237,7 +262,7 @@ MoreBC2 should track whether BitcoinII releases meet that kind of standard witho
 ## Open questions
 
 - Is `Bitcoin-II/BitcoinII-Core` the canonical release repository?
-- Are BitcoinII release tags signed?
+- Are any current BitcoinII releases published with signed annotated tags?
 - Are BitcoinII release commits GitHub-verified for all current releases?
 - Are SHA256 checksum files published outside uploaded GitHub release assets?
 - Are checksum files signed?
@@ -252,4 +277,4 @@ MoreBC2 should track whether BitcoinII releases meet that kind of standard witho
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This guide defines the release verification standard and records release-page, API-asset-inventory, checksum/signature/key-search, public external-signature-repo check, source-comparison, network-comparison, workflow, and process-document observations. This still does not verify any BitcoinII release binary.
+**Notes:** This guide defines the release verification standard and records release-page, API-asset-inventory, generated-source-archive metadata, checksum/signature/key-search, public external-signature-repo check, lightweight-tag/commit-signature metadata, source-comparison, network-comparison, workflow, and process-document observations. This still does not verify any BitcoinII release binary.
