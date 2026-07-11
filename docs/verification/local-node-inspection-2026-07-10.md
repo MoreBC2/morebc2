@@ -1,161 +1,171 @@
 # Local BitcoinII node inspection — 2026-07-10
 
 **Category:** Verification record  
-**Status:** Partial  
+**Status:** Partial, successful read-only RPC check  
 **Date checked:** 2026-07-10
 
 ## Summary
 
-This page records a read-only inspection of a locally running BitcoinII Core v29.1.0 GUI node on Windows.
+This page records a local BitcoinII Core v29.1.0 GUI node inspection on Windows, successful local-only RPC enablement, five read-only RPC checks, and a same-time comparison against the public BitcoinII explorer tip endpoint.
 
-The inspection identified the running process, executable path, data directory, active P2P ports, version, local best block height/hash from `debug.log`, and current peer activity. Read-only CLI RPC attempts were made, but the detected local port did not behave as a usable BitcoinII RPC HTTP endpoint.
+The local node and explorer returned the same height and best-block hash during the comparison window. This is a dated point-in-time agreement, not a permanent reliability claim.
 
-No node restart, configuration change, wallet inspection, transaction action, private-key access, mining action, or file edit was performed during the inspection.
+No wallet balances, addresses, transactions, private keys, seeds, descriptors, cookie contents, or RPC credentials were inspected or printed. No transaction, mining, peer-control, import, or other state-changing RPC command was used.
 
 ## Environment
 
 - Operating system: Windows
 - Process: `bitcoinII-qt.exe`
-- PID at check time: `38508`
-- Process start time: `2026-07-10 4:39:22 PM`
-- BitcoinII Core version observed in log: `v29.1.0`
-- Network: mainnet inferred from default-looking ports, absence of testnet/regtest configuration, and observed chain activity
+- PID after restart: `37820`
+- BitcoinII Core version: `v29.1.0`
+- Network: `main`
+- Data directory: `C:\Users\Dan\AppData\Local\BitcoinII`
 
-## Running executable
+## Executables
+
+GUI:
 
 ```text
 C:\Users\Dan\Desktop\BitcoinII-29.1.0-x86_64-win64-GUI\BitcoinII-29.1.0-x86_64-win64-GUI\bitcoinII-qt.exe
 ```
 
-Active command line:
-
-```text
-"C:\Users\Dan\Desktop\BitcoinII-29.1.0-x86_64-win64-GUI\BitcoinII-29.1.0-x86_64-win64-GUI\bitcoinII-qt.exe"
-```
-
-## CLI executable found
+CLI:
 
 ```text
 C:\bcli\bin\Release\bitcoinII-cli.exe
 ```
 
-The running GUI package directory contained `bitcoinII-qt.exe`, but no CLI executable was found next to it.
+## Local-only RPC configuration
 
-## Data directory
-
-Detected from `debug.log`:
+Configuration file:
 
 ```text
-C:\Users\Dan\AppData\Local\BitcoinII
+C:\Users\Dan\AppData\Local\BitcoinII\bitcoinII.conf
 ```
 
-No `bitcoinII.conf` file was present there during the check.
+Configuration used:
 
-## Ports and network activity
+```ini
+server=1
+rpcbind=127.0.0.1
+rpcallowip=127.0.0.1
+rpcport=8337
+```
 
-Observed from `debug.log` and `netstat`:
+The GUI log confirmed these arguments were loaded.
 
-- P2P listener: `0.0.0.0:8338`
-- IPv6 P2P listener: `[::]:8338`
-- Local listener: `127.0.0.1:8339`
-- Network active: `true`
-- External established peer connections observed: 10
+Observed bindings after restart:
 
-Important caveat:
+- RPC: `127.0.0.1:8337`
+- P2P: `0.0.0.0:8338`
+- P2P IPv6: `[::]:8338`
 
-`127.0.0.1:8339` did not behave as a usable BitcoinII RPC HTTP endpoint when probed with `bitcoinII-cli.exe`. The CLI returned an invalid-header connection error.
+No `0.0.0.0:8337` or LAN-address RPC bind was observed. RPC was therefore localhost-only during the check.
 
-## Read-only commands used
+No previous `bitcoinII.conf` existed, so no backup was required.
 
-Process and environment inspection:
+## Read-only commands run
 
 ```powershell
-Get-CimInstance Win32_Process | Where-Object { $_.Name -match 'bitcoin|bc2|bitcoinii|bitcoinII|qt' -or $_.CommandLine -match 'bitcoin|bc2|bitcoinii|bitcoinII' } | Select-Object ProcessId,Name,ExecutablePath,CommandLine | Format-List
-
-Get-ChildItem -LiteralPath 'C:\Users\Dan\AppData\Local\BitcoinII' -Force
-
-netstat -ano | Select-String -Pattern '\s38508$'
-
-Select-String -LiteralPath 'C:\Users\Dan\AppData\Local\BitcoinII\debug.log' -Pattern 'UpdateTip: new best=|Leaving InitialBlockDownload|SetNetworkActive|BitcoinII Core version|Using data directory|Config file:|Bound to|block tree size'
+& 'C:\bcli\bin\Release\bitcoinII-cli.exe' -datadir='C:\Users\Dan\AppData\Local\BitcoinII' -rpcconnect=127.0.0.1 -rpcport=8337 getblockcount
+& 'C:\bcli\bin\Release\bitcoinII-cli.exe' -datadir='C:\Users\Dan\AppData\Local\BitcoinII' -rpcconnect=127.0.0.1 -rpcport=8337 getbestblockhash
+& 'C:\bcli\bin\Release\bitcoinII-cli.exe' -datadir='C:\Users\Dan\AppData\Local\BitcoinII' -rpcconnect=127.0.0.1 -rpcport=8337 getblockchaininfo
+& 'C:\bcli\bin\Release\bitcoinII-cli.exe' -datadir='C:\Users\Dan\AppData\Local\BitcoinII' -rpcconnect=127.0.0.1 -rpcport=8337 getnetworkinfo
+& 'C:\bcli\bin\Release\bitcoinII-cli.exe' -datadir='C:\Users\Dan\AppData\Local\BitcoinII' -rpcconnect=127.0.0.1 -rpcport=8337 getconnectioncount
 ```
 
-Read-only RPC attempts:
+## Local RPC results
 
-```powershell
-& 'C:\bcli\bin\Release\bitcoinII-cli.exe' -datadir='C:\Users\Dan\AppData\Local\BitcoinII' -rpcport=8339 getblockcount
-& 'C:\bcli\bin\Release\bitcoinII-cli.exe' -datadir='C:\Users\Dan\AppData\Local\BitcoinII' -rpcport=8339 getbestblockhash
-& 'C:\bcli\bin\Release\bitcoinII-cli.exe' -datadir='C:\Users\Dan\AppData\Local\BitcoinII' -rpcport=8339 getblockchaininfo
-& 'C:\bcli\bin\Release\bitcoinII-cli.exe' -datadir='C:\Users\Dan\AppData\Local\BitcoinII' -rpcport=8339 getnetworkinfo
-& 'C:\bcli\bin\Release\bitcoinII-cli.exe' -datadir='C:\Users\Dan\AppData\Local\BitcoinII' -rpcport=8339 getconnectioncount
-```
-
-All five RPC attempts failed with:
+Local check timestamp:
 
 ```text
-Could not connect to the server 127.0.0.1:8339
-error while reading header, or invalid header
+2026-07-10T20:46:08.8662219-04:00
 ```
 
-## Observed local chain state
+| Field | Result |
+|---|---|
+| `getblockcount` | `57420` |
+| `getbestblockhash` | `0000000000000000130acb08cd609dc86dc72e2312a3112028617da3895bd596` |
+| Chain | `main` |
+| Blocks | `57420` |
+| Headers | `57420` |
+| Verification progress | `0.9998990523854668` |
+| Initial block download | `false` |
+| Version | `290100` |
+| Subversion | `/Satoshi:29.1.0/` |
+| Network active | `true` |
+| Connections | `10` |
+| Inbound connections | `0` |
+| Outbound connections | `10` |
+| `getconnectioncount` | `10` |
 
-Observed from `debug.log`:
+The successful RPC responses show that the detected CLI could communicate with the running GUI node under this local configuration.
 
-- Local best block height: `57,418`
-- Local best block hash: `000000000000000007b1af4392f1a07850331b4a599f24bf1ecbabdf02336a39`
-- Verification progress at last logged tip: `0.999837`
-- Initial block download: log contained `Leaving InitialBlockDownload (latching to false)`
-- Version: `BitcoinII Core version v29.1.0`
-- Network active: `true`
+## Same-time explorer comparison
 
-Headers were not available through RPC. The log showed `block tree size = 57426`, but this page does not equate that value with the RPC `headers` field.
+Explorer endpoint:
 
-Connection count was not available through RPC. `netstat` showed 10 established external peer connections to remote `:8338` endpoints at the time checked.
+```text
+https://bitcoinii.ddns.net/explorer/api/blocks/tip
+```
 
-## Explorer comparison
+Explorer check timestamp:
 
-Previously observed explorer state from 2026-07-06:
+```text
+2026-07-10T20:46:16.9332436-04:00
+```
 
-- Explorer height: `57,398`
-- Explorer tip hash: `0000000000000000230effe4c66d34cc5a97064e0860f462df9920ac4ba96f83`
+Explorer response summary:
 
-The local node log contained the same hash at height `57,398`.
+```json
+{
+  "height": 57420,
+  "hash": "0000000000000000130acb08cd609dc86dc72e2312a3112028617da3895bd596"
+}
+```
 
-This supports a historical same-height/same-hash match for that block.
+Comparison:
 
-At the time of the local inspection, the locally logged tip was height `57,418`, which was 20 blocks ahead of the previously recorded explorer observation. This does not show that either source was currently synced because the checks were made on different dates.
+| Source | Height | Tip hash |
+|---|---:|---|
+| Local BitcoinII node | `57420` | `0000000000000000130acb08cd609dc86dc72e2312a3112028617da3895bd596` |
+| BitcoinII explorer API | `57420` | `0000000000000000130acb08cd609dc86dc72e2312a3112028617da3895bd596` |
+
+Result: same-time height and tip-hash match, with the two checks approximately eight seconds apart.
 
 ## What this record supports
 
-This record supports:
+This record supports that, at the recorded time:
 
-- a locally running BitcoinII Core v29.1.0 GUI node was directly observed,
-- the active process, executable path, data directory, P2P ports, and peer activity were identified,
-- the local log recorded height `57,418` and best block hash `000000000000000007b1af4392f1a07850331b4a599f24bf1ecbabdf02336a39`,
-- the local log contained the previously observed explorer hash at height `57,398`,
-- the node had left initial block download according to the log.
+- BitcoinII Core v29.1.0 was running on mainnet,
+- local-only RPC was successfully enabled on `127.0.0.1:8337`,
+- the five listed read-only RPC commands worked,
+- the node reported blocks equal to headers,
+- the node reported `initialblockdownload: false`,
+- the node had 10 outbound connections and no inbound connections,
+- the local node and public explorer API agreed on height `57420` and the same tip hash.
 
 ## What this record does not support
 
 This record does not prove:
 
-- a working RPC configuration,
-- current explorer sync status,
-- current local-node sync status against another source at the same moment,
-- exact RPC `headers`, `subversion`, or `connections` values,
+- permanent explorer synchronization or reliability,
+- explorer official status,
 - binary authenticity,
-- wallet safety or wallet state,
-- exchange/service suitability.
+- release artifact verification,
+- wallet safety or correctness,
+- exchange/service suitability,
+- that the node and explorer will continue to agree after the recorded check.
 
-## Remaining unknowns
+## Errors and caveats
 
-- Which local port, if any, is configured for BitcoinII JSON-RPC.
-- Whether GUI startup omitted RPC server mode.
-- Whether the CLI build at `C:\bcli\bin\Release\bitcoinII-cli.exe` is fully compatible with the running GUI build.
-- Exact RPC values for `getblockchaininfo`, `getnetworkinfo`, and `getconnectioncount`.
-- Current same-time explorer/local-node height and tip-hash comparison.
+- An initial explorer request from a sandboxed network failed, then succeeded through approved public GET access.
+- No RPC startup or configuration errors were observed.
+- No rollback was required.
+- Earlier attempts against `127.0.0.1:8339` failed because that listener was not the BitcoinII JSON-RPC endpoint.
 
-## Safe next step
+## Verification
 
-If RPC access is needed later, start the GUI intentionally with RPC server mode enabled, using a reviewed configuration or explicit `-server=1`, then rerun only the same read-only RPC commands.
-
-Do not publish RPC credentials, cookie contents, or wallet-sensitive data in the verification record.
+**Status:** Partial, successful dated check  
+**Primary evidence:** Local process/config inspection, local-only port inspection, five successful read-only RPC calls, and public explorer tip GET  
+**Notes:** This is a dated operational observation. It should not be generalized into a permanent sync or reliability claim.
