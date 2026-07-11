@@ -2,19 +2,31 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-07-02
+**Last reviewed:** 2026-07-10
 
 ## Summary
 
 This page tracks whether MoreBC2 is ready to invite a small group of trusted readers or agents for narrow private review.
 
-It is not a public-launch checklist. Public launch has higher requirements around license, release artifact verification, command testing, ecosystem checks, and outside technical review.
+It is not a public-launch checklist. Public launch has higher requirements around license, contribution workflow, release authentication, service claims, and outside technical review.
 
 ## Current readiness call
 
 **Current stage:** Ready for first narrow invite-only review.
 
-MoreBC2 is coherent enough for focused private review, but reviewers should be given small assignments instead of being asked to review the whole repository at once.
+MoreBC2 is coherent enough for focused private review. Reviewers should still receive small assignments instead of being asked to review the whole repository at once.
+
+The project now has dated operational evidence in addition to review frameworks:
+
+- a locally running BitcoinII Core `v29.1.0` Windows mainnet node was inspected,
+- localhost-only RPC was enabled and tested,
+- a same-time local-node/explorer height and tip-hash match was recorded,
+- nine harmless read-only RPC commands were locally tested,
+- release assets and missing authentication materials were inventoried,
+- explorers, public APIs, exchanges, and mining statistics received dated direct checks,
+- the canonical public implementation and project-controlled identity sources were reviewed.
+
+See the [verification evidence index](verification-index.md) for the current evidence map.
 
 ## Readiness levels
 
@@ -31,139 +43,150 @@ MoreBC2 is coherent enough for focused private review, but reviewers should be g
 | Milestone | Status | Notes |
 |---|---|---|
 | Private documentation foundation | Mostly done | Main sections, READMEs, status labels, review rules, and conservative boundaries exist. |
-| Source-backed technical base | Strong partial | First-pass Source Atlas coverage exists across consensus, validation, storage, mempool, wallet, mining, RPC, and network/peer-communication areas. |
-| Verification workflow | Mostly done | Verification queue, coverage dashboard, command trackers, stale wording scan, command scan, release trackers, network comparison notes, test coverage map, test run plan, and feedback buckets exist. |
-| Private review handoff | Mostly done | `docs/REVIEW_HANDOFF.md`, review feedback buckets, readiness page, and narrow assignment cards exist. |
-| Command safety posture | Strong framework | Commands remain placeholders until tested; smoke-test plan exists. Actual command test records are still missing. |
-| Network/P2P verification posture | Strong framework | Source review, release comparison, selected blob checks, test coverage map, and test run plan exist. Runtime tests and live checks remain open. |
-| Release verification posture | Partial | Release source comparison and artifact checklist exist, but binary/hash/signature verification remains open. |
-| Ecosystem/service posture | Framework | Ecosystem/API/explorer/pool/exchange pages avoid active claims, but direct live checks remain open. |
-| Legal/reuse posture | Clear blocker | No public reuse posture until license decision is made. |
+| Source-backed technical base | Strong partial | First-pass Source Atlas coverage exists across consensus, validation, storage, mempool, wallet, mining, RPC, and network/P2P areas. |
+| Verification workflow | Strong | Verification queue, evidence index, coverage dashboard, command trackers, release trackers, ecosystem records, and feedback buckets exist. |
+| Private review handoff | Ready | Review handoff, assignment cards, readiness page, first review packets, and feedback buckets exist. |
+| Command safety posture | Locally tested partial | Nine read-only commands were tested on Windows mainnet. Wallet, transaction, mining, and operator state-changing workflows remain outside this batch. |
+| Explorer/API posture | Dated operational evidence | A same-time local-node/explorer tip match and harmless public API checks were recorded. Official ownership and long-term reliability remain open. |
+| Network/P2P verification posture | Strong partial | Source review and live peer summaries exist. Full developer test execution and broader runtime behavior remain open. |
+| Release verification posture | Clearly bounded partial | Release metadata and asset inventory exist. Public checksum/signature/trusted-key infrastructure is not currently available; the maintainer has described it as roadmap work. |
+| Ecosystem/service posture | Direct-check partial | Explorer, API, exchange, and mining-statistics observations are dated. Account-gated and reliability claims remain untested. |
+| Project identity posture | Strong partial | Canonical implementation and project-controlled website/ticker usage were identified. Dedicated technical/security contact remains unclear. |
+| Legal/reuse posture | Clear blocker | No broad public reuse posture until a license and contribution decision is made. |
+| Outside technical review | Open blocker | No independent reviewer has yet completed a core-claims review. |
 
 ## What is ready for peer review now
 
 These areas are suitable for narrow private review:
 
-- Editorial and status-label rules.
-- Source Atlas entry format.
+- Command-safety wording and the local read-only RPC record.
+- Explorer/API wording and the same-time comparison record.
+- Release-verification wording, including the explicit absence of current signing infrastructure.
+- Project identity and canonical-repository evidence.
 - Chain parameter documentation style.
-- PoW and difficulty documentation wording.
-- RPC overview and command-safety boundaries.
-- Command smoke-test plan.
-- Release verification framework wording.
-- Network/peer-communication wording boundaries.
+- Network/P2P wording boundaries.
 - Network test coverage and test-run planning.
-- Ecosystem page caution and active-service claim boundaries.
-- Review feedback bucket workflow.
+- Exchange and ecosystem claim boundaries.
+- Editorial status labels and verification terminology.
 
 ## What should not be treated as peer-validated yet
 
-These areas are not ready to be treated as verified:
-
-- Locally tested command examples.
-- Release binary verification.
-- Active ecosystem/explorer/API/pool/exchange listings.
-- Exchange confirmation policy.
-- Runtime peer behavior or live network health.
-- Wallet database internals and GUI behavior.
+- Release binary authenticity or reproducibility.
+- Permanent explorer/API reliability or official ownership.
+- Exchange deposits, withdrawals, liquidity, safety, or regional availability.
+- Recommended exchange confirmation policy.
+- Wallet backup, restore, encryption, spending, or recovery workflows.
+- Full runtime network health or developer test-suite results.
+- Public contribution and reuse posture.
 - Public launch readiness.
 
-## Remaining pre-review checks
+## Recommended first reviewer lanes
 
-Before inviting the first small group, complete or confirm:
+Give each reviewer one lane only.
 
-| Check | Current status | Notes |
-|---|---|---|
-| Stale wording tracker updated | Mostly done | Recent source-link and overclaim scans are recorded. One final skim is still useful. |
-| Command example tracker updated | Mostly done | Main command surfaces are recorded. Repository search behavior was unreliable, so a manual/code-search recheck is still useful. |
-| Coverage dashboard current | Mostly done | Updated after Source Atlas cleanup, command plan, network RPC, protocol primitives, network review, release comparison, and network test planning. |
-| Review assignments narrow enough | Done for first invitations | Assignment cards now include command, release, ecosystem, P2P wording, and network test-plan lanes. |
-| License/reuse caveat visible | Done for private review | Public reuse remains blocked until license choice. |
-| Public-launch caveat visible | Done | Project status says not ready for broad public launch. |
+### 1. Command and local-runtime reviewer
 
-## Suggested first reviewer lanes
+Review:
 
-Give each reviewer one lane only:
+- [Read-only RPC smoke test](read-only-rpc-smoke-test-2026-07-10.md)
+- [Command testing status](command-testing.md)
+- `docs/developers/rpc-overview.md`
 
-1. **Command safety reviewer**
-   - Review `docs/verification/command-smoke-test-plan.md`, `docs/verification/command-testing.md`, and `docs/verification/command-example-scan.md`.
-   - Flag any command that should move to `Do not publish` or later-phase testing.
+Check command names, output-redaction rules, version/platform limits, and whether any wording sounds broader than the test environment.
 
-2. **Release verification reviewer**
-   - Review `docs/developers/release-verification.md`, `docs/verification/release-source-comparison.md`, `docs/verification/network-release-comparison.md`, and `docs/verification/release-artifact-checklist.md`.
-   - Flag any wording that sounds like binary verification is complete.
+### 2. Release-verification reviewer
 
-3. **Chain parameters reviewer**
-   - Check `docs/developers/source-atlas/chainparams-cpp.md` against `v29.1.0` and current `main`.
-   - Flag any value that should be labeled release-specific.
+Review:
 
-4. **RPC reviewer**
-   - Review `docs/developers/rpc-overview.md` plus one RPC Source Atlas page.
-   - Confirm command names and risk categories, not runtime behavior.
+- `docs/developers/release-verification.md`
+- [Release asset inventory attempt](release-asset-inventory-attempt.md)
+- [Release artifact checklist](release-artifact-checklist.md)
+- [Network release comparison](network-release-comparison.md)
 
-5. **Ecosystem wording reviewer**
-   - Review ecosystem/API/explorer/pool/exchange pages.
-   - Flag any active-service claim without direct dated evidence.
+Confirm that no wording implies binary verification, signed releases, or a trusted key path currently exists.
 
-6. **P2P wording reviewer**
-   - Review the peer communication model plus one or two P2P Source Atlas pages.
-   - Flag any wording that goes beyond source-reviewed behavior.
+### 3. Explorer/API reviewer
 
-7. **Network test-plan reviewer**
-   - Review `docs/verification/network-test-coverage-map.md` and `docs/verification/network-test-run-plan.md`.
-   - Flag any plan step that sounds like a completed result or needs more environment detail.
+Review:
+
+- `docs/ecosystem/explorers.md`
+- `docs/ecosystem/apis.md`
+- [Local node inspection](local-node-inspection-2026-07-10.md)
+
+Confirm that the point-in-time tip match is described accurately and is not turned into a permanent reliability claim.
+
+### 4. Project identity reviewer
+
+Review:
+
+- [Project identity source check](project-identity-source-check-2026-07-10.md)
+- canonical repository, website, ticker, contact, and inherited security-contact wording
+
+Confirm the distinction between project-controlled public evidence and maintainer conversation context.
+
+### 5. Ecosystem wording reviewer
+
+Review exchange, mining-pool, explorer, and API pages. Flag any claim about active operations, safety, reliability, liquidity, fees, deposits, withdrawals, or official status that lacks direct evidence.
+
+### 6. Network/P2P reviewer
+
+Review the peer communication model and selected P2P Source Atlas pages. Flag wording that goes beyond source review, the one-node live observation, or the existing test plan.
 
 ## Invite wording for reviewers
-
-Use narrow wording like:
 
 ```text
 Please review only the assigned page(s). Do not rewrite broadly. Please flag:
 
 - claims that sound stronger than the evidence,
-- missing source/version labels,
-- command examples that look tested but are not,
-- public-launch wording that should stay private-review-only,
-- anything that should move to Open Questions instead of docs.
+- missing source, date, release, platform, or network labels,
+- examples whose live values could be mistaken for constants,
+- private or network data that should be redacted,
+- public-launch wording that should remain private-review-only,
+- anything that belongs in Open Questions instead of documentation.
 ```
 
 ## Go/no-go recommendation
 
-**Recommendation:** MoreBC2 is ready to send the first one or two narrow private-review assignments.
+**Recommendation:** MoreBC2 is ready to send the first one or two narrow private-review assignments now.
 
-Do not open broad review yet. Invite one or two trusted reviewers or agents at a time, with constrained assignments and explicit evidence rules.
+The strongest first lanes are:
+
+1. local RPC and command-safety review,
+2. release-verification wording review,
+3. explorer/API evidence wording review.
+
+Do not open broad review yet.
 
 ## Public launch blockers
 
-Do not treat private review readiness as public launch readiness.
-
 Public launch still needs:
 
-- Final license decision.
-- Release artifact verification model checked against current releases.
-- At least one outside technical review of core claims.
-- Local command test records for any published command examples.
-- Direct ecosystem checks with dates.
-- Confirmation policy for exchange/service docs.
-- Issue/PR workflow decision for public contributors.
+- Final MoreBC2 license decision.
+- Public issue/PR and contributor workflow decision.
+- At least one independent technical review of core claims.
+- Release verification guidance that accurately reflects the absence of current signing infrastructure and can be upgraded when public checksums/signatures/keys appear.
+- Clear labeling of which locally tested commands are suitable for published instructions.
+- Continued dated ecosystem checks and a policy for stale service information.
+- Confirmation policy or explicit non-recommendation posture for exchange/service integration.
+- Dedicated official technical/security contact information, or an explicit statement that none is published.
 
 ## Related pages
 
+- [Verification evidence index](verification-index.md)
 - [Project status](../../PROJECT_STATUS.md)
 - [Private review handoff](../REVIEW_HANDOFF.md)
 - [Private review assignments](private-review-assignments.md)
 - [Review feedback buckets](review-feedback-buckets.md)
+- [Open questions backlog](open-questions.md)
 - [Documentation coverage](../documentation-coverage.md)
-- [Stale wording scan](stale-wording-scan.md)
-- [Command example scan](command-example-scan.md)
-- [Command smoke-test plan](command-smoke-test-plan.md)
-- [Network release comparison](network-release-comparison.md)
-- [Network test coverage map](network-test-coverage-map.md)
-- [Network test run plan](network-test-run-plan.md)
+- [Command testing status](command-testing.md)
+- [Local node inspection](local-node-inspection-2026-07-10.md)
+- [Read-only RPC smoke test](read-only-rpc-smoke-test-2026-07-10.md)
+- [Project identity source check](project-identity-source-check-2026-07-10.md)
 - [Legal and reuse posture](../LEGAL_REUSE.md)
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Project status, review handoff, coverage dashboard, stale wording scan, command example scan, command testing status, command smoke-test plan, release verification pages, network release comparison, network test coverage map, network test run plan, legal/reuse posture
-**Notes:** This page is a private-review readiness dashboard. It does not verify BitcoinII protocol behavior or public-launch readiness.
+**Primary sources checked:** Current MoreBC2 verification records, project status, review handoff, coverage dashboard, local node/RPC records, release verification records, ecosystem direct-check records, project identity source check, and legal/reuse posture
+**Notes:** This is a private-review readiness dashboard. It does not verify BitcoinII protocol behavior, release binaries, service reliability, or public-launch readiness.
