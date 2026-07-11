@@ -32,41 +32,43 @@ Use [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md
 
 ### BitcoinII Explorer
 
-**Status:** Partially checked / Historical block match observed / Current sync still unconfirmed  
+**Status:** Active, dated check / Same-time local comparison passed  
 **Official:** Claimed by page text, not independently verified  
 **URL:** `https://bitcoinii.ddns.net/explorer/`  
 **Supports:** Blocks / transactions / addresses / public GET API / mempool summary  
-**Last explorer check:** 2026-07-06  
-**Last local comparison check:** 2026-07-10  
-**Evidence level:** E4 direct public-page/API observation plus historical same-height/same-hash local-log comparison; not E8 synced/reliable service evidence
+**Last checked:** 2026-07-10  
+**Evidence level:** E6 dated direct public API check plus same-time local-node height/hash comparison; not permanent reliability evidence
 
 **What was checked:**
 
-- HTTPS page loaded.
+- HTTPS explorer pages loaded during the earlier direct check.
 - Page title and visible UI identified the site as `BitcoinII Explorer`.
 - Visible page text said `Official Explorer for the BitcoinII network`; this claim was observed but not independently verified.
-- Visible height was `57,398` during the 2026-07-06 check.
-- Tip hash from API was `0000000000000000230effe4c66d34cc5a97064e0860f462df9920ac4ba96f83`.
-- Recent block list was visible for heights `57,398` through `57,389`.
-- A public transaction page loaded.
-- A public address page loaded.
-- Harmless GET API endpoints returned JSON for tip, block, transaction, address, and mempool summary.
-- A local BitcoinII Core v29.1.0 node log inspected on 2026-07-10 contained the same hash at height `57,398`.
+- Public block, transaction, address, tip, and mempool views/endpoints were observed.
+- On 2026-07-10, the explorer tip endpoint returned height `57420` and hash `0000000000000000130acb08cd609dc86dc72e2312a3112028617da3895bd596`.
+- A local BitcoinII Core v29.1.0 mainnet node returned the same height and best-block hash approximately eight seconds earlier.
+
+**Same-time comparison:**
+
+| Source | Timestamp | Height | Tip hash |
+|---|---|---:|---|
+| Local BitcoinII node RPC | `2026-07-10T20:46:08.8662219-04:00` | `57420` | `0000000000000000130acb08cd609dc86dc72e2312a3112028617da3895bd596` |
+| Explorer tip API | `2026-07-10T20:46:16.9332436-04:00` | `57420` | `0000000000000000130acb08cd609dc86dc72e2312a3112028617da3895bd596` |
 
 **What was not checked:**
 
 - No POST search submission.
 - No transaction submission.
 - No account-only features.
-- No same-time local node/explorer comparison.
 - No independent verification that the explorer is official.
-- No claim that the explorer is currently synced.
+- No long-term uptime, rate-limit, latency, or reliability testing.
+- No claim that the explorer will remain synced after the dated comparison.
 
 **Notes:**
 
-The working explorer URL was `https://bitcoinii.ddns.net/explorer/`. The explorer page canonical/open-graph metadata referenced `https://bitcoiniiexplorer.org`, but that domain did not resolve during the 2026-07-06 check.
+The same-time comparison supports that the explorer and local node agreed at that moment. It does not establish permanent synchronization or suitability as the only source of truth for an exchange or custody service.
 
-The local node inspection on 2026-07-10 recorded local height `57,418`, which was 20 blocks ahead of the older explorer observation. Because the checks were made four days apart, that difference does not show that either source was stale or synced at the later time.
+The working explorer URL is `https://bitcoinii.ddns.net/explorer/`. The explorer page canonical/open-graph metadata referenced `https://bitcoiniiexplorer.org`, but that domain did not resolve during the 2026-07-06 check.
 
 See [Local BitcoinII node inspection — 2026-07-10](../verification/local-node-inspection-2026-07-10.md).
 
@@ -85,9 +87,9 @@ See [Local BitcoinII node inspection — 2026-07-10](../verification/local-node-
 
 ## Current status
 
-MoreBC2 has one partially checked general BitcoinII/BC2 explorer candidate and one historical local-log match for the explorer's observed block at height `57,398`.
+MoreBC2 has one BitcoinII/BC2 explorer with a successful dated direct check and same-time local-node height/hash comparison.
 
-That historical match is useful, but the explorer should not be called currently synced until a same-time height and tip-hash comparison is performed against a local node or another reliable source.
+It can be described as reachable and matching a local node at the recorded time. It should not be described as permanently synced, officially maintained, highly available, or sufficient as an exchange's only source of truth.
 
 ## What to check
 
@@ -103,15 +105,13 @@ For each explorer, verify:
 - Any sync-status claim is compared against another reliable source or local node output.
 - Last checked date is recorded.
 
-Do not claim an explorer is synced unless there is a comparison source checked at the same time.
-
 ## Open items
 
-- Perform a same-time explorer height/tip and local-node height/tip comparison before calling the explorer synced.
 - Confirm whether `https://bitcoinii.ddns.net/explorer/` is officially maintained.
 - Recheck `https://bitcoiniiexplorer.org` because it appears in metadata but did not resolve.
-- Add API notes if endpoint shapes remain stable after another dated check.
-- Add examples for block, transaction, and address lookups only after harmless public examples are chosen and documented.
+- Repeat same-time comparisons periodically before publishing current-status claims.
+- Document exact API response fields only after another stability check.
+- Do not recommend the explorer as a sole exchange/service source of truth.
 
 ## Related pages
 
@@ -123,6 +123,6 @@ Do not claim an explorer is synced unless there is a comparison source checked a
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Ecosystem direct check plan, existing explorer framework, Codex explorer/API recon report from 2026-07-06, and local node inspection report from 2026-07-10
-**Notes:** One explorer is listed as partially checked. A historical same-height/same-hash local-log match was observed for block `57,398`, but current sync, official status, reliability, and service-provider suitability remain unverified.
+**Status:** Draft  
+**Primary sources checked:** Direct explorer/API observations, successful local BitcoinII RPC calls, and a same-time local/explorer tip comparison from 2026-07-10  
+**Notes:** The explorer matched a local node at height `57420` during a dated check. Official status, permanent sync, long-term reliability, and service-provider suitability remain unverified.
