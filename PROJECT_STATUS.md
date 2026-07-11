@@ -1,13 +1,15 @@
 # MoreBC2 project status
 
 **Status:** Private foundation-building, ready for first narrow invite-only review
-**Last reviewed:** 2026-07-04
+**Last reviewed:** 2026-07-10
 
 ## Summary
 
-MoreBC2 is currently a private, source-backed documentation and ecosystem reference project for BitcoinII (BC2).
+MoreBC2 is a private, source-backed documentation and verification project for BitcoinII (BC2).
 
-The repository has moved beyond a basic wiki framework. It now has a substantial architecture handbook, Source Atlas, RPC review track, wallet review track, exchange framework, ecosystem/API framework, release-verification framework, release asset inventory tracker, command-test tracker, smoke-test plan, network release comparison, network test coverage map, network test run plan, verification queue, private-review workflow, and editorial rules.
+The repository has moved beyond framework-only documentation. It now contains dated operational evidence from a local BitcoinII Core node, a same-time explorer comparison, a nine-command read-only RPC smoke test, release asset and authentication-gap records, direct ecosystem checks, and a project-identity source review.
+
+The fastest overview is the [verification evidence index](docs/verification/verification-index.md).
 
 ## Current phase
 
@@ -15,137 +17,162 @@ The repository has moved beyond a basic wiki framework. It now has a substantial
 
 Current goal:
 
-- Share one or two exact review lanes with trusted readers or agents.
-- Keep license/reuse posture explicit while the final license decision is pending.
-- Keep verified documentation separate from research, discussion, history, and ecosystem tracking.
-- Avoid public-launch claims until release, ecosystem, and command examples are checked.
-- Keep command examples as placeholders unless local test records exist.
-- Keep developer test-suite planning separate from user-facing command guidance.
+- Send one or two exact review lanes to trusted readers.
+- Keep evidence levels, dates, releases, platforms, and network context visible.
+- Keep maintainer conversation context separate from public primary-source evidence.
+- Preserve the private-review-only license and contribution posture.
+- Avoid public-launch claims until the remaining blockers are deliberately resolved or clearly documented as unavailable.
 
 ## Launch readiness
 
-MoreBC2 is **not ready for broad public launch yet**.
+MoreBC2 is **not ready for broad public launch**.
 
-It is ready for the first one or two narrow private-review assignments, especially:
+It is ready for narrow private review in these lanes:
 
-- command safety review
-- release verification wording review
+- local RPC and command-safety evidence,
+- release-verification wording,
+- explorer/API evidence wording,
+- project identity and canonical-source wording,
+- P2P and network-test planning,
+- ecosystem active-claim boundaries.
 
-Additional second-wave narrow assignments can include:
+## Current verified and observed work
 
-- P2P wording boundary review
-- network test-plan review
-- ecosystem active-claim review
+### Local node and RPC
 
-Before public sharing it still needs:
+A BitcoinII Core `v29.1.0` GUI node was inspected on Windows mainnet. Local-only RPC was configured on `127.0.0.1:8337` and tested without exposing credentials or wallet data.
 
-- Final license decision.
-- Tested local command examples before any command guide is marked Verified.
-- Active ecosystem/explorer/API/exchange checks from direct sources.
-- Release hash/signature/trusted-key checks or a clearly documented gap if the project does not publish those materials.
-- At least one outside reviewer for core technical claims.
-- Confirmation policy for exchange/service docs.
+Nine read-only commands were successfully tested:
+
+- `getblockcount`
+- `getbestblockhash`
+- `getblockchaininfo`
+- `getnetworkinfo`
+- `getconnectioncount`
+- `getpeerinfo`
+- `getmempoolinfo`
+- `getdifficulty`
+- `uptime`
+
+Raw peer/network output remains subject to redaction rules.
+
+### Explorer and API
+
+The local node and `bitcoinii.ddns.net` explorer matched at height `57,420` with the same best-block hash within about eight seconds on 2026-07-10.
+
+This is a dated point-in-time agreement. It is not a permanent reliability, official-status, or service-suitability claim.
+
+Public explorer pages and harmless GET endpoints for tip, block, transaction, address, and mempool summary were also observed.
+
+### Release posture
+
+The `v29.1.0` release metadata and uploaded asset inventory are recorded. Generated source archives are distinguished from uploaded assets. The tag and GitHub-reported commit-signature metadata are documented conservatively.
+
+No public BitcoinII checksum manifest, detached release signature, signed annotated tag, trusted release-key path, or independent binary hash record has been established.
+
+The repository owner has spoken with the maintainer and understands release signing and signatures to be roadmap work that is not implemented yet. MoreBC2 records this as maintainer-supplied context, not cryptographic evidence.
+
+### Project identity
+
+Project-controlled GitHub metadata supports treating `Bitcoin-II/BitcoinII-Core` as the canonical public reference implementation. Project-controlled material also strongly supports BitcoinII / `BC2` naming.
+
+A dedicated technical/security integration contact remains unclear, and inherited upstream security-contact wording should not be treated as BitcoinII-specific guidance.
+
+### Ecosystem checks
+
+Dated direct public checks exist for:
+
+- the BitcoinII explorer and public API,
+- MiningPoolStats network/mining statistics,
+- NonKYC public BC2 pages,
+- CoinEx public BC2 pages,
+- an unconfirmed NestEx candidate.
+
+These checks do not establish exchange safety, liquidity, regional access, account-level deposit/withdrawal operation, pool payout reliability, or official status.
 
 ## Current strengths
 
-- Clear editorial rule: document reality, explore possibilities, separate the two.
-- Strong naming standard: BitcoinII / BC2 / BitcoinII Core / MoreBC2.
-- Root and docs indexes route readers through project status, coverage, private-review handoff, legal/reuse posture, and reviewer start flow.
-- Section READMEs are normalized.
-- `CONTRIBUTING.md` defines a private-review workflow.
-- Review feedback buckets are documented.
-- Private-review readiness and narrow assignment cards exist.
-- Legal/reuse posture is documented as private-review-only until a license decision is made.
-- Multiple architecture explainer pages now exist and are cross-linked to Source Atlas.
-- Source Atlas has meaningful reviewed entries across consensus, validation, storage, wallet, mining, RPC, network, P2P, and mempool areas.
-- RPC overview tracks mining, blockchain, network, raw transaction, mempool, and wallet RPC groups.
-- Wallet guide has source-backed startup, address, backup/import, spend/PSBT, encryption, coin/balance, and transaction-history notes.
-- Command testing tracker and command smoke-test plan exist, and major user/operator pages link to command safety material.
-- Codex command-shaped audit found no blocker for first narrow private review, and the suggested command wording fixes were applied.
-- Release source comparison, network release comparison, release asset inventory attempt, release verification guide, and artifact checklist exist.
-- Release metadata is now clearer: uploaded assets, generated source archives, external public signature-repo checks, lightweight tag metadata, and GitHub-reported commit signature metadata are recorded.
-- Network test coverage map and network test run plan exist.
-- Ecosystem direct-check plan exists, and ecosystem templates were refreshed around dated evidence fields.
-- Verification queue exists and tracks important unresolved questions.
-- Exchange, ecosystem, explorer, and API frameworks exist without falsely listing unverified services as active.
-- Technical pages are generally conservative and clearly marked Draft, Partial, Reviewed, or Needs Review.
+- Clear separation between source review, direct observation, local testing, maintainer context, and unresolved claims.
+- Strong naming and terminology boundaries.
+- Substantial Source Atlas and architecture coverage.
+- Real Windows/mainnet local-runtime evidence.
+- Same-time local-node/explorer comparison.
+- Nine locally tested read-only RPC commands.
+- Dated release, explorer, API, exchange, and mining-statistics records.
+- Conservative release-authentication wording.
+- Narrow private-review packets and assignment lanes.
+- Verification evidence index and centralized open-question tracking.
 
-## Current risks
+## Current risks and blockers
 
 - Final public license decision is not made.
-- Public issue/PR workflow is not set up.
-- Source Atlas pages and architecture pages overlap enough that future consistency checks will still be useful.
-- Glossary cross-linking has improved, but it is not complete enough for public review.
-- Command examples are still mostly untested and must remain clearly marked as placeholders or draft material.
-- Release binaries are not verified yet.
-- `v29.1.0` uploaded assets and generated source archives are recorded, but hashes, checksum manifests, signatures, trusted keys, and independent binary checks are not complete.
-- The `v29.1.0` tag appears lightweight; GitHub reports the tagged commit signature as valid, but MoreBC2 has not independently verified that signature and this does not verify binaries.
-- Ecosystem and service pages are mostly frameworks until active services are checked directly.
-- Peer/network behavior has strong first-pass source review, but runtime tests and live network checks remain open.
+- Public issue/PR and contributor workflow is not established.
+- No outside technical reviewer has completed a core-claims review.
+- Release binaries are not independently authenticated.
+- Public signing/checksum/trusted-key infrastructure is not currently available.
+- Wallet backup, restore, encryption, spending, and recovery workflows are not locally tested.
+- Exchange/service confirmation policy is unresolved.
+- Ecosystem observations can become stale and need dated rechecks.
+- Official technical/security contact guidance is incomplete.
+- Broader runtime and developer test-suite execution remain open.
 
 ## Recommended sharing stage
 
 ### Now
 
-Keep private, but begin the first one or two narrow invite-only review assignments.
+Keep the repository private and begin one or two narrow invite-only review assignments.
 
-Recommended first assignments:
+Recommended order:
 
-1. Command safety review.
-2. Release verification wording review.
+1. Local RPC and command-safety review.
+2. Release-verification wording review.
+3. Explorer/API evidence wording review.
 
 ### Next
 
-Invite one additional trusted reviewer or agent at a time for constrained lanes such as:
-
-- P2P wording boundary review.
-- Network test-plan review.
-- Ecosystem active-claim review.
-- Chain parameter source-version review.
+- Record feedback in the existing review buckets.
+- Correct only evidence, wording, redaction, and version/context problems found by reviewers.
+- Decide the MoreBC2 license and contribution posture.
+- Prepare a short maintainer question covering technical/security contact and explicit ticker/contact confirmation.
 
 ### Later
 
-Public launch after:
+Consider broad public launch only after:
 
-- Top-level navigation is polished.
-- Known unknowns remain centralized.
-- License choice is final.
-- Issues and contribution workflow are ready.
-- Release verification model is checked against actual releases or its gaps are clearly documented.
-- Active ecosystem resources are directly checked and dated.
-- At least one outside reviewer has checked core claims.
+- license and contribution workflow are ready,
+- at least one independent technical review is complete,
+- release-authentication gaps are clearly presented and updateable,
+- stale-service policy and exchange/service wording are settled,
+- top-level navigation and known-unknown routing are polished.
 
 ## Current coverage snapshot
 
 | Area | Status | Notes |
 |---|---|---|
-| Repository principles | Strong | Existing root governance/style files establish the philosophy. |
-| Documentation taxonomy | Strong | Categories are defined and mostly respected. |
-| Architecture explainers | Partial | Transaction, block, reorg, startup, consensus, mempool, validation, wallet, candidate-block, and peer-communication pages exist. Wallet internals and live-network behavior remain pending. |
-| Source Atlas | Partial | Strong first-pass coverage now exists for chainparams, PoW, transaction checks, script, validation, storage, wallet RPC groups, mining RPC, blockchain RPC, network RPC, protocol primitives, connection management, addrman, banman, net-processing slices, raw transaction RPC, and mempool/broadcast RPC. |
-| Verification queue | Partial | Major unknowns, release-check work, release asset inventory, command-test tracking, command smoke-test plan, network release comparison, network test coverage map, network test run plan, ecosystem direct-check plan, feedback buckets, stale-wording scan tracker, and review handoff now exist. |
-| RPC documentation | Partial | Major RPC groups are source-reviewed, but command examples are not locally tested. |
-| Wallet documentation | Partial | Major wallet RPC groups are source-reviewed, but platform guides, database internals, GUI flows, and tested examples are pending. |
-| Network/P2P documentation | Partial | First-pass source reviews, release comparison, selected blob checks, test coverage mapping, and test-run planning exist. Runtime tests and live checks remain open. |
-| Release verification | Partial | Release page/API observations, uploaded asset inventory, generated source archive metadata, external public signature-repo checks, lightweight tag metadata, source comparison, network comparison, release asset inventory attempt, artifact checklist, and release verification guide exist; release files/manifests/signatures are not verified. |
-| Exchange integration | Framework | Useful structure exists; confirmation policy and direct service checks remain unverified. |
-| Ecosystem directory | Framework | Direct-check plan and conservative templates exist; active services still need direct checks. |
-| Developer onboarding | Partial | Reading order, repository map, source tree guide, source review guide, local dev, build, testing, release verification, contributing guide, legal/reuse posture, private-review handoff, readiness checklist, assignment cards, and root reviewer flow exist. |
-| Glossary | Partial | Root and developer glossaries have been expanded; cross-linking and missing terms remain cleanup work. |
-| Public website planning | Early | Site section exists, but navigation/search/publishing choices remain open. |
+| Documentation foundation | Strong | Governance, structure, READMEs, status labels, and review rules exist. |
+| Source Atlas | Strong partial | Broad first-pass coverage exists; consistency and deeper runtime/testing work remain. |
+| Verification workflow | Strong | Evidence index, queue, trackers, dated records, review packets, and feedback workflow exist. |
+| RPC documentation | Locally tested partial | Nine read-only commands are tested on Windows mainnet; sensitive/state-changing workflows remain open. |
+| Wallet documentation | Partial | Source-backed material exists; local backup/recovery/spending tests remain open. |
+| Network/P2P documentation | Strong partial | Source review and one live peer snapshot exist; broader runtime and test-suite execution remain open. |
+| Release verification | Clearly bounded partial | Metadata and gaps are documented; no binary/signature/trusted-key verification exists. |
+| Explorer/API | Dated operational evidence | Same-time tip match and public endpoint checks exist; permanence and official status remain open. |
+| Exchange integration | Direct-check partial | Public listing pages were observed; account-level operation and policy remain unverified. |
+| Ecosystem directory | Direct-check partial | Explorer/API/mining-statistics/exchange records exist and require periodic refresh. |
+| Project identity | Strong partial | Canonical implementation and project-controlled naming evidence exist; contact path remains incomplete. |
+| Private review | Ready | Narrow reviewer lanes and evidence rules exist. |
+| Public launch | Blocked | License, outside review, contribution workflow, and several operational-policy questions remain. |
 
 ## Immediate next actions
 
-1. Start dated ecosystem checks, beginning with explorers and public APIs.
-2. Continue first one or two narrow private-review assignments.
-3. Keep private-review feedback in narrow buckets.
-4. Seek maintainer or official-source guidance for release checksum/signature/trusted-key process.
-5. Run command smoke tests only when a disposable BitcoinII environment is available.
-6. Run developer network tests only when a suitable build/test environment is available.
-7. Continue direct ecosystem checks separately from source documentation.
+1. Send the first narrow private-review assignment.
+2. Keep reviewer feedback constrained to evidence strength, version/context, safety, and overclaiming.
+3. Decide the MoreBC2 license and public contribution posture.
+4. Ask the maintainer one concise set of questions about technical/security contact, explicit ticker wording, and future release-signing publication location.
+5. Recheck live ecosystem records only on a deliberate schedule or before publication.
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Repository structure, documentation coverage dashboard, verification queue, private-review readiness checklist, private-review assignments, private-review handoff, contribution guide, legal/reuse posture note, release asset inventory attempt, release verification guide, ecosystem direct-check plan, command smoke-test plan, network release comparison, network test coverage map, network test run plan, and root README reviewer flow
-**Notes:** This dashboard is a project-management document for MoreBC2. It is not BitcoinII protocol documentation.
+**Primary sources checked:** Current MoreBC2 verification evidence index, local node/RPC records, release inventory and verification records, ecosystem direct-check records, project identity source check, private-review readiness page, legal/reuse posture, and review workflow documents
+**Notes:** This is a project-management dashboard. It does not itself verify BitcoinII protocol behavior, release binaries, exchanges, pools, or long-term service reliability.
