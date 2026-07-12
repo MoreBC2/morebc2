@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-07-10
+**Last reviewed:** 2026-07-12
 
 ## Purpose
 
@@ -28,9 +28,11 @@ This index does not make MoreBC2 public-ready and does not convert Draft pages i
 | Release binary signatures | Unavailable / planned | No uploaded checksum manifest, detached signature, signed annotated tag, or trusted BitcoinII release-key path was found for `v29.1.0`. The project maintainer has told the repository owner that releases/signatures are on the roadmap but are not implemented yet. | Treat this as maintainer-supplied context, not published cryptographic evidence. Update when public signing material exists. |
 | Local BitcoinII node | Locally tested | BitcoinII Core `v29.1.0` GUI node inspected on Windows mainnet with working localhost-only RPC. See [local node inspection](local-node-inspection-2026-07-10.md). | This is one Windows/mainnet environment, not cross-platform proof. |
 | Local-only RPC setup | Locally tested | RPC bound to `127.0.0.1:8337`; no public or LAN bind was observed. Cookie authentication was used without publishing credentials. | Configuration behavior should be rechecked on future releases. |
-| Explorer tip comparison | Directly compared | Local node and `bitcoinii.ddns.net` explorer matched at height `57,420` and the same tip hash within about eight seconds on 2026-07-10. | This is a dated point-in-time agreement, not a permanent reliability or official-status claim. |
+| Explorer tip comparison | Directly compared | Local node and `bitcoinii.ddns.net` explorer matched at height `57,420` on 2026-07-10. Local node and `bc2mempool.com` REST matched at height `57,437` within a fraction of a second on 2026-07-12. | These are dated point-in-time agreements, not permanent reliability or official-status claims. |
 | Read-only RPC commands | Locally tested | Nine commands passed: `getblockcount`, `getbestblockhash`, `getblockchaininfo`, `getnetworkinfo`, `getconnectioncount`, `getpeerinfo`, `getmempoolinfo`, `getdifficulty`, and `uptime`. See [RPC smoke test](read-only-rpc-smoke-test-2026-07-10.md). | `getpeerinfo` and some network output require redaction before publication. Live values are examples only. |
-| Explorer/API availability | Directly observed | Public explorer pages and harmless GET endpoints for tip, block, transaction, address, and mempool summary were checked. | Formal API documentation, long-term stability, and official ownership remain unconfirmed. |
+| Explorer/API availability | Directly observed / tested | `bc2mempool.com` and `bc2.live` loaded; public REST endpoints worked for tip, blocks, transactions, address summaries, mempool, fees, mining analytics, prices, and rich-list data. See [public API/Electrum smoke test](public-api-electrum-smoke-test-2026-07-12.md). | Long-term reliability, complete schemas, UTXO paths, broadcast behavior, and full mempool.space compatibility remain unverified. |
+| WebSocket | Directly tested / partial | `wss://bc2mempool.com/api/v1/ws` completed a handshake and returned an initial explorer-state event after `{"action":"init"}`. | Only one brief initialization exchange was checked; full schemas, reconnect behavior, and long sessions remain unverified. |
+| Electrum services | Directly tested / partial | `infra1.bitcoin-ii.org` TCP `50008` and SSL `50009` accepted standard read-only Electrum calls; TLS hostname validation passed; returned header matched local/REST tip. | Wallet compatibility is not established. `explorer.bitcoin-ii.org:5008` timed out in the check. |
 | Exchange listings | Directly observed / partial | Direct public pages were observed for NonKYC and CoinEx; NestEx remained unconfirmed. | Account-gated deposits, withdrawals, trading, liquidity, region availability, and reliability were not tested. |
 | Mining/network statistics | Directly observed / partial | MiningPoolStats BitcoinII page was observed and matched the explorer height during the check. | This does not verify individual mining pools, payout behavior, fees, or reliability. |
 | Network/P2P source posture | Strong partial | Source Atlas entries, release comparison, selected blob checks, test coverage map, and test-run plan exist. | Full runtime test execution and broader live-network behavior remain open. |
@@ -56,6 +58,7 @@ This index does not make MoreBC2 public-ready and does not convert Draft pages i
 
 ### Ecosystem evidence
 
+- [Public API, WebSocket, and Electrum smoke test — 2026-07-12](public-api-electrum-smoke-test-2026-07-12.md)
 - [Explorers](../ecosystem/explorers.md)
 - [APIs](../ecosystem/apis.md)
 - [Exchanges](../ecosystem/exchanges.md)
@@ -71,9 +74,9 @@ This index does not make MoreBC2 public-ready and does not convert Draft pages i
 
 ## Current interpretation
 
-MoreBC2 now contains original, dated operational evidence rather than only planning frameworks. The strongest current evidence is the Windows mainnet RPC record, the same-time local-node/explorer tip match, the nine-command smoke test, and the dated release/ecosystem observations.
+MoreBC2 now contains original, dated operational evidence rather than only planning frameworks. The strongest current evidence includes the Windows mainnet RPC record, two same-time local-node/explorer/API tip matches, the nine-command smoke test, the public REST/WebSocket/Electrum smoke test, and the dated release/ecosystem observations.
 
-The project is ready for narrow invite-only review. It is not ready for broad public launch because license, outside review, public contribution workflow, release-authentication infrastructure, and several service/operational questions remain unresolved.
+The project is ready for narrow invite-only review. It is not ready for broad public launch because license, outside review, public contribution workflow, release-authentication infrastructure, wallet compatibility, broadcast behavior, and several service/operational questions remain unresolved.
 
 ## Update rule
 
@@ -88,5 +91,5 @@ When new evidence is added:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** MoreBC2 dated local node/RPC records, release inventory and verification records, ecosystem direct-check records, project identity source check, and private-review readiness documents
+**Primary sources checked:** MoreBC2 dated local node/RPC records, public API/WebSocket/Electrum smoke-test record, release inventory and verification records, ecosystem direct-check records, project identity source check, and private-review readiness documents
 **Notes:** This is an evidence navigation page and status summary. It does not itself independently reproduce every linked check.
