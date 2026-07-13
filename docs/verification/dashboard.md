@@ -1,14 +1,22 @@
 # Verification dashboard
 
 **Category:** Project maintenance
-**Status:** Draft
-**Last reviewed:** 2026-07-01
+**Status:** Legacy dashboard concept / Superseded for current evidence summary
+**Last reviewed:** 2026-07-12
 
 ## Summary
 
-This dashboard gives a quick view of MoreBC2 documentation confidence.
+This dashboard is retained as a legacy manually maintained dashboard concept.
 
-The numbers below are manually maintained for now. If MoreBC2 later becomes a static website, these could be generated automatically from page metadata.
+The current canonical evidence summary is:
+
+- [Verification evidence index](verification-index.md)
+
+The current Verification section router is:
+
+- [Verification README](README.md)
+
+The counts and evidence summaries below are historical and should not be treated as the current evidence map.
 
 ## Current page status summary
 
@@ -21,6 +29,8 @@ The numbers below are manually maintained for now. If MoreBC2 later becomes a st
 | Superseded | 0 | None yet. |
 
 ## Current evidence summary
+
+The table below is historical. It predates the current dated local-node, RPC, API, WebSocket, Electrum, release-asset, ecosystem, and project-identity records.
 
 | Evidence level | Current use |
 |---|---|
@@ -48,7 +58,7 @@ The numbers below are manually maintained for now. If MoreBC2 later becomes a st
 
 ## How this dashboard should evolve
 
-Eventually this page should show:
+If MoreBC2 later adds generated metadata, this page could become a generated dashboard showing:
 
 - Total pages.
 - Pages by category.
@@ -60,6 +70,6 @@ Eventually this page should show:
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Not applicable
-**Notes:** This is a project-maintenance dashboard, not a BitcoinII technical source. Evidence labels are confidence categories, not page-level Verified status.
+**Status:** Legacy dashboard concept / Superseded for current evidence summary
+**Primary sources checked:** Current verification navigation structure
+**Notes:** This is a project-maintenance dashboard concept, not a BitcoinII technical source and not the canonical evidence index.

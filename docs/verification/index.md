@@ -1,12 +1,22 @@
 # Verification index
 
 **Category:** Project maintenance
-**Status:** Draft
-**Last reviewed:** 2026-06-29
+**Status:** Superseded / Historical navigation
+**Last reviewed:** 2026-07-12
 
 ## Summary
 
-The verification index tracks what MoreBC2 has checked, what still needs review, and what should not be treated as verified.
+This older verification index is retained for historical context and path stability.
+
+The canonical current evidence summary is now:
+
+- [Verification evidence index](verification-index.md)
+
+For section navigation, use:
+
+- [Verification README](README.md)
+
+The older tables below are not the current evidence map. They reflect an earlier pre-v0.2 verification structure and should not be used to decide current readiness, current evidence status, or public-launch posture.
 
 ## Verified or partially verified topics
 
@@ -40,12 +50,12 @@ The verification index tracks what MoreBC2 has checked, what still needs review,
 
 ## Confidence summary
 
-This project currently has a strong documentation framework and several source-backed technical drafts.
+This historical page predates the current dated local-node, RPC, API, WebSocket, Electrum, release-asset, ecosystem, and project-identity records.
 
-No page should be considered fully Verified until it has been reviewed against the current canonical repository and, where needed, a running BitcoinII Core node.
+Use [Verification evidence index](verification-index.md) for the current evidence snapshot. No page should be considered fully Verified from this historical table.
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This index should be updated whenever a page moves from Draft or Needs Review to Verified.
+**Status:** Superseded / Historical navigation
+**Primary sources checked:** Current verification navigation structure
+**Notes:** This file is kept to avoid breaking links and to preserve historical context. It is not the canonical verification evidence index.

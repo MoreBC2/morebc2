@@ -15,6 +15,7 @@ New first-class navigation for the v0.2 developer-platform batch:
 
 - [API documentation](docs/api/README.md)
 - [Infrastructure directory](docs/infrastructure/README.md)
+- [Verification router](docs/verification/README.md)
 - [Verification evidence index](docs/verification/verification-index.md)
 
 ## Current phase
