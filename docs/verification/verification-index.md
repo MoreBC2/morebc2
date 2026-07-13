@@ -18,6 +18,8 @@ Status terms on this page are deliberately narrow:
 
 This index does not make MoreBC2 public-ready and does not convert Draft pages into verified instructions.
 
+For Verification section navigation, use the [Verification README](README.md). Older pages such as [Verification index](index.md) and [Verification dashboard](dashboard.md) are retained for path stability and historical context, but this page is the canonical evidence summary.
+
 ## Current evidence snapshot
 
 | Area | Status | Evidence | Remaining limit |

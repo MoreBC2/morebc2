@@ -18,6 +18,7 @@ For a quick project-level orientation, start with:
 - [Private review handoff](REVIEW_HANDOFF.md)
 - [Legal and reuse posture](LEGAL_REUSE.md)
 - [Documentation polish plan](POLISH_PLAN.md)
+- [Verification evidence index](verification/verification-index.md)
 
 For a technical reader, start with:
 
@@ -54,7 +55,7 @@ For a technical reader, start with:
 - [Nodes](nodes/README.md) — node operation and network resources.
 - [Ecosystem](ecosystem/README.md) — wallets, explorers, pools, exchanges, tools, APIs, and services.
 - [Encyclopedia](encyclopedia/README.md) — concept explainers and cross-linked background pages.
-- [Verification](verification/README.md) — open verification work, known unknowns, and source-backed status tracking.
+- [Verification](verification/README.md) — router for evidence records, open questions, plans, review coordination, and the canonical [verification evidence index](verification/verification-index.md).
 - [Site](site/README.md) — public website planning.
 
 ## Current caution

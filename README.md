@@ -66,7 +66,8 @@ For a technical reviewer:
 - [RPC overview](docs/developers/rpc-overview.md)
 - [API documentation](docs/api/README.md)
 - [Infrastructure directory](docs/infrastructure/README.md)
-- [Verification queue](docs/verification/README.md)
+- [Verification router](docs/verification/README.md)
+- [Verification evidence index](docs/verification/verification-index.md)
 
 ## Current source-backed highlights
 
