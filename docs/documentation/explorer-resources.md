@@ -2,15 +2,15 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-13
 
 ## Summary
 
 Block explorers help users inspect BitcoinII (BC2) blocks, transactions, addresses, and network status.
 
-This page is a framework until active explorers are verified directly.
+This page is an overview. Dated explorer and public API observations now exist, including same-time local-node comparisons, but they do not establish permanent sync, reliability, official operation, or service-provider suitability.
 
-For API-specific inventory and endpoint testing, see [Ecosystem APIs](../ecosystem/apis.md).
+For current service status, see [Infrastructure](../infrastructure/README.md). For API-specific summaries, see [API documentation](../api/README.md). For compatibility limits, see [Compatibility](../compatibility/README.md). For canonical evidence, see the [verification evidence index](../verification/verification-index.md).
 
 ## What explorers are useful for
 
@@ -33,6 +33,8 @@ Use explorer data for live observations. Use source code for implementation deta
 
 For exchanges and services, a public explorer should not replace a service's own BitcoinII Core node for critical deposit, withdrawal, or custody workflows.
 
+A page that is reachable is not necessarily reliable. A same-time local-node/API match is a dated point-in-time result, not proof of permanent sync. A public official-status claim should stay separate from independent confirmation of ownership or operation.
+
 ## Explorer listing format
 
 Each explorer should be listed like this:
@@ -52,7 +54,7 @@ Each explorer should be listed like this:
 
 ## API check format
 
-If an explorer exposes a public API, add the API to [Ecosystem APIs](../ecosystem/apis.md) and record endpoint checks there.
+If an explorer exposes a public API, summarize current API behavior in [API documentation](../api/README.md), summarize service status in [Infrastructure](../infrastructure/README.md), and keep dated evidence in Verification records.
 
 At minimum, check whether the API can provide:
 
@@ -63,20 +65,26 @@ At minimum, check whether the API can provide:
 - Mempool lookup, if supported.
 - Sync or health status, if supported.
 
-## Open items
+## Current evidence and open items
 
-- Verify current active BitcoinII explorers.
-- Check whether explorers expose public APIs.
-- Check explorer uptime and sync status.
-- Add example block lookup.
-- Add example transaction lookup.
-- Add example address lookup.
-- Add API endpoint test records for any explorer APIs.
+Observed evidence now includes dated explorer/API checks and same-time node/API comparisons. Remaining open items include:
+
+- Recheck current explorers on a deliberate schedule before publication.
+- Confirm official ownership/operator status where relevant.
+- Check explorer uptime and long-term sync behavior.
+- Keep example block, transaction, and address lookups linked to dated records.
+- Avoid recommending any public explorer as a sole source of truth for service-provider workflows.
 
 ## Related pages
 
 - [Ecosystem explorers](../ecosystem/explorers.md)
 - [Ecosystem APIs](../ecosystem/apis.md)
+- [API documentation](../api/README.md)
+- [Infrastructure directory](../infrastructure/README.md)
+- [Compatibility](../compatibility/README.md)
+- [Verification evidence index](../verification/verification-index.md)
+- [Local BitcoinII node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md)
+- [Public API, WebSocket, and Electrum smoke test - 2026-07-12](../verification/public-api-electrum-smoke-test-2026-07-12.md)
 - [Exchange integration](../exchange/README.md)
 - [Deposit monitoring](../exchange/deposit-monitoring.md)
 - [RPC overview](../developers/rpc-overview.md)
@@ -85,5 +93,5 @@ At minimum, check whether the API can provide:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** No
-**Notes:** No explorer has been added yet because active explorer links need direct verification. API endpoint checks should be recorded separately in the ecosystem API framework.
+**Primary sources checked:** Verification evidence index, local node inspection, public API/Electrum smoke test, Infrastructure section, API section, and ecosystem explorer/API pages
+**Notes:** Dated explorer and API observations exist, but this page does not verify permanent sync, reliability, official status, wallet compatibility, broadcast behavior, or service-provider suitability.

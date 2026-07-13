@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-07-04
+**Last reviewed:** 2026-07-13
 
 ## Summary
 
@@ -44,16 +44,16 @@ Use [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md
 **Source:** Current release-page observations and source-reviewed wallet files
 **Last checked:** 2026-07-04
 **Evidence level:** E2/E3
-**What was checked:** Source-reviewed wallet RPC groups and current observed release path.
-**What was not checked:** Canonical release path, complete current asset list, platform-specific downloads, downloaded binary hashes, checksum manifests, signatures, trusted keys, or third-party wallet support.
-**Notes:** MoreBC2 currently observes `Bitcoin-II/BitcoinII-Core` as the active public release path, while older release links may redirect elsewhere. BitcoinII Core source includes wallet functionality and reviewed wallet RPC groups, but the canonical release path, asset list, release verification model, and platform-specific wallet downloads still need review before this listing is promoted.
+**What was checked:** Source-reviewed wallet RPC groups, current observed release path, and current release asset inventory metadata.
+**What was not checked:** Downloaded binary hashes, checksum manifests, signatures, trusted keys, platform-specific wallet installation, wallet backup/recovery/spending workflows, or third-party wallet support.
+**Notes:** MoreBC2 currently observes `Bitcoin-II/BitcoinII-Core` as the active public release path, while older release links may redirect elsewhere. BitcoinII Core source includes wallet functionality and reviewed wallet RPC groups, and the v29.1.0 release asset inventory has been captured as metadata. This is not wallet compatibility testing, binary authentication, or a recommendation to download or use a wallet.
 
 ## Open items
 
 - Confirm official wallet download source.
 - Confirm canonical repository and release path.
 - Confirm release verification workflow.
-- Confirm platform-specific wallet asset names.
+- Confirm platform-specific wallet installation and behavior.
 - Confirm whether any third-party wallets exist.
 - Confirm whether any web/mobile/hardware wallet support exists.
 
@@ -62,6 +62,8 @@ Use [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md
 - [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md)
 - [Wallet guide](../wallets/wallet-guide.md)
 - [Release verification guide](../developers/release-verification.md)
+- [Releases](../releases/README.md)
+- [Wallet compatibility](../compatibility/wallets.md)
 - [Release artifact checklist](../verification/release-artifact-checklist.md)
 - [Release asset inventory attempt](../verification/release-asset-inventory-attempt.md)
 - [Known unknowns](../verification/known-unknowns.md)
@@ -70,4 +72,4 @@ Use [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md
 
 **Status:** Draft
 **Primary sources checked:** Ecosystem direct check plan, current release-page observations, release-verification docs, and source-reviewed wallet files
-**Notes:** This ecosystem page is intentionally conservative. The current observed release path has been updated, but canonical status, release assets, and wallet download verification still need direct review before public use.
+**Notes:** This ecosystem page is intentionally conservative. The current observed release path and release asset inventory metadata have been recorded, but wallet download authentication, wallet compatibility, third-party wallet support, and wallet workflows still need direct review before public use.

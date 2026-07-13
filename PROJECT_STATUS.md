@@ -1,7 +1,7 @@
 # MoreBC2 project status
 
-**Status:** Private foundation-building, ready for first narrow invite-only review
-**Last reviewed:** 2026-07-10
+**Status:** Private foundation-building, ready for narrow v0.2 private review candidate
+**Last reviewed:** 2026-07-13
 
 ## Summary
 
@@ -11,18 +11,19 @@ The repository has moved beyond framework-only documentation. It now contains da
 
 The fastest overview is the [verification evidence index](docs/verification/verification-index.md).
 
-New first-class navigation for the v0.2 developer-platform batch:
+First-class v0.2 navigation:
 
 - [API documentation](docs/api/README.md)
 - [Infrastructure directory](docs/infrastructure/README.md)
 - [Releases](docs/releases/README.md)
 - [Compatibility](docs/compatibility/README.md)
+- [Developer docs](docs/developers/README.md)
 - [Verification router](docs/verification/README.md)
 - [Verification evidence index](docs/verification/verification-index.md)
 
 ## Current phase
 
-**Phase:** v0.1 first narrow private-review readiness
+**Phase:** v0.2 narrow private-review candidate
 
 Current goal:
 

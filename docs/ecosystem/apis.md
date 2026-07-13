@@ -2,7 +2,7 @@
 
 **Category:** Ecosystem
 **Status:** Draft
-**Last reviewed:** 2026-07-06
+**Last reviewed:** 2026-07-13
 
 ## Summary
 
@@ -10,7 +10,9 @@ This page tracks BitcoinII (BC2) public API resources such as explorer APIs, ser
 
 No API should be listed as active, synced, reliable, or recommended until it has been directly checked and dated with clear limits.
 
-Use [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md) before adding or promoting API listings.
+First-class current API summaries now live under [API documentation](../api/README.md). Service availability and status wording now live under [Infrastructure](../infrastructure/README.md). Compatibility interpretation now lives under [Compatibility](../compatibility/README.md). Use this page as ecosystem context and historical observation support, not as the canonical API reference.
+
+Use [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md) before adding or promoting API listings, and link the [verification evidence index](../verification/verification-index.md) when summarizing dated records.
 
 ## API categories
 
@@ -85,14 +87,14 @@ Potential API categories include:
 **What was not checked:**
 
 - Endpoint response schemas were not stabilized into public documentation.
-- No local node comparison was performed.
-- No sync claim was made.
+- A later same-time local node comparison was performed in a separate dated record; this older 2026-07-06 entry did not include one.
+- No permanent sync claim was made.
 - No POST/search submission was performed.
 - No authentication, rate-limit, or long-term availability claim was checked.
 
 **Notes:**
 
-These public API observations are useful for future explorer documentation, but they should not be used as a sole exchange/service source of truth.
+These public API observations are useful ecosystem context, but they should not be used as a sole exchange/service source of truth. For current REST/WebSocket/Electrum summaries, use [API documentation](../api/README.md), [Infrastructure](../infrastructure/README.md), and the dated [public API/Electrum smoke test](../verification/public-api-electrum-smoke-test-2026-07-12.md).
 
 ### MiningPoolStats BitcoinII data endpoints
 
@@ -195,17 +197,22 @@ Do not claim yet that:
 - MiningPoolStats is a general block explorer.
 - Public API endpoint availability proves long-term service reliability.
 
-## Planned checks
+## Remaining checks
 
-- Recheck the BitcoinII Explorer API and record exact response fields before writing endpoint examples.
-- Compare explorer/API height and tip against a local BitcoinII node or another reliable source before any sync claim.
+- Recheck API availability on a deliberate schedule before publication.
+- Compare explorer/API height and tip against a local BitcoinII node or another reliable source before any fresh sync-status wording.
 - Locate formal API documentation if it exists.
-- Check whether response fields are stable enough to document.
+- Check whether response fields remain stable enough to document.
 - Add direct check dates and evidence levels to any future examples.
 
 ## Related pages
 
 - [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md)
+- [API documentation](../api/README.md)
+- [Infrastructure directory](../infrastructure/README.md)
+- [Compatibility](../compatibility/README.md)
+- [Verification evidence index](../verification/verification-index.md)
+- [Public API, WebSocket, and Electrum smoke test - 2026-07-12](../verification/public-api-electrum-smoke-test-2026-07-12.md)
 - [Explorers](explorers.md)
 - [Explorer resources](../documentation/explorer-resources.md)
 - [Exchange integration](../exchange/README.md)
@@ -217,5 +224,5 @@ Do not claim yet that:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Ecosystem direct check plan, existing API framework, and Codex explorer/API recon report from 2026-07-06
-**Notes:** This page records first public API observations. It does not verify sync status, official status, long-term reliability, or exchange suitability.
+**Primary sources checked:** Ecosystem direct check plan, existing API framework, Codex explorer/API recon report from 2026-07-06, verification evidence index, API section, Infrastructure section, and public API/Electrum smoke test from 2026-07-12
+**Notes:** This page records ecosystem API observations and historical context. It does not verify permanent sync status, official status, long-term reliability, wallet compatibility, broadcast behavior, or exchange suitability.

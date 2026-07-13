@@ -2,15 +2,15 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-07-04
+**Last reviewed:** 2026-07-13
 
 ## Summary
 
 BitcoinII Core includes JSON-RPC functionality for command-line tools, wallets, exchanges, explorers, and other services.
 
-This page is a safe starting point only. RPC command examples should not be marked Verified until they are tested against a running BitcoinII Core node.
+This page is a safe starting point only. Nine read-only RPC commands have a dated local Windows/mainnet test record, but other RPC command examples should not be marked tested or Verified until they are tested against a running BitcoinII Core node in a documented environment.
 
-For test tracking, see [Command testing status](../verification/command-testing.md) and the [Command smoke-test plan](../verification/command-smoke-test-plan.md).
+For test tracking, see [Command testing status](../verification/command-testing.md), the [Command smoke-test plan](../verification/command-smoke-test-plan.md), [Local BitcoinII node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md), and [Read-only RPC smoke test - 2026-07-10](../verification/read-only-rpc-smoke-test-2026-07-10.md).
 
 ## What RPC is used for
 
@@ -45,12 +45,12 @@ The generated example configuration file includes RPC settings for:
 - `rpcwhitelist`
 - `server`
 
-The generated example config lists default RPC ports as:
+MoreBC2 has two relevant RPC-port evidence types:
 
-- Mainnet: `8332`
-- Testnet: `18332`
-- Signet: `38332`
-- Regtest: `18443`
+- BitcoinII Core `v29.1.0` mainnet local testing used localhost-only RPC on `127.0.0.1:8337`.
+- Older inherited/generated Bitcoin Core-style material may mention mainnet `8332`, testnet `18332`, signet `38332`, and regtest `18443`.
+
+Do not silently treat inherited/generated `8332` material as the BitcoinII v29.1.0 mainnet runtime value. Also do not assume every historical BitcoinII release used `8337` unless a version-specific source or test record supports it.
 
 The same file warns not to expose the RPC server to untrusted networks such as the public internet.
 
@@ -65,7 +65,23 @@ MoreBC2 has reviewed first-pass source maps for these RPC files:
 - [Mempool and transaction broadcast RPC](source-atlas/rpc-mempool.md): `src/rpc/mempool.cpp`
 - [Wallet RPC](source-atlas/wallet-rpc.md): wallet startup/address/backup/spend/encryption/coin/history RPC files
 
-These reviews document command groups and behavior from source, but do not mark command examples as tested.
+These reviews document command groups and behavior from source, but do not mark command examples as tested unless a dated local record says so.
+
+## Locally tested read-only subset
+
+The 2026-07-10 smoke test locally tested these read-only commands against BitcoinII Core `v29.1.0` on Windows mainnet with localhost-only RPC at `127.0.0.1:8337`:
+
+- `getblockcount`
+- `getbestblockhash`
+- `getblockchaininfo`
+- `getnetworkinfo`
+- `getconnectioncount`
+- `getpeerinfo`
+- `getmempoolinfo`
+- `getdifficulty`
+- `uptime`
+
+This is not cross-platform proof and does not cover wallet, transaction, mining, peer-control, shutdown, import/export, or state-changing workflows. For publication-ready examples, use [API read-only examples](../api/read-only-examples.md) and the dated smoke-test record.
 
 ## Mining RPC group
 
@@ -221,7 +237,7 @@ The command forms below are not verified instructions. They are placeholders for
 
 ### Read-only or status-style placeholders
 
-These are better candidates for early smoke testing, but they are still not working instructions until there are matching test records.
+Some of these commands now have a matching local Windows/mainnet test record. Commands without a matching dated record remain placeholders, not working instructions.
 
 ```bash
 bitcoinII-cli getblockchaininfo
@@ -276,7 +292,7 @@ bitcoinII-cli getblocktemplate '{"rules":["segwit"]}'
 
 Block/header submission examples are intentionally not included here as copyable command lines.
 
-Do not copy any of these into user guides as working examples until the command-testing page has matching test records.
+Do not copy any of these into user guides as working examples until the command-testing page has matching test records. Even locally tested values should retain version, network, platform, datadir/RPC context, and redaction rules.
 
 ## Exchange/service-provider caution
 
@@ -299,7 +315,7 @@ For service docs, MoreBC2 should distinguish:
 
 ## Open items
 
-- Test common RPC commands against a synced BitcoinII Core node or documented disposable local environment.
+- Test additional common RPC commands against a synced BitcoinII Core node or documented disposable local environment.
 - Confirm binary names for each platform and release asset.
 - Confirm configuration file paths by operating system.
 - Confirm wallet loading behavior.
@@ -324,9 +340,12 @@ For service docs, MoreBC2 should distinguish:
 - `src/wallet/rpc/transactions.cpp`
 - [Command testing status](../verification/command-testing.md)
 - [Command smoke-test plan](../verification/command-smoke-test-plan.md)
+- [Local BitcoinII node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md)
+- [Read-only RPC smoke test - 2026-07-10](../verification/read-only-rpc-smoke-test-2026-07-10.md)
+- [API read-only examples](../api/read-only-examples.md)
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** Port and config-option notes are source-observed from generated/example configuration material. Mining, blockchain, network, raw transaction, mempool, and wallet RPC groups have first-pass source review. Command examples are placeholders until matching local test records exist.
+**Notes:** Config-option notes and inherited/generated port examples are source-observed from generated/example configuration material. BitcoinII Core v29.1.0 mainnet localhost-only RPC was locally tested on `127.0.0.1:8337`. Mining, blockchain, network, raw transaction, mempool, and wallet RPC groups have first-pass source review. Command examples remain placeholders unless matching local test records exist.

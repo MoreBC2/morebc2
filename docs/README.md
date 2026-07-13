@@ -2,11 +2,11 @@
 
 **Category:** Documentation index
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-13
 
 This directory holds the working documentation for MoreBC2.
 
-MoreBC2 is still a private, source-backed documentation project. Many pages are intentionally marked Draft or Partial because command examples, release artifacts, and ecosystem claims still need direct verification.
+MoreBC2 is still a private, source-backed documentation project. Some dated operational evidence now exists, including local read-only RPC testing, release asset inventory, and public REST, WebSocket, Electrum, explorer, and exchange observations. Many pages remain Draft or Partial because sensitive commands, wallet workflows, transaction broadcast, release authentication, account-gated services, long-term reliability, and public contribution posture still need direct verification or policy decisions.
 
 ## Best starting points
 
@@ -19,6 +19,8 @@ For a quick project-level orientation, start with:
 - [Legal and reuse posture](LEGAL_REUSE.md)
 - [Documentation polish plan](POLISH_PLAN.md)
 - [Verification evidence index](verification/verification-index.md)
+- [API documentation](api/README.md)
+- [Infrastructure directory](infrastructure/README.md)
 - [Releases](releases/README.md)
 - [Compatibility](compatibility/README.md)
 
@@ -87,6 +89,10 @@ If it describes a reviewed implementation file, place it in Developers / Source 
 If it summarizes observed public REST, WebSocket, Electrum, or endpoint behavior, place it in API and link the dated verification record.
 
 If it lists public services or service-status wording rules, place it in Infrastructure and link the dated verification record.
+
+If it summarizes release assets, source archives, authentication gaps, or release-signing roadmap status, place it in Releases and link the dated verification record.
+
+If it interprets RPC, REST, Electrum, wallet, mempool.space, or integration behavior against compatibility assumptions, place it in Compatibility and link the dated verification record.
 
 If it describes something people are considering, debating, or comparing, place it in Research or Discussion.
 
