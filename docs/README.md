@@ -25,6 +25,8 @@ For a technical reader, start with:
 - [Developers](developers/README.md)
 - [Source Atlas](developers/source-atlas/README.md)
 - [RPC overview](developers/rpc-overview.md)
+- [API documentation](api/README.md)
+- [Infrastructure directory](infrastructure/README.md)
 - [Wallet guide](wallets/wallet-guide.md)
 
 ## Project-maintenance pages
@@ -40,6 +42,8 @@ For a technical reader, start with:
 - [Documentation](documentation/README.md) — current source-backed BitcoinII behavior.
 - [Architecture](architecture/README.md) — conceptual maps of BitcoinII Core components and flows.
 - [Configuration](configuration/README.md) — BitcoinII Core configuration concepts and option references.
+- [API](api/README.md) — evidence-linked REST, WebSocket, Electrum, public-endpoint, and read-only example summaries.
+- [Infrastructure](infrastructure/README.md) — observed public service directory and status wording policy.
 - [Research](research/README.md) — technical explainers and analysis.
 - [Discussion](discussion/README.md) — community ideas, proposals, and opinions.
 - [History](history/README.md) — past events and milestones.
@@ -72,6 +76,10 @@ If it describes how BitcoinII works today, place it in Documentation.
 If it explains how reviewed components fit together, place it in Architecture.
 
 If it describes a reviewed implementation file, place it in Developers / Source Atlas.
+
+If it summarizes observed public REST, WebSocket, Electrum, or endpoint behavior, place it in API and link the dated verification record.
+
+If it lists public services or service-status wording rules, place it in Infrastructure and link the dated verification record.
 
 If it describes something people are considering, debating, or comparing, place it in Research or Discussion.
 
