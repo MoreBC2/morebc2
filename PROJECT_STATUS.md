@@ -11,6 +11,12 @@ The repository has moved beyond framework-only documentation. It now contains da
 
 The fastest overview is the [verification evidence index](docs/verification/verification-index.md).
 
+New first-class navigation for the v0.2 developer-platform batch:
+
+- [API documentation](docs/api/README.md)
+- [Infrastructure directory](docs/infrastructure/README.md)
+- [Verification evidence index](docs/verification/verification-index.md)
+
 ## Current phase
 
 **Phase:** v0.1 first narrow private-review readiness
@@ -99,6 +105,7 @@ These checks do not establish exchange safety, liquidity, regional access, accou
 - Same-time local-node/explorer comparison.
 - Nine locally tested read-only RPC commands.
 - Dated release, explorer, API, exchange, and mining-statistics records.
+- Evidence-linked API and infrastructure navigation for REST, WebSocket, Electrum, public endpoints, and service-status wording.
 - Conservative release-authentication wording.
 - Narrow private-review packets and assignment lanes.
 - Verification evidence index and centralized open-question tracking.

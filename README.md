@@ -22,6 +22,8 @@ Start here if you are reviewing the project structure:
 
 - [Project status](PROJECT_STATUS.md)
 - [Docs index](docs/README.md)
+- [API documentation](docs/api/README.md)
+- [Infrastructure directory](docs/infrastructure/README.md)
 - [Private review handoff](docs/REVIEW_HANDOFF.md)
 - [Legal and reuse posture](docs/LEGAL_REUSE.md)
 - [Repository audit](docs/AUDIT.md)
@@ -62,6 +64,8 @@ For a technical reviewer:
 - [Source tree guide](docs/developers/source-tree.md)
 - [Source Atlas](docs/developers/source-atlas/README.md)
 - [RPC overview](docs/developers/rpc-overview.md)
+- [API documentation](docs/api/README.md)
+- [Infrastructure directory](docs/infrastructure/README.md)
 - [Verification queue](docs/verification/README.md)
 
 ## Current source-backed highlights
@@ -110,6 +114,8 @@ MoreBC2 separates information into clearly labeled categories:
 - **Documentation** — how BitcoinII works today, based on current source code, releases, and official project resources.
 - **Architecture** — source-backed conceptual explanations of how BitcoinII Core components and flows fit together.
 - **Developers** — Source Atlas, build notes, RPC notes, and developer-focused resources.
+- **API** — evidence-linked REST, WebSocket, Electrum, public-endpoint, and read-only example summaries.
+- **Infrastructure** — observed public service directory and status wording policy.
 - **News** — factual updates about things that happened.
 - **Research** — technical explainers, comparisons, and analysis that may be relevant to BitcoinII but are not necessarily implemented.
 - **Discussion** — community ideas, proposals, and opinions.
