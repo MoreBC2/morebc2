@@ -19,6 +19,7 @@ For a quick project-level orientation, start with:
 - [Legal and reuse posture](LEGAL_REUSE.md)
 - [Documentation polish plan](POLISH_PLAN.md)
 - [Verification evidence index](verification/verification-index.md)
+- [Releases](releases/README.md)
 
 For a technical reader, start with:
 
@@ -28,6 +29,7 @@ For a technical reader, start with:
 - [RPC overview](developers/rpc-overview.md)
 - [API documentation](api/README.md)
 - [Infrastructure directory](infrastructure/README.md)
+- [Releases](releases/README.md)
 - [Wallet guide](wallets/wallet-guide.md)
 
 ## Project-maintenance pages
@@ -45,6 +47,7 @@ For a technical reader, start with:
 - [Configuration](configuration/README.md) — BitcoinII Core configuration concepts and option references.
 - [API](api/README.md) — evidence-linked REST, WebSocket, Electrum, public-endpoint, and read-only example summaries.
 - [Infrastructure](infrastructure/README.md) — observed public service directory and status wording policy.
+- [Releases](releases/README.md) — evidence-linked release asset, source archive, authentication-gap, and roadmap summaries.
 - [Research](research/README.md) — technical explainers and analysis.
 - [Discussion](discussion/README.md) — community ideas, proposals, and opinions.
 - [History](history/README.md) — past events and milestones.
