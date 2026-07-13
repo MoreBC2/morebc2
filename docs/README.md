@@ -20,6 +20,7 @@ For a quick project-level orientation, start with:
 - [Documentation polish plan](POLISH_PLAN.md)
 - [Verification evidence index](verification/verification-index.md)
 - [Releases](releases/README.md)
+- [Compatibility](compatibility/README.md)
 
 For a technical reader, start with:
 
@@ -30,6 +31,7 @@ For a technical reader, start with:
 - [API documentation](api/README.md)
 - [Infrastructure directory](infrastructure/README.md)
 - [Releases](releases/README.md)
+- [Compatibility](compatibility/README.md)
 - [Wallet guide](wallets/wallet-guide.md)
 
 ## Project-maintenance pages
@@ -48,6 +50,7 @@ For a technical reader, start with:
 - [API](api/README.md) — evidence-linked REST, WebSocket, Electrum, public-endpoint, and read-only example summaries.
 - [Infrastructure](infrastructure/README.md) — observed public service directory and status wording policy.
 - [Releases](releases/README.md) — evidence-linked release asset, source archive, authentication-gap, and roadmap summaries.
+- [Compatibility](compatibility/README.md) — evidence-linked RPC, REST, Electrum, wallet, mempool.space, and integration-breakpoint summaries.
 - [Research](research/README.md) — technical explainers and analysis.
 - [Discussion](discussion/README.md) — community ideas, proposals, and opinions.
 - [History](history/README.md) — past events and milestones.
