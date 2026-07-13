@@ -25,6 +25,7 @@ Start here if you are reviewing the project structure:
 - [API documentation](docs/api/README.md)
 - [Infrastructure directory](docs/infrastructure/README.md)
 - [Releases](docs/releases/README.md)
+- [Compatibility](docs/compatibility/README.md)
 - [Private review handoff](docs/REVIEW_HANDOFF.md)
 - [Legal and reuse posture](docs/LEGAL_REUSE.md)
 - [Repository audit](docs/AUDIT.md)
@@ -68,6 +69,7 @@ For a technical reviewer:
 - [API documentation](docs/api/README.md)
 - [Infrastructure directory](docs/infrastructure/README.md)
 - [Releases](docs/releases/README.md)
+- [Compatibility](docs/compatibility/README.md)
 - [Verification router](docs/verification/README.md)
 - [Verification evidence index](docs/verification/verification-index.md)
 
@@ -120,6 +122,7 @@ MoreBC2 separates information into clearly labeled categories:
 - **API** — evidence-linked REST, WebSocket, Electrum, public-endpoint, and read-only example summaries.
 - **Infrastructure** — observed public service directory and status wording policy.
 - **Releases** — evidence-linked release asset, source archive, authentication-gap, and roadmap summaries.
+- **Compatibility** — evidence-linked RPC, REST, Electrum, wallet, mempool.space, and integration-breakpoint summaries.
 - **News** — factual updates about things that happened.
 - **Research** — technical explainers, comparisons, and analysis that may be relevant to BitcoinII but are not necessarily implemented.
 - **Discussion** — community ideas, proposals, and opinions.
