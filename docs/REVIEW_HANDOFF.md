@@ -2,7 +2,7 @@
 
 **Category:** Project maintenance
 **Status:** Draft
-**Last reviewed:** 2026-07-02
+**Last reviewed:** 2026-07-13
 
 ## Summary
 
@@ -43,7 +43,9 @@ Do not ask a reviewer or agent to treat the repository as final public documenta
 - Command smoke-test plan exists.
 - Release source comparison, network release comparison, and release artifact checklist exist.
 - Network test coverage map and network test run plan exist.
-- Ecosystem/API framework exists without claiming live services are active.
+- API and infrastructure summaries exist for dated REST, WebSocket, Electrum, explorer, mining-statistics, price, rich-list, and exchange-page observations without claiming reliability, official status, wallet support, or service suitability.
+- Release asset inventory and release-authentication gap summaries exist.
+- Compatibility summaries exist for RPC, REST, Electrum, wallets, mempool.space-style assumptions, and known integration breakpoints.
 - Open questions and known unknowns are centralized enough for private review.
 - Narrow private-review assignment cards exist.
 
@@ -152,17 +154,21 @@ Use narrow assignments. Avoid broad requests like "review everything."
 Ask the agent to:
 
 - Review `docs/verification/command-smoke-test-plan.md`, `docs/verification/command-testing.md`, and `docs/verification/command-example-scan.md`.
+- Review the dated [read-only RPC smoke test](verification/read-only-rpc-smoke-test-2026-07-10.md) and [local node inspection](verification/local-node-inspection-2026-07-10.md).
 - Confirm each untested example is clearly labeled.
 - Flag any command that should move later or be marked Do not publish.
-- Do not run commands.
+- Confirm the nine locally tested read-only commands stay limited to their documented Windows/mainnet environment.
+- Do not run commands unless a separate task explicitly authorizes a safe test environment.
 - Do not mark anything tested.
 
 ### Agent task: Release verification wording
 
 Ask the agent to:
 
-- Review `docs/developers/release-verification.md`, `docs/verification/release-source-comparison.md`, `docs/verification/network-release-comparison.md`, and `docs/verification/release-artifact-checklist.md`.
+- Review `docs/releases/`, `docs/developers/release-verification.md`, `docs/verification/release-source-comparison.md`, `docs/verification/network-release-comparison.md`, `docs/verification/release-artifact-checklist.md`, and `docs/verification/release-asset-inventory-attempt.md`.
 - Check that source comparison, GitHub UI verification, binary artifact verification, checksum verification, and live release-asset checks remain separate.
+- Treat the captured `v29.1.0` asset inventory as metadata only.
+- Check that missing checksum, signature, trusted-key, and binary-authentication gaps are still visible.
 - Do not claim release files are verified unless hashes/signatures/assets were checked directly.
 
 ### Agent task: Source-backed claim review
@@ -196,7 +202,8 @@ Ask the agent to:
 
 Ask the agent to:
 
-- Check one explorer, pool, exchange, or API page at a time.
+- Check one explorer, pool, exchange, API, or infrastructure page at a time.
+- Start from the [verification evidence index](verification/verification-index.md), [API documentation](api/README.md), [Infrastructure directory](infrastructure/README.md), and dated [public API/Electrum smoke test](verification/public-api-electrum-smoke-test-2026-07-12.md).
 - Record URL, date, observed status, and evidence level.
 - Do not call anything official unless an official source says so.
 
@@ -204,10 +211,10 @@ Ask the agent to:
 
 Ask the agent to:
 
-- Capture the full `v29.1.0` release asset list.
-- Check whether checksum and signature artifacts exist.
+- Review the existing `v29.1.0` release asset inventory and generated source archive notes.
+- Check whether the current release-authentication wording clearly separates uploaded assets, generated source archives, Git tag metadata, GitHub commit-signature metadata, checksums, detached signatures, and trusted release keys.
 - Do not download or run binaries unless explicitly assigned.
-- Update `docs/verification/release-artifact-checklist.md`.
+- Do not recapture the asset list unless a separate release-refresh task is assigned.
 
 ## Not ready for agents yet
 
@@ -231,8 +238,8 @@ These do not block private review, but they do block public launch:
 - Release asset verification workflow.
 - License/contribution policy finalized.
 - At least one outside technical review of core claims.
-- Direct explorer/API/pool/exchange checks.
-- Tested node/wallet/RPC command examples or clear removal of copy/paste examples.
+- Long-term service reliability, official ownership/status, pool behavior, and account-gated exchange operation.
+- Additional tested node/wallet/RPC command examples or clear removal of copy/paste examples outside the narrow read-only test set.
 - Confirmation policy for exchange/service docs.
 - Public website/navigation decision.
 
@@ -251,5 +258,5 @@ Please do not add live ecosystem listings, install instructions, wallet movement
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current MoreBC2 project status, documentation coverage, verification queue, private review readiness, private review assignments, contribution guide, feedback buckets, legal/reuse note, command safety plan, release comparison docs, network comparison docs, and network test planning docs
+**Primary sources checked:** Current MoreBC2 project status, documentation coverage, verification evidence index, verification queue, private review readiness, private review assignments, contribution guide, feedback buckets, legal/reuse note, command safety plan, local node/RPC records, API/Electrum smoke test, release comparison docs, release asset inventory, Releases section, Compatibility section, Infrastructure section, network comparison docs, and network test planning docs
 **Notes:** This page is a handoff checklist for private review. It does not verify BitcoinII protocol behavior or public-launch readiness.

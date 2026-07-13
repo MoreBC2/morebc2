@@ -10,6 +10,10 @@ This section is for developer-focused BitcoinII (BC2) resources.
 - [Source atlas](source-atlas/README.md)
 - [Repository map](repository-map.md)
 - [Source tree guide](source-tree.md)
+- [API documentation](../api/README.md)
+- [Compatibility](../compatibility/README.md)
+- [Releases](../releases/README.md)
+- [Infrastructure directory](../infrastructure/README.md)
 
 ## Developer workflow guides
 
@@ -24,6 +28,14 @@ This section is for developer-focused BitcoinII (BC2) resources.
 - [Architecture overview](../architecture/architecture-overview.md)
 - [RPC overview](rpc-overview.md)
 
+Public API behavior and compatibility observations now live in their own first-class sections:
+
+- [API documentation](../api/README.md)
+- [Compatibility](../compatibility/README.md)
+- [Infrastructure directory](../infrastructure/README.md)
+
+Source Atlas remains the source-review area. API and compatibility pages should link back to dated verification records instead of duplicating long evidence.
+
 ## Source-backed architecture pages
 
 - [Life of a transaction](../architecture/life-of-a-transaction.md)
@@ -35,7 +47,6 @@ This section is for developer-focused BitcoinII (BC2) resources.
 ## Draft topics still to create
 
 - Configuration examples
-- Explorer API notes
 - Exchange integration support examples
 
 ## Verification rule

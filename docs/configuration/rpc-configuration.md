@@ -2,15 +2,15 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-13
 
 ## Summary
 
 BitcoinII Core includes JSON-RPC configuration options for command-line tools, wallets, exchanges, explorers, and service integrations.
 
-This page documents options observed in the generated example configuration file.
+This page documents options observed in the generated example configuration file and notes the dated BitcoinII v29.1.0 local RPC evidence.
 
-It does not yet provide a verified production RPC setup. Operational examples need local testing and security review.
+It does not provide a verified production RPC setup. A narrow localhost-only read-only RPC setup was locally tested on Windows mainnet, but production patterns, service-provider patterns, authentication variants, and sensitive commands still need security review.
 
 ## Security warning
 
@@ -36,14 +36,30 @@ Do not expose BitcoinII Core RPC directly to the public internet.
 | `rpcwhitelistdefault` | Default behavior for RPC whitelisting | Source-observed |
 | `server` | Accept command line and JSON-RPC commands | Source-observed |
 
-## Default RPC ports observed in generated config
+## RPC port evidence
 
-| Network | RPC port |
-|---|---:|
-| Mainnet | `8332` |
-| Testnet | `18332` |
-| Signet | `38332` |
-| Regtest | `18443` |
+MoreBC2 has two relevant evidence types:
+
+| Evidence | Network | RPC port | Status |
+|---|---|---:|---|
+| Dated BitcoinII Core `v29.1.0` local test | Mainnet | `8337` | Locally tested on Windows with localhost-only RPC |
+| Generated/example Bitcoin Core-style material | Mainnet | `8332` | Historical/source-observed context; do not treat as the v29.1.0 local-test value |
+| Generated/example Bitcoin Core-style material | Testnet | `18332` | Source-observed from generated/example material |
+| Generated/example Bitcoin Core-style material | Signet | `38332` | Source-observed from generated/example material |
+| Generated/example Bitcoin Core-style material | Regtest | `18443` | Source-observed from generated/example material |
+
+The dated local test configured BitcoinII Core `v29.1.0` with:
+
+```ini
+server=1
+rpcbind=127.0.0.1
+rpcallowip=127.0.0.1
+rpcport=8337
+```
+
+See [Local BitcoinII node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md) and [Read-only RPC smoke test - 2026-07-10](../verification/read-only-rpc-smoke-test-2026-07-10.md).
+
+Do not assume all historical BitcoinII releases used the same RPC port unless a version-specific source or test record supports it.
 
 ## Authentication notes
 
@@ -51,7 +67,7 @@ The generated config describes `rpcauth` as using a username and HMAC-SHA-256 ha
 
 It also notes that a canonical Python script is included in `share/rpcauth`.
 
-Authentication examples are not locally tested yet and should not be copied into production instructions until tested.
+Cookie authentication with localhost-only RPC was locally tested for the narrow read-only command smoke test. Other authentication examples are not locally tested yet and should not be copied into production instructions until tested.
 
 ## Command testing status
 
@@ -70,12 +86,12 @@ Future RPC setup examples should record:
 
 ## Open items
 
-- Test RPC auth setup with BitcoinII Core.
+- Test additional RPC auth setup patterns with BitcoinII Core.
 - Confirm whether `rpcuser`/`rpcpassword` is still acceptable for simple local setups.
 - Confirm best-practice exchange RPC setup.
 - Confirm whether RPC whitelist examples should be included.
-- Confirm `bitcoinII-cli` command examples against a running node.
-- Add tested records for local-only RPC setup before publishing copy/paste examples.
+- Confirm additional `bitcoinII-cli` command examples against a running node.
+- Add tested records before publishing copy/paste examples beyond the narrow local-only read-only setup.
 - Confirm canonical repository/source path before public-link polish.
 
 ## Sources
@@ -83,10 +99,12 @@ Future RPC setup examples should record:
 - `share/examples/bitcoinII.conf` in the current observed repository: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/share/examples/bitcoinII.conf
 - `doc/JSON-RPC-interface.md` in the current observed repository: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/doc/JSON-RPC-interface.md
 - [Command testing status](../verification/command-testing.md)
+- [Local BitcoinII node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md)
+- [Read-only RPC smoke test - 2026-07-10](../verification/read-only-rpc-smoke-test-2026-07-10.md)
 - [RPC overview](../developers/rpc-overview.md)
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** Options and default ports are source-backed from the generated config. Authentication setup, CLI command examples, production RPC patterns, and whitelist examples still need testing and review. Source links use the current observed repository path, but canonical repository status still needs confirmation.
+**Notes:** Options and inherited/generated port examples are source-observed from generated/example configuration material. BitcoinII Core v29.1.0 mainnet localhost-only RPC was locally tested on `127.0.0.1:8337`. Additional authentication setup, CLI command examples, production RPC patterns, and whitelist examples still need testing and review.

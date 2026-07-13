@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-07-13
 
 ## Summary
 
@@ -10,20 +10,20 @@ This page is the starting point for running a BitcoinII (BC2) node.
 
 A BitcoinII Core node connects to the BitcoinII peer-to-peer network, downloads blocks and transactions, and validates them according to consensus rules.
 
-This guide is not yet a step-by-step setup guide. Platform-specific setup and command examples still need local testing before being marked verified.
+This guide is not yet a step-by-step setup guide. A narrow read-only RPC command set has been locally tested on BitcoinII Core v29.1.0 on Windows mainnet, but platform-specific setup, wallet workflows, transaction workflows, mining workflows, peer-control workflows, shutdown behavior, and broader command examples still need local testing before being promoted.
 
 ## What is source-backed today
 
-From checked source and generated configuration:
+From checked source, generated configuration, and dated local evidence:
 
 - Default mainnet P2P port: `8338`
-- Default mainnet RPC port: `8332`
+- BitcoinII v29.1.0 mainnet RPC port used in dated local testing: `8337`
 - DNS seeds:
   - `dnsseed.bitcoin-ii.org.`
   - `bitcoinII.ddns.net.`
 - The generated config supports `daemon`, `datadir`, `reindex`, `txindex`, `prune`, and other node operation settings.
 
-These values are source-observed from reviewed files. They should still be checked against current release artifacts before public-launch use.
+The mainnet P2P value is source-observed, and the `8337` RPC value is supported by the dated local Windows/mainnet RPC setup. Older inherited or generated Bitcoin Core-style material may mention `8332`; do not treat that as the BitcoinII v29.1.0 local-test value without checking the relevant version and source context.
 
 ## Node types
 
@@ -45,11 +45,16 @@ Wallet-specific behavior is covered in the [Wallet guide](../wallets/wallet-guid
 
 ## Command testing status
 
-MoreBC2 has not yet verified node command examples against a running BitcoinII Core node.
+MoreBC2 has locally tested a narrow read-only command set against BitcoinII Core v29.1.0 on Windows mainnet using localhost-only RPC at `127.0.0.1:8337`.
 
-Track future tests in [Command testing status](../verification/command-testing.md).
+Evidence records:
 
-Candidate node commands that need local test records include:
+- [Local BitcoinII node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md)
+- [Read-only RPC smoke test - 2026-07-10](../verification/read-only-rpc-smoke-test-2026-07-10.md)
+- [API read-only examples](../api/read-only-examples.md)
+- [Command testing status](../verification/command-testing.md)
+
+The tested read-only commands include:
 
 - `bitcoinII-cli getblockchaininfo`
 - `bitcoinII-cli getnetworkinfo`
@@ -57,8 +62,11 @@ Candidate node commands that need local test records include:
 - `bitcoinII-cli getbestblockhash`
 - `bitcoinII-cli getdifficulty`
 - `bitcoinII-cli getmempoolinfo`
+- `bitcoinII-cli getconnectioncount`
+- `bitcoinII-cli getpeerinfo`
+- `bitcoinII-cli uptime`
 
-Do not treat these as working instructions until a matching command-test record exists.
+This is one Windows/mainnet environment, not cross-platform proof. Wallet, transaction, mining, peer-control, shutdown, import/export, and state-changing workflows remain outside that smoke test.
 
 ## Basic operational principles
 
@@ -89,7 +97,7 @@ Do not treat these as working instructions until a matching command-test record 
 - Confirm current sync time expectations.
 - Confirm whether inbound port `8338` should be recommended for public listening nodes.
 - Confirm binary names from release assets.
-- Add local command-test records before promoting examples.
+- Add additional local command-test records before promoting examples beyond the narrow read-only test set.
 - Confirm canonical repository/source path before public-link polish.
 
 ## Sources
@@ -98,6 +106,8 @@ Do not treat these as working instructions until a matching command-test record 
 - `src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/chainparams.cpp
 - `share/examples/bitcoinII.conf`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/share/examples/bitcoinII.conf
 - [Command testing status](../verification/command-testing.md)
+- [Local BitcoinII node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md)
+- [Read-only RPC smoke test - 2026-07-10](../verification/read-only-rpc-smoke-test-2026-07-10.md)
 - [Source atlas: chainparams.cpp](../developers/source-atlas/chainparams-cpp.md)
 - [Source atlas: startup initialization](../developers/source-atlas/init-cpp.md)
 - [Source atlas: blockchain RPC](../developers/source-atlas/rpc-blockchain.md)
@@ -107,4 +117,4 @@ Do not treat these as working instructions until a matching command-test record 
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** Network values are source-backed. Platform setup instructions, release asset names, sync behavior, pruning guidance, and node command examples still need testing. Source links use the current observed repository path, but canonical repository status still needs confirmation.
+**Notes:** Network values are source-backed where linked. The narrow read-only RPC command set has one dated Windows/mainnet local test record. Platform setup instructions, release asset names, sync behavior, pruning guidance, wallet workflows, transaction workflows, mining workflows, peer-control workflows, and broader node command examples still need testing.

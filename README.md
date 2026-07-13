@@ -12,16 +12,17 @@ Preserve, organize, and expand publicly verifiable knowledge about the BitcoinII
 
 ## Current status
 
-This repository is in private foundation-building mode and is near invite-only review preparation.
+This repository is in private foundation-building mode and is ready for a first narrow v0.2 private review candidate.
 
 The project has meaningful first-pass source-backed coverage across BitcoinII Core architecture, chain parameters, proof of work, validation, block storage, mempool behavior, wallet RPC groups, mining RPC, blockchain RPC, raw transaction RPC, and mempool/broadcast RPC.
 
-It is still not ready for broad public launch because command examples, release artifacts, ecosystem listings, and some service-provider recommendations still need direct verification.
+It is still not ready for broad review or public launch. Some dated operational evidence now exists, including local read-only RPC testing, same-time node/API comparisons, release asset inventory, and public REST, WebSocket, Electrum, explorer, and exchange observations. Sensitive, unsupported, account-gated, wallet-moving, release-authentication, and long-term service-reliability claims remain unverified.
 
 Start here if you are reviewing the project structure:
 
 - [Project status](PROJECT_STATUS.md)
 - [Docs index](docs/README.md)
+- [Developer docs](docs/developers/README.md)
 - [API documentation](docs/api/README.md)
 - [Infrastructure directory](docs/infrastructure/README.md)
 - [Releases](docs/releases/README.md)
@@ -138,6 +139,8 @@ For example, if a difficulty adjustment algorithm such as Dark Gravity Wave is d
 
 ## Repository structure
 
+Current first-class v0.2 sections include [API](docs/api/README.md), [Infrastructure](docs/infrastructure/README.md), [Releases](docs/releases/README.md), [Compatibility](docs/compatibility/README.md), [Verification](docs/verification/README.md), and [Developers](docs/developers/README.md). The tree below is retained as a broad repository-shape aid.
+
 ```text
 morebc2/
 ├── docs/
@@ -166,17 +169,16 @@ morebc2/
 
 ## Launch readiness
 
-MoreBC2 should stay private while the final review-prep pass is completed.
+MoreBC2 should stay private while narrow v0.2 review feedback is collected.
 
-Invite-only review should come before public launch.
+Narrow invite-only review should come before broad review or public launch.
 
 Public launch should wait until:
 
-- Top-level navigation is polished.
 - Known unknowns are centralized.
 - License and contribution workflow are settled.
-- Release verification has been checked against actual releases.
-- Ecosystem claims are checked against current direct sources.
+- Release authentication has a published checksum/signature/trusted-key path, or its absence is documented for public readers with maintainer-reviewed wording.
+- Ecosystem and service claims are checked against current direct sources and have a stale-service policy.
 - At least one outside reviewer has checked core technical claims.
 
 ## Project phrase

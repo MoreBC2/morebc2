@@ -2,13 +2,15 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-07-04
+**Last reviewed:** 2026-07-13
 
 ## Summary
 
 This section tracks BitcoinII (BC2) ecosystem resources such as wallets, explorers, mining pools, exchanges, resources, services, APIs, and community projects.
 
-Nothing should be listed as active until it has been directly checked and dated.
+This section is broader ecosystem and community context. Current API behavior belongs in [API documentation](../api/README.md), live service status belongs in [Infrastructure](../infrastructure/README.md), compatibility interpretation belongs in [Compatibility](../compatibility/README.md), and canonical evidence summaries belong in the [verification evidence index](../verification/verification-index.md).
+
+Nothing should be listed as active until it has been directly checked and dated. Some dated explorer, API, WebSocket, Electrum, exchange-page, and mining-statistics observations now exist, but they do not establish reliability, official ownership/status, wallet support, account-gated exchange operation, or service-provider suitability.
 
 Ecosystem pages are time-sensitive. Every listing should include a review date, status, evidence level, and notes about what was and was not checked.
 
@@ -91,6 +93,10 @@ Avoid `Verified` for ecosystem services unless MoreBC2 later adopts a repeatable
 
 ## Related pages
 
+- [API documentation](../api/README.md)
+- [Infrastructure directory](../infrastructure/README.md)
+- [Compatibility](../compatibility/README.md)
+- [Verification evidence index](../verification/verification-index.md)
 - [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md)
 - [Exchange integration](../exchange/README.md)
 - [Wallet guide](../wallets/wallet-guide.md)
@@ -104,5 +110,5 @@ Avoid `Verified` for ecosystem services unless MoreBC2 later adopts a repeatable
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Ecosystem framework pages and ecosystem direct check plan
-**Notes:** This is a framework. Specific ecosystem listings still need direct verification before being described as active, reliable, official, or recommended.
+**Primary sources checked:** Ecosystem framework pages, ecosystem direct check plan, verification evidence index, API section, Infrastructure section, and Compatibility section
+**Notes:** This is an ecosystem overview. Dated observations exist for some public services, but specific ecosystem listings still need direct verification and periodic refresh before being described as active, reliable, official, supported, or recommended.

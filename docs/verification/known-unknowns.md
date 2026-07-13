@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-07-04
+**Last reviewed:** 2026-07-13
 
 ## Summary
 
@@ -75,11 +75,40 @@ MoreBC2 has not confirmed the preferred contact process for exchanges, explorers
 
 ### Active ecosystem resources
 
-MoreBC2 now has an ecosystem direct-check plan and refreshed templates, but it has not performed dated direct checks for active explorers, APIs, pools, exchanges, wallets, or community resources.
+MoreBC2 now has an ecosystem direct-check plan, refreshed templates, and dated direct observations for some public resources.
+
+Completed or partially completed records include:
+
+- explorer checks,
+- REST API checks,
+- WebSocket check,
+- Electrum checks,
+- public exchange-page observations,
+- local RPC testing,
+- release asset inventory,
+- canonical repository and project-identity evidence.
+
+These records do not establish broad service reliability, official ownership/status for every service, wallet support, transaction-broadcast safety, account-gated exchange operation, mining-pool behavior, or community-resource completeness.
 
 **Needed:** Direct checks with URL, date, observed status, what was checked, what was not checked, and evidence level.
 
 **Blocks:** Public launch.
+
+### Service reliability and ownership
+
+Dated checks show that some public explorers, APIs, WebSocket, Electrum, mining-statistics, price, rich-list, and exchange pages were reachable or returned expected public data during specific check windows.
+
+**Needed:** Repeat-check policy, ownership/official-status confirmation where relevant, documented stale-service handling, and clear limits for service-provider reuse.
+
+**Blocks:** Public launch for active-service directories and service-provider recommendations.
+
+### Wallet compatibility
+
+MoreBC2 has source-reviewed BitcoinII Core wallet behavior and public Electrum protocol observations, but it has not established BlueWallet, Cake Wallet, Komodo, or other third-party wallet compatibility.
+
+**Needed:** Safe disposable watch-only or public-address wallet compatibility records, without private keys, seeds, real funds, or transaction broadcast.
+
+**Blocks:** Public wallet recommendations.
 
 ### Untested command examples
 
@@ -114,5 +143,5 @@ When an unknown is resolved, move the result to the correct documentation page a
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Open questions backlog, verification queue, current coverage dashboard, release asset inventory attempt, release verification guide, ecosystem direct-check plan, network test run plan
+**Primary sources checked:** Open questions backlog, verification queue, verification evidence index, current coverage dashboard, local node/RPC records, public API/Electrum smoke test, release asset inventory attempt, release verification guide, ecosystem direct-check plan, network test run plan
 **Notes:** This page is a short executive list. The detailed backlog is `open-questions.md`.
