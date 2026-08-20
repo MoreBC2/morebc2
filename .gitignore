@@ -14,6 +14,10 @@ site/
 dist/
 build/
 .cache/
+.astro/
+
+# Generated Starlight content (source remains in docs/ and root Markdown files)
+src/content/docs/
 
 # Node / static site tooling
 node_modules/
