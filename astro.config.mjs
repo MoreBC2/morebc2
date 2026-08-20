@@ -1,6 +1,11 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
+const generatedSection = (label, directory) => ({
+  label,
+  items: [{ autogenerate: { directory } }],
+});
+
 export default defineConfig({
   integrations: [
     starlight({
@@ -17,22 +22,22 @@ export default defineConfig({
             { label: 'Project status', link: '/project/project-status/' },
           ],
         },
-        { label: 'Documentation', autogenerate: { directory: 'documentation' } },
-        { label: 'Architecture', autogenerate: { directory: 'architecture' } },
-        { label: 'Wallets', autogenerate: { directory: 'wallets' } },
-        { label: 'Nodes', autogenerate: { directory: 'nodes' } },
-        { label: 'Mining', autogenerate: { directory: 'mining' } },
-        { label: 'Developers', autogenerate: { directory: 'developers' } },
-        { label: 'API', autogenerate: { directory: 'api' } },
-        { label: 'Infrastructure', autogenerate: { directory: 'infrastructure' } },
-        { label: 'Releases', autogenerate: { directory: 'releases' } },
-        { label: 'Compatibility', autogenerate: { directory: 'compatibility' } },
-        { label: 'Exchange integration', autogenerate: { directory: 'exchange' } },
-        { label: 'Ecosystem', autogenerate: { directory: 'ecosystem' } },
-        { label: 'Research', autogenerate: { directory: 'research' } },
-        { label: 'History', autogenerate: { directory: 'history' } },
-        { label: 'Verification', autogenerate: { directory: 'verification' } },
-        { label: 'Contribute & project', autogenerate: { directory: 'project' } },
+        generatedSection('Documentation', 'documentation'),
+        generatedSection('Architecture', 'architecture'),
+        generatedSection('Wallets', 'wallets'),
+        generatedSection('Nodes', 'nodes'),
+        generatedSection('Mining', 'mining'),
+        generatedSection('Developers', 'developers'),
+        generatedSection('API', 'api'),
+        generatedSection('Infrastructure', 'infrastructure'),
+        generatedSection('Releases', 'releases'),
+        generatedSection('Compatibility', 'compatibility'),
+        generatedSection('Exchange integration', 'exchange'),
+        generatedSection('Ecosystem', 'ecosystem'),
+        generatedSection('Research', 'research'),
+        generatedSection('History', 'history'),
+        generatedSection('Verification', 'verification'),
+        generatedSection('Contribute & project', 'project'),
       ],
     }),
   ],
