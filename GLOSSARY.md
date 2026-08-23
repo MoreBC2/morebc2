@@ -1,5 +1,7 @@
 # MoreBC2 Glossary
 
+**Status:** Draft
+
 This glossary defines common terms used across MoreBC2.
 
 Definitions should stay neutral and general unless a BitcoinII-specific detail has been verified against a primary source.
