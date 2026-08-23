@@ -16,6 +16,18 @@ export default defineConfig({
       lastUpdated: true,
       pagination: true,
       customCss: ['./src/styles/morebc2.css'],
+      // This deployment is a review preview, not the public launch. Keep a
+      // site-wide robots directive in the rendered HTML in addition to the
+      // Cloudflare header and robots.txt protections in public/.
+      head: [
+        {
+          tag: 'meta',
+          attrs: {
+            name: 'robots',
+            content: 'noindex, nofollow, noarchive, nosnippet',
+          },
+        },
+      ],
       sidebar: [
         {
           label: 'Start here',
