@@ -1,5 +1,7 @@
 # MoreBC2 Editorial Style Guide
 
+**Status:** Framework
+
 ## Purpose
 
 This guide keeps MoreBC2 consistent, useful, and careful.
