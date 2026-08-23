@@ -1,5 +1,7 @@
 # MoreBC2 Founding Principles
 
+**Status:** Framework
+
 ## Mission
 
 MoreBC2 exists to preserve, organize, and expand publicly verifiable knowledge about the BitcoinII (BC2) ecosystem.
