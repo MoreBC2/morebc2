@@ -1,5 +1,7 @@
 # MoreBC2 Roadmap
 
+**Status:** Framework
+
 This roadmap is for organizing MoreBC2 work. It is not a BitcoinII protocol roadmap and should not be presented as one.
 
 ## Current project stage
