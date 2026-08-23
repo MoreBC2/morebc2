@@ -13,6 +13,7 @@ export default defineConfig({
       description: 'Community-maintained, source-backed documentation for the BitcoinII (BC2) ecosystem.',
       lastUpdated: true,
       pagination: true,
+      customCss: ['./src/styles/morebc2.css'],
       sidebar: [
         {
           label: 'Start here',
