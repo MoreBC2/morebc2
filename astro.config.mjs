@@ -7,10 +7,12 @@ const generatedSection = (label, directory) => ({
 });
 
 export default defineConfig({
+  site: 'https://morebc2.pages.dev',
   integrations: [
     starlight({
       title: 'MoreBC2',
       description: 'Community-maintained, source-backed documentation for the BitcoinII (BC2) ecosystem.',
+      disable404Route: true,
       lastUpdated: true,
       pagination: true,
       customCss: ['./src/styles/morebc2.css'],
@@ -25,6 +27,8 @@ export default defineConfig({
         },
         generatedSection('Documentation', 'documentation'),
         generatedSection('Architecture', 'architecture'),
+        generatedSection('Configuration', 'configuration'),
+        generatedSection('Encyclopedia', 'encyclopedia'),
         generatedSection('Wallets', 'wallets'),
         generatedSection('Nodes', 'nodes'),
         generatedSection('Mining', 'mining'),

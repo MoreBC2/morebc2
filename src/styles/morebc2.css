@@ -15,7 +15,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  white-space: nowrap;
+  min-width: 0;
 }
 
 .morebc2-meta__item strong {
@@ -34,6 +34,7 @@
   border-radius: 999px;
   font-weight: 650;
   line-height: 1.2;
+  text-align: center;
 }
 
 .morebc2-status--verified,
@@ -57,6 +58,16 @@
   background: var(--sl-color-blue-low);
 }
 
+.sl-markdown-content :is(a, code) {
+  overflow-wrap: anywhere;
+}
+
+.sl-markdown-content table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
 .sl-markdown-content h2:is(#sources, #verification),
 .sl-markdown-content h2:is(#sources, #verification) + * {
   scroll-margin-top: 6rem;
@@ -67,5 +78,10 @@
     align-items: flex-start;
     flex-direction: column;
     gap: 0.55rem;
+  }
+
+  .morebc2-meta__item {
+    align-items: flex-start;
+    flex-wrap: wrap;
   }
 }
