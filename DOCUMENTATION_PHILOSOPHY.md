@@ -1,5 +1,7 @@
 # MoreBC2 Documentation Philosophy
 
+**Status:** Framework
+
 MoreBC2 exists because useful ecosystems need memory.
 
 Discord conversations move fast. Social posts disappear. Links break. People forget why decisions were made. New users ask the same questions because answers are scattered across chats, repositories, explorers, release pages, and old screenshots.
