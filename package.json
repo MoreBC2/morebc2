@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "prepare:site": "node scripts/build-site-content.mjs",
+    "prepare:site": "node scripts/build-site-content.mjs && node scripts/protect-preview-content.mjs",
     "dev": "npm run prepare:site && astro dev",
     "build": "npm run prepare:site && astro build && npm run check:site-output",
     "check:site-output": "node scripts/check-site-output.mjs",
