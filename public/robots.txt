@@ -1,0 +1,4 @@
+# MoreBC2 review preview
+# This Pages deployment is not the public launch.
+User-agent: *
+Disallow: /
