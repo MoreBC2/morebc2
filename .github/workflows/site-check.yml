@@ -8,10 +8,13 @@ on:
     paths:
       - 'docs/**'
       - '*.md'
+      - 'public/**'
       - 'src/**'
       - 'scripts/**'
       - 'astro.config.mjs'
       - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig.json'
       - '.github/workflows/site-check.yml'
 
 permissions:
@@ -30,10 +33,10 @@ jobs:
         with:
           node-version: '22.12.0'
           cache: npm
-          cache-dependency-path: package.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Build static site
         run: npm run build

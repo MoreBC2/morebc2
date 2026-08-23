@@ -5,9 +5,11 @@
   "scripts": {
     "prepare:site": "node scripts/build-site-content.mjs",
     "dev": "npm run prepare:site && astro dev",
-    "build": "npm run prepare:site && astro build",
+    "build": "npm run prepare:site && astro build && npm run check:site-output",
+    "check:site-output": "node scripts/check-site-output.mjs",
+    "test:site-adapter": "node --test scripts/build-site-content.test.mjs",
     "preview": "astro preview",
-    "check": "npm run prepare:site && astro check"
+    "check": "npm run prepare:site && astro check && npm run test:site-adapter"
   },
   "dependencies": {
     "@astrojs/starlight": "0.41.7",
