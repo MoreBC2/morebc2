@@ -29,7 +29,7 @@ Priority labels:
 
 **Needed evidence:** A periodic recheck of project-controlled GitHub organization/repository metadata and the project website link.
 
-**Priority:** Monitor for drift
+**Priority:** Future improvement
 
 **Status:** Needs Review
 
