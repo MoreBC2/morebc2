@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-07-13
+**Last reviewed:** 2026-08-27
 
 ## Summary
 
@@ -42,10 +42,11 @@ Known current release findings for `v29.1.0`:
 - No uploaded asset name appears to be a checksum manifest or detached signature file.
 - Obvious public GitHub `guix.sigs` and detached-signature repository paths were not found.
 - The `v29.1.0` tag appears lightweight and points directly to a GitHub-reported verified commit.
-- MoreBC2 has not independently verified the commit signature.
-- MoreBC2 has not downloaded release files, calculated independent hashes, verified signatures, or identified trusted release keys.
+- All 10 uploaded assets and two generated source archives were downloaded and independently hashed on 2026-08-27; the uploaded-asset sizes and hashes matched GitHub API metadata.
+- The tagged commit locally verifies against GitHub's published web-flow service key. This is not a BitcoinII release key and does not bind uploaded artifacts to source.
+- No publisher checksum manifest, detached release signature, BitcoinII trusted release-key path, public build attestation, or reproducible-build proof was found.
 
-**Needed:** Official checksum/signature/key guidance, local hash records, independent signature checks if artifacts exist, and maintainer confirmation if necessary.
+**Needed:** Official checksum/signature/key guidance, an authenticated artifact-to-source binding, public reproducible-build attestations if adopted, and maintainer confirmation if necessary.
 
 **Blocks:** Public launch.
 
@@ -53,7 +54,7 @@ Known current release findings for `v29.1.0`:
 
 The source tree contains Bitcoin Core-style release-process and verification-helper material, but MoreBC2 has not confirmed that the current BitcoinII `v29.1.0` release followed that process.
 
-**Needed:** Maintainer-documented release verification process, signed checksum manifest, trusted keys, signed annotated tags, reproducible-build evidence, or another project-approved release trust path.
+**Needed:** Maintainer-documented release verification process, signed checksum manifest, trusted BitcoinII release key, signed annotated tag, release-specific reproducible-build evidence, or another project-approved release trust path.
 
 **Blocks:** Public launch.
 
