@@ -105,12 +105,14 @@ Do not claim exchange-grade release verification until checksums, signatures, si
 
 ## Sources
 
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
 - Canonical BitcoinII repository: https://github.com/Bitcoin-II/BitcoinII-Core
 - BitcoinII releases: https://github.com/Bitcoin-II/BitcoinII-Core/releases
-- `src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/kernel/chainparams.cpp
-- `src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/pow.cpp
-- `src/hash.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/hash.h
-- `share/examples/bitcoinII.conf`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/share/examples/bitcoinII.conf
+- `src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/chainparams.cpp
+- `src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/pow.cpp
+- `src/hash.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/hash.h
+- `share/examples/bitcoinII.conf`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/share/examples/bitcoinII.conf
 - [Project identity source check - 2026-07-10](../verification/project-identity-source-check-2026-07-10.md)
 - [Local node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md)
 

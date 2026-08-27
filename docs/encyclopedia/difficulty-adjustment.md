@@ -41,8 +41,10 @@ If Dark Gravity Wave or other algorithms are discussed by community members, tho
 
 ## Sources
 
-- `src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/kernel/chainparams.cpp
-- `src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/pow.cpp
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
+- `src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/chainparams.cpp
+- `src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/pow.cpp
 
 ## Verification
 

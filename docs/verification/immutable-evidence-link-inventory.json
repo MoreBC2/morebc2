@@ -11,9 +11,9 @@
     "source_files": 48,
     "distinct_upstream_paths": 79,
     "classification_counts": {
-      "A": 22,
-      "B": 0,
-      "C": 170,
+      "A": 9,
+      "B": 4,
+      "C": 179,
       "D": 0,
       "E": 0
     }
@@ -30,10 +30,10 @@
       "upstream_path": "src/validation.cpp",
       "context": "- `src/validation.cpp`: [mutable upstream URL]",
       "classification": {
-        "category": "A",
-        "label": "release-specific evidence",
-        "action": "pin to v29.1.0",
-        "rationale": "The surrounding claim describes behavior or values applicable to MoreBC2's documented v29.1.0 release."
+        "category": "B",
+        "label": "commit-specific evidence",
+        "action": "pin to 218d1b7e0f682c2aa43c3698d927cbfbb7adfe76",
+        "rationale": "The page records a fixed reviewed source mapping rather than a release-specific or intentionally moving upstream claim."
       },
       "upstream_verification": {
         "tag_exists": true,
@@ -43,7 +43,7 @@
         "main_blob": "059b46a44edb148e3198fcf7281ba0093c28a6d5",
         "post_tag_change": null
       },
-      "verification_basis": "Path exists at v29.1.0; its blob is byte-identical to current upstream, so the cited substantive evidence is unchanged.",
+      "verification_basis": "Path exists at immutable upstream commit 218d1b7e0f682c2aa43c3698d927cbfbb7adfe76; the fixed reviewed source mapping is pinned to the exact source state independently re-observed on 2026-08-27.",
       "url_kind": "github-blob",
       "original_ref": "main"
     },
@@ -54,10 +54,10 @@
       "upstream_path": "src/pow.cpp",
       "context": "- `src/pow.cpp`: [mutable upstream URL]",
       "classification": {
-        "category": "A",
-        "label": "release-specific evidence",
-        "action": "pin to v29.1.0",
-        "rationale": "The surrounding claim describes behavior or values applicable to MoreBC2's documented v29.1.0 release."
+        "category": "B",
+        "label": "commit-specific evidence",
+        "action": "pin to 218d1b7e0f682c2aa43c3698d927cbfbb7adfe76",
+        "rationale": "The page records a fixed reviewed source mapping rather than a release-specific or intentionally moving upstream claim."
       },
       "upstream_verification": {
         "tag_exists": true,
@@ -67,7 +67,7 @@
         "main_blob": "561550cfcf7041a0de86c54918e561781da5ae6d",
         "post_tag_change": null
       },
-      "verification_basis": "Path exists at v29.1.0; its blob is byte-identical to current upstream, so the cited substantive evidence is unchanged.",
+      "verification_basis": "Path exists at immutable upstream commit 218d1b7e0f682c2aa43c3698d927cbfbb7adfe76; the fixed reviewed source mapping is pinned to the exact source state independently re-observed on 2026-08-27.",
       "url_kind": "github-blob",
       "original_ref": "main"
     },
@@ -78,10 +78,10 @@
       "upstream_path": "src/kernel/disconnected_transactions.h",
       "context": "- `src/kernel/disconnected_transactions.h`: [mutable upstream URL]",
       "classification": {
-        "category": "A",
-        "label": "release-specific evidence",
-        "action": "pin to v29.1.0",
-        "rationale": "The surrounding claim describes behavior or values applicable to MoreBC2's documented v29.1.0 release."
+        "category": "B",
+        "label": "commit-specific evidence",
+        "action": "pin to 218d1b7e0f682c2aa43c3698d927cbfbb7adfe76",
+        "rationale": "The page records a fixed reviewed source mapping rather than a release-specific or intentionally moving upstream claim."
       },
       "upstream_verification": {
         "tag_exists": true,
@@ -91,7 +91,7 @@
         "main_blob": "0f77d7876b3e9ff754e6fcd1f885056eeb557349",
         "post_tag_change": null
       },
-      "verification_basis": "Path exists at v29.1.0; its blob is byte-identical to current upstream, so the cited substantive evidence is unchanged.",
+      "verification_basis": "Path exists at immutable upstream commit 218d1b7e0f682c2aa43c3698d927cbfbb7adfe76; the fixed reviewed source mapping is pinned to the exact source state independently re-observed on 2026-08-27.",
       "url_kind": "github-blob",
       "original_ref": "main"
     },
@@ -102,10 +102,10 @@
       "upstream_path": "src/kernel/disconnected_transactions.cpp",
       "context": "- `src/kernel/disconnected_transactions.cpp`: [mutable upstream URL]",
       "classification": {
-        "category": "A",
-        "label": "release-specific evidence",
-        "action": "pin to v29.1.0",
-        "rationale": "The surrounding claim describes behavior or values applicable to MoreBC2's documented v29.1.0 release."
+        "category": "B",
+        "label": "commit-specific evidence",
+        "action": "pin to 218d1b7e0f682c2aa43c3698d927cbfbb7adfe76",
+        "rationale": "The page records a fixed reviewed source mapping rather than a release-specific or intentionally moving upstream claim."
       },
       "upstream_verification": {
         "tag_exists": true,
@@ -115,7 +115,7 @@
         "main_blob": "bbb5220522d0bbafd0410f36f03fae3f8601ca3a",
         "post_tag_change": null
       },
-      "verification_basis": "Path exists at v29.1.0; its blob is byte-identical to current upstream, so the cited substantive evidence is unchanged.",
+      "verification_basis": "Path exists at immutable upstream commit 218d1b7e0f682c2aa43c3698d927cbfbb7adfe76; the fixed reviewed source mapping is pinned to the exact source state independently re-observed on 2026-08-27.",
       "url_kind": "github-blob",
       "original_ref": "main"
     },
@@ -4158,10 +4158,10 @@
       "upstream_path": "src/kernel/chainparams.cpp",
       "context": "- `src/kernel/chainparams.cpp`: [mutable upstream URL]",
       "classification": {
-        "category": "A",
-        "label": "release-specific evidence",
-        "action": "pin to v29.1.0",
-        "rationale": "The surrounding claim describes behavior or values applicable to MoreBC2's documented v29.1.0 release."
+        "category": "C",
+        "label": "intentionally current-upstream evidence",
+        "action": "retain main and add a dated mutable-evidence note",
+        "rationale": "The page explicitly presents the source as current upstream or as a Source Atlas review of current upstream state."
       },
       "upstream_verification": {
         "tag_exists": true,
@@ -4171,7 +4171,7 @@
         "main_blob": "2993f7c1e331a589f6214600679dbb6ad0cd1706",
         "post_tag_change": "218d1b7e0f682c2aa43c3698d927cbfbb7adfe76|2026-06-22T16:26:45-05:00|Update genesis block parameters and clear assumeutxo data"
       },
-      "verification_basis": "Path exists at v29.1.0. The only post-tag diff changes regtest genesis/checkpoint/AssumeUTXO data; the candidate pages cite unchanged mainnet ports, seeds, timing, prefixes, genesis, and proof-of-work parameters.",
+      "verification_basis": "Path exists at v29.1.0 and current upstream; classification follows the page's explicit current-upstream intent rather than blob equality.",
       "url_kind": "github-blob",
       "original_ref": "main"
     },
@@ -4182,10 +4182,10 @@
       "upstream_path": "src/pow.cpp",
       "context": "- `src/pow.cpp`: [mutable upstream URL]",
       "classification": {
-        "category": "A",
-        "label": "release-specific evidence",
-        "action": "pin to v29.1.0",
-        "rationale": "The surrounding claim describes behavior or values applicable to MoreBC2's documented v29.1.0 release."
+        "category": "C",
+        "label": "intentionally current-upstream evidence",
+        "action": "retain main and add a dated mutable-evidence note",
+        "rationale": "The page explicitly presents the source as current upstream or as a Source Atlas review of current upstream state."
       },
       "upstream_verification": {
         "tag_exists": true,
@@ -4195,7 +4195,7 @@
         "main_blob": "561550cfcf7041a0de86c54918e561781da5ae6d",
         "post_tag_change": null
       },
-      "verification_basis": "Path exists at v29.1.0; its blob is byte-identical to current upstream, so the cited substantive evidence is unchanged.",
+      "verification_basis": "Path exists at v29.1.0 and current upstream; classification follows the page's explicit current-upstream intent rather than blob equality.",
       "url_kind": "github-blob",
       "original_ref": "main"
     },
@@ -4206,10 +4206,10 @@
       "upstream_path": "src/pow.cpp",
       "context": "- `src/pow.cpp`: [mutable upstream URL]",
       "classification": {
-        "category": "A",
-        "label": "release-specific evidence",
-        "action": "pin to v29.1.0",
-        "rationale": "The surrounding claim describes behavior or values applicable to MoreBC2's documented v29.1.0 release."
+        "category": "C",
+        "label": "intentionally current-upstream evidence",
+        "action": "retain main and add a dated mutable-evidence note",
+        "rationale": "The page explicitly presents the source as current upstream or as a Source Atlas review of current upstream state."
       },
       "upstream_verification": {
         "tag_exists": true,
@@ -4219,7 +4219,7 @@
         "main_blob": "561550cfcf7041a0de86c54918e561781da5ae6d",
         "post_tag_change": null
       },
-      "verification_basis": "Path exists at v29.1.0; its blob is byte-identical to current upstream, so the cited substantive evidence is unchanged.",
+      "verification_basis": "Path exists at v29.1.0 and current upstream; classification follows the page's explicit current-upstream intent rather than blob equality.",
       "url_kind": "github-blob",
       "original_ref": "main"
     },
@@ -4230,10 +4230,10 @@
       "upstream_path": "src/primitives/block.cpp",
       "context": "- `src/primitives/block.cpp`: [mutable upstream URL]",
       "classification": {
-        "category": "A",
-        "label": "release-specific evidence",
-        "action": "pin to v29.1.0",
-        "rationale": "The surrounding claim describes behavior or values applicable to MoreBC2's documented v29.1.0 release."
+        "category": "C",
+        "label": "intentionally current-upstream evidence",
+        "action": "retain main and add a dated mutable-evidence note",
+        "rationale": "The page explicitly presents the source as current upstream or as a Source Atlas review of current upstream state."
       },
       "upstream_verification": {
         "tag_exists": true,
@@ -4243,7 +4243,7 @@
         "main_blob": "8823ea2e91ebf01c9acd8a7cb7e4855939f706c1",
         "post_tag_change": null
       },
-      "verification_basis": "Path exists at v29.1.0; its blob is byte-identical to current upstream, so the cited substantive evidence is unchanged.",
+      "verification_basis": "Path exists at v29.1.0 and current upstream; classification follows the page's explicit current-upstream intent rather than blob equality.",
       "url_kind": "github-blob",
       "original_ref": "main"
     },
@@ -4254,10 +4254,10 @@
       "upstream_path": "src/hash.h",
       "context": "- `src/hash.h`: [mutable upstream URL]",
       "classification": {
-        "category": "A",
-        "label": "release-specific evidence",
-        "action": "pin to v29.1.0",
-        "rationale": "The surrounding claim describes behavior or values applicable to MoreBC2's documented v29.1.0 release."
+        "category": "C",
+        "label": "intentionally current-upstream evidence",
+        "action": "retain main and add a dated mutable-evidence note",
+        "rationale": "The page explicitly presents the source as current upstream or as a Source Atlas review of current upstream state."
       },
       "upstream_verification": {
         "tag_exists": true,
@@ -4267,7 +4267,7 @@
         "main_blob": "caca0d407a3deb585511eaafe21ec746ff206c50",
         "post_tag_change": null
       },
-      "verification_basis": "Path exists at v29.1.0; its blob is byte-identical to current upstream, so the cited substantive evidence is unchanged.",
+      "verification_basis": "Path exists at v29.1.0 and current upstream; classification follows the page's explicit current-upstream intent rather than blob equality.",
       "url_kind": "github-blob",
       "original_ref": "main"
     },
@@ -4494,10 +4494,10 @@
       "upstream_path": "src/kernel/chainparams.cpp",
       "context": "- `src/kernel/chainparams.cpp`: [mutable upstream URL]",
       "classification": {
-        "category": "A",
-        "label": "release-specific evidence",
-        "action": "pin to v29.1.0",
-        "rationale": "The surrounding claim describes behavior or values applicable to MoreBC2's documented v29.1.0 release."
+        "category": "C",
+        "label": "intentionally current-upstream evidence",
+        "action": "retain main and add a dated mutable-evidence note",
+        "rationale": "The page explicitly presents the source as current upstream or as a Source Atlas review of current upstream state."
       },
       "upstream_verification": {
         "tag_exists": true,
@@ -4507,7 +4507,7 @@
         "main_blob": "2993f7c1e331a589f6214600679dbb6ad0cd1706",
         "post_tag_change": "218d1b7e0f682c2aa43c3698d927cbfbb7adfe76|2026-06-22T16:26:45-05:00|Update genesis block parameters and clear assumeutxo data"
       },
-      "verification_basis": "Path exists at v29.1.0. The only post-tag diff changes regtest genesis/checkpoint/AssumeUTXO data; the candidate pages cite unchanged mainnet ports, seeds, timing, prefixes, genesis, and proof-of-work parameters.",
+      "verification_basis": "Path exists at v29.1.0 and current upstream; classification follows the page's explicit current-upstream intent rather than blob equality.",
       "url_kind": "github-blob",
       "original_ref": "main"
     },
@@ -4518,10 +4518,10 @@
       "upstream_path": "src/pow.cpp",
       "context": "- `src/pow.cpp`: [mutable upstream URL]",
       "classification": {
-        "category": "A",
-        "label": "release-specific evidence",
-        "action": "pin to v29.1.0",
-        "rationale": "The surrounding claim describes behavior or values applicable to MoreBC2's documented v29.1.0 release."
+        "category": "C",
+        "label": "intentionally current-upstream evidence",
+        "action": "retain main and add a dated mutable-evidence note",
+        "rationale": "The page explicitly presents the source as current upstream or as a Source Atlas review of current upstream state."
       },
       "upstream_verification": {
         "tag_exists": true,
@@ -4531,7 +4531,7 @@
         "main_blob": "561550cfcf7041a0de86c54918e561781da5ae6d",
         "post_tag_change": null
       },
-      "verification_basis": "Path exists at v29.1.0; its blob is byte-identical to current upstream, so the cited substantive evidence is unchanged.",
+      "verification_basis": "Path exists at v29.1.0 and current upstream; classification follows the page's explicit current-upstream intent rather than blob equality.",
       "url_kind": "github-blob",
       "original_ref": "main"
     },
@@ -4542,10 +4542,10 @@
       "upstream_path": "src/hash.h",
       "context": "- `src/hash.h`: [mutable upstream URL]",
       "classification": {
-        "category": "A",
-        "label": "release-specific evidence",
-        "action": "pin to v29.1.0",
-        "rationale": "The surrounding claim describes behavior or values applicable to MoreBC2's documented v29.1.0 release."
+        "category": "C",
+        "label": "intentionally current-upstream evidence",
+        "action": "retain main and add a dated mutable-evidence note",
+        "rationale": "The page explicitly presents the source as current upstream or as a Source Atlas review of current upstream state."
       },
       "upstream_verification": {
         "tag_exists": true,
@@ -4555,7 +4555,7 @@
         "main_blob": "caca0d407a3deb585511eaafe21ec746ff206c50",
         "post_tag_change": null
       },
-      "verification_basis": "Path exists at v29.1.0; its blob is byte-identical to current upstream, so the cited substantive evidence is unchanged.",
+      "verification_basis": "Path exists at v29.1.0 and current upstream; classification follows the page's explicit current-upstream intent rather than blob equality.",
       "url_kind": "github-blob",
       "original_ref": "main"
     },
@@ -4566,10 +4566,10 @@
       "upstream_path": "share/examples/bitcoinII.conf",
       "context": "- `share/examples/bitcoinII.conf`: [mutable upstream URL]",
       "classification": {
-        "category": "A",
-        "label": "release-specific evidence",
-        "action": "pin to v29.1.0",
-        "rationale": "The surrounding claim describes behavior or values applicable to MoreBC2's documented v29.1.0 release."
+        "category": "C",
+        "label": "intentionally current-upstream evidence",
+        "action": "retain main and add a dated mutable-evidence note",
+        "rationale": "The page explicitly presents the source as current upstream or as a Source Atlas review of current upstream state."
       },
       "upstream_verification": {
         "tag_exists": true,
@@ -4579,7 +4579,7 @@
         "main_blob": "cfc9353818499382891815be4aa35819688013f0",
         "post_tag_change": null
       },
-      "verification_basis": "Path exists at v29.1.0; its blob is byte-identical to current upstream, so the cited substantive evidence is unchanged.",
+      "verification_basis": "Path exists at v29.1.0 and current upstream; classification follows the page's explicit current-upstream intent rather than blob equality.",
       "url_kind": "github-blob",
       "original_ref": "main"
     },

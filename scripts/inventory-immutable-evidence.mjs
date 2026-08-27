@@ -10,12 +10,12 @@ const SOURCE_MOREBC2_COMMIT = 'ca08df7369f22953b19d845218766233e5b4ca1d';
 const CURRENT_NOTE = `The mutable current-upstream \`main\` links below were re-observed on ${OBSERVED_DATE} and are intentionally retained to track upstream state. They are not release-pinned evidence.`;
 
 const releaseSpecificFiles = new Set([
-  'docs/architecture/block-validation-flow.md',
-  'docs/encyclopedia/difficulty-adjustment.md',
-  'docs/encyclopedia/proof-of-work.md',
   'docs/exchange/integration-package.md',
-  'docs/exchange/operator-guide.md',
   'docs/nodes/node-guide.md',
+]);
+
+const commitSpecificFiles = new Set([
+  'docs/architecture/block-validation-flow.md',
 ]);
 
 const ignoredDirectories = new Set([
@@ -59,6 +59,26 @@ async function listMarkdownFiles(directory, root = directory) {
   return files.sort();
 }
 
+function repositoryGit(repository, args) {
+  return execFileSync('git', ['-C', repository, ...args], { encoding: 'utf8' }).trim();
+}
+
+function isIncludedMarkdownFile(sourceFile) {
+  const parts = sourceFile.split('/');
+  return sourceFile.toLowerCase().endsWith('.md') && !parts.some((part) => ignoredDirectories.has(part));
+}
+
+function listBaselineMarkdownFiles(repository) {
+  return repositoryGit(repository, ['ls-tree', '-r', '--name-only', SOURCE_MOREBC2_COMMIT])
+    .split(/\r?\n/)
+    .filter(isIncludedMarkdownFile)
+    .sort();
+}
+
+function readBaselineFile(repository, sourceFile) {
+  return repositoryGit(repository, ['show', `${SOURCE_MOREBC2_COMMIT}:${sourceFile}`]);
+}
+
 function git(upstream, args) {
   return execFileSync('git', ['-c', `safe.directory=${upstream.replaceAll('\\', '/')}`, '-C', upstream, ...args], { encoding: 'utf8' }).trim();
 }
@@ -84,6 +104,14 @@ function classify(sourceFile) {
       rationale: `The surrounding claim describes behavior or values applicable to MoreBC2's documented ${RELEASE_TAG} release.`,
     };
   }
+  if (commitSpecificFiles.has(sourceFile)) {
+    return {
+      category: 'B',
+      label: 'commit-specific evidence',
+      action: `pin to ${EXPECTED_MAIN_COMMIT}`,
+      rationale: 'The page records a fixed reviewed source mapping rather than a release-specific or intentionally moving upstream claim.',
+    };
+  }
   return {
     category: 'C',
     label: 'intentionally current-upstream evidence',
@@ -95,6 +123,9 @@ function classify(sourceFile) {
 function verificationBasis(classification, upstreamPath, comparison) {
   if (classification.category === 'C') {
     return `Path exists at ${RELEASE_TAG} and current upstream; classification follows the page's explicit current-upstream intent rather than blob equality.`;
+  }
+  if (classification.category === 'B') {
+    return `Path exists at immutable upstream commit ${EXPECTED_MAIN_COMMIT}; the fixed reviewed source mapping is pinned to the exact source state independently re-observed on ${OBSERVED_DATE}.`;
   }
   if (comparison.identical) {
     return `Path exists at ${RELEASE_TAG}; its blob is byte-identical to current upstream, so the cited substantive evidence is unchanged.`;
@@ -117,14 +148,18 @@ async function main() {
   if (tagCommit !== EXPECTED_TAG_COMMIT) throw new Error(`Unexpected ${RELEASE_TAG} commit: ${tagCommit}`);
   if (mainCommit !== EXPECTED_MAIN_COMMIT) throw new Error(`Unexpected upstream main commit: ${mainCommit}`);
 
-  const files = await listMarkdownFiles(repositoryRoot);
+  const baselineCommit = repositoryGit(repositoryRoot, ['rev-parse', SOURCE_MOREBC2_COMMIT]);
+  if (baselineCommit !== SOURCE_MOREBC2_COMMIT) throw new Error(`Missing MoreBC2 baseline commit: ${SOURCE_MOREBC2_COMMIT}`);
+
+  const files = options.apply ? await listMarkdownFiles(repositoryRoot) : listBaselineMarkdownFiles(repositoryRoot);
   const occurrences = [];
   const sourceContents = new Map();
   const comparisons = new Map();
 
   for (const sourceFile of files) {
-    const absolute = path.join(repositoryRoot, sourceFile);
-    const content = await fs.readFile(absolute, 'utf8');
+    const content = options.apply
+      ? await fs.readFile(path.join(repositoryRoot, sourceFile), 'utf8')
+      : readBaselineFile(repositoryRoot, sourceFile);
     sourceContents.set(sourceFile, content);
     const lines = content.split(/\r?\n/);
     for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
@@ -176,11 +211,11 @@ async function main() {
 
   const counts = { A: 0, B: 0, C: 0, D: 0, E: 0 };
   for (const occurrence of occurrences) counts[occurrence.classification.category] += 1;
-  const inventoryOccurrences = occurrences.map(({ url, context, ...occurrence }) => ({
+  const inventoryOccurrences = occurrences.map(({ url, ...occurrence }) => ({
     ...occurrence,
+    context: occurrence.context.replace(url, '[mutable upstream URL]'),
     url_kind: url.includes('raw.githubusercontent.com') ? 'raw-content' : url.includes('/tree/') ? 'github-tree' : url.includes('/raw/') ? 'github-raw' : 'github-blob',
     original_ref: 'main',
-    context: context.replace(url, '[mutable upstream URL]'),
   }));
   const inventory = {
     schema_version: 1,
@@ -224,6 +259,16 @@ async function main() {
             .replace('/tree/main/', `/tree/${RELEASE_TAG}/`)
             .replace('/raw/main/', `/raw/${RELEASE_TAG}/`)
             .replace('/BitcoinII-Core/main/', `/BitcoinII-Core/${RELEASE_TAG}/`);
+          content = content.replaceAll(occurrence.url, replacement);
+        }
+      }
+      if (fileOccurrences.some((item) => item.classification.category === 'B')) {
+        for (const occurrence of fileOccurrences.filter((item) => item.classification.category === 'B')) {
+          const replacement = occurrence.url
+            .replace('/blob/main/', `/blob/${EXPECTED_MAIN_COMMIT}/`)
+            .replace('/tree/main/', `/tree/${EXPECTED_MAIN_COMMIT}/`)
+            .replace('/raw/main/', `/raw/${EXPECTED_MAIN_COMMIT}/`)
+            .replace('/BitcoinII-Core/main/', `/BitcoinII-Core/${EXPECTED_MAIN_COMMIT}/`);
           content = content.replaceAll(occurrence.url, replacement);
         }
       }
