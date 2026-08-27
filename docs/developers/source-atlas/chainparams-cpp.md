@@ -167,6 +167,8 @@ Checkpoint lists should be labeled by source version before being copied into pu
 
 ## Sources
 
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
 - Current observed `main`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/chainparams.cpp
 - `v29.1.0`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/kernel/chainparams.cpp
 - [Release source comparison notes](../../verification/release-source-comparison.md)

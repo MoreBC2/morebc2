@@ -82,6 +82,8 @@ Separate source-observed defaults from recommended operator settings.
 
 ## Sources
 
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
 - `share/examples/bitcoinII.conf` in the current observed repository: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/share/examples/bitcoinII.conf
 - [Command testing status](../verification/command-testing.md)
 - [RPC configuration](rpc-configuration.md)

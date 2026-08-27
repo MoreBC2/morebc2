@@ -203,6 +203,8 @@ The reviewed file shows BitcoinII naming and fork metadata, but this first pass 
 
 ## Sources
 
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
 - Current observed `main` `src/kernel/mempool_entry.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/mempool_entry.h
 - Current observed `main` `src/txmempool.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/txmempool.h
 - Current observed `main` `src/txmempool.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/txmempool.cpp

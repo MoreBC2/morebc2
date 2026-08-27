@@ -192,6 +192,8 @@ The reviewed file structure appears Bitcoin-style, but no upstream comparison ha
 
 ## Sources
 
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
 - Current observed `main` `src/validationinterface.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validationinterface.h
 - Current observed `main` `src/validationinterface.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validationinterface.cpp
 - Current observed `main` `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.cpp
