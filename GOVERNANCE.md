@@ -1,5 +1,7 @@
 # MoreBC2 Governance
 
+**Status:** Framework
+
 ## Current model
 
 MoreBC2 starts as a community documentation project.

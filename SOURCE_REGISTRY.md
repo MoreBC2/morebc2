@@ -1,5 +1,7 @@
 # MoreBC2 Source Registry
 
+**Status:** Needs Review
+
 This registry helps contributors choose appropriate sources.
 
 It does not prove that every listed source is complete, current, or official in every context. Each page should still cite the exact source used.

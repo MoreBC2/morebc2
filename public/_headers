@@ -1,0 +1,3 @@
+# MoreBC2 review preview: prevent search indexing at the HTTP layer too.
+/*
+  X-Robots-Tag: noindex, nofollow, noarchive, nosnippet

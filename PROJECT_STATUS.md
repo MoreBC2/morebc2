@@ -9,6 +9,8 @@ MoreBC2 is a private, source-backed documentation and verification project for B
 
 The repository has moved beyond framework-only documentation. It now contains dated operational evidence from a local BitcoinII Core node, a same-time explorer comparison, a nine-command read-only RPC smoke test, release asset and authentication-gap records, direct ecosystem checks, and a project-identity source review.
 
+As of 2026-08-26, the canonical private repository is `MoreBC2/morebc2` following its transfer into the MoreBC2 GitHub organization.
+
 The fastest overview is the [verification evidence index](docs/verification/verification-index.md).
 
 First-class v0.2 navigation:

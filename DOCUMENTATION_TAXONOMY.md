@@ -1,5 +1,7 @@
 # MoreBC2 Documentation Taxonomy
 
+**Status:** Framework
+
 This taxonomy defines where content belongs.
 
 When in doubt, choose the category that best describes the evidence level and purpose of the page.

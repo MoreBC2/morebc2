@@ -1,0 +1,87 @@
+.morebc2-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  align-items: center;
+  margin: 0.75rem 0 2rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.6rem;
+  background: color-mix(in srgb, var(--sl-color-gray-6) 55%, transparent);
+  font-size: 0.85rem;
+}
+
+.morebc2-meta__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.morebc2-meta__item strong {
+  color: var(--sl-color-gray-2);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.morebc2-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.55rem;
+  padding: 0.12rem 0.55rem;
+  border: 1px solid var(--sl-color-gray-4);
+  border-radius: 999px;
+  font-weight: 650;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.morebc2-status--verified,
+.morebc2-status--reviewed {
+  border-color: var(--sl-color-green-high);
+  color: var(--sl-color-green-high);
+  background: var(--sl-color-green-low);
+}
+
+.morebc2-status--needs-review,
+.morebc2-status--partial {
+  border-color: var(--sl-color-orange-high);
+  color: var(--sl-color-orange-high);
+  background: var(--sl-color-orange-low);
+}
+
+.morebc2-status--draft,
+.morebc2-status--framework {
+  border-color: var(--sl-color-blue-high);
+  color: var(--sl-color-blue-high);
+  background: var(--sl-color-blue-low);
+}
+
+.sl-markdown-content :is(a, code) {
+  overflow-wrap: anywhere;
+}
+
+.sl-markdown-content table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.sl-markdown-content h2:is(#sources, #verification),
+.sl-markdown-content h2:is(#sources, #verification) + * {
+  scroll-margin-top: 6rem;
+}
+
+@media (max-width: 40rem) {
+  .morebc2-meta {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .morebc2-meta__item {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+}
