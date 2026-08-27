@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Needs Review
-**Last reviewed:** 2026-07-04
+**Last reviewed:** 2026-08-27
 
 ## Summary
 
@@ -75,10 +75,12 @@ Asset-count note:
 - GitHub API uploaded-asset metadata reported 10 uploaded assets.
 - The two GitHub-generated source archives reconcile that earlier count without treating source archives as uploaded release assets.
 
+The [2026-08-27 release-artifact authentication record](../verification/release-artifact-authentication-2026-08-27.md) downloaded and hashed all 10 uploaded assets and both generated source archives.
+
 Verification caveats:
 
-- MoreBC2 did not download binaries or generated source archives.
-- MoreBC2 did not calculate independent hashes.
+- Independently calculated hashes are integrity fingerprints for repeat-download comparison; they are not publisher-authenticated expected values.
+- All 10 uploaded-asset sizes and hashes matched GitHub API metadata, which remains hosting-provider metadata.
 - MoreBC2 did not verify any detached signature or signed checksum manifest.
 - No uploaded asset name appears to be a checksum manifest.
 - No uploaded asset name appears to be a detached signature file.
@@ -158,11 +160,11 @@ However, this source-tree helper is not enough by itself to prove the current Bi
 | Uploaded release asset list captured | Partial | GitHub API metadata reports 10 uploaded assets. |
 | Generated source archives listed separately | Partial | Two GitHub-generated tag archives were captured and are distinct from uploaded assets. |
 | Rendered asset count reconciled | Partial | Earlier rendered page showed 12 items, likely matching 10 uploaded assets plus two generated source archive links. |
-| Asset hashes independently calculated | Not done | No binaries or source archives downloaded. |
-| Checksum manifest found | Needs Review | No uploaded asset name appears to be a checksum manifest; external/other official checksum source not checked. |
-| Detached signature found | Needs Review | No uploaded asset name appears to be a signature file; external/other official signature source not checked. |
-| Release tag signature checked | Needs Review | GitHub verified commit marker observed, but tag-signature status was not independently checked. |
-| Trusted release keys identified | Needs Review | GitHub key ID observed, but BitcoinII trust model is not confirmed. |
+| Asset hashes independently calculated | Integrity recorded | All 10 uploaded assets and two generated source archives were hashed on 2026-08-27. |
+| Checksum manifest found | Not found | No publisher manifest was found in the checked release, archives, canonical repository material, or obvious public signature-repository paths. |
+| Detached signature found | Not found | No detached release-asset signature was found in the checked public locations. |
+| Release tag signature checked | Bounded result | The tag is lightweight. Its source commit verifies against GitHub's web-flow service key, not a BitcoinII release key. |
+| Trusted release keys identified | Not established | GitHub's service-key identity was established, but no BitcoinII release-key trust path was found. |
 | Source comparison performed | Partial | Release source comparison and network release comparison exist, but source comparison does not verify release binaries. |
 | Exchange-grade verification path confirmed | No | Requires manifest/signature/key workflow or maintainer-approved alternative. |
 
@@ -173,7 +175,7 @@ However, this source-tree helper is not enough by itself to prove the current Bi
 - Confirm whether checksum manifests are signed.
 - Confirm whether tags are signed separately from GitHub's verified commit marker.
 - Confirm which key or keys should be trusted for BitcoinII releases.
-- Download at least one release asset in a safe environment and independently calculate SHA256 in a documented test record.
+- Obtain an authenticated publisher checksum/signature/key chain or public reproducible-build attestations, then compare them with the dated local hashes.
 - Create a user-facing wallet release-verification guide only after the actual release model is confirmed.
 
 ## Sources
@@ -187,6 +189,7 @@ However, this source-tree helper is not enough by itself to prove the current Bi
 - [Release verification guide](../developers/release-verification.md)
 - [Release asset inventory attempt](../verification/release-asset-inventory-attempt.md)
 - [Release artifact checklist](../verification/release-artifact-checklist.md)
+- [Release-artifact authentication — 2026-08-27](../verification/release-artifact-authentication-2026-08-27.md)
 - [Release source comparison notes](../verification/release-source-comparison.md)
 - [Network release comparison](../verification/network-release-comparison.md)
 - [Open questions backlog](../verification/open-questions.md)
@@ -195,4 +198,4 @@ However, this source-tree helper is not enough by itself to prove the current Bi
 
 **Status:** Needs Review
 **Primary sources checked:** Partially
-**Notes:** GitHub release pages, GitHub API asset metadata through Codex, generated source archive metadata through Codex, and source-tree verification-helper text were checked. Canonical-source wording was synchronized on 2026-08-27. MoreBC2 has not downloaded binaries or source archives, calculated hashes, verified manifests, verified detached signatures, or confirmed trusted release keys.
+**Notes:** GitHub release pages/API, all 10 uploaded assets, both generated source archives, tag/commit signature state, public authentication-material paths, and source-tree verification-helper text were checked. Canonical-source wording was synchronized on 2026-08-27. Artifact integrity was recorded; manifests, detached release signatures, BitcoinII trusted release keys, binary-to-source binding, and reproducible-build proof remain unverified.

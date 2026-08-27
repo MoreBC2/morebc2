@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-07-12
+**Last reviewed:** 2026-08-27
 
 ## Purpose
 
@@ -26,8 +26,8 @@ For Verification section navigation, use the [Verification README](README.md). O
 |---|---|---|---|
 | Canonical public implementation | Source-reviewed | `Bitcoin-II/BitcoinII-Core` is described by project-controlled GitHub metadata as the canonical reference implementation. See [project identity source check](project-identity-source-check-2026-07-10.md). | Maintainer confirmation remains useful if ownership or repository structure changes. |
 | Project name and ticker | Strong partial | Project-controlled source/UI/repository material uses BitcoinII and `BC2`. | A simple explicit maintainer statement would be the cleanest primary ticker source. |
-| Current release metadata | Directly observed | `v29.1.0` release metadata, uploaded assets, generated source archives, tag target, and commit-signature metadata were recorded. | Release files were not independently hashed or authenticated. |
-| Release binary signatures | Unavailable / planned | No uploaded checksum manifest, detached signature, signed annotated tag, or trusted BitcoinII release-key path was found for `v29.1.0`. The project maintainer has told the repository owner that releases/signatures are on the roadmap but are not implemented yet. | Treat this as maintainer-supplied context, not published cryptographic evidence. Update when public signing material exists. |
+| Current release metadata | Directly observed / integrity recorded | `v29.1.0` release metadata, 10 uploaded assets, two generated source archives, local hashes, tag target, and bounded commit-signature result were recorded. All uploaded-asset sizes and hashes matched GitHub metadata. | Local hashes and GitHub metadata do not authenticate publisher intent or binary provenance. |
+| Release binary signatures | Unavailable / planned | No publisher checksum manifest, detached release signature, signed annotated tag, trusted BitcoinII release-key path, or public release-specific build attestation was found for `v29.1.0`. The project maintainer has told the repository owner that releases/signatures are on the roadmap but are not implemented yet. | Treat the local hashes as integrity fingerprints and the maintainer statement as roadmap context, not published cryptographic authenticity evidence. |
 | Local BitcoinII node | Locally tested | BitcoinII Core `v29.1.0` GUI node inspected on Windows mainnet with working localhost-only RPC. See [local node inspection](local-node-inspection-2026-07-10.md). | This is one Windows/mainnet environment, not cross-platform proof. |
 | Local-only RPC setup | Locally tested | RPC bound to `127.0.0.1:8337`; no public or LAN bind was observed. Cookie authentication was used without publishing credentials. | Configuration behavior should be rechecked on future releases. |
 | Explorer tip comparison | Directly compared | Local node and `bitcoinii.ddns.net` explorer matched at height `57,420` on 2026-07-10. Local node and `bc2mempool.com` REST matched at height `57,437` within a fraction of a second on 2026-07-12. | These are dated point-in-time agreements, not permanent reliability or official-status claims. |
@@ -54,6 +54,7 @@ For Verification section navigation, use the [Verification README](README.md). O
 ### Release evidence
 
 - [Release asset inventory attempt](release-asset-inventory-attempt.md)
+- [Release-artifact authentication — 2026-08-27](release-artifact-authentication-2026-08-27.md)
 - [Release artifact checklist](release-artifact-checklist.md)
 - [Release source comparison](release-source-comparison.md)
 - [Network release comparison](network-release-comparison.md)
