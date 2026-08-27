@@ -47,11 +47,13 @@ The branch also includes `.github/workflows/site-check.yml` so GitHub can valida
 
 ## Cloudflare target
 
-The preview is deployed at <https://morebc2.pages.dev/> with these Pages settings:
+The active review preview is deployed from the Cloudflare Pages project `morebc2-preview` at <https://morebc2-preview.pages.dev/> with these settings:
 
 - Build command: `npm run build`
 - Output directory: `dist`
 - Production branch: `site/starlight-preview`
+
+The older `morebc2` Pages project and <https://morebc2.pages.dev/> hostname remain separate and untouched as a fallback. They are not the canonical URL for the active review preview.
 
 ## Preview publication boundary
 

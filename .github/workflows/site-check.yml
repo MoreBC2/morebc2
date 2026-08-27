@@ -3,6 +3,7 @@ name: MoreBC2 site check
 on:
   push:
     branches:
+      - main
       - site/starlight-preview
   pull_request:
     paths:
