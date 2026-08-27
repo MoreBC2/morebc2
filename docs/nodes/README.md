@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-08-27
 
 ## Summary
 
@@ -12,7 +12,7 @@ Node pages should help readers run, configure, and troubleshoot BitcoinII Core w
 
 ## Current pages
 
-- [Node guide](node-guide.md)
+- [Tested Windows node guide](node-guide.md) — bounded `v29.1.0` command-line startup, initial-sync observation, read-only RPC, shutdown, and restart path.
 
 ## Source-backed anchors
 
@@ -31,8 +31,8 @@ These pages are source-observed unless they explicitly say a command was run loc
 
 ## Planned pages
 
-- Running a full node
-- Configuration file examples
+- Linux and macOS node paths
+- Additional production configuration examples
 - Network ports
 - Syncing from scratch
 - Backups
@@ -67,4 +67,4 @@ These pages are source-observed unless they explicitly say a command was run loc
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** Some node parameters, startup behavior, storage behavior, and RPC behavior have source-backed anchors. Operational guides need local testing before being treated as verified.
+**Notes:** The Windows `v29.1.0` command-line route has one dated local test through advancing initial sync, clean shutdown, and restart. Draft status remains because full sync, other platforms, release authenticity, and broader operational behavior are unresolved.
