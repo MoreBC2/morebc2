@@ -173,6 +173,8 @@ The reviewed code appears Bitcoin-style in structure, but no upstream comparison
 
 ## Sources
 
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
 - Current observed `main` `src/consensus/tx_check.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/consensus/tx_check.cpp
 - Current observed `main` `src/consensus/tx_check.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/consensus/tx_check.h
 - Current observed `main` `src/consensus/tx_verify.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/consensus/tx_verify.cpp

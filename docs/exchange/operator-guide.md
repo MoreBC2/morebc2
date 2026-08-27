@@ -105,6 +105,8 @@ Do not claim exchange-grade release verification until checksums, signatures, si
 
 ## Sources
 
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
 - Canonical BitcoinII repository: https://github.com/Bitcoin-II/BitcoinII-Core
 - BitcoinII releases: https://github.com/Bitcoin-II/BitcoinII-Core/releases
 - `src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/chainparams.cpp

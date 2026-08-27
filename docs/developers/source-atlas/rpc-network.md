@@ -181,6 +181,8 @@ No upstream comparison has been completed, so this page does not claim whether n
 
 ## Sources
 
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
 - Current observed `main` `src/rpc/net.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/net.cpp
 - Current observed `main` `src/net_processing.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/net_processing.h
 - Current observed `main` `src/net.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/net.h

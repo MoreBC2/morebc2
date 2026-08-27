@@ -129,6 +129,8 @@ Current source-backed wording is Bitcoin-style 2016-block retargeting.
 
 ## Sources
 
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
 - Current observed `main`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/pow.cpp
 - Current observed `main` chain parameters: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/chainparams.cpp
 - `v29.1.0` proof-of-work source: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/pow.cpp

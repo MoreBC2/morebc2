@@ -190,6 +190,8 @@ These still need verification before the page can be marked Verified:
 
 ## Sources
 
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
 - Current observed `main` `src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/chainparams.cpp
 - Current observed `main` `src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/pow.cpp
 - Current observed `main` `src/primitives/block.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/primitives/block.cpp

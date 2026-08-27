@@ -223,6 +223,8 @@ MoreBC2 can use this page to support cautious explanations of:
 
 ## Sources
 
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
 - Current observed `main` `src/banman.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/banman.h
 - Current observed `main` `src/banman.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/banman.cpp
 - Current observed `main` `src/net_processing.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/net_processing.cpp

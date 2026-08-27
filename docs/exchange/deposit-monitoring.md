@@ -92,6 +92,8 @@ MoreBC2 has not yet documented BitcoinII-specific reorganization risk or recomme
 
 ## Sources
 
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
 - `src/kernel/chainparams.cpp` in the current observed BitcoinII Core repository: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/chainparams.cpp
 - `share/examples/bitcoinII.conf` in the current observed BitcoinII Core repository: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/share/examples/bitcoinII.conf
 

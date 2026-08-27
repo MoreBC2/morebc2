@@ -162,6 +162,8 @@ No upstream comparison has been completed, so this page does not claim whether r
 
 ## Sources
 
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
 - Current observed `main` `src/rpc/rawtransaction.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/rawtransaction.cpp
 - Current observed `main` `src/rpc/rawtransaction_util.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/rawtransaction_util.h
 - Current observed `main` `src/node/transaction.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/transaction.h
