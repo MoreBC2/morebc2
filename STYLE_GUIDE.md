@@ -1,5 +1,7 @@
 # MoreBC2 Editorial Style Guide
 
+**Status:** Framework
+
 ## Purpose
 
 This guide keeps MoreBC2 consistent, useful, and careful.
@@ -39,13 +41,16 @@ Each page should clearly belong to one of these categories:
 
 ## Status labels
 
-Use one of these status labels near the top of substantial pages:
+Use one of these page status labels near the top of substantial pages:
 
 - **Draft** — early working content.
-- **Needs Review** — mostly written, but not fully checked.
-- **Verified** — checked against strong primary sources.
-- **Historical** — accurate as history, not necessarily current.
-- **Superseded** — replaced by newer information.
+- **Framework** — structure, policy, or coverage framework exists, but the page is not a verification claim.
+- **Partial** — meaningful source-backed or tested coverage exists, but important areas remain incomplete.
+- **Needs Review** — mostly written, but the relevant claims or current-state wording still need checking.
+- **Reviewed** — a reviewer has checked the page at the stated scope, but that does not automatically make every claim Verified.
+- **Verified** — the page-level verification standard has been met against strong evidence.
+
+Historical or superseded material should be identified explicitly so readers do not mistake it for current information.
 
 ## Source strength
 

@@ -1,5 +1,7 @@
 # MoreBC2 Style Conventions
 
+**Status:** Framework
+
 These conventions keep pages consistent.
 
 ## Headings
@@ -50,9 +52,11 @@ Substantial pages should start with:
 
 ```md
 **Category:** Documentation / News / Research / Discussion / History
-**Status:** Draft / Needs Review / Verified / Historical / Superseded
+**Status:** Draft / Framework / Partial / Needs Review / Reviewed / Verified
 **Last reviewed:** YYYY-MM-DD
 ```
+
+Historical or superseded material should be identified explicitly in its category, title, or notes rather than being made to look current.
 
 ## Verification blocks
 
@@ -61,7 +65,7 @@ Substantial pages should end with:
 ```md
 ## Verification
 
-**Status:** Draft / Needs Review / Verified / Historical
+**Status:** Draft / Framework / Partial / Needs Review / Reviewed / Verified
 **Primary sources checked:** Yes / No
 **Notes:** Add caveats here.
 ```

@@ -1,0 +1,25 @@
+{
+  "name": "morebc2-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare:site": "node scripts/build-site-content.mjs && node scripts/protect-preview-content.mjs",
+    "dev": "npm run prepare:site && astro dev",
+    "build": "npm run prepare:site && astro build && npm run check:site-output",
+    "check:site-output": "node scripts/check-site-output.mjs",
+    "test:site-adapter": "node --test scripts/build-site-content.test.mjs",
+    "preview": "astro preview",
+    "check": "npm run prepare:site && astro check && npm run test:site-adapter"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "0.41.7",
+    "astro": "7.2.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "typescript": "5.9.2"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

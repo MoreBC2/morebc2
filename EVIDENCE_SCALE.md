@@ -1,5 +1,7 @@
 # MoreBC2 Evidence Scale
 
+**Status:** Framework
+
 The evidence scale explains how much confidence readers should place in a claim.
 
 A page can contain multiple claims with different evidence levels. Use the strongest evidence available, and label uncertainty clearly.

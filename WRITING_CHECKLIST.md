@@ -1,12 +1,15 @@
 # MoreBC2 Writing Checklist
 
+**Status:** Framework
+
 Use this checklist before committing documentation changes.
 
 ## Category
 
 - [ ] The page has the correct category: Documentation, News, Research, Discussion, or History.
 - [ ] The page is in the correct folder.
-- [ ] The page status is clear: Draft, Needs Review, Verified, Historical, or Superseded.
+- [ ] The page status is clear: Draft, Framework, Partial, Needs Review, Reviewed, or Verified.
+- [ ] Historical or superseded material is explicitly identified so it cannot be mistaken for current information.
 
 ## Naming
 

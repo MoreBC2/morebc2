@@ -1,5 +1,7 @@
 # MoreBC2
 
+**Status:** Needs Review
+
 Community documentation and resources for the BitcoinII (BC2) ecosystem.
 
 MoreBC2 is not intended to replace the official BitcoinII website, repositories, releases, or developer communications. It exists to preserve, organize, and explain publicly verifiable information so that users, miners, developers, exchanges, and infrastructure providers can find what they need faster.

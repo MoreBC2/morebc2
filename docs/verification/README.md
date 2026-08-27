@@ -6,7 +6,7 @@
 
 ## Summary
 
-This section tracks MoreBC2 evidence records, open questions, test plans, review coordination, and verification queues.
+This section tracks MoreBC2 evidence records, open questions, test plans, and verification queues.
 
 Start with the [Verification evidence index](verification-index.md). It is the canonical evidence summary for MoreBC2.
 
@@ -55,8 +55,9 @@ Plans are not completed results. They describe safe order, scope, or test covera
 - [Command example scan](command-example-scan.md)
 - [Network test coverage map](network-test-coverage-map.md)
 - [Network test run plan](network-test-run-plan.md)
-- [Codex task prompts](codex-task-prompts.md)
 - [Stale wording scan](stale-wording-scan.md)
+
+Internal task prompts and narrow reviewer packets are intentionally not linked from this reader-facing index.
 
 ## 5. Release verification
 
@@ -66,7 +67,8 @@ Release records are carefully bounded. Asset inventory is not binary verificatio
 - [Release artifact checklist](release-artifact-checklist.md)
 - [Release source comparison notes](release-source-comparison.md)
 - [Network release comparison](network-release-comparison.md)
-- [First review packet: release verification wording](first-review-packet-release-wording.md)
+
+Narrow reviewer packets for release wording are intentionally kept outside the normal reader flow.
 
 ## 6. Ecosystem checks
 
@@ -83,13 +85,7 @@ Ecosystem records and plans should distinguish reachable services from reliable,
 
 ## 7. Private review coordination
 
-Private review pages are for narrow invite-only review. They do not make MoreBC2 public-ready.
-
-- [Private review readiness](private-review-readiness.md)
-- [Narrow private review assignments](private-review-assignments.md)
-- [Review feedback buckets](review-feedback-buckets.md)
-- [First review packet: command safety](first-review-packet-command-safety.md)
-- [First review packet: release verification wording](first-review-packet-release-wording.md)
+Private review coordination exists for narrow invite-only review and does not make MoreBC2 public-ready. Those working pages are intentionally omitted from this reader-facing index and from normal site navigation/search.
 
 ## 8. Project identity and status evidence
 
