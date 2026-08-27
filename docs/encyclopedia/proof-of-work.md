@@ -36,9 +36,11 @@ Those pages currently record a double-SHA256 block header hashing path and Bitco
 
 ## Sources
 
-- `src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/pow.cpp
-- `src/primitives/block.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/primitives/block.cpp
-- `src/hash.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/hash.h
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
+- `src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/pow.cpp
+- `src/primitives/block.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/primitives/block.cpp
+- `src/hash.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/hash.h
 
 ## Verification
 
