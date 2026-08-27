@@ -15,6 +15,7 @@
 /package-lock.json @MoreBC2/maintainers
 /astro.config.mjs @MoreBC2/maintainers
 /tsconfig.json @MoreBC2/maintainers
+/src/content.config.ts @MoreBC2/maintainers
 
 # Validation, build, and deployment behavior.
 /scripts/** @MoreBC2/maintainers
