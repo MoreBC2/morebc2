@@ -64,7 +64,7 @@ Exchange, explorer, and pool configurations should be tested and reviewed before
 
 ## Sources
 
-- `share/examples/bitcoinII.conf`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/share/examples/bitcoinII.conf
+- `share/examples/bitcoinII.conf`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/share/examples/bitcoinII.conf
 
 ## Verification
 

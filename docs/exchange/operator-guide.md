@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-08-27
 
 ## Summary
 
@@ -31,7 +31,7 @@ An exchange integration should eventually document:
 | Project name | BitcoinII | README / repository |
 | Common ticker | BC2, needs stronger primary source | Source/UI references and community usage |
 | Mainnet P2P port | `8338` | `chainparams.cpp` |
-| Mainnet RPC port | `8332` | generated config |
+| Mainnet RPC port | `8332` in inherited/generated configuration; `8337` in one dated local `v29.1.0` Windows/mainnet test | source review and local test; no universal value established |
 | Target block spacing | 10 minutes | `chainparams.cpp` |
 | Difficulty interval | 2016 blocks | `chainparams.cpp` / `pow.cpp` |
 | Block header hash path | double-SHA256 via `HashWriter::GetHash()` | `block.cpp` / `hash.h` |
@@ -40,6 +40,8 @@ An exchange integration should eventually document:
 ## RPC security
 
 BitcoinII Core RPC should not be exposed to untrusted networks.
+
+Do not assume that either `8332` or `8337` is universal. The former appears in inherited/generated example configuration, while the latter was configured and observed in the 2026-07-10 local BitcoinII Core `v29.1.0` Windows/mainnet test. Verify the exact release and active node configuration before operational use.
 
 Use firewall rules, private networking, strong authentication, least-privilege access, and operational separation between hot-wallet systems and public-facing infrastructure.
 
@@ -84,7 +86,7 @@ Do not claim exchange-grade release verification until checksums, signatures, si
 
 ## Open items
 
-- Confirm canonical repository path.
+- Monitor the canonical repository path for future ownership or location changes.
 - Confirm official ticker source.
 - Confirm release verification workflow.
 - Confirm recommended confirmation count.
@@ -103,15 +105,17 @@ Do not claim exchange-grade release verification until checksums, signatures, si
 
 ## Sources
 
-- BitcoinII repository: https://github.com/BitcoinII-Dev/BitcoinII
-- BitcoinII releases: https://github.com/BitcoinII-Dev/BitcoinII/releases
-- `src/kernel/chainparams.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/kernel/chainparams.cpp
-- `src/pow.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/pow.cpp
-- `src/hash.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/hash.h
-- `share/examples/bitcoinII.conf`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/share/examples/bitcoinII.conf
+- Canonical BitcoinII repository: https://github.com/Bitcoin-II/BitcoinII-Core
+- BitcoinII releases: https://github.com/Bitcoin-II/BitcoinII-Core/releases
+- `src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/chainparams.cpp
+- `src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/pow.cpp
+- `src/hash.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/hash.h
+- `share/examples/bitcoinII.conf`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/share/examples/bitcoinII.conf
+- [Project identity source check - 2026-07-10](../verification/project-identity-source-check-2026-07-10.md)
+- [Local node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md)
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This guide is an integration framework with source-backed anchors. It is not ready to send as final exchange documentation.
+**Notes:** Canonical-source and RPC wording were synchronized on 2026-08-27. This guide remains an integration framework with source-backed and explicitly scoped local-test anchors. It is not ready to send as final exchange documentation.

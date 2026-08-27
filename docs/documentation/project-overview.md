@@ -35,7 +35,7 @@ The repository README also describes BitcoinII as a “Sister Chain” that curr
 ## Public resources checked during prior review
 
 - Website: https://bitcoin-ii.org/
-- Current observed repository/release path: https://github.com/Bitcoin-II/BitcoinII-Core
+- Current canonical public reference-implementation repository: https://github.com/Bitcoin-II/BitcoinII-Core
 - Legacy or redirected repository path observed in older docs: https://github.com/BitcoinII-Dev/BitcoinII
 - Current observed release page: https://github.com/Bitcoin-II/BitcoinII-Core/releases
 - Source file checked: `src/kernel/chainparams.cpp`
@@ -51,11 +51,10 @@ These should not be filled in from memory:
 - Official X account review.
 - Official Reddit link review.
 - Current maintainer/contact process.
-- Whether `Bitcoin-II/BitcoinII-Core` is the intended canonical GitHub path long-term.
-- How older `BitcoinII-Dev/BitcoinII` links should be described after redirect review.
+- Whether the current canonical GitHub path changes ownership or location in the future.
 
 ## Verification
 
 **Status:** Needs Review
 **Primary sources checked:** Partially
-**Notes:** The statements above are intentionally narrow and remain under review. The ticker, canonical repository path, social links, and maintainer/contact details need further confirmation before this page is marked Verified.
+**Notes:** The statements above are intentionally narrow and remain under review. Canonical-source wording was synchronized from the 2026-07-10 project-identity evidence on 2026-08-27; ticker, social links, and maintainer/contact details still need further confirmation before this page is marked Verified.

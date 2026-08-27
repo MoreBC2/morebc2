@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-07-04
+**Last reviewed:** 2026-08-27
 
 ## Summary
 
@@ -28,10 +28,12 @@ Current source-backed values relevant to this topic:
 - Target block spacing: 10 minutes.
 - Difficulty adjustment interval: 2016 blocks.
 - Mainnet P2P port: `8338`.
-- Mainnet RPC port from generated config: `8332`.
+- Mainnet RPC evidence: inherited/generated configuration shows `8332`; one dated local BitcoinII Core `v29.1.0` Windows/mainnet test configured and observed `127.0.0.1:8337`.
 - Block header hash path: double-SHA256 via `HashWriter::GetHash()`.
 
 These anchors are useful for service documentation, but they do not by themselves define an exchange confirmation policy.
+
+Neither RPC observation establishes a universal port. A service must verify the exact release source and active node configuration before deployment.
 
 ## Confirmation policy
 
@@ -97,4 +99,4 @@ MoreBC2 has not yet documented BitcoinII-specific reorganization risk or recomme
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a framework. Command examples and confirmation policy need testing/review before use in production documentation. Source links use the current observed repository path, but canonical repository status still needs confirmation.
+**Notes:** This is a framework. Canonical-source and RPC wording were synchronized on 2026-08-27. Command examples and confirmation policy need testing/review before use in production documentation, and release-specific RPC behavior beyond the dated local test remains unresolved.

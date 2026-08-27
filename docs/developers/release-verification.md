@@ -70,7 +70,7 @@ Current observations:
 
 Current caveats:
 
-- MoreBC2 has not confirmed that the GitHub release path is canonical.
+- Project-controlled GitHub metadata supports `Bitcoin-II/BitcoinII-Core` as the current canonical public reference implementation and release path; this does not authenticate release artifacts.
 - MoreBC2 has not confirmed that current BitcoinII releases publish `SHA256SUMS` and `SHA256SUMS.asc` outside uploaded release assets.
 - MoreBC2 has not confirmed trusted BitcoinII release keys.
 - MoreBC2 found no public GitHub API evidence at the obvious `guix.sigs` or detached-signature repository paths, but those repositories could be private, renamed, deleted, never created, or hosted elsewhere.
@@ -261,7 +261,7 @@ MoreBC2 should track whether BitcoinII releases meet that kind of standard witho
 
 ## Open questions
 
-- Is `Bitcoin-II/BitcoinII-Core` the canonical release repository?
+- Has the canonical release repository moved or changed ownership since the 2026-07-10 project-identity check?
 - Are any current BitcoinII releases published with signed annotated tags?
 - Are BitcoinII release commits GitHub-verified for all current releases?
 - Are SHA256 checksum files published outside uploaded GitHub release assets?

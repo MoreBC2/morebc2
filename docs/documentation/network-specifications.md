@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Needs Review
-**Last reviewed:** 2026-07-02
+**Last reviewed:** 2026-08-27
 
 ## Summary
 
@@ -10,7 +10,7 @@ This page records BitcoinII mainnet values that have been checked against curren
 
 Values should not be copied here from Discord, memory, explorer pages, or third-party listings unless they are clearly labeled and later verified against primary sources.
 
-This page is still **Needs Review** because some values are moving chain-data fields and because MoreBC2 has not run a local node or compared every value against the current release branch.
+This page is still **Needs Review** because some values are moving chain-data fields and because MoreBC2 has not compared every value against the current release branch. A separate dated local `v29.1.0` Windows/mainnet RPC test exists, but it is not proof of every network value or platform.
 
 ## Source files checked
 
@@ -98,13 +98,15 @@ Because of that, the source-backed wording for now is:
 
 - Message start bytes: `0x42 0x49 0x49 0x21`
 - Default P2P port: `8338`
-- Default RPC port from generated example config: `8332`
+- Mainnet RPC port shown by inherited/generated example configuration: `8332`
 - Testnet RPC port from generated example config: `18332`
 - Signet RPC port from generated example config: `38332`
 - Regtest RPC port from generated example config: `18443`
 - Prune-after height: `200000`
 - Assumed blockchain size hint: `10`
 - Assumed chain state size hint: `10`
+
+The generated `8332` value is source-observed configuration material, not a universally verified BitcoinII runtime default. In a dated local Windows/mainnet test, BitcoinII Core `v29.1.0` was configured and observed on `127.0.0.1:8337`. MoreBC2 has not established whether `8337` is universal across platforms, configurations, or releases; verify the release-specific source and active node configuration before operational use. See [RPC configuration](../configuration/rpc-configuration.md) and the [2026-07-10 local node inspection](../verification/local-node-inspection-2026-07-10.md).
 
 ## P2P behavior now source-atlas linked
 
@@ -174,7 +176,7 @@ Avoid stronger wording until current release, live-chain status, and maintainer-
 
 These still need verification before the page can be marked Verified:
 
-- Current release version tied to these parameters.
+- Complete comparison of these parameters against the current documented release, `v29.1.0`.
 - Current recommended exchange deposit confirmation count.
 - Current recommended withdrawal confirmation count.
 - Whether any later branch or release changes these values.
@@ -205,4 +207,4 @@ These still need verification before the page can be marked Verified:
 
 **Status:** Needs Review
 **Primary sources checked:** Partially
-**Notes:** This page records source-code values and links first-pass network Source Atlas coverage. It should still be reviewed against the current release branch, a locally running BitcoinII Core node, and maintainer-preferred public terminology before being marked Verified.
+**Notes:** This page records source-code values and links first-pass network Source Atlas coverage. RPC wording was synchronized on 2026-08-27 with the dated local `v29.1.0` evidence while preserving unresolved cross-platform/default behavior. The page should still be reviewed against the current release branch and maintainer-preferred public terminology before being marked Verified.

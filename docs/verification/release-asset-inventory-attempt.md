@@ -39,9 +39,9 @@ Captured by Codex from GitHub API metadata:
 
 | Item | Status | Notes |
 |---|---|---|
-| Release page path | Partial | Public path observed. Canonical status still needs confirmation. |
+| Release page path | Partial | Current canonical path established by separate project-controlled metadata review; artifact authentication remains separate. |
 | Release title | Partial | `BitcoinII Core v29.1.0` observed by page review and API metadata. |
-| Release timestamp | Partial | API metadata gives created and published timestamps. Canonical status of release path still needs confirmation. |
+| Release timestamp | Partial | API metadata gives created and published timestamps; this does not authenticate the release or assets. |
 | Uploaded asset count | Partial | GitHub API reports 10 uploaded assets. |
 | Uploaded asset names | Partial | 10 uploaded asset names captured from API metadata. |
 | Uploaded asset sizes | Partial | Uploaded asset sizes captured from API metadata. |

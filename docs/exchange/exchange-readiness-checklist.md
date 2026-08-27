@@ -25,7 +25,7 @@ It is intentionally conservative. A checked item should mean the information is 
 | Project name | Draft | Should match official project usage. |
 | Ticker | Draft | Should be `BC2` unless official sources change. |
 | Official website | Needs verification | Confirm current canonical domain before applications. |
-| Official source repository | Needs verification | Confirm canonical repository path and ownership. |
+| Official source repository | Needs verification | Current canonical public reference implementation is `Bitcoin-II/BitcoinII-Core`; recheck ownership/path before an application. |
 | License | Needs verification | Confirm from repository license file. |
 | Logo package | Missing | Needed in PNG/SVG, dark/light variants if possible. |
 | Short project description | Draft | Should avoid hype and unverifiable claims. |

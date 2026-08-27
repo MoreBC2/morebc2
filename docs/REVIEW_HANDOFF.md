@@ -234,7 +234,6 @@ Avoid these assignments until there is a dedicated reason and a tighter test env
 
 These do not block private review, but they do block public launch:
 
-- Canonical repository and release path confirmation.
 - Release asset verification workflow.
 - License/contribution policy finalized.
 - At least one outside technical review of core claims.

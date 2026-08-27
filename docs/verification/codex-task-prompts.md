@@ -20,6 +20,8 @@ GitHub repository search can miss matches or behave differently from a full loca
 
 ### Prompt
 
+The legacy repository names below are search needles retained so future audits can detect stale operational references; they are not source recommendations.
+
 ```text
 You are working in the MoreBC2 repository.
 

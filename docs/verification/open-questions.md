@@ -23,13 +23,13 @@ Priority labels:
 
 ## Project identity and official sources
 
-### Canonical repository path
+### Canonical repository path drift
 
-**Question:** Which GitHub path should MoreBC2 treat as the canonical public BitcoinII repository path?
+**Question:** Has the current canonical `Bitcoin-II/BitcoinII-Core` path changed ownership or location since the 2026-07-10 project-identity check?
 
-**Needed evidence:** Maintainer-confirmed repository link, official website link, or stable release/source link.
+**Needed evidence:** A periodic recheck of project-controlled GitHub organization/repository metadata and the project website link.
 
-**Priority:** Blocks public launch
+**Priority:** Future improvement
 
 **Status:** Needs Review
 

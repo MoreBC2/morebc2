@@ -159,7 +159,7 @@ Checkpoint lists should be labeled by source version before being copied into pu
 
 ## Open questions
 
-- Confirm whether `Bitcoin-II/BitcoinII-Core` is the canonical source for current public releases.
+- Monitor whether the current canonical `Bitcoin-II/BitcoinII-Core` source or release path changes.
 - Confirm whether current `main` differs from `v29.1.0` for snapshot-style chain-data fields.
 - Confirm maintainer-preferred public wording for consensus parameters.
 - Decide whether checkpoint data deserves a separate reference page.

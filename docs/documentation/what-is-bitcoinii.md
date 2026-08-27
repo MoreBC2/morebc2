@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Needs Review
-**Last reviewed:** 2026-07-01
+**Last reviewed:** 2026-08-27
 
 ## Summary
 
@@ -36,7 +36,7 @@ The current MoreBC2 technical drafts have source-backed notes for:
 - 210,000-block subsidy halving interval.
 - Double-SHA256 block header hashing path.
 - Mainnet P2P port `8338`.
-- Mainnet RPC port `8332` from the generated example config.
+- Inherited/generated example configuration shows mainnet RPC port `8332`; a dated local BitcoinII Core `v29.1.0` Windows/mainnet test used `127.0.0.1:8337`. Neither observation proves a universal RPC port, so operators must verify the relevant release and runtime configuration.
 - Genesis block hash and merkle root.
 - Address prefix values.
 
@@ -60,12 +60,13 @@ This page does not claim:
 ## Open items
 
 - Confirm the strongest official source for ticker `BC2`.
-- Confirm the canonical long-term GitHub organization or repository path.
+- Monitor the current canonical repository path for future ownership or location changes.
 - Confirm official community links and maintainer contact process.
 - Confirm release verification model.
 
 ## Sources
 
+- Current canonical repository: `Bitcoin-II/BitcoinII-Core`
 - Current observed README: `Bitcoin-II/BitcoinII-Core` `README.md`
 - Current observed chain parameters source: `Bitcoin-II/BitcoinII-Core` `src/kernel/chainparams.cpp`
 - Current observed difficulty source: `Bitcoin-II/BitcoinII-Core` `src/pow.cpp`
@@ -77,4 +78,4 @@ This page does not claim:
 
 **Status:** Needs Review
 **Primary sources checked:** Partially
-**Notes:** This page should be reviewed after the source registry confirms canonical links and official public contact channels.
+**Notes:** Canonical-source wording was synchronized from the 2026-07-10 project-identity evidence on 2026-08-27. Technical claims remain source-reviewed or locally tested only where stated; official public contact channels still need review.
