@@ -2,6 +2,8 @@
 
 **Status:** Needs Review
 
+**Facts synchronized:** 2026-08-27
+
 This registry helps contributors choose appropriate sources.
 
 It does not prove that every listed source is complete, current, or official in every context. Each page should still cite the exact source used.
@@ -33,13 +35,14 @@ Use for:
 - Hashing path
 - Configuration defaults
 
-Current repository path used in MoreBC2 drafts:
+Current canonical public reference-implementation repository used for operational and current citations:
 
-- https://github.com/BitcoinII-Dev/BitcoinII
+- https://github.com/Bitcoin-II/BitcoinII-Core
 
 Notes:
 
-- Some GitHub paths may redirect or appear under different owner names. When citing, prefer the public project path that users are expected to visit.
+- Project-controlled GitHub organization and repository metadata reviewed on 2026-07-10 explicitly describe `Bitcoin-II/BitcoinII-Core` as the canonical reference implementation.
+- The older `BitcoinII-Dev/BitcoinII` path is retained only in historical provenance, migration/redirect history, archived evidence, and older reviewed material. It must not be used as a current operational source.
 - If repository ownership or canonical location changes, update this registry and affected docs.
 
 ### BitcoinII releases
@@ -52,9 +55,15 @@ Use for:
 - Downloadable assets
 - Checksums/signature model, if available
 
-Current release page used in drafts:
+Current release page used for operational and current citations:
 
-- https://github.com/BitcoinII-Dev/BitcoinII/releases
+- https://github.com/Bitcoin-II/BitcoinII-Core/releases
+
+Current documented release:
+
+- `v29.1.0`
+
+This records the release established by the existing MoreBC2 release-page/API evidence. It is not binary authentication, checksum verification, or a claim that every release artifact was independently verified.
 
 ### BitcoinII website
 
@@ -124,7 +133,7 @@ Example:
 
 ## Open source-registry tasks
 
-- Confirm canonical BitcoinII GitHub organization/path.
+- Monitor the canonical repository and release path for future ownership or location changes.
 - Add confirmed official Discord invite.
 - Add confirmed official Telegram.
 - Add confirmed official X account.

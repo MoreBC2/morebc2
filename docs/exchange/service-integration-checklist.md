@@ -15,7 +15,7 @@ It is a documentation checklist only. It does not replace technical review, secu
 - [ ] Project name confirmed as BitcoinII.
 - [ ] Ticker source confirmed as BC2.
 - [ ] Official website confirmed.
-- [ ] Canonical repository path confirmed.
+- [ ] Recheck the recorded canonical `Bitcoin-II/BitcoinII-Core` repository path for changes before submission.
 - [ ] Release page confirmed.
 - [ ] Technical contact process confirmed.
 

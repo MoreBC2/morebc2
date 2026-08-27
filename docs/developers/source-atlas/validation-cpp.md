@@ -421,11 +421,11 @@ This diagram is intentionally simplified. MoreBC2 still needs a broader mempool 
 
 ## Sources
 
-- `src/validation.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/validation.cpp
-- `src/validation.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/validation.h
-- `src/pow.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/pow.cpp
-- `src/kernel/disconnected_transactions.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/kernel/disconnected_transactions.h
-- `src/kernel/disconnected_transactions.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/kernel/disconnected_transactions.cpp
+- `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.cpp
+- `src/validation.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.h
+- `src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/pow.cpp
+- `src/kernel/disconnected_transactions.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/disconnected_transactions.h
+- `src/kernel/disconnected_transactions.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/disconnected_transactions.cpp
 
 ## Verification
 

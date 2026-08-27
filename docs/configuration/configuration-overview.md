@@ -78,7 +78,7 @@ Separate source-observed defaults from recommended operator settings.
 - Confirm platform-specific service setup.
 - Add tested configuration records for local node startup.
 - Confirm release binary names before writing copy/paste command examples.
-- Confirm canonical repository/source path before public-link polish.
+- Monitor the canonical repository/source path for future ownership or location changes.
 
 ## Sources
 
@@ -91,4 +91,4 @@ Separate source-observed defaults from recommended operator settings.
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** General config-file behavior is source-observed from the generated example config. Platform-specific instructions, startup commands, service setup examples, and release binary names still need testing. Source links use the current observed repository path, but canonical repository status still needs confirmation.
+**Notes:** General config-file behavior is source-observed from the generated example config. Canonical-source wording was synchronized on 2026-08-27. Platform-specific instructions, startup commands, service setup examples, and release binary names still need testing.
