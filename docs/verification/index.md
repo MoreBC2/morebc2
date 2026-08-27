@@ -40,7 +40,7 @@ The older tables below are not the current evidence map. They reflect an earlier
 | Topic | Needed source | Location |
 |---|---|---|
 | Official ticker source for BC2 | Official site, README, release, maintainer statement | Source registry / project overview |
-| Canonical GitHub path | Maintainer confirmation or official stable link | Source registry |
+| Canonical GitHub path change monitoring | Recheck project-controlled GitHub metadata for ownership/path changes | Source registry / project identity source check |
 | Release verification model | Release assets, signatures, checksums, maintainer note | Releases / wallet guide |
 | Recommended exchange confirmations | Maintainer recommendation or reviewed risk model | Exchange package |
 | Technical contact process | Official website, README, maintainer statement | Exchange package |

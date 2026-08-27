@@ -51,7 +51,7 @@ Use [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md
 ## Open items
 
 - Confirm official wallet download source.
-- Confirm canonical repository and release path.
+- Monitor the canonical repository and release path for future changes.
 - Confirm release verification workflow.
 - Confirm platform-specific wallet installation and behavior.
 - Confirm whether any third-party wallets exist.

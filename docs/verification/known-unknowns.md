@@ -14,13 +14,13 @@ For the full working list, use the [open questions backlog](open-questions.md) a
 
 ## Highest-priority known unknowns
 
-### Canonical public repository path
+### Canonical public repository path drift
 
-MoreBC2 currently observes `Bitcoin-II/BitcoinII-Core` for current source and release work, while older paths may redirect elsewhere.
+Project-controlled GitHub metadata reviewed on 2026-07-10 supports `Bitcoin-II/BitcoinII-Core` as the current canonical public reference implementation. Older paths are retained only for historical provenance, migration/redirect history, archived evidence, or older reviewed material.
 
-**Needed:** Stable maintainer-confirmed canonical source and release path.
+**Needed:** Periodic recheck for repository ownership or location changes.
 
-**Blocks:** Public launch.
+**Blocks:** Nothing currently; a future path change would require synchronized operational links.
 
 ### Official ticker source
 

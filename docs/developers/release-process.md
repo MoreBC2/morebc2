@@ -18,7 +18,7 @@ Current observed public release path:
 
 - `https://github.com/Bitcoin-II/BitcoinII-Core/releases`
 
-Older release links such as `https://github.com/BitcoinII-Dev/BitcoinII/releases` may redirect elsewhere and should be treated as legacy observations until the canonical source and release path are confirmed.
+Older release links such as `https://github.com/BitcoinII-Dev/BitcoinII/releases` may redirect elsewhere and are retained only as legacy observations. Current operational release citations use the canonical `Bitcoin-II/BitcoinII-Core` path.
 
 ## What is known from current review
 
@@ -35,7 +35,7 @@ MoreBC2 also observed legacy release-page entries for:
 - `v0.27.1`
 - `v0.27.0`
 
-Those legacy observations should not be treated as the current canonical release path until maintainers or official project material confirm the path.
+Those legacy observations are historical evidence and must not be treated as the current canonical release path.
 
 ## Source-tree process documents observed
 
@@ -54,8 +54,7 @@ Source-tree process documents are useful evidence about intended or inherited pr
 
 This page should eventually answer:
 
-- Which repository path is canonical?
-- Where are official releases published?
+- How should a future canonical-repository or release-path move be detected and recorded?
 - Which assets are published for each platform?
 - Are checksum files provided?
 - Are release authenticity files provided?
@@ -73,13 +72,13 @@ This page does not claim:
 - That builds are reproducible.
 - That GitHub release metadata alone is sufficient for exchange-grade verification.
 - That workflow artifacts are attached to the public release page.
-- That `Bitcoin-II/BitcoinII-Core` is final canonical path without maintainer or official-source confirmation.
+- That the current canonical path can never change ownership or location.
 
 Those claims need direct review.
 
 ## Open items
 
-- Confirm canonical repository and release path.
+- Monitor the canonical repository and release path for future changes.
 - Capture full `v29.1.0` asset list.
 - Check whether checksum files are published.
 - Check whether release authenticity files are published.

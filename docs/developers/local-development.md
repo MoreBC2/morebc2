@@ -31,7 +31,7 @@ Current MoreBC2 review work observes this public source path:
 
 - `https://github.com/Bitcoin-II/BitcoinII-Core`
 
-The canonical repository question is still open. Do not present this as final official guidance until the repository path is confirmed by maintainers or official project material.
+Project-controlled GitHub metadata reviewed on 2026-07-10 supports this as the current canonical public reference-implementation repository. Repository ownership or location can still change, so contributors should recheck the [source registry](../../SOURCE_REGISTRY.md) before long-lived automation.
 
 ## Safety rule
 
@@ -140,7 +140,7 @@ This path should be documented only after it is actually performed.
 
 ## Open questions
 
-- Which repository path should contributors clone as canonical?
+- How should contributors detect and respond to a future canonical-repository move?
 - Which Linux distribution should MoreBC2 use for first verified builds?
 - Which dependency set is required for daemon-only builds?
 - Which dependency set is required for GUI builds?
@@ -151,4 +151,4 @@ This path should be documented only after it is actually performed.
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This guide defines the local-development documentation workflow. It does not yet contain verified build commands. The current observed source path is recorded, but canonical repository status still needs confirmation.
+**Notes:** This guide defines the local-development documentation workflow. It does not yet contain verified build commands. Canonical-source wording was synchronized from the dated project-identity evidence on 2026-08-27.
