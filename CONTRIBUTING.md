@@ -1,7 +1,7 @@
 # Contributing to MoreBC2
 
 **Status:** Draft / private-review workflow
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-08-26
 
 ## Summary
 
@@ -28,6 +28,29 @@ Document what is verified.
 Clearly label what is not verified.
 
 Do not make uncertain material sound more certain than the evidence supports.
+
+## Repository workflow
+
+Use a short-lived branch for each focused change. Changes should normally enter `main` through a pull request rather than a direct push.
+
+The preferred review flow is:
+
+1. Keep the branch and pull request limited to one understandable purpose.
+2. Complete the relevant checks in this guide and record the validation in the pull request.
+3. Ask a reviewer to check substantive changes. Authors should not approve their own substantive work.
+4. Verify factual and technical claims against the cited evidence; a formatting-only review is not enough for those claims.
+5. Involve `@MoreBC2/maintainers` when a change affects repository administration, dependencies, validation, build behavior, deployment behavior, or other workflow-sensitive paths.
+6. Merge only after the requested review and validation are complete.
+
+The `contributors`, `reviewers`, and `maintainers` teams provide the repository access needed for these roles. Contributors do not need organization Owner access.
+
+GitHub does not currently enforce the preferred `main` protections for this private repository on the organization's current plan. The pull-request and review steps above are project policy even where the GitHub interface cannot require them. They are intended to remain the same if enforceable branch protections or rulesets are added later.
+
+## Repository safety and privacy
+
+Do not commit secrets, API tokens, passwords, private keys, seed phrases, personal information, or unnecessary personal data. Use redacted examples and safe test data. If sensitive material is exposed, stop sharing it and notify a maintainer privately so the affected credential or data can be handled appropriately.
+
+Preserve MoreBC2's existing status vocabulary, evidence scale, sourcing standards, and verification blocks. Do not weaken an uncertainty label or strengthen a claim merely to make a change appear complete.
 
 ## Evidence expectations
 
