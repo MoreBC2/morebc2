@@ -208,6 +208,8 @@ The reviewed file structure appears Bitcoin-style, but no upstream comparison ha
 
 ## Sources
 
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
 - Current observed `main` `src/node/miner.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/miner.h
 - Current observed `main` `src/node/miner.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/miner.cpp
 - Current observed `main` `src/node/mini_miner.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/mini_miner.h

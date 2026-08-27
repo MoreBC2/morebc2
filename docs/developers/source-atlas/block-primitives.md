@@ -51,6 +51,8 @@ MoreBC2 currently cites these files for:
 
 ## Sources
 
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
 - Current observed `main` `src/primitives/block.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/primitives/block.h
 - Current observed `main` `src/primitives/block.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/primitives/block.cpp
 

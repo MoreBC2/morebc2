@@ -257,6 +257,8 @@ No upstream comparison has been completed, so this page does not claim whether w
 
 ## Sources
 
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
 - Current observed `main` `src/wallet/rpc/wallet.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/wallet.cpp
 - Current observed `main` `src/wallet/rpc/addresses.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/addresses.cpp
 - Current observed `main` `src/wallet/init.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/init.cpp

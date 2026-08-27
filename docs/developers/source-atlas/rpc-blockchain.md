@@ -222,6 +222,8 @@ No upstream comparison has been completed, so this page does not claim whether b
 
 ## Sources
 
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
 - Current observed `main` `src/rpc/blockchain.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/blockchain.cpp
 - Current observed `main` `src/rpc/blockchain.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/blockchain.h
 - Current observed `main` `src/rpc/server.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/server.h

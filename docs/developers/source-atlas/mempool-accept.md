@@ -353,6 +353,8 @@ This reviewed code shows BitcoinII naming and fork metadata. This pass has not i
 
 ## Sources
 
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
 - Current observed `main` `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.cpp
 - Current observed `main` `src/validation.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.h
 - Current observed `main` `src/node/transaction.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/transaction.cpp

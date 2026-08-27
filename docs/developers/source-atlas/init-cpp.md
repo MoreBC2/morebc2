@@ -196,6 +196,8 @@ Use this Source Atlas page when reading:
 
 ## Sources
 
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
 - Current observed `main` `src/init.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/init.cpp
 - Current observed `main` `src/init.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/init.h
 - Current observed `main` `src/node/context.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/context.h

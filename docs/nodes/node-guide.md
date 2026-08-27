@@ -103,8 +103,8 @@ This is one Windows/mainnet environment, not cross-platform proof. Wallet, trans
 ## Sources
 
 - Current observed BitcoinII Core repository: https://github.com/Bitcoin-II/BitcoinII-Core
-- `src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/chainparams.cpp
-- `share/examples/bitcoinII.conf`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/share/examples/bitcoinII.conf
+- `src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/kernel/chainparams.cpp
+- `share/examples/bitcoinII.conf`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/share/examples/bitcoinII.conf
 - [Command testing status](../verification/command-testing.md)
 - [Local BitcoinII node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md)
 - [Read-only RPC smoke test - 2026-07-10](../verification/read-only-rpc-smoke-test-2026-07-10.md)
