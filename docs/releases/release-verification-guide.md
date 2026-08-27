@@ -69,7 +69,7 @@ Use:
 - "uploaded asset inventory recorded"
 - "local integrity fingerprints recorded"
 - "source archives listed separately"
-- "GitHub commit signature metadata observed but not independently verified"
+- "tagged commit signature independently verified against GitHub's web-flow service key; no BitcoinII release trust or artifact binding established"
 - "release authentication path remains unresolved"
 - "signing/checksum publication is roadmap context, not current proof"
 
