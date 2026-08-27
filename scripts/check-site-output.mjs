@@ -3,7 +3,7 @@ import path from 'node:path';
 
 const repoRoot = process.cwd();
 const distRoot = path.join(repoRoot, 'dist');
-const siteOrigin = 'https://morebc2.pages.dev';
+const siteOrigin = 'https://morebc2-preview.pages.dev';
 
 function toPosix(value) {
   return value.replaceAll('\\', '/');

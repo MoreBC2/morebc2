@@ -35,9 +35,12 @@ const hiddenProjectFiles = new Set([
   'WRITING_CHECKLIST.md',
 ]);
 
-// These working pages remain directly addressable and searchable, but do not
-// belong in the normal reader sidebar.
+// These working pages remain directly addressable, but do not belong in the
+// normal reader sidebar or Pagefind search index.
 const hiddenDocPaths = new Set([
+  'docs/AUDIT.md',
+  'docs/POLISH_PLAN.md',
+  'docs/REVIEW_HANDOFF.md',
   'docs/verification/codex-task-prompts.md',
   'docs/verification/first-review-packet-command-safety.md',
   'docs/verification/first-review-packet-release-wording.md',
