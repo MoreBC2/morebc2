@@ -44,7 +44,7 @@ The preferred review flow is:
 
 The `contributors`, `reviewers`, and `maintainers` teams provide the repository access needed for these roles. Contributors do not need organization Owner access.
 
-GitHub does not currently enforce the preferred `main` protections for this private repository on the organization's current plan. The pull-request and review steps above are project policy even where the GitHub interface cannot require them. They are intended to remain the same if enforceable branch protections or rulesets are added later.
+GitHub does not currently enable CODEOWNERS or enforce the preferred `main` protections for this private repository on the organization's current plan. The CODEOWNERS file records the intended ownership model, but GitHub will not automatically request those teams or require their approval under the current plan. The pull-request and review steps above are project policy even where the GitHub interface cannot require them. They are intended to remain the same if CODEOWNERS and enforceable branch protections or rulesets become available later.
 
 ## Repository safety and privacy
 
