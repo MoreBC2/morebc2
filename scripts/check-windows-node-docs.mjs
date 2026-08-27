@@ -29,10 +29,22 @@ assert.match(record, /^\*\*Status:\*\* Draft \/ Dated local test$/m);
 assert.ok(combined.includes('INTEGRITY RECORDED, AUTHENTICITY UNVERIFIED'));
 assert.match(combined, /do not authenticate the publisher|repeat-byte integrity evidence only/i);
 assert.match(combined, /Do not expose BitcoinII Core RPC to the public internet/i);
-assert.match(combined, /does not generalize .*universal default|not (?:a claimed |a )?default|not asserted here as universal/i);
-assert.match(combined, /initialblockdownload.*true/is);
-assert.match(combined, /full synchronization.*(?:not|did not)/is);
-assert.match(combined, /Shutdown: done/);
+assert.match(guide, /`28337` is an explicit operator-selected port used by this isolated test/i);
+assert.match(guide, /does not generalize `8337` or `28337` as a universal default/i);
+assert.match(guide, /evidence that contains `8332` is also a separate evidence type/i);
+assert.match(record, /explicit loopback override `28337`/i);
+assert.match(record, /Neither port is asserted here as universal/i);
+assert.match(guide, /three redacted one-shot peer addresses borrowed from a separate local node/i);
+assert.match(guide, /fresh-node bootstrap path remains unresolved/i);
+assert.match(record, /three outbound peer addresses were obtained from the separate local node/i);
+assert.match(record, /No public peer list or generalized repair is established here/i);
+assert.match(guide, /initialblockdownload.*true/is);
+assert.match(record, /initialblockdownload.*true/is);
+assert.match(guide, /did not establish full synchronization/i);
+assert.match(record, /test stopped before full synchronization/i);
+assert.match(guide, /not an exhaustive filesystem-integrity or corruption test/i);
+assert.match(guide, /Shutdown: done/);
+assert.match(record, /Shutdown: done/);
 
 for (const line of [
   'server=1',

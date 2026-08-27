@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-07-10
+**Last reviewed:** 2026-08-27
 
 ## Summary
 
@@ -198,5 +198,5 @@ Once a command has a test record:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current MoreBC2 RPC, wallet, node, mining, configuration pages, command smoke-test plan, first-pass network RPC source review, and the local read-only RPC smoke-test record from 2026-07-10
-**Notes:** Nine read-only node/network RPC commands now have a local Windows mainnet test record for BitcoinII Core v29.1.0. This is not cross-platform or cross-version verification, and raw peer/network outputs still require privacy review.
+**Primary sources checked:** Current MoreBC2 RPC, wallet, node, mining, configuration pages, command smoke-test plan, first-pass network RPC source review, the local read-only RPC smoke-test record from 2026-07-10, and the Windows node-operator test from 2026-08-27
+**Notes:** Nine read-only node/network RPC commands have the earlier local Windows mainnet record; five of them were exercised again in the isolated command-line route together with startup, shutdown, and restart. This is not cross-platform or cross-version verification, and raw peer/network outputs still require privacy review.

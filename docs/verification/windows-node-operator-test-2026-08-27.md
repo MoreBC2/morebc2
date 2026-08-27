@@ -16,7 +16,7 @@ The bounded test did not wait for initial block download to finish. It establish
 |---|---|
 | Host | 64-bit Windows, NT `10.0.26200.9168`; registry `DisplayVersion` `25H2` |
 | Network | BitcoinII mainnet |
-| BitcoinII Core | `v29.1.0`; daemon and CLI reported version `290100` / `/Satoshi:29.1.0/` |
+| BitcoinII Core | Both executables reported `v29.1.0` with `-version`; `getnetworkinfo` returned `version=290100` and `subversion=/Satoshi:29.1.0/` |
 | Artifact | `BitcoinII-29.1.0-x86_64-win64-CLI.zip` |
 | Artifact bytes | `7,987,528` |
 | Artifact SHA-256 | `94985c39c2e99406b50b3a318442677ffa3df6f9d471c03cb30f1fb0c4b8fa3a` |
