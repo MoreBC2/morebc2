@@ -18,6 +18,8 @@ This is one narrow, locally tested route for running the BitcoinII Core `v29.1.0
 
 The test reached advancing initial block synchronization and then completed a clean shutdown and restart. It did not wait for full synchronization. This is not a wallet, transaction, mining, inbound-node, firewall, or public-RPC guide.
 
+**Important peer-discovery limit:** the fresh isolated node did not automatically obtain persistent peers in the tested environment. The synchronization progress reported below required three redacted one-shot peer addresses borrowed from a separate local node. Those addresses were test scaffolding, are not published or recommended, and are not required for the startup, local RPC, shutdown, or restart portions of this guide. A generally reproducible fresh-node bootstrap path remains unresolved, so a reader following this Draft procedure may remain at zero peers.
+
 ## 1. Obtain the tested release
 
 Use the canonical [`v29.1.0` release page](https://github.com/Bitcoin-II/BitcoinII-Core/releases/tag/v29.1.0) and select:
@@ -143,6 +145,8 @@ Live connection counts vary.
 
 ## 6. Observe peers and synchronization
 
+The tested synchronization advance depended on the redacted one-shot peer scaffolding disclosed in the Scope section. The commands below accurately show whether your node found peers and is advancing, but this guide does not claim that the preceding fresh-node steps will discover peers automatically.
+
 Run:
 
 ```powershell
@@ -200,6 +204,8 @@ Do not force-close the process merely because the CLI returned. The test treated
 ## 9. Restart
 
 Run the startup command from step 4 again with the same `$DataDir`. After `Done loading`, repeat `getblockchaininfo`. The test restarted successfully, read the retained chain state at height 6,795, and then completed a second clean RPC shutdown without a corruption warning.
+
+That bounded restart shows that the retained state was readable in this test; it is not an exhaustive filesystem-integrity or corruption test.
 
 ## Troubleshooting boundaries
 
