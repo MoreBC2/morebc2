@@ -1,0 +1,23 @@
+# GitHub does not currently enable CODEOWNERS for this private repository on
+# the organization's plan. These rules record the intended ownership model for
+# human review now and for GitHub enforcement if the plan supports it later.
+
+# Default ownership for repository content, including documentation and site content.
+* @MoreBC2/reviewers
+
+# Repository administration and GitHub Actions workflows.
+/.github/** @MoreBC2/maintainers
+/.github/CODEOWNERS @MoreBC2/maintainers
+/.github/workflows/** @MoreBC2/maintainers
+
+# Dependency and build configuration.
+/package.json @MoreBC2/maintainers
+/package-lock.json @MoreBC2/maintainers
+/astro.config.mjs @MoreBC2/maintainers
+/tsconfig.json @MoreBC2/maintainers
+/src/content.config.ts @MoreBC2/maintainers
+
+# Validation, build, and deployment behavior.
+/scripts/** @MoreBC2/maintainers
+/public/_headers @MoreBC2/maintainers
+/public/robots.txt @MoreBC2/maintainers
