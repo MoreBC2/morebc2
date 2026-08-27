@@ -296,10 +296,10 @@ Reviewed behavior:
 
 ## Sources
 
-- `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.cpp
-- `src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/pow.cpp
-- `src/kernel/disconnected_transactions.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/disconnected_transactions.h
-- `src/kernel/disconnected_transactions.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/disconnected_transactions.cpp
+- `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/218d1b7e0f682c2aa43c3698d927cbfbb7adfe76/src/validation.cpp
+- `src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/218d1b7e0f682c2aa43c3698d927cbfbb7adfe76/src/pow.cpp
+- `src/kernel/disconnected_transactions.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/218d1b7e0f682c2aa43c3698d927cbfbb7adfe76/src/kernel/disconnected_transactions.h
+- `src/kernel/disconnected_transactions.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/218d1b7e0f682c2aa43c3698d927cbfbb7adfe76/src/kernel/disconnected_transactions.cpp
 
 ## Verification
 

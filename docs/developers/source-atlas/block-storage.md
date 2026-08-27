@@ -223,6 +223,8 @@ The reviewed file structure appears Bitcoin-style, but no upstream comparison ha
 
 ## Sources
 
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
 - Current observed `main` `src/node/blockstorage.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/blockstorage.h
 - Current observed `main` `src/node/blockstorage.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/blockstorage.cpp
 - Current observed `main` `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.cpp

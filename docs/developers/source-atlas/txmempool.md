@@ -336,6 +336,8 @@ The reviewed files show BitcoinII naming and fork metadata, but this pass has no
 
 ## Sources
 
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
 - Current observed `main` `src/txmempool.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/txmempool.h
 - Current observed `main` `src/txmempool.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/txmempool.cpp
 - Current observed `main` `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.cpp

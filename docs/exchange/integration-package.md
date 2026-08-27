@@ -136,13 +136,13 @@ Do not claim stronger release verification than currently exists.
 ## Sources
 
 - GitHub releases: https://github.com/Bitcoin-II/BitcoinII-Core/releases
-- `src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/chainparams.cpp
-- `src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/pow.cpp
-- `src/primitives/block.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/primitives/block.cpp
-- `src/hash.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/hash.h
-- `src/consensus/amount.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/consensus/amount.h
-- `share/examples/bitcoinII.conf`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/share/examples/bitcoinII.conf
-- README: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/README.md
+- `src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/kernel/chainparams.cpp
+- `src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/pow.cpp
+- `src/primitives/block.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/primitives/block.cpp
+- `src/hash.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/hash.h
+- `src/consensus/amount.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/consensus/amount.h
+- `share/examples/bitcoinII.conf`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/share/examples/bitcoinII.conf
+- README: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/README.md
 - [Project identity source check - 2026-07-10](../verification/project-identity-source-check-2026-07-10.md)
 - [Local node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md)
 

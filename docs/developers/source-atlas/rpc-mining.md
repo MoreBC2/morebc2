@@ -250,6 +250,8 @@ No upstream comparison has been completed, so this page does not claim whether m
 
 ## Sources
 
+The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+
 - Current observed `main` `src/rpc/mining.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/mining.cpp
 - Current observed `main` `src/node/miner.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/miner.h
 - Current observed `main` `src/node/miner.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/miner.cpp
