@@ -28,7 +28,7 @@ For Verification section navigation, use the [Verification README](README.md). O
 | Project name and ticker | Strong partial | Project-controlled source/UI/repository material uses BitcoinII and `BC2`. | A simple explicit maintainer statement would be the cleanest primary ticker source. |
 | Current release metadata | Directly observed / integrity recorded | `v29.1.0` release metadata, 10 uploaded assets, two generated source archives, local hashes, tag target, and bounded commit-signature result were recorded. All uploaded-asset sizes and hashes matched GitHub metadata. | Local hashes and GitHub metadata do not authenticate publisher intent or binary provenance. |
 | Release binary signatures | Unavailable / planned | No publisher checksum manifest, detached release signature, signed annotated tag, trusted BitcoinII release-key path, or public release-specific build attestation was found for `v29.1.0`. The project maintainer has told the repository owner that releases/signatures are on the roadmap but are not implemented yet. | Treat the local hashes as integrity fingerprints and the maintainer statement as roadmap context, not published cryptographic authenticity evidence. |
-| Local BitcoinII node | Locally tested | BitcoinII Core `v29.1.0` GUI node inspected on Windows mainnet with working localhost-only RPC. See [local node inspection](local-node-inspection-2026-07-10.md). | This is one Windows/mainnet environment, not cross-platform proof. |
+| Local BitcoinII node | Locally tested | BitcoinII Core `v29.1.0` GUI inspection and a separate wallet-disabled CLI route were tested on Windows mainnet. The CLI test covered isolated startup, advancing initial sync, five read-only RPC calls, clean shutdown, and restart. See the [Windows operator test](windows-node-operator-test-2026-08-27.md). | Full sync, automatic peer discovery, other platforms, wallet behavior, and universal port behavior remain unresolved. |
 | Local-only RPC setup | Locally tested | RPC bound to `127.0.0.1:8337`; no public or LAN bind was observed. Cookie authentication was used without publishing credentials. | Configuration behavior should be rechecked on future releases. |
 | Explorer tip comparison | Directly compared | Local node and `bitcoinii.ddns.net` explorer matched at height `57,420` on 2026-07-10. Local node and `bc2mempool.com` REST matched at height `57,437` within a fraction of a second on 2026-07-12. | These are dated point-in-time agreements, not permanent reliability or official-status claims. |
 | Read-only RPC commands | Locally tested | Nine commands passed: `getblockcount`, `getbestblockhash`, `getblockchaininfo`, `getnetworkinfo`, `getconnectioncount`, `getpeerinfo`, `getmempoolinfo`, `getdifficulty`, and `uptime`. See [RPC smoke test](read-only-rpc-smoke-test-2026-07-10.md). | `getpeerinfo` and some network output require redaction before publication. Live values are examples only. |
@@ -46,6 +46,7 @@ For Verification section navigation, use the [Verification README](README.md). O
 
 ### Local runtime evidence
 
+- [Windows node-operator test — 2026-08-27](windows-node-operator-test-2026-08-27.md)
 - [Local BitcoinII node inspection — 2026-07-10](local-node-inspection-2026-07-10.md)
 - [Local RPC enablement plan](local-rpc-enablement-plan.md)
 - [Read-only RPC smoke test — 2026-07-10](read-only-rpc-smoke-test-2026-07-10.md)
@@ -77,7 +78,7 @@ For Verification section navigation, use the [Verification README](README.md). O
 
 ## Current interpretation
 
-MoreBC2 now contains original, dated operational evidence rather than only planning frameworks. The strongest current evidence includes the Windows mainnet RPC record, two same-time local-node/explorer/API tip matches, the nine-command smoke test, the public REST/WebSocket/Electrum smoke test, and the dated release/ecosystem observations.
+MoreBC2 now contains original, dated operational evidence rather than only planning frameworks. The strongest current evidence includes the tested Windows command-line node route, the earlier Windows mainnet RPC record, two same-time local-node/explorer/API tip matches, the nine-command smoke test, the public REST/WebSocket/Electrum smoke test, and the dated release/ecosystem observations.
 
 The project is ready for narrow invite-only review. It is not ready for broad public launch because license, outside review, public contribution workflow, release-authentication infrastructure, wallet compatibility, broadcast behavior, and several service/operational questions remain unresolved.
 
