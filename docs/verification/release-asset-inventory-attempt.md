@@ -2,15 +2,15 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-07-04
+**Last reviewed:** 2026-08-27
 
 ## Summary
 
-This page records the current attempt status for capturing the `v29.1.0` release asset inventory.
+This page records the original inventory and its current completion state for the `v29.1.0` release assets.
 
-It is now a GitHub API-based uploaded-asset inventory plus a separate record of GitHub-generated source archive links. It is not a binary verification record.
+It is a GitHub API-based uploaded-asset inventory plus a separate record of GitHub-generated source archive links. The completed download, hash, and authentication-boundary results are in [Release-artifact authentication — 2026-08-27](release-artifact-authentication-2026-08-27.md).
 
-No binaries or source archives were downloaded. No hashes were independently calculated. No signatures were verified. GitHub API digest fields, if present, should not be treated as independent MoreBC2 hash verification.
+All 10 uploaded assets and both generated source archives were downloaded and independently hashed on 2026-08-27. GitHub API digest fields matched the local hashes for the uploaded assets, but remain hosting-provider metadata rather than publisher-authenticated checksum evidence. No detached release signature or BitcoinII release-key trust path was found.
 
 ## Target
 
@@ -51,9 +51,9 @@ Captured by Codex from GitHub API metadata:
 | Checksum manifest | Needs Review | No uploaded asset name or generated source archive appears to be a checksum manifest. This does not prove no checksum exists elsewhere. |
 | Signature file | Needs Review | No uploaded asset name or generated source archive appears to be a detached signature file. This does not prove no signature exists elsewhere. |
 | Trusted release key source | Needs Review | Not confirmed. |
-| Downloaded files | Not done | MoreBC2 has not downloaded release assets or generated source archives. |
-| Calculated hashes | Not done | MoreBC2 has not calculated SHA256 hashes for release assets or generated source archives. |
-| Signature checks | Not done | MoreBC2 has not checked detached signatures. |
+| Downloaded files | Complete for observed release-page downloads | All 10 uploaded assets and both generated source archives were retrieved on 2026-08-27. |
+| Calculated hashes | Integrity recorded | SHA-256 and byte size were recorded for all 12 downloads; all uploaded-asset values matched GitHub metadata. |
+| Signature checks | No release signature available | No detached release signature was found. The tagged source commit's GitHub service signature was checked separately and does not authenticate assets. |
 
 ## Uploaded asset inventory from GitHub API
 
@@ -95,13 +95,14 @@ This reconciles the earlier count without treating generated source archives as 
 
 ## Checksum and signature observation
 
-Based on uploaded asset names and generated source archive names only:
+Based on release metadata, all downloaded archive member names, canonical repository review, and public signature-material searches:
 
 - No uploaded asset appears to be `SHA256SUMS`, a checksum manifest, or similar.
 - No uploaded asset appears to be a detached signature file such as `.asc` or `.sig`.
 - GitHub-generated source archive links are not checksum or signature artifacts.
-- No trusted release key source was identified.
-- No binary, source archive, hash, or signature verification was performed.
+- No BitcoinII trusted release key source was identified.
+- Independent integrity fingerprints were recorded for every listed download.
+- No publisher-authenticated checksum, release-asset signature, or binary-to-source binding was established.
 
 ## What to avoid
 
@@ -114,15 +115,16 @@ Do not:
 - treat GitHub API digest fields as independent MoreBC2 hash checks,
 - treat GitHub commit or tag metadata as binary verification,
 - assume the absence of uploaded checksum/signature assets proves no checksum/signature information exists elsewhere,
-- download or run binaries as part of inventory capture unless explicitly assigned,
+- run the downloaded binaries as part of inventory capture,
 - mark release assets verified from inventory alone.
 
 ## Next steps
 
-1. Confirm whether checksum manifests or signatures are published outside uploaded release assets.
-2. Identify any official BitcoinII trusted-key source or maintainer guidance.
-3. Check whether the release tag itself is signed.
-4. Only after inventory and trust-source questions are resolved, decide whether a safe hash-check pass should be run.
+1. Obtain a publisher checksum manifest or another authenticated expected-value source.
+2. Identify a BitcoinII release key through a documented fingerprint trust path.
+3. Verify any future manifest or artifact signature against that documented key.
+4. Compare the recorded local hashes against authenticated expected values.
+5. Obtain public build attestations or independently reproduce release outputs if the project adopts that path.
 
 ## Related pages
 
@@ -135,5 +137,5 @@ Do not:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Existing release-page observations, release artifact checklist, Codex GitHub API asset inventory report, and Codex generated source archive metadata report
-**Notes:** This page records uploaded release asset metadata and generated source archive link metadata. It does not verify assets, source archives, hashes, signatures, trusted keys, or release authenticity.
+**Primary sources checked:** Existing release-page observations, release artifact checklist, GitHub API asset metadata, generated source archives, and the dated 2026-08-27 authentication record
+**Notes:** This page records uploaded release asset metadata and generated source archive link metadata. The linked dated record adds local integrity hashes but does not establish signatures, trusted keys, binary provenance, or release authenticity.
