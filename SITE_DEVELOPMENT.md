@@ -51,7 +51,7 @@ The active review preview is deployed from the Cloudflare Pages project `morebc2
 
 - Build command: `npm run build`
 - Output directory: `dist`
-- Production branch: `site/starlight-preview`
+- Production branch: `main`
 
 The older `morebc2` Pages project and <https://morebc2.pages.dev/> hostname remain separate and untouched as a fallback. They are not the canonical URL for the active review preview.
 
