@@ -41,6 +41,8 @@ The GitHub release page shows `v0.27.1` with the release note `Update DNS seeds 
 
 ## Sources
 
+The following legacy paths are intentionally preserved as the provenance used for these historical entries. They are not current operational source or release links.
+
 - `src/kernel/chainparams.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/kernel/chainparams.cpp
 - GitHub releases: https://github.com/BitcoinII-Dev/BitcoinII/releases
 

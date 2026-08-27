@@ -2,13 +2,13 @@
 
 **Category:** Verification plan  
 **Status:** Planned / Not yet executed  
-**Last reviewed:** 2026-07-10
+**Last reviewed:** 2026-08-27
 
 ## Summary
 
 This page records a proposed safe configuration for enabling local-only JSON-RPC access to a BitcoinII Core v29.1.0 GUI node on Windows.
 
-The plan was derived from BitcoinII source defaults and a read-only inspection of the locally running node. It has not yet been executed or validated.
+The plan was derived from then-reviewed BitcoinII material and a read-only inspection of the locally running node. This page preserves the plan as it stood before execution; the linked local-node inspection and smoke-test records document the later `v29.1.0` Windows/mainnet result. The plan does not establish `8337` as a universal source default.
 
 ## Environment
 
@@ -50,7 +50,7 @@ Interpretation:
 - `server=1` enables RPC server mode for the GUI node.
 - `rpcbind=127.0.0.1` binds RPC only to localhost.
 - `rpcallowip=127.0.0.1` limits accepted RPC clients to localhost.
-- `rpcport=8337` uses the source-observed BitcoinII mainnet RPC default.
+- `rpcport=8337` is the value selected for this dated local test and later observed in that `v29.1.0` Windows/mainnet environment. It is not established here as a universal BitcoinII mainnet RPC default; inherited/generated material elsewhere shows `8332`.
 
 ## Planned restart procedure
 
@@ -134,5 +134,5 @@ This page does not prove:
 ## Verification
 
 **Status:** Planned / Not yet executed  
-**Primary sources checked:** BitcoinII Core v29.1.0 source port defaults and the 2026-07-10 local-node inspection report  
-**Notes:** This is a reviewed plan only. No configuration or runtime change is verified by this page.
+**Primary sources checked:** BitcoinII Core `v29.1.0` material and the 2026-07-10 local-node inspection report
+**Notes:** This is a preserved reviewed plan, not the runtime evidence record. RPC-port wording was synchronized on 2026-08-27: `8337` is supported for the linked local test environment only, while inherited/generated material elsewhere shows `8332`.

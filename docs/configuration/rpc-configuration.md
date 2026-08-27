@@ -92,7 +92,7 @@ Future RPC setup examples should record:
 - Confirm whether RPC whitelist examples should be included.
 - Confirm additional `bitcoinII-cli` command examples against a running node.
 - Add tested records before publishing copy/paste examples beyond the narrow local-only read-only setup.
-- Confirm canonical repository/source path before public-link polish.
+- Monitor the canonical repository/source path for future ownership or location changes.
 
 ## Sources
 

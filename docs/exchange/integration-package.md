@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-08-27
 
 ## Summary
 
@@ -16,8 +16,8 @@ It should only include confirmed values. Anything not yet confirmed is listed un
 - Common ticker: BC2
 - Core software: BitcoinII Core
 - Public website: https://bitcoin-ii.org/
-- Public release page: https://github.com/BitcoinII-Dev/BitcoinII/releases
-- Public source repository path shown by project resources: https://github.com/BitcoinII-Dev/BitcoinII
+- Current release page: https://github.com/Bitcoin-II/BitcoinII-Core/releases
+- Canonical public reference-implementation repository: https://github.com/Bitcoin-II/BitcoinII-Core
 - License: MIT
 
 ## Mainnet technical values checked from source
@@ -31,7 +31,7 @@ It should only include confirmed values. Anything not yet confirmed is listed un
 - `COIN`: 100,000,000 base units
 - `MAX_MONEY`: `21000000 * COIN`
 - Default P2P port: 8338
-- Default RPC port from generated example config: 8332
+- Mainnet RPC port shown by inherited/generated example configuration: 8332
 - Message start bytes: `0x42 0x49 0x49 0x21`
 - Genesis hash: `0000000028f062b221c1a8a5cf0244b1627315f7aa5b775b931cfec46dc17ceb`
 - Genesis merkle root: `80d1b4e9ca868f83b88b9301036205876072bdd3ded0ad4dc022e1f9266ddc49`
@@ -48,9 +48,9 @@ It should only include confirmed values. Anything not yet confirmed is listed un
 - Extended secret key prefix: `04 88 AD E4`
 - Bech32 HRP: `bc`
 
-## RPC information checked from generated config
+## RPC evidence and unresolved default
 
-The generated example configuration lists:
+Inherited/generated example configuration lists:
 
 - Mainnet RPC port: `8332`
 - Testnet RPC port: `18332`
@@ -59,19 +59,22 @@ The generated example configuration lists:
 
 It also warns not to expose the RPC server to untrusted networks such as the public internet.
 
+Separate local evidence dated 2026-07-10 configured and observed BitcoinII Core `v29.1.0` on Windows mainnet at `127.0.0.1:8337`. That test does not prove that `8337` is universal across releases, platforms, or deployments, and the generated `8332` material does not prove the `v29.1.0` runtime value. An exchange must verify its exact release source and active node configuration before integration; this package does not currently prescribe a universal RPC port.
+
 ## Release information checked
 
-Latest release observed on GitHub:
+Current documented release on the canonical release page:
+
+- `v29.1.0`
+- GitHub API `published_at` recorded by MoreBC2: `2025-11-27T04:22:39Z`
+- Release note recorded by MoreBC2: mandatory release with updated seed server and blockchain checkpoints; previous v29 releases deprecated
+
+Legacy releases observed on a redirected older repository path:
 
 - `v0.27.1`
-- Date shown: 2025-11-29
-- Release note shown: `Update DNS seeds and chain transaction data`
-
-Earlier release observed:
-
 - `v0.27.0`
-- Release title: `Genesis Release`
-- Date shown: 2025-07-28
+
+Those legacy observations are historical evidence, not the current operational release path. Release-page/API metadata does not authenticate binaries, checksums, signatures, or trusted keys.
 
 ## Suggested exchange integration sections still to build
 
@@ -132,14 +135,16 @@ Do not claim stronger release verification than currently exists.
 
 ## Sources
 
-- GitHub releases: https://github.com/BitcoinII-Dev/BitcoinII/releases
-- `src/kernel/chainparams.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/kernel/chainparams.cpp
-- `src/pow.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/pow.cpp
-- `src/primitives/block.cpp`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/primitives/block.cpp
-- `src/hash.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/hash.h
-- `src/consensus/amount.h`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/src/consensus/amount.h
-- `share/examples/bitcoinII.conf`: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/share/examples/bitcoinII.conf
-- README: https://github.com/BitcoinII-Dev/BitcoinII/blob/main/README.md
+- GitHub releases: https://github.com/Bitcoin-II/BitcoinII-Core/releases
+- `src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/chainparams.cpp
+- `src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/pow.cpp
+- `src/primitives/block.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/primitives/block.cpp
+- `src/hash.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/hash.h
+- `src/consensus/amount.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/consensus/amount.h
+- `share/examples/bitcoinII.conf`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/share/examples/bitcoinII.conf
+- README: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/README.md
+- [Project identity source check - 2026-07-10](../verification/project-identity-source-check-2026-07-10.md)
+- [Local node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md)
 
 ## Needs verification
 
@@ -147,11 +152,11 @@ Do not claim stronger release verification than currently exists.
 - Current recommended confirmation count.
 - Current maintainer or technical contact process.
 - Whether release checksums are signed or only displayed on GitHub.
-- Whether exchanges should use `BitcoinII-Dev/BitcoinII` as the canonical repo path.
+- Release- and environment-specific RPC port behavior beyond the one local `v29.1.0` Windows/mainnet test.
 - Whether maintainers prefer `double-SHA256` or `SHA-256d` wording in public integration docs.
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This package now has more verified source-backed values, but it should not be sent to exchanges as complete yet.
+**Notes:** Canonical-source, current-release, and RPC wording were factually synchronized on 2026-08-27. The package remains Draft and should not be sent to exchanges as complete; operational setup, release authentication, confirmation policy, and state-changing workflows remain unresolved.

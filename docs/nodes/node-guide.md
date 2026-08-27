@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-07-13
+**Last reviewed:** 2026-08-27
 
 ## Summary
 
@@ -98,7 +98,7 @@ This is one Windows/mainnet environment, not cross-platform proof. Wallet, trans
 - Confirm whether inbound port `8338` should be recommended for public listening nodes.
 - Confirm binary names from release assets.
 - Add additional local command-test records before promoting examples beyond the narrow read-only test set.
-- Confirm canonical repository/source path before public-link polish.
+- Monitor the canonical repository/source path for future ownership or location changes.
 
 ## Sources
 
@@ -117,4 +117,4 @@ This is one Windows/mainnet environment, not cross-platform proof. Wallet, trans
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** Network values are source-backed where linked. The narrow read-only RPC command set has one dated Windows/mainnet local test record. Platform setup instructions, release asset names, sync behavior, pruning guidance, wallet workflows, transaction workflows, mining workflows, peer-control workflows, and broader node command examples still need testing.
+**Notes:** Network values are source-backed where linked. Canonical-source and RPC wording were synchronized on 2026-08-27. The narrow read-only RPC command set has one dated Windows/mainnet local test record; `8337` is not claimed as universal. Platform setup instructions, release asset names, sync behavior, pruning guidance, wallet workflows, transaction workflows, mining workflows, peer-control workflows, and broader node command examples still need testing.

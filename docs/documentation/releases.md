@@ -18,11 +18,13 @@ The public BitcoinII Core release page rechecked by MoreBC2 was:
 
 Older links such as `https://github.com/BitcoinII-Dev/BitcoinII/releases` have previously been observed redirecting to a different GitHub repository path observed as `KvantaMechanic/BitcoinII`.
 
-This repository-path split remains a public-launch blocker until the canonical release/source path is confirmed by maintainers or official project material.
+The older redirected path is retained as migration/history evidence only. Current operational release and source citations use the canonical `Bitcoin-II/BitcoinII-Core` path established by project-controlled GitHub metadata reviewed on 2026-07-10.
 
 ## Releases observed
 
 ### BitcoinII Core v29.1.0
+
+This is the current release documented by MoreBC2 as of the 2026-08-27 factual synchronization. The dated GitHub `Latest` observation below is supporting page evidence, not a guarantee that the marker will remain unchanged.
 
 Observed on the `Bitcoin-II/BitcoinII-Core` release page and through Codex GitHub API metadata review:
 
@@ -39,7 +41,7 @@ Observed on the `Bitcoin-II/BitcoinII-Core` release page and through Codex GitHu
 
 Important caveat:
 
-GitHub API metadata resolved the timestamp that the unauthenticated rendered HTML previously showed only as `27 Nov 04:22`. This still does not prove release authenticity, asset authenticity, or canonical project status.
+GitHub API metadata resolved the timestamp that the unauthenticated rendered HTML previously showed only as `27 Nov 04:22`. This still does not prove release authenticity or asset authenticity; canonical repository evidence is documented separately in the [project identity source check](../verification/project-identity-source-check-2026-07-10.md).
 
 #### Uploaded release assets from GitHub API
 
@@ -114,7 +116,7 @@ Observed asset naming pattern includes:
 Verification caveats:
 
 - This appears on a redirected legacy repository path, not the current observed `Bitcoin-II/BitcoinII-Core` path.
-- MoreBC2 should not treat this as the current release path until the canonical path is confirmed.
+- MoreBC2 does not treat this as the current release path; it is retained as historical redirected-path evidence.
 - Legacy asset naming does not prove the current `v29.1.0` asset list.
 
 ### Legacy observed release: v0.27.0
@@ -150,7 +152,7 @@ However, this source-tree helper is not enough by itself to prove the current Bi
 
 | Question | Current status | Notes |
 |---|---|---|
-| Release page path observed | Partial | Observed path is `Bitcoin-II/BitcoinII-Core/releases`. Canonical status still needs confirmation. |
+| Release page path observed | Partial | `Bitcoin-II/BitcoinII-Core/releases` is the current canonical release path; this path status does not authenticate artifacts. |
 | Latest-release marker observed | Partial | `BitcoinII Core v29.1.0` showed a GitHub `Latest` marker during the 2026-07-02 rendered-page recheck. |
 | Release date resolved | Partial | GitHub API metadata gives `published_at` as `2025-11-27T04:22:39Z`. |
 | Uploaded release asset list captured | Partial | GitHub API metadata reports 10 uploaded assets. |
@@ -166,7 +168,7 @@ However, this source-tree helper is not enough by itself to prove the current Bi
 
 ## Open items
 
-- Confirm canonical repository and release path.
+- Monitor the canonical repository and release path for future changes.
 - Confirm whether release assets include checksum manifests outside uploaded assets.
 - Confirm whether checksum manifests are signed.
 - Confirm whether tags are signed separately from GitHub's verified commit marker.
@@ -193,4 +195,4 @@ However, this source-tree helper is not enough by itself to prove the current Bi
 
 **Status:** Needs Review
 **Primary sources checked:** Partially
-**Notes:** GitHub release pages, GitHub API asset metadata through Codex, generated source archive metadata through Codex, and source-tree verification-helper text were checked. MoreBC2 has not downloaded binaries or source archives, calculated hashes, verified manifests, verified detached signatures, confirmed trusted release keys, or confirmed canonical repository status.
+**Notes:** GitHub release pages, GitHub API asset metadata through Codex, generated source archive metadata through Codex, and source-tree verification-helper text were checked. Canonical-source wording was synchronized on 2026-08-27. MoreBC2 has not downloaded binaries or source archives, calculated hashes, verified manifests, verified detached signatures, or confirmed trusted release keys.
