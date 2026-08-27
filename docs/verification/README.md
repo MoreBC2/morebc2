@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-07-12
+**Last reviewed:** 2026-08-27
 
 ## Summary
 
@@ -39,6 +39,10 @@ Project identity:
 
 - [Project identity source check - 2026-07-10](project-identity-source-check-2026-07-10.md)
 
+Release integrity and authentication:
+
+- [Release-artifact authentication - 2026-08-27](release-artifact-authentication-2026-08-27.md)
+
 ## 3. Open questions and known unknowns
 
 Unresolved items stay in these queues until a dated record or source review resolves them:
@@ -64,6 +68,7 @@ Internal task prompts and narrow reviewer packets are intentionally not linked f
 Release records are carefully bounded. Asset inventory is not binary verification, and maintainer roadmap context is not cryptographic proof.
 
 - [Release asset inventory attempt](release-asset-inventory-attempt.md)
+- [Release-artifact authentication - 2026-08-27](release-artifact-authentication-2026-08-27.md)
 - [Release artifact checklist](release-artifact-checklist.md)
 - [Release source comparison notes](release-source-comparison.md)
 - [Network release comparison](network-release-comparison.md)
