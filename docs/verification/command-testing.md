@@ -12,6 +12,8 @@ A command can be source-observed without being tested. Source-observed means Mor
 
 Use the [command smoke-test plan](command-smoke-test-plan.md) for the safe local test order. The first read-only node-status batch was completed on 2026-07-10; see [BitcoinII read-only RPC smoke test — 2026-07-10](read-only-rpc-smoke-test-2026-07-10.md).
 
+A separate wallet-disabled Windows command-line route was exercised on 2026-08-27 through startup, advancing initial sync, five read-only calls, clean RPC shutdown, and restart; see the [Windows node-operator test](windows-node-operator-test-2026-08-27.md).
+
 ## Current rule
 
 No command example in MoreBC2 should be treated as verified unless it has a test record with:
@@ -62,6 +64,23 @@ The local record also observed:
 - `pruned=true`
 - 10 outbound peers and 0 inbound peers at test time
 - P2P v2 transport on all observed peers
+
+## Node lifecycle commands locally tested on 2026-08-27
+
+Environment: 64-bit Windows, BitcoinII Core `v29.1.0`, mainnet, unpruned isolated data directory, wallet disabled, outbound-only P2P, cookie RPC at the explicit loopback override `127.0.0.1:28337`.
+
+| Command or action | Current status | Notes |
+|---|---|---|
+| `bitcoinIId.exe -datadir=<data-directory>` | Locally tested | Started from the CLI release through PowerShell `Start-Process`; the selected config and log paths were confirmed. |
+| `bitcoinII-cli.exe -datadir=<data-directory> -rpcport=28337 getblockchaininfo` | Locally tested | Returned mainnet initial-sync fields while block validation advanced. |
+| `bitcoinII-cli.exe -datadir=<data-directory> -rpcport=28337 getnetworkinfo` | Locally tested | Confirmed `v29.1.0`, network-active state, and connection counts. |
+| `bitcoinII-cli.exe -datadir=<data-directory> -rpcport=28337 getconnectioncount` | Locally tested | Returned outbound connection counts without publishing peer addresses. |
+| `bitcoinII-cli.exe -datadir=<data-directory> -rpcport=28337 getblockcount` | Locally tested | Height increased during initial sync. |
+| `bitcoinII-cli.exe -datadir=<data-directory> -rpcport=28337 getbestblockhash` | Locally tested | Returned the current validated-tip hash. |
+| `bitcoinII-cli.exe -datadir=<data-directory> -rpcport=28337 stop` | Locally tested | Returned the stopping acknowledgement; the process exited and the log recorded clean shutdown. |
+| Restart with the same data directory | Locally tested | Reopened retained chain state and accepted RPC before a second clean shutdown. |
+
+The explicit `28337` value is a test override, not a default. Full synchronization was not reached, and the page remains Draft.
 
 ## Remaining untested command inventory
 

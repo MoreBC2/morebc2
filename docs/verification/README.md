@@ -27,6 +27,7 @@ Older navigation/status pages:
 
 Local runtime and RPC:
 
+- [Windows node-operator test - 2026-08-27](windows-node-operator-test-2026-08-27.md)
 - [Local BitcoinII node inspection - 2026-07-10](local-node-inspection-2026-07-10.md)
 - [Read-only RPC smoke test - 2026-07-10](read-only-rpc-smoke-test-2026-07-10.md)
 - [Local RPC enablement plan](local-rpc-enablement-plan.md)

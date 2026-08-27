@@ -43,6 +43,7 @@ MoreBC2 has two relevant evidence types:
 | Evidence | Network | RPC port | Status |
 |---|---|---:|---|
 | Dated BitcoinII Core `v29.1.0` local test | Mainnet | `8337` | Locally tested on Windows with localhost-only RPC |
+| Dated isolated BitcoinII Core `v29.1.0` operator test | Mainnet | `28337` | Explicit localhost-only override because `8337` was already occupied; not a claimed default |
 | Generated/example Bitcoin Core-style material | Mainnet | `8332` | Historical/source-observed context; do not treat as the v29.1.0 local-test value |
 | Generated/example Bitcoin Core-style material | Testnet | `18332` | Source-observed from generated/example material |
 | Generated/example Bitcoin Core-style material | Signet | `38332` | Source-observed from generated/example material |
@@ -57,9 +58,9 @@ rpcallowip=127.0.0.1
 rpcport=8337
 ```
 
-See [Local BitcoinII node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md) and [Read-only RPC smoke test - 2026-07-10](../verification/read-only-rpc-smoke-test-2026-07-10.md).
+See [Local BitcoinII node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md), [Read-only RPC smoke test - 2026-07-10](../verification/read-only-rpc-smoke-test-2026-07-10.md), and [Windows node-operator test - 2026-08-27](../verification/windows-node-operator-test-2026-08-27.md).
 
-Do not assume all historical BitcoinII releases used the same RPC port unless a version-specific source or test record supports it.
+Do not assume all historical BitcoinII releases used the same RPC port unless a version-specific source or test record supports it. The `28337` observation demonstrates an operator-selected override, not a BitcoinII default.
 
 ## Authentication notes
 
@@ -103,10 +104,11 @@ The mutable current-upstream `main` links below were re-observed on 2026-08-27 a
 - [Command testing status](../verification/command-testing.md)
 - [Local BitcoinII node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md)
 - [Read-only RPC smoke test - 2026-07-10](../verification/read-only-rpc-smoke-test-2026-07-10.md)
+- [Windows node-operator test - 2026-08-27](../verification/windows-node-operator-test-2026-08-27.md)
 - [RPC overview](../developers/rpc-overview.md)
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** Options and inherited/generated port examples are source-observed from generated/example configuration material. BitcoinII Core v29.1.0 mainnet localhost-only RPC was locally tested on `127.0.0.1:8337`. Additional authentication setup, CLI command examples, production RPC patterns, and whitelist examples still need testing and review.
+**Notes:** Options and inherited/generated port examples are source-observed from generated/example configuration material. BitcoinII Core v29.1.0 mainnet localhost-only RPC was locally tested on `127.0.0.1:8337`; a separate isolated operator test used the explicit override `127.0.0.1:28337`. Additional authentication setup, production RPC patterns, and whitelist examples still need testing and review.
