@@ -106,9 +106,14 @@ assert.deepEqual(
   ['127.0.0.1'],
   'Guide contains an unexpected IPv4 literal that could publish or recommend a peer address',
 );
+
+const guideCommandText = [
+  ...[...guide.matchAll(/```[^\n]*\n([\s\S]*?)```/g)].map((match) => match[1]),
+  ...[...guide.matchAll(/`([^`\n]+)`/g)].map((match) => match[1]),
+].join('\n');
 assert.doesNotMatch(
-  guide,
-  /(?:-addnode=|-seednode=|-connect=|\baddnode\b[^\n]*\bonetry\b)/i,
+  guideCommandText,
+  /(?:^|\s)-?(?:addnode|seednode|connect)(?:=|\s+\S+)/im,
   'Guide contains a manual peer or bootstrap-address command',
 );
 
