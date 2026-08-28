@@ -23,6 +23,9 @@ User-supplied screenshots from the BitcoinII Discord record the following statem
 - The developer later stated that difficulty was approximately `5.4M` when the attack began.
 - At approximately 12:36 PM local Discord display time, the developer stated that the attack had been caught/neutralized and that the `1 PH/s` order would be stopped.
 - The developer expected the demonstration fork to stall after the large hashrate left, then recover toward normal operation at the remaining approximately `20 TH/s` hashrate.
+- At approximately 4:47 PM local Discord display time, the developer stated: the demonstration fork had begun recovery with `20 TH/s`.
+- At approximately 4:49 PM, another participant observed that after one block the fork was back near its pre-attack difficulty.
+- At approximately 4:52 PM, the developer stated that it would take a few blocks to sort itself out and begin running closer to 10-minute averages, subject to normal variance.
 
 These statements are contextual claims from Discord screenshots; the block observations below are independent public explorer observations.
 
@@ -30,7 +33,7 @@ These statements are contextual claims from Discord screenshots; the block obser
 
 The explorer exposed block-level time, `bits`, difficulty, hash, and other block metadata. Selected observations captured while the temporary fork was still online are below.
 
-| Height | Explorer time (UTC) | Difficulty | Bits | Observation |
+| Height | Block time (UTC) | Difficulty | Bits | Observation |
 | ---: | --- | ---: | --- | --- |
 | 57,794 | 15:32 | 3.023M | `1a058cb3` | Pre-burst sample |
 | 57,798 | 15:52 | 3.491M | `1a04ce31` | Difficulty already rising gradually |
@@ -45,7 +48,8 @@ The explorer exposed block-level time, `bits`, difficulty, hash, and other block
 | 57,815 | 16:17 | 12.612M | `1a01548c` | Difficulty continues upward |
 | 57,816 | 16:19 | 50.447M | `19552300` | Large upward adjustment |
 | 57,817 | 16:30 | 201.788M | `191548c0` | Highest captured sampled difficulty |
-| 57,818 | 16:31 | 175.468M | `19187a10` | First captured decline after the 201.788M sample |
+| 57,818 | 16:31:03 | 175.468M | `19187a10` | High-difficulty post-burst block; recovery stall begins |
+| **57,819** | **20:35:02** | **5.558M** | **`1a0304b7`** | **First captured recovery block; difficulty returns near attack-start level** |
 
 Explorer pages captured during this observation included:
 
@@ -63,8 +67,22 @@ Explorer pages captured during this observation included:
 - `https://bitcoinii.ddns.net/explorer/block-height/57816`
 - `https://bitcoinii.ddns.net/explorer/block-height/57817`
 - `https://bitcoinii.ddns.net/explorer/block-height/57818`
+- `https://bitcoinii.ddns.net/explorer/block-height/57819`
 
-At the time of capture, the explorer tip was height `57,818`, with current difficulty approximately `175.468M`.
+## Recovery block measurement
+
+The explorer's machine-readable block summaries provide exact UNIX timestamps:
+
+- block `57,818`: `1787934663` (`2026-08-28 16:31:03 UTC`), difficulty `175468222.7571142`, bits `19187a10`;
+- block `57,819`: `1787949302` (`2026-08-28 20:35:02 UTC`), difficulty `5558197.561155626`, bits `1a0304b7`.
+
+The elapsed time between the two blocks was **14,639 seconds = 4 hours, 3 minutes, 59 seconds**.
+
+Across that single recovery interval, reported difficulty fell from approximately `175.468M` to `5.558M`, a reduction of about **96.83%** (approximately **31.57× lower**). The new `5.558M` difficulty is also close to the developer's contemporaneous statement that the simulated attack began around `5.4M` difficulty.
+
+This is the strongest captured evidence so far for the recovery side of the demonstration: after the `1 PH/s` burst was removed and the approximately `20 TH/s` baseline remained, the fork experienced a multi-hour stall and then the first observed recovery block reset difficulty close to its pre-attack range.
+
+The public explorer home page subsequently reported tip height `57,819` and current difficulty approximately `5.558M`.
 
 ## Immediate interpretation
 
@@ -72,11 +90,11 @@ The sampled sequence is strong evidence that the demonstration fork was using a 
 
 The most important observed sequence is:
 
-`5.393M -> 5.626M -> 5.860M -> 6.712M -> 8.022M -> 9.087M -> 10.285M -> 12.612M -> 50.447M -> 201.788M -> 175.468M`
+`5.393M -> 5.626M -> 5.860M -> 6.712M -> 8.022M -> 9.087M -> 10.285M -> 12.612M -> 50.447M -> 201.788M -> 175.468M -> 5.558M`
 
-across blocks `57,808` through `57,818`.
+across blocks `57,808` through `57,819`.
 
-Several blocks were produced within the same displayed UTC minute during the early part of that sequence. Difficulty then climbed sharply as the burst continued. By block `57,818`, difficulty had fallen from the immediately preceding `201.788M` sample to `175.468M`.
+Several blocks were produced within the same displayed UTC minute during the early part of that sequence. Difficulty then climbed sharply as the burst continued. After the large hashrate was removed, no block was observed for slightly more than four hours between `57,818` and `57,819`. The next block reduced reported difficulty from `175.468M` to `5.558M`.
 
 This behavior is consistent with the stated purpose of testing response to a sudden large hashrate increase and subsequent removal. However, this record **does not identify the exact algorithm from chain behavior alone**. Whether the final release uses Dark Gravity Wave, a modified DGW implementation, or another algorithm must be established from the released source code.
 
@@ -86,15 +104,17 @@ The Discord screenshot records the simulated `1 PH/s` attack as commencing at ap
 
 Block `57,808` is timestamped 16:15 UTC and has difficulty `5.393M`, closely matching the developer's later statement that difficulty was `5.4M` when the attack began. This is a strong temporal correlation but is not sufficient by itself to assert that block `57,808` was the exact first attacked block.
 
+The later Discord statement that recovery had begun with approximately `20 TH/s` occurred at about 4:47 PM local display time (`20:47 UTC`), shortly after block `57,819`'s exact timestamp of `20:35:02 UTC`. Another participant's observation that one block returned the fork near its previous difficulty is directly consistent with the explorer's `175.468M -> 5.558M` transition.
+
 ## What remains to capture
 
 If the temporary explorer remains available, follow-up capture should attempt to preserve:
 
-1. every block between the pre-attack baseline and height `57,818`;
-2. subsequent blocks after `57,818` to measure the post-attack stall/recovery period;
-3. exact UNIX block timestamps rather than minute-rounded UI timestamps;
+1. every block between the pre-attack baseline and height `57,819`;
+2. subsequent blocks after `57,819` to measure how quickly cadence settles toward the stated 10-minute target;
+3. exact UNIX block timestamps for all preserved blocks;
 4. per-block difficulty and `bits` values;
-5. the time required for block cadence and difficulty to return toward the approximately `20 TH/s` baseline;
+5. the number of recovery blocks required for cadence/difficulty to stabilize near the approximately `20 TH/s` baseline;
 6. the final public tip before the demonstration fork is destroyed.
 
 The explorer's public API documentation advertises `/api/block/$HEIGHT` and `/api/blocks/tip`, which may provide a cleaner archival path if those endpoints remain available.
@@ -107,6 +127,7 @@ The explorer's public API documentation advertises `/api/block/$HEIGHT` and `/ap
 - Discord statements are contextual evidence and are distinguished from independently observed explorer data.
 - No claim is made that the demonstrated algorithm is the final production algorithm until the corresponding release source is public and reviewed.
 - No claim is made that the demonstration proves resistance to every possible hashrate attack.
+- The approximately `20 TH/s` and `1 PH/s` hashrates are developer-stated test context, not independently measured network-hashrate observations.
 
 ## Preservation urgency
 
