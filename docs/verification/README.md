@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-08-27
+**Last reviewed:** 2026-08-28
 
 ## Summary
 
@@ -27,6 +27,7 @@ Older navigation/status pages:
 
 Local runtime and RPC:
 
+- [Windows fresh-node peer discovery test - 2026-08-28](windows-peer-discovery-test-2026-08-28.md)
 - [Windows node-operator test - 2026-08-27](windows-node-operator-test-2026-08-27.md)
 - [Local BitcoinII node inspection - 2026-07-10](local-node-inspection-2026-07-10.md)
 - [Read-only RPC smoke test - 2026-07-10](read-only-rpc-smoke-test-2026-07-10.md)
