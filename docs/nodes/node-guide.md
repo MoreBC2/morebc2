@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-08-27
+**Last reviewed:** 2026-08-28
 
 ## Scope
 
@@ -18,7 +18,9 @@ This is one narrow, locally tested route for running the BitcoinII Core `v29.1.0
 
 The test reached advancing initial block synchronization and then completed a clean shutdown and restart. It did not wait for full synchronization. This is not a wallet, transaction, mining, inbound-node, firewall, or public-RPC guide.
 
-**Important peer-discovery limit:** the fresh isolated node did not automatically obtain persistent peers in the tested environment. The synchronization progress reported below required three redacted one-shot peer addresses borrowed from a separate local node. Those addresses were test scaffolding, are not published or recommended, and are not required for the startup, local RPC, shutdown, or restart portions of this guide. A generally reproducible fresh-node bootstrap path remains unresolved, so a reader following this Draft procedure may remain at zero peers.
+**Peer-discovery evidence:** on 2026-08-27, one fresh isolated Windows `v29.1.0` node did not automatically obtain persistent peers. The synchronization progress reported below required three redacted one-shot peer addresses borrowed from a separate local node. Those addresses were test scaffolding and are not published or recommended.
+
+On 2026-08-28, [two additional fresh isolated Windows nodes](../verification/windows-peer-discovery-test-2026-08-28.md) successfully bootstrapped through the two configured DNS seeds without borrowed or manual peers. Independent review reproduced successful default DNS bootstrap again with another fresh data directory. Together, these dated Windows/mainnet `v29.1.0` tests demonstrate default DNS bootstrap repeatedly, but do not guarantee that every fresh node will obtain peers immediately. DNS seed availability can change over time, and a reader may still temporarily remain at zero peers. The three compiled fixed seeds did not establish usable fallback peers in bounded testing and are not recommended as a recovery path.
 
 ## 1. Obtain the tested release
 
@@ -145,7 +147,7 @@ Live connection counts vary.
 
 ## 6. Observe peers and synchronization
 
-The tested synchronization advance depended on the redacted one-shot peer scaffolding disclosed in the Scope section. The commands below accurately show whether your node found peers and is advancing, but this guide does not claim that the preceding fresh-node steps will discover peers automatically.
+The 2026-08-27 synchronization figures below depended on the redacted one-shot peer scaffolding disclosed in the Scope section. Later 2026-08-28 tests repeatedly established default DNS bootstrap without manual peers, but this remains dated evidence rather than a guarantee for every startup. The commands below show whether your own node found peers and is advancing.
 
 Run:
 
@@ -215,7 +217,7 @@ Only cases directly observed in this test or supported by the linked help/source
 - **RPC call fails during startup:** wait for `Done loading` in `debug.log`, then use the exact successful syntax with the same `$DataDir` and `-rpcport`.
 - **RPC bind failure:** another process may own the selected port. The test observed this at `127.0.0.1:8337`. Choose a free loopback port and update both the config and every CLI command; do not widen the bind address.
 - **Wrong config or data directory:** the beginning of `debug.log` reports the selected data directory and config file. Correct the command rather than copying cookies or passwords.
-- **No peers:** check `networkactive`, `connections`, and DNS/network errors in `debug.log`. Both configured DNS seeds returned no addresses in this test environment, so automatic peer discovery was not proven here. This guide does not recommend untrusted peer lists.
+- **No peers:** check `networkactive`, `connections`, and DNS/network errors in `debug.log`. The 2026-08-27 isolated test remained at zero peers, while repeated 2026-08-28 tests successfully used the configured DNS seeds without manual peers. Seed availability can change, so a temporary zero-peer result remains possible. This guide does not recommend untrusted peer lists or the unproven compiled fixed seeds as recovery paths.
 - **Node is still syncing:** inspect `initialblockdownload`, `headers`, `blocks`, and repeated block-height samples. Do not infer a sync deadline.
 - **Shutdown appears slow:** wait for process exit and `Shutdown: done`; do not kill the daemon while it is writing state.
 
@@ -233,6 +235,13 @@ Only cases directly observed in this test or supported by the linked help/source
 
 - The configuration switches used here and the meanings of the linked RPC fields.
 
+### Later peer-discovery evidence
+
+- On 2026-08-28, two fresh isolated Windows/mainnet `v29.1.0` nodes obtained persistent peers through default DNS bootstrap without borrowed or manual peers.
+- Independent review reproduced successful default DNS bootstrap with another fresh data directory.
+- These results demonstrate a repeatable dated bootstrap path, not guaranteed future seed availability or immediate peer discovery in every environment.
+- The three compiled fixed seeds did not establish usable fallback peers in bounded testing and are not recommended as a recovery path.
+
 ### Release-specific
 
 - The artifact name, size, hash, executable names, and observed behavior are bounded to Windows x86_64 BitcoinII Core `v29.1.0` and the 2026-08-27 test.
@@ -240,7 +249,7 @@ Only cases directly observed in this test or supported by the linked help/source
 ### Still unresolved
 
 - Full-sync completion and sync duration.
-- Automatic peer discovery across Windows environments.
+- Immediate automatic peer discovery in every environment and future DNS seed availability.
 - Universal RPC port behavior.
 - Publisher authenticity and binary-to-source reproducibility.
 - Wallet, transaction, mining, pruning, inbound networking, firewall, and public-service workflows.
@@ -248,6 +257,7 @@ Only cases directly observed in this test or supported by the linked help/source
 ## Related pages
 
 - [Windows node-operator test — 2026-08-27](../verification/windows-node-operator-test-2026-08-27.md)
+- [Windows fresh-node peer-discovery test — 2026-08-28](../verification/windows-peer-discovery-test-2026-08-28.md)
 - [Release-artifact authentication — 2026-08-27](../verification/release-artifact-authentication-2026-08-27.md)
 - [Node configuration](../configuration/node-configuration.md)
 - [RPC configuration](../configuration/rpc-configuration.md)
@@ -258,5 +268,5 @@ Only cases directly observed in this test or supported by the linked help/source
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** BitcoinII Core `v29.1.0` Windows x86_64 CLI release artifact and generated help; 2026-08-27 isolated local runtime, log, process, socket, RPC, shutdown, and restart evidence; linked Source Atlas and configuration records
-**Notes:** The primary route was locally tested through advancing initial sync, clean shutdown, and restart. Draft status is retained because full sync, cross-platform behavior, automatic peer discovery, release authenticity, and broader operational workflows remain unresolved.
+**Primary sources checked:** BitcoinII Core `v29.1.0` Windows x86_64 CLI release artifact and generated help; 2026-08-27 isolated local runtime, log, process, socket, RPC, shutdown, and restart evidence; independently reviewed 2026-08-28 fresh-node DNS-bootstrap evidence; linked Source Atlas and configuration records
+**Notes:** The primary route was locally tested through advancing initial sync, clean shutdown, and restart. Later dated tests repeatedly demonstrated default DNS bootstrap without manual peers. Draft status is retained because immediate peer discovery is not guaranteed, full sync, cross-platform behavior, release authenticity, and broader operational workflows remain unresolved.
