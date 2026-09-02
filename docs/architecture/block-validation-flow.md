@@ -2,15 +2,29 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-09-02
 
 ## Summary
 
-This page maps the reviewed BitcoinII Core block-validation path from `src/validation.cpp`.
+This page maps the broad BitcoinII Core block-validation flow around header acceptance, block checks, UTXO connection/disconnection, best-chain activation, and reorganization handling.
 
-It is intentionally partial. The reviewed path now covers header acceptance, context-free block checks, contextual block checks, UTXO-dependent connection checks in `ConnectBlock`, UTXO rollback in `DisconnectBlock`, best-chain candidate selection, chain activation steps, disconnected-transaction handling, mempool reorg update flow, disk storage, and tip notification paths.
+The structural flow remains useful, but the earlier detailed review predates BitcoinII Core `v31.1.0`. Current release notes identify new or changed consensus/validation behavior, so this page now distinguishes the durable architecture from v31-specific paths that still need dedicated review.
 
-## Simplified reviewed flow
+## Current v31.1.0 boundary
+
+BitcoinII Core `v31.1.0` adds or identifies:
+
+- ShockWave per-block difficulty adjustment;
+- consensus-level data restrictions;
+- BC2 replay protection;
+- fork-aware header synchronization;
+- associated validation, mempool, wallet, RPC, mining, and PSBT updates.
+
+Mainnet activates ShockWave, data restrictions, and replay protection at height `57750`.
+
+The broad validation pipeline below still shows where header/block/chainstate work occurs, but MoreBC2 has **not yet remapped every v31-specific check into this flow**.
+
+## Simplified validation flow
 
 ```text
 ProcessNewBlock
@@ -19,8 +33,13 @@ ProcessNewBlock
        -> AcceptBlockHeader
             -> CheckBlockHeader
             -> ContextualCheckBlockHeader
+                 -> next-work / difficulty check
+                 -> timestamp / contextual checks
+                 -> v31 header-path behavior where applicable
        -> CheckBlock
        -> ContextualCheckBlock
+            -> context-dependent transaction/block rules
+            -> v31 data/replay-related checks where implemented
        -> SaveBlockToDisk
        -> ReceivedBlockTransactions
   -> NotifyHeaderTip
@@ -32,277 +51,109 @@ ProcessNewBlock
                  -> ConnectBlock
 ```
 
-## Simplified reviewed reorg flow
+## Difficulty check
 
-```text
-ActivateBestChain
-  -> FindMostWorkChain
-  -> ActivateBestChainStep
-       -> find fork point
-       -> DisconnectTip until active tip reaches fork point
-            -> DisconnectBlock
-                 -> spend outputs created by disconnected block
-                 -> restore spent inputs from undo data
-                 -> move coins view best block backward
-            -> update disconnected-transaction pool
-            -> move active chain tip backward
-       -> ConnectTip new branch blocks
-       -> MaybeUpdateMempoolForReorg
-            -> drain disconnected transaction pool
-            -> re-add eligible non-coinbase transactions
-            -> remove invalid/non-final/immature descendants
-            -> re-limit mempool size
-```
-
-## Entry point reviewed
-
-### `ProcessNewBlock`
-
-`ProcessNewBlock` is a reviewed full-block processing entry point.
+`ContextualCheckBlockHeader` checks the candidate header's difficulty bits against `GetNextWorkRequired`.
 
-Reviewed behavior:
+For historical pre-57750 BitcoinII mainnet, that path used the inherited Bitcoin-style retarget behavior.
 
-- Acquires `cs_main` before `CheckBlock` because `CBlock::fChecked` can cause data races.
-- Calls `CheckBlock`.
-- Calls `AcceptBlock` if `CheckBlock` succeeds.
-- Signals failed block checks when validation fails.
-- Calls `NotifyHeaderTip`.
-- Calls `ActivateBestChain` after accepting the block.
+Beginning at mainnet height `57750`, `GetNextWorkRequired` uses **ShockWave** for the next-block work requirement. Current documentation should therefore not interpret this validation step as a 2016-block-only difficulty check.
 
-## Header path reviewed
+See:
 
-### `AcceptBlockHeader`
+- [Difficulty adjustment](../encyclopedia/difficulty-adjustment.md)
+- [Source atlas: pow.cpp](../developers/source-atlas/pow-cpp.md)
 
-Reviewed behavior:
+## Header acceptance and synchronization
 
-- Checks for duplicate headers.
-- Calls `CheckBlockHeader` for non-genesis headers.
-- Requires the previous block to be known.
-- Rejects headers building on invalid previous blocks.
-- Calls `ContextualCheckBlockHeader`.
-- Checks ancestry against known failed blocks.
-- Requires anti-DoS proof-of-work validation before adding a new header.
-- Adds accepted headers to the block index.
+The durable reviewed architecture includes:
 
-### `CheckBlockHeader`
+- duplicate-header checks;
+- previous-header availability;
+- invalid-parent rejection;
+- proof-of-work checking;
+- contextual header checks;
+- adding accepted headers to the block index.
 
-Reviewed behavior:
+`v31.1.0` additionally identifies **fork-aware header synchronization**. MoreBC2 still needs a dedicated v31 source/runtime review showing exactly how the new synchronization behavior interacts with competing branches and recovery scenarios.
 
-- Calls `CheckProofOfWork` when proof-of-work checking is enabled.
-- Rejects the header if proof-of-work fails.
+## Block body checks
 
-### `ContextualCheckBlockHeader`
+The existing review covers structural checks such as:
 
-Reviewed behavior:
+- merkle root;
+- size/weight limits;
+- coinbase placement;
+- transaction structure;
+- contextual finality and witness-related checks.
 
-- Checks difficulty bits against `GetNextWorkRequired`.
-- Checks checkpoint restrictions when enabled.
-- Checks median-time-past timestamp rule.
-- Rejects timestamps too far in the future.
-- Rejects outdated block versions after relevant deployments are active.
+`v31.1.0` activates BitcoinII-specific consensus data restrictions at height `57750`. Their exact validation location and boundary behavior should be documented in a dedicated current-release source slice rather than inferred from this older broad flow map.
 
-## Block body path reviewed
+## Transaction and replay-protection checks
 
-### `CheckBlock`
+Existing connection/transaction reviews cover UTXO input checks, sequence locks, script verification, fees, operation limits, and coins-view updates.
 
-Reviewed behavior:
+BC2 replay protection is now a current consensus consideration from height `57750`, with fork ID `0x01324342`.
 
-- Calls `CheckBlockHeader`.
-- Checks signet block solution when signet applies.
-- Checks merkle root.
-- Checks size and weight limits.
-- Requires exactly one coinbase transaction at the beginning.
-- Calls `CheckTransaction` for each transaction.
-- Checks legacy sigops limit.
-
-### `ContextualCheckBlock`
+MoreBC2 has confirmed those activation anchors, but this page does not yet claim a complete replay-protection transaction-path map.
 
-Reviewed behavior:
+## UTXO connection and disconnection
 
-- Applies context-dependent block checks that do not use the UTXO set.
-- Checks finality for all transactions.
-- Enforces coinbase height after the relevant deployment is active.
-- Checks witness commitments when SegWit is active.
-- Checks block weight after witness commitment validation.
+The durable reviewed architecture includes:
 
-## UTXO connection path reviewed
+- `ConnectBlock` applying validated block effects to the coins view;
+- undo data for non-coinbase inputs;
+- fee/subsidy checks;
+- `DisconnectBlock` reversing UTXO effects;
+- `DisconnectTip` moving the active chain backward;
+- reorg handling and reconsideration of eligible disconnected transactions.
 
-### `ConnectBlock`
+These concepts remain part of current BitcoinII architecture, while v31-specific validation changes still need release-targeted spot checks.
 
-`ConnectBlock` applies a block's effects to the UTXO set represented by a coins view and performs UTXO-dependent validation checks.
+## Best-chain activation and reorganizations
 
-Reviewed behavior:
+The existing flow covers:
 
-- Re-runs `CheckBlock` before connecting the block.
-- Verifies the coins view best block equals the previous block hash.
-- Special-cases the genesis block.
-- Applies assumed-valid script-check behavior when applicable.
-- Enforces BIP30 duplicate-output protection where applicable.
-- Enables BIP68 sequence locks when CSV is active.
-- Gets script verification flags with `GetBlockScriptFlags`.
-- Builds undo data for non-coinbase transactions.
-- Checks non-coinbase transaction inputs with `Consensus::CheckTxInputs`.
-- Accumulates fees and checks fee range with `MoneyRange`.
-- Checks BIP68 sequence locks using previous output heights.
-- Counts transaction signature operation cost.
-- Runs input script checks when script checking is enabled.
-- Updates the coins view with `UpdateCoins`.
-- Checks that the coinbase does not pay more than fees plus subsidy.
-- Waits for queued script checks.
-- Writes undo data when not in just-check mode.
-- Raises block validity to `BLOCK_VALID_SCRIPTS` when appropriate.
-- Sets the coins view best block to the connected block hash.
-
-## UTXO disconnection path reviewed
-
-### `ApplyTxInUndo`
-
-`ApplyTxInUndo` restores one spent output from undo data.
-
-Reviewed behavior:
-
-- Marks the disconnect unclean if restoring would overwrite an existing unspent output.
-- Recovers older undo metadata from an alternate output when possible.
-- Fails if required undo metadata cannot be recovered.
-- Adds the restored coin back to the coins view.
-
-### `DisconnectBlock`
-
-`DisconnectBlock` rolls back a block's UTXO effects.
-
-Reviewed behavior:
+- selecting a usable most-work candidate;
+- finding the fork point;
+- disconnecting the old branch;
+- connecting the replacement branch;
+- updating the mempool after reorgs;
+- updating the active tip.
 
-- Reads block undo data from disk.
-- Fails on missing or inconsistent undo data.
-- Walks transactions in reverse order.
-- Spends outputs created by the disconnected block.
-- Checks that removed outputs match block transaction outputs, height, and coinbase status.
-- Restores non-coinbase inputs from undo data with `ApplyTxInUndo`.
-- Sets the coins view best block to the disconnected block's parent hash.
-- Returns `DISCONNECT_OK`, `DISCONNECT_UNCLEAN`, or `DISCONNECT_FAILED`.
-
-### `DisconnectTip`
-
-`DisconnectTip` rolls the active chain tip backward by one block.
-
-Reviewed behavior:
-
-- Reads the current tip block from disk.
-- Creates a coins-view cache over the current coins tip.
-- Verifies that the coins view best block is the tip being disconnected.
-- Calls `DisconnectBlock` to roll back the tip's UTXO effects.
-- Flushes the coins-view cache.
-- Moves prune locks backward when needed.
-- Flushes state to disk if needed.
-- Adds disconnected transactions to the disconnected-transaction pool when available.
-- Moves the active chain tip back to the disconnected block's parent.
-- Calls `UpdateTip`.
-- Emits `BlockDisconnected` signals.
-
-## Mempool reorg update path reviewed
-
-### `MaybeUpdateMempoolForReorg`
-
-Reviewed behavior:
-
-- Drains the disconnected-transaction pool.
-- Processes disconnected transactions in reverse queue order so earlier previously-confirmed transactions are considered first.
-- Skips coinbase transactions.
-- Attempts to re-add eligible transactions to the mempool.
-- Removes failed resurrected transactions and descendants.
-- Updates descendants of successfully re-added transactions.
-- Removes transactions that are no longer final.
-- Recalculates and updates invalidated lock points where possible.
-- Removes transactions that would spend immature coinbase outputs.
-- Re-limits mempool size after reorg processing.
-
-## Best-chain activation path reviewed
-
-### `FindMostWorkChain`
-
-Reviewed behavior:
-
-- Chooses the highest-work candidate from `setBlockIndexCandidates`.
-- Walks backward toward the active chain.
-- Rejects chains with failed ancestors.
-- Rejects chains missing required block data.
-- Returns a usable most-work candidate when one is found.
-
-### `ActivateBestChainStep`
-
-Reviewed behavior:
-
-- Finds the fork point between the current active chain and the most-work candidate.
-- Disconnects blocks until the current tip reaches that fork point.
-- Builds a list of blocks to connect toward the candidate tip.
-- Connects blocks with `ConnectTip`.
-- Marks invalid chains when a connected block fails consensus validation.
-- Updates the mempool after blocks are disconnected.
-- Checks fork-warning conditions.
-
-### `ConnectTip`
-
-Reviewed behavior:
-
-- Reads the block from disk unless a cached block is available.
-- Calls `ConnectBlock` with a coins-view cache.
-- Flushes the cache after successful connection.
-- Flushes chainstate to disk if needed.
-- Removes confirmed transactions from the mempool.
-- Sets the active chain tip to the new block.
-- Calls `UpdateTip`.
-- Records the connected block in `connectTrace`.
-
-### `ActivateBestChain`
-
-Reviewed behavior:
-
-- Uses a chainstate mutex so only one activation runs at a time.
-- Calls `FindMostWorkChain` and `ActivateBestChainStep`.
-- Emits `BlockConnected` signals.
-- Emits tip-update notifications when the active tip changes.
-- Handles initial-block-download exit behavior.
-- Checks the block index after activation.
-- Periodically flushes state to disk.
-
-## Storage path reviewed
-
-### `AcceptBlock`
-
-Reviewed behavior:
-
-- Calls `AcceptBlockHeader`.
-- Skips already-known block data.
-- Applies anti-DoS logic for unrequested blocks.
-- Calls `CheckBlock` and `ContextualCheckBlock`.
-- Saves valid block data to disk.
-- Calls `ReceivedBlockTransactions`.
-- Flushes state to disk with `FlushStateMode::NONE`.
-
-## What is not fully reviewed yet
-
-- Broader mempool policy beyond reorg handling
-- Full `txmempool` implementation details
-- Package mempool behavior beyond currently reviewed anchors
+ShockWave changes how required work is calculated after height `57750`; it does not eliminate normal accumulated-work chain selection or the possibility of reorganizations.
+
+## Historical review note
+
+Earlier versions of this page contained detailed function-by-function notes based on a pre-v31 source snapshot. Those notes remain useful background in repository history, but the current-facing page now avoids presenting that older snapshot as a complete `v31.1.0` validation specification.
+
+## Current review priorities
+
+1. Map the replay-protection transaction/validation path.
+2. Map the consensus data-restriction path.
+3. Map fork-aware header synchronization.
+4. Re-check validation/mempool caller paths changed in `v31.1.0`.
+5. Add safe current-release test records where practical.
 
 ## Related pages
 
-- [Source atlas: validation.cpp](../developers/source-atlas/validation-cpp.md)
-- [Disconnected transactions](../developers/source-atlas/disconnected-transactions.md)
 - [Consensus overview](../documentation/consensus-overview.md)
-- [Checkpoints](../documentation/checkpoints.md)
+- [Consensus model](consensus-model.md)
+- [Difficulty adjustment](../encyclopedia/difficulty-adjustment.md)
+- [Source atlas: pow.cpp](../developers/source-atlas/pow-cpp.md)
+- [Source atlas: validation.cpp](../developers/source-atlas/validation-cpp.md)
 - [Reorganizations](../encyclopedia/reorganizations.md)
-- [Proof-of-work](../encyclopedia/proof-of-work.md)
+- [v31 currentness audit](../verification/v31-currentness-audit-2026-09-02.md)
 
 ## Sources
 
-- `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/218d1b7e0f682c2aa43c3698d927cbfbb7adfe76/src/validation.cpp
-- `src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/218d1b7e0f682c2aa43c3698d927cbfbb7adfe76/src/pow.cpp
-- `src/kernel/disconnected_transactions.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/218d1b7e0f682c2aa43c3698d927cbfbb7adfe76/src/kernel/disconnected_transactions.h
-- `src/kernel/disconnected_transactions.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/218d1b7e0f682c2aa43c3698d927cbfbb7adfe76/src/kernel/disconnected_transactions.cpp
+- BitcoinII Core `v31.1.0` release: https://github.com/Bitcoin-II/BitcoinII-Core/releases/tag/v31.1.0
+- `v31.1.0/src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/src/pow.cpp
+- `v31.1.0/src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/src/kernel/chainparams.cpp
+- `src/validation.cpp` current-release review remains a follow-up item
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This is a partial flow map based on reviewed validation and disconnected-transaction code. It should be expanded after deeper review of broader mempool policy.
+**Primary sources checked:** Current v31 release/activation/difficulty anchors plus existing MoreBC2 validation architecture review
+**Notes:** This page is a current architecture boundary, not a complete v31-specific function-by-function validation audit.
