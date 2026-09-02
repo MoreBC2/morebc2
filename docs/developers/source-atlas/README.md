@@ -10,16 +10,17 @@ The source atlas is a file-by-file and feature-path companion to the BitcoinII C
 
 Each page should explain one important source file or tightly related implementation path in plain language, link it to related MoreBC2 documentation, and record open questions.
 
-## v31.1.0 consensus feature paths
+## v31.1.0 release-specific reviews
 
-The current release-specific deep-review entries are:
+The current deep-review entries are:
 
 - [ShockWave difficulty adjustment](shockwave-v31.md)
 - [Replay protection](replay-protection-v31.md)
 - [Consensus data restrictions](data-restrictions-v31.md)
 - [Fork-aware header synchronization](headers-sync-v31.md)
+- [Wallet / PSBT / RPC / mempool / mining regression audit](../../verification/v31-wallet-mempool-mining-regression-2026-09-02.md)
 
-These pages are pinned to the canonical BitcoinII Core `v31.1.0` source and are intended to complement the older file-oriented atlas entries.
+The regression audit classifies older wallet, raw-transaction RPC, mempool, and mining pages against BitcoinII Core `v31.1.0`, documenting where the inherited structure remains accurate and where replay protection or ShockWave creates a material BitcoinII-specific difference.
 
 ## Current atlas entries
 
@@ -87,5 +88,5 @@ Each source atlas page should include:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Partially, with dedicated `v31.1.0` source review for ShockWave, replay protection, data restrictions, and header synchronization
-**Notes:** The atlas now contains both broad file-oriented first-pass coverage and release-specific feature-path reviews for the principal BitcoinII v31 consensus changes.
+**Primary sources checked:** Partially, with dedicated `v31.1.0` source review for ShockWave, replay protection, data restrictions, header synchronization, wallet/PSBT/raw-RPC signing, mempool activation behavior, validation-cache separation, and mining candidate-time/difficulty coupling
+**Notes:** The atlas now contains both broad file-oriented first-pass coverage and release-specific reviews of the principal BitcoinII v31 consensus and subsystem changes.
