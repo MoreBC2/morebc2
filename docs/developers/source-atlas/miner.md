@@ -1,225 +1,128 @@
 # Block template assembly
 
 **Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-06-30
+**Status:** Source-reviewed partial
+**Last reviewed:** 2026-09-02
 
 ## Summary
 
-This page covers a first-pass review of:
+This page covers candidate block assembly centered on `src/node/miner.cpp` / `miner.h` and related MiniMiner helpers.
 
-- `src/node/miner.h`
-- `src/node/miner.cpp`
-- `src/node/mini_miner.h`
-- `src/node/mini_miner.cpp`
+The broad Bitcoin-style `BlockAssembler` and package-selection structure remains useful in BitcoinII Core `v31.1.0`. The important BitcoinII-specific change is that **candidate block time can now affect required work under ShockWave**, so template code must recalculate `nBits` when time changes.
 
-These files cover candidate block assembly and a smaller fee-selection simulation helper.
+## Main template flow
 
-This page is about local block-template construction and transaction selection. It is not a hardware guide, profitability guide, or service setup guide.
+The reviewed `CreateNewBlock` structure remains:
 
-## Why this file matters
+1. reset block-assembly counters;
+2. create a template and dummy coinbase;
+3. lock/read chain state and choose next height;
+4. compute block version and time/locktime context;
+5. select mempool transactions;
+6. construct the real coinbase and reward;
+7. generate commitments;
+8. fill previous hash, candidate time, difficulty bits and nonce;
+9. optionally run block-validity checks;
+10. return the template.
 
-MoreBC2 needs to separate several layers:
+`BlockAssembler` still tracks block weight, operation cost, fee totals, selected transactions and target height. Ancestor-aware package selection remains the core transaction-selection model.
 
-- Consensus proof-of-work rules.
-- Local candidate-block construction.
-- Mempool transaction selection.
-- RPC behavior.
-- External operator tooling.
+## v31 candidate-time / difficulty coupling
 
-The reviewed files sit mostly in the candidate-block construction and transaction-selection layer.
+Before ShockWave, Bitcoin-style mainnet logic normally allowed code to think of difficulty as fixed between long retarget boundaries.
 
-## Key symbols reviewed
+That assumption is unsafe under current BitcoinII.
 
-- `CBlockTemplate`
-- `CTxMemPoolModifiedEntry`
-- `BlockAssembler`
-- `BlockAssembler::Options`
-- `BlockAssembler::CreateNewBlock`
-- `BlockAssembler::addPackageTxs`
-- `BlockAssembler::TestPackage`
-- `BlockAssembler::TestPackageTransactions`
-- `BlockAssembler::SortForBlock`
-- `GetMinimumTime`
-- `UpdateTime`
-- `RegenerateCommitments`
-- `ApplyArgsManOptions`
-- `MiniMiner`
-- `MiniMinerMempoolEntry`
+`UpdateTime` can change a candidate header's timestamp. In v31, `src/node/miner.cpp` explicitly notes that updating candidate time can change required work under ShockWave and recalculates:
 
-## Block template object
+```text
+pblock->nBits = GetNextWorkRequired(pindexPrev, pblock, consensusParams)
+```
 
-`CBlockTemplate` contains:
+when the candidate time changes (and in the existing min-difficulty cases).
 
-- The candidate `CBlock`.
-- Per-transaction fee data.
-- Per-transaction operation-cost data.
-- Coinbase commitment data.
-- Package feerates in the order packages are selected for inclusion.
+`CreateNewBlock` likewise obtains the candidate difficulty through the production `GetNextWorkRequired()` path.
 
-This object represents a candidate block before valid proof-of-work has been found.
+## Why candidate time matters
 
-## BlockAssembler role
+ShockWave includes timestamp-aware behavior and emergency stall recovery. As a result, the candidate header itself can participate in determining the required next target.
 
-`BlockAssembler` constructs a new block template.
+Mining/template software that changes `nTime` while retaining stale `nBits` can therefore construct an invalid candidate.
 
-Reviewed state tracked during assembly includes:
+This is also why MoreBC2 should not describe current BitcoinII mining as simply "reuse the tip difficulty until a retarget block."
 
-- Current block weight.
-- Current transaction count.
-- Current operation cost.
-- Total fees.
-- Transactions already included in the template.
-- Target height.
-- Locktime cutoff.
-- Chain parameters.
-- Optional mempool pointer.
-- Chainstate reference.
+## RPC/server context
 
-## BlockAssembler options
+The v31 RPC server helper path similarly constructs next-block context by:
 
-Reviewed options include:
+1. creating a candidate next header;
+2. calling `UpdateTime`;
+3. calling `GetNextWorkRequired` using that actual candidate header;
+4. building synthetic next-block context from the result.
 
-- Maximum block weight.
-- Minimum transaction fee rate for template inclusion.
-- Whether to run `TestBlockValidity` at the end of block creation.
-- Whether to print modified fee information.
-- Reserved block weight.
-- Coinbase output configuration inherited from block-create options.
+The same rule applies broadly: code that needs next-block consensus context should derive work from the candidate header, not assume the previous block's compact target remains correct.
 
-`ApplyArgsManOptions` maps command-line settings such as `-blockmaxweight`, `-blockmintxfee`, `-printpriority`, and `-blockreservedweight` into assembler options.
+## Transaction/package selection
 
-## Time and difficulty helpers
+This pass did not identify a BitcoinII-specific rewrite of the normal template-selection machinery around:
 
-`GetMinimumTime` computes the minimum time a creator should use for the next candidate block. The reviewed comments say it accounts for the BIP94 timewarp rule and may differ from the strict consensus limit.
+- ancestor-aware feerate ordering;
+- package assembly;
+- weight and operation-cost limits;
+- fee minimums;
+- ancestor-before-descendant ordering;
+- MiniMiner fee/ordering simulation.
 
-`UpdateTime` updates the block header time to at least the required minimum or current node time. On networks allowing minimum-difficulty blocks, updating time can also update `nBits` through `GetNextWorkRequired`.
+Those earlier MoreBC2 descriptions remain structurally useful.
 
-## CreateNewBlock flow
+## MiniMiner
 
-Reviewed `CreateNewBlock` behavior includes:
+`MiniMiner` remains a local simulation/helper for fee and transaction ordering calculations, not a proof-of-work miner or block producer.
 
-1. Reset block assembly counters.
-2. Create a new `CBlockTemplate`.
-3. Add a dummy coinbase transaction first.
-4. Lock chain state.
-5. Read previous tip and compute next height.
-6. Compute block version from versionbits.
-7. Set block time and locktime cutoff.
-8. Add mempool transactions if a mempool is available.
-9. Build the real coinbase transaction.
-10. Add subsidy plus selected transaction fees to the coinbase output.
-11. Add coinbase height data to the coinbase input script.
-12. Generate the coinbase commitment.
-13. Fill header fields: previous block hash, time, difficulty bits, nonce.
-14. Optionally run `TestBlockValidity` without proof-of-work or merkle-root checks.
-15. Return the template.
+No ShockWave-specific rewrite of MiniMiner's fee-selection role was identified in this regression pass.
 
-## Transaction selection
+## Operational implication
 
-`addPackageTxs` selects transactions from the mempool for inclusion in the block template.
+External miners/pools consuming block templates should use current BitcoinII Core template/RPC output or independently reproduce v31 candidate-time and difficulty behavior exactly.
 
-Reviewed behavior includes:
+A Bitcoin-derived template implementation that assumes time and difficulty are decoupled between 2016-block retargets is not a safe model for post-activation BitcoinII.
 
-- Locking the mempool.
-- Considering transactions by ancestor-aware fee score.
-- Maintaining a modified-transaction set for descendants whose ancestor state changes when parents are included.
-- Tracking failed transactions to avoid repeated evaluation.
-- Stopping when remaining packages fall below the configured minimum fee rate.
-- Checking block weight and operation-cost limits.
-- Calculating ancestor packages.
-- Removing already-included transactions from package candidates.
-- Checking package transaction finality.
-- Sorting package entries so ancestors appear before descendants.
-- Adding selected transactions to the template.
-- Updating descendant package state after inclusion.
+## Runtime status
 
-## Package checks
+MoreBC2 has not yet executed a controlled template test showing candidate-time changes and resulting ShockWave `nBits` changes.
 
-`TestPackage` rejects a package if adding it would exceed the configured block weight limit or maximum operation-cost limit.
+Useful follow-up work:
 
-`TestPackageTransactions` checks package transaction finality for the candidate block height and locktime cutoff.
+- generate templates across normal and stall-recovery candidate times;
+- confirm template/RPC `bits` matches direct `GetNextWorkRequired` calculation;
+- test stale-time refresh behavior;
+- inspect pool/miner software assumptions where Bitcoin-compatible template handling is claimed.
 
-## Coinbase and reward notes
+## Related pages
 
-`CreateNewBlock` sets the coinbase output value to selected transaction fees plus `GetBlockSubsidy` for the candidate height.
-
-MoreBC2 has not yet reviewed the subsidy calculation file deeply enough to document the complete block subsidy schedule here.
-
-## MiniMiner role
-
-`MiniMiner` is described in the reviewed header as a minimal version of `BlockAssembler` using the same ancestor-set scoring algorithm on a limited transaction set while ignoring consensus rules.
-
-Reviewed uses include:
-
-- Calculating bump fees for unconfirmed outputs at a target feerate.
-- Linearizing a list of transactions to see selection order.
-
-This is not real block production. It is a simulation/helper for fee and ordering calculations.
-
-## MiniMiner behavior
-
-Reviewed behavior includes:
-
-- Copying relevant mempool transaction data while holding the mempool lock.
-- Releasing the mempool lock after building its local data structures.
-- Tracking transactions that are expected to be replaced.
-- Building descendant caches.
-- Sorting entries by a fee score based on ancestor and individual fee rates.
-- Building a mock template until a target feerate is reached or all entries are selected.
-- Recording selection order for linearization.
-- Calculating bump fees based on both individual and ancestor-set fee requirements.
-
-## Relationship to mining overview
-
-This source review supports adding a clearer distinction to mining docs:
-
-- Proof-of-work rules come from consensus and PoW files.
-- Candidate block templates come from `BlockAssembler`.
-- Mempool package selection is local policy/template behavior.
-- MiniMiner is a helper/simulation path.
-- Solo/pool operation and external tools still require separate verification.
-
-Related pages:
-
+- [ShockWave v31](shockwave-v31.md)
+- [v31 wallet/mempool/mining regression audit](../../verification/v31-wallet-mempool-mining-regression-2026-09-02.md)
 - [Mining overview](../../mining/mining-overview.md)
 - [Proof-of-work](../../encyclopedia/proof-of-work.md)
 - [Difficulty adjustment](../../encyclopedia/difficulty-adjustment.md)
-- [Mempool flow](../../architecture/mempool-flow.md)
-- [Life of a block](../../architecture/life-of-a-block.md)
-- [Source atlas: pow.cpp](pow-cpp.md)
-- [Source atlas: transaction consensus files](transaction-consensus.md)
-
-## BitcoinII-specific notes
-
-This first-pass review did not identify BitcoinII-specific template behavior beyond project naming, header guards, and executable/RPC naming.
-
-The reviewed file structure appears Bitcoin-style, but no upstream comparison has been completed.
-
-## Open questions
-
-- Where is `GetBlockSubsidy` implemented, and what is the full BitcoinII subsidy schedule?
-- Which RPC path calls `BlockAssembler` for `getblocktemplate`?
-- Which local submit-block paths should be documented next?
-- Which block-template tests are most relevant for MoreBC2?
-- Does BitcoinII differ from upstream Bitcoin Core in template construction or package selection?
-- Which external operation instructions can be verified from current primary sources?
-- Confirm whether `v29.1.0` differs from current `main` for these files before upgrading status.
+- [Mining RPC](rpc-mining.md)
 
 ## Sources
 
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+Pinned to BitcoinII Core `v31.1.0`:
 
-- Current observed `main` `src/node/miner.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/miner.h
-- Current observed `main` `src/node/miner.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/miner.cpp
-- Current observed `main` `src/node/mini_miner.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/mini_miner.h
-- Current observed `main` `src/node/mini_miner.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/mini_miner.cpp
-- Current observed `main` `src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/pow.cpp
-- Current observed `main` `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.cpp
-- Current observed `main` `src/rpc/mining.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/mining.cpp
+- `src/node/miner.cpp`
+- `src/node/miner.h`
+- `src/node/mini_miner.cpp`
+- `src/node/mini_miner.h`
+- `src/pow.cpp`
+- `src/rpc/server_util.cpp`
+- `src/validation.cpp`
+
+Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This is a first-pass block-template and MiniMiner review. RPC caller paths, subsidy schedule, local commands, external operation guides, upstream comparison, and release-versus-main comparison remain open.
+**Status:** Source-reviewed partial
+**Primary sources checked:** BitcoinII Core `v31.1.0`
+**Notes:** Candidate-time-triggered work recalculation and the template's use of production `GetNextWorkRequired()` are source-backed. Controlled runtime template vectors remain open.
