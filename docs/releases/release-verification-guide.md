@@ -2,31 +2,26 @@
 
 **Category:** Releases
 **Status:** Draft / Standard and current gaps
-**Last reviewed:** 2026-08-27
+**Last reviewed:** 2026-09-02
 
 ## Summary
 
-This page explains the release verification standard MoreBC2 should use when discussing BitcoinII Core releases.
+This page explains the release-verification standard MoreBC2 should use when discussing BitcoinII Core releases.
 
-It does not claim that the current BitcoinII release provides every required artifact.
+It does not claim that the current BitcoinII release provides every artifact needed for strong independent authentication.
 
-Detailed current evidence remains in:
-
-- [Developer release verification guide](../developers/release-verification.md)
-- [Release artifact checklist](../verification/release-artifact-checklist.md)
-- [Authentication status](authentication-status.md)
-- [Release-artifact authentication record — 2026-08-27](../verification/release-artifact-authentication-2026-08-27.md)
+The current release baseline is `v31.1.0`. Historical `v29.1.0` evidence remains useful only within its recorded version/date scope.
 
 ## Strong release verification path
 
-For release binaries, the strongest normal path is:
+For release binaries, a strong normal path is:
 
 ```text
 release binary
   -> locally calculated SHA256 hash
   -> checksum or manifest file
   -> signature over checksum or manifest
-  -> trusted release key or signed release process
+  -> trusted release key or independently trusted release process
 ```
 
 If one of those links is missing, MoreBC2 should document the gap clearly.
@@ -36,65 +31,67 @@ If one of those links is missing, MoreBC2 should document the gap clearly.
 | Evidence type | What it can support | What it cannot support by itself |
 |---|---|---|
 | Observed release page/API metadata | A release exists at an observed path with recorded metadata. | Binary authenticity. |
-| Uploaded asset inventory | Asset names, sizes, content types, and URLs were recorded. | That the assets are safe, signed, or authentic. |
-| GitHub-generated source archive metadata | Archive links are generated from the tag. | That uploaded binaries match source. |
-| Lightweight tag ref | A tag name points directly to a commit. | Signed annotated tag evidence. |
-| Locally calculated SHA-256 | The exact retrieved bytes have a repeatable fingerprint. | Publisher authentication without an independently trusted expected value. |
-| GitHub web-flow commit signature | The tagged commit data verifies against GitHub's published service key. | A BitcoinII maintainer signature, signed tag, or binary-to-source binding. |
-| Source comparison | Whether source refs differ in observed files. | Whether binaries were built from those sources. |
-| Workflow artifact | A workflow produced an artifact. | That the artifact is a verified release asset. |
-| Maintainer Statement | Context about intended or planned release process. | Cryptographic proof or current release authentication. |
+| Uploaded asset inventory | Asset names, sizes, content types, URLs, and hosting metadata were recorded. | That the assets are safe, signed, or authentic. |
+| GitHub-reported SHA-256 digest | Hosting-provider metadata for the uploaded bytes. | A publisher-signed expected hash or independent authentication. |
+| GitHub-generated source archive metadata | Archive links are generated from a tag/ref. | That uploaded binaries match source. |
+| Locally calculated SHA-256 | The retrieved bytes have a repeatable local fingerprint. | Publisher authentication without an independently trusted expected value. |
+| GitHub web-flow commit signature | Commit data verifies against GitHub's published service key. | A BitcoinII maintainer release signature or binary-to-source binding. |
+| Source comparison | Whether reviewed source refs/files differ. | Whether binaries were built from those sources. |
+| Reproducible-build attestation | Can strengthen binary-to-source provenance when independently verifiable. | Publisher identity unless the attestation trust path is also established. |
+| Maintainer statement | Context about intended or planned release process. | Cryptographic proof by itself. |
 
-## Current v29.1.0 limits
+## Current v31.1.0 limits
 
-For BitcoinII Core `v29.1.0`, current MoreBC2 records show:
+For BitcoinII Core `v31.1.0`, current MoreBC2 records show:
 
-- independent SHA-256 values recorded for all 10 uploaded assets and two generated source archives,
-- all uploaded-asset sizes and hashes matched GitHub API metadata,
-- no verified checksum manifest,
-- no verified `SHA256SUMS`,
-- no verified `SHA256SUMS.asc`,
-- no detached release signature verified,
-- no trusted BitcoinII release-key path established,
-- no signed annotated tag observed,
-- no release binary authenticity established.
+- current release identity and publication time observed;
+- four uploaded Linux/Windows CLI/Qt assets recorded;
+- GitHub-reported SHA-256 digest metadata recorded for those assets;
+- no independent MoreBC2 `v31.1.0` artifact hash record yet;
+- no current publisher-signed checksum manifest established;
+- no detached current-release signature established;
+- no trusted BitcoinII release-key path established;
+- no current binary-to-source provenance established;
+- no current reproducible-build proof established.
 
-The first two findings are integrity and hosting cross-checks only. They do not supply an authenticated publisher value.
+The GitHub-reported digest fields are useful metadata, but they are not equivalent to independent MoreBC2 hashing plus a publisher-authenticated expected value.
+
+## Historical v29.1.0 evidence
+
+MoreBC2's 2026-08-27 `v29.1.0` audit independently hashed all 10 uploaded assets and two GitHub-generated source archives and performed bounded release-signature/trust-path checks.
+
+That record should be cited when discussing `v29.1.0` verification history. It must not be used to imply that `v31.1.0` has already undergone the same independent process.
 
 ## Safe user-facing wording
 
+Use phrases such as:
+
+- "current release metadata observed"
+- "GitHub-reported asset digest recorded"
+- "historical v29.1.0 integrity fingerprints recorded"
+- "independent v31.1.0 artifact authentication remains open"
+- "trusted BitcoinII release-key path not established"
+
+Avoid phrases such as:
+
+- "v31.1.0 release verified"
+- "binary verified"
+- "signed release" unless a BitcoinII-specific trust path has actually been established
+- "trusted binaries"
+- "GitHub digest proves publisher authenticity"
+- "historical v29 hashes verify current v31 assets"
+
+## Relationship to verification records
+
 Use:
 
-- "release metadata observed"
-- "uploaded asset inventory recorded"
-- "local integrity fingerprints recorded"
-- "source archives listed separately"
-- "tagged commit signature independently verified against GitHub's web-flow service key; no BitcoinII release trust or artifact binding established"
-- "release authentication path remains unresolved"
-- "signing/checksum publication is roadmap context, not current proof"
-
-Do not use:
-
-- "release verified"
-- "binary verified"
-- "signed release"
-- "trusted binaries"
-- "exchange-grade verified"
-- "source comparison proves binary provenance"
-- "GitHub verified commit proves release assets are authentic"
-
-## Relationship to existing verification records
-
-The existing verification records remain canonical:
-
-- use [Release asset inventory attempt](../verification/release-asset-inventory-attempt.md) for asset metadata,
-- use [Release artifact checklist](../verification/release-artifact-checklist.md) for required future checks,
-- use [Release source comparison notes](../verification/release-source-comparison.md) for source-ref comparison caveats,
-- use [Network release comparison](../verification/network-release-comparison.md) for network/P2P source comparison notes,
-- use [Open questions backlog](../verification/open-questions.md) for unresolved release questions.
+- [Current v31.1.0 asset record](v31.1.0-assets.md) for current release metadata and GitHub-reported digests;
+- [Authentication status](authentication-status.md) for the current high-level boundary;
+- [Historical v29.1.0 artifact authentication](../verification/release-artifact-authentication-2026-08-27.md) for the dated deeper audit;
+- [Open questions backlog](../verification/open-questions.md) for unresolved current-release work.
 
 ## Verification
 
-**Status:** Draft / Standard and current gaps  
-**Primary sources checked:** Existing MoreBC2 release verification records and the dated 2026-08-27 artifact authentication record linked above
-**Notes:** This page is guidance for wording and evidence separation. The current evidence records integrity, not release authenticity.
+**Status:** Draft / Standard and current gaps
+**Primary sources checked:** Current `v31.1.0` release metadata and existing MoreBC2 release-verification evidence
+**Notes:** This page defines evidence wording and keeps current-release metadata separate from historical deeper verification.
