@@ -1,173 +1,116 @@
 # Wallet spend and PSBT RPC
 
 **Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-06-30
+**Status:** Source-reviewed partial
+**Last reviewed:** 2026-09-02
 
 ## Summary
 
-This page covers a first-pass review of:
+This page covers BitcoinII wallet spend/funding/PSBT behavior centered on `src/wallet/rpc/spend.cpp` and the signing helpers it calls.
 
-- `src/wallet/rpc/spend.cpp`
+The broad wallet RPC structure remains Bitcoin-style, but BitcoinII Core `v31.1.0` adds an important BitcoinII-specific requirement: wallet and PSBT signing must use the replay-protection signature-hash domain selected for the **next block**.
 
-This file contains wallet RPC behavior for sending funds, fee settings, transaction funding, fee bumping, signing with wallet data, and PSBT workflows.
+This is not a user command guide. Spend-related commands can move funds or prepare fund-moving transactions.
 
-This is not a user command guide. Spend-related commands can move funds or prepare fund-moving transactions, so examples should not be marked verified until they are tested on a temporary wallet and reviewed carefully.
+## Main command groups
 
-## Why this file matters
+Reviewed command families include:
 
-Spend RPCs are among the highest-impact wallet commands.
+- direct sends: `sendtoaddress`, `sendmany`, `send`, `sendall`;
+- fee/funding: `settxfee`, `fundrawtransaction`, `walletcreatefundedpsbt`;
+- fee bumping: `bumpfee`, `psbtbumpfee`;
+- signing/PSBT: `signrawtransactionwithwallet`, `walletprocesspsbt`;
+- PSBT finalization/extraction paths used by wallet RPC.
 
-For MoreBC2, this file matters because it touches:
+Existing fee, funding, coin-selection, replaceability, change-output, and wallet-unlock behavior remains structurally useful from the earlier review.
 
-- Direct wallet sends.
-- Multi-recipient sends.
-- Fee selection and fee-rate units.
-- Replace-by-fee behavior.
-- Coin selection options.
-- Change output handling.
-- Raw-transaction funding.
-- PSBT creation, update, signing, and finalization.
-- Fee bumping for eligible wallet transactions.
+## v31 replay-protection integration
 
-## Helper behavior reviewed
+Mainnet replay protection activates at height `57750` with fork id `0x01324342`.
 
-Reviewed helper behavior includes:
+`CWallet::GetSighashForkId()` obtains the replay domain appropriate for transactions targeting the next block. Below activation the domain is zero; at/after activation it is the BC2 fork id.
 
-- Recipient construction from destination/amount pairs.
-- Fee-estimation option handling.
-- Subtract-fee-from-output option parsing.
-- Outdated option-name rejection for newer snake_case names.
-- Wallet signing/finalization through PSBT helper paths.
-- Coin-control option parsing for funding commands.
-- Change address and change position validation.
-- Watch-only inclusion handling.
-- Input lock handling.
-- Solving-data parsing for non-wallet or external inputs.
+Wallet signing passes this value into transaction-signing helpers rather than relying on generic Bitcoin signature hashes.
 
-## Direct send behavior reviewed
+`DescriptorScriptPubKeyMan::SignTransaction` passes `m_storage.GetSighashForkId()` into the signing path.
 
-Reviewed direct spend commands include:
+## PSBT behavior in v31
 
-- `sendtoaddress`
-- `sendmany`
-- `send`
-- `sendall`
+The fork id propagates through PSBT handling:
 
-Observed behavior includes:
+- `PrecomputePSBTData(..., sighash_fork_id)` stores it in `PrecomputedTransactionData`;
+- wallet PSBT processing calls that helper with `GetSighashForkId()`;
+- wallet spend RPC passes the domain into `FinalizeAndExtractPSBT`;
+- signature creation/checking receives the same domain through signing helpers.
 
-- Wallet unlock is required for direct wallet signing paths.
-- Wallets with private-key handling disabled cannot use direct send paths that require local signing.
-- Recipients are validated before transaction creation.
-- Fee settings can be automatic or explicit depending on command/options.
-- Replaceability is controlled through wallet defaults or command options.
-- Some commands can return either transaction IDs, raw transaction hex, or PSBT output depending on options and completion state.
+A PSBT can therefore be syntactically valid and still be unusable on post-activation BitcoinII if a third-party signer computes legacy Bitcoin-style signature hashes.
 
-## Fee and funding behavior reviewed
+## External signer boundary
 
-Reviewed commands and helpers include:
+The v31 external-signer path explicitly warns that it cannot safely sign BitcoinII post-fork transactions without replay-protection sighash support.
 
-- `settxfee`
-- `FundTransaction`
-- `walletcreatefundedpsbt`
-- `fundrawtransaction`
+MoreBC2 should not describe a hardware/external signer as compatible merely because it supports Bitcoin-format addresses or PSBT generally.
 
-Observed behavior includes:
+## Operational implication
 
-- `settxfee` stores a wallet-specific fee rate after checking relay, wallet minimum, and wallet maximum fee bounds.
-- Funding commands can add wallet inputs automatically.
-- Funding options include change address, change position, change type, minimum/maximum confirmations, include watch-only, input locking, explicit fee rate, confirmation target, and replaceability.
-- The reviewed code distinguishes newer `fee_rate` units from older `feeRate` behavior.
-- Some options are accepted for backwards compatibility but newer names are preferred.
+For services and exchanges, the safe default is to use current BitcoinII Core wallet/signing/PSBT code or independently reproduce the BC2 replay-domain rules exactly.
 
-## Fee bumping behavior reviewed
+The compatibility boundary is signature-digest behavior, not address encoding.
 
-Reviewed fee-bump commands include:
+## What remains structurally unchanged
 
-- `bumpfee`
-- `psbtbumpfee`
+This pass did not identify a BitcoinII-specific rewrite of the ordinary wallet RPC concepts around:
 
-Observed behavior includes:
+- recipient construction;
+- fee-rate options;
+- funding and coin-control options;
+- change handling;
+- opt-in replacement;
+- fee bumping;
+- wallet locking/private-key availability;
+- send-all selection mechanics.
 
-- Fee bumping targets an existing opt-in replaceable wallet transaction.
-- `bumpfee` creates and commits a new wallet transaction when signing succeeds.
-- `psbtbumpfee` returns a PSBT instead of committing a signed transaction.
-- The replacement can reduce or reuse change outputs and may add inputs when needed.
-- The new fee rate must satisfy incremental relay requirements.
-- The reviewed help text warns about fee-rate unit changes from older versions.
+Those earlier descriptions remain useful as structural documentation.
 
-## Signing and PSBT behavior reviewed
+## Runtime status
 
-Reviewed commands include:
+MoreBC2 has **not** yet executed a v31 wallet/PSBT regression suite.
 
-- `signrawtransactionwithwallet`
-- `walletprocesspsbt`
-- `walletcreatefundedpsbt`
+Still needed:
 
-Observed behavior includes:
+- disposable-wallet PSBT create/process/finalize tests;
+- raw-transaction versus wallet-signing digest equivalence;
+- external/hardware signer tests;
+- deterministic pre/post-fork signature vectors.
 
-- Raw transaction signing decodes the supplied transaction, looks up previous outputs from chain data and optional inputs, then signs with wallet data when available.
-- `walletprocesspsbt` updates a PSBT with wallet data, can sign, can include BIP32 derivation data, and can finalize when possible.
-- `walletcreatefundedpsbt` creates and funds a PSBT from inputs, outputs, locktime, and funding options.
+## Related pages
 
-## Send-all behavior reviewed
-
-The reviewed `sendall` path supports sweeping selected or available wallet coins while accounting for fee rate, dust checks, transaction weight, optional input locking, and remainder distribution across outputs without specified amounts.
-
-This command should be treated as advanced and tested only on a temporary wallet before any user-facing example is published.
-
-## Documentation implications
-
-MoreBC2 should separate spend documentation into tiers:
-
-- Read-only wallet status commands.
-- Receive/address commands.
-- Safe backup commands.
-- Transaction preparation commands.
-- PSBT/offline signing workflows.
-- Direct send commands.
-- Advanced sweeping and fee-bump commands.
-
-Commands that can move funds should not appear casually in exchange or beginner docs without explicit safety notes and tested examples.
-
-## Relationship to other pages
-
-Related pages:
-
-- [Source atlas: wallet RPC](wallet-rpc.md)
-- [Source atlas: wallet backup/import RPC](wallet-backup-import-rpc.md)
+- [Replay protection v31](replay-protection-v31.md)
+- [v31 wallet/mempool/mining regression audit](../../verification/v31-wallet-mempool-mining-regression-2026-09-02.md)
+- [Raw transaction RPC](rpc-rawtransaction.md)
+- [Wallet RPC](wallet-rpc.md)
 - [Wallet guide](../../wallets/wallet-guide.md)
-- [RPC overview](../rpc-overview.md)
 - [Service integration checklist](../../exchange/service-integration-checklist.md)
-
-## BitcoinII-specific notes
-
-This first-pass review saw BitcoinII naming and amount-unit strings in wallet RPC help text.
-
-No upstream comparison has been completed, so this page does not claim whether spend RPC behavior differs from upstream Bitcoin Core beyond naming and visible strings.
-
-## Open questions
-
-- Which spend examples can be tested safely on regtest or a temporary wallet?
-- Which commands should be documented only for developers or advanced operators?
-- Which PSBT workflow should MoreBC2 recommend for safer service integrations?
-- How should fee-rate units be explained across wallet and mining RPC docs?
-- Which wallet coin-selection defaults matter to normal users?
-- Which GUI send paths map to these RPC helpers?
-- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
 
 ## Sources
 
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+Pinned to BitcoinII Core `v31.1.0`:
 
-- Current observed `main` `src/wallet/rpc/spend.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/spend.cpp
-- Current observed `main` `src/wallet/wallet.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/wallet.h
-- Current observed `main` `src/wallet/spend.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/spend.h
-- Current observed `main` `src/wallet/coincontrol.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/coincontrol.h
-- Current observed `main` `src/wallet/fees.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/fees.h
+- `src/wallet/rpc/spend.cpp`
+- `src/wallet/wallet.h`
+- `src/wallet/wallet.cpp`
+- `src/wallet/scriptpubkeyman.h`
+- `src/wallet/scriptpubkeyman.cpp`
+- `src/wallet/external_signer_scriptpubkeyman.cpp`
+- `src/psbt.h`
+- `src/psbt.cpp`
+- `src/script/sign.cpp`
+- `src/interfaces/chain.h`
+
+Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This is a first-pass spend/PSBT/funding RPC review. Commands have not been run. Public examples, service recommendations, GUI mapping, upstream comparison, and release-versus-main comparison remain open.
+**Status:** Source-reviewed partial
+**Primary sources checked:** BitcoinII Core `v31.1.0`
+**Notes:** Wallet/PSBT replay-domain propagation is source-backed. Commands and third-party signer compatibility have not yet been runtime-tested by MoreBC2.
