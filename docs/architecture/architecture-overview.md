@@ -2,32 +2,25 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-07-02
+**Last reviewed:** 2026-09-02
 
 ## Summary
 
 BitcoinII Core is reference software for participating in the BitcoinII (BC2) network.
 
-This page gives a high-level architecture map and points readers toward the more focused architecture and Source Atlas pages.
+This page gives a high-level architecture map and points readers toward focused architecture and Source Atlas pages. Current-facing architecture notes now use BitcoinII Core `v31.1.0` as the release baseline.
 
-It is intentionally conservative. It does not claim that every subsystem has been fully reviewed.
+## v31.1.0 architecture boundary
 
-## How to read this section
+The current release introduces BitcoinII-specific behavior that affects several major architecture paths:
 
-Start here, then move outward:
+- ShockWave per-block difficulty adjustment from mainnet height `57750`;
+- consensus-level data restrictions from height `57750`;
+- BC2 replay protection from height `57750`;
+- fork-aware header synchronization;
+- associated wallet, mining, mempool, RPC, validation, and PSBT updates.
 
-1. [Node startup](node-startup.md)
-2. [Consensus model](consensus-model.md)
-3. [Life of a transaction](life-of-a-transaction.md)
-4. [Life of a block](life-of-a-block.md)
-5. [Life of a reorganization](life-of-a-reorg.md)
-6. [Block validation flow](block-validation-flow.md)
-7. [Mempool flow](mempool-flow.md)
-8. [Peer communication model](peer-communication-model.md)
-
-The architecture pages explain flows.
-
-The Source Atlas pages explain where those flows are implemented.
+Older Source Atlas and architecture pages remain useful first-pass structural reviews, but detailed behavior in files touched by these changes should be treated as needing v31-specific spot checks unless the page says otherwise.
 
 ## Conceptual component map
 
@@ -41,16 +34,19 @@ CLI / GUI / RPC / wallet interface
 BitcoinII Core node
       |
       +-- Startup and configuration
-      +-- Chain parameters
+      +-- Chain parameters and activation heights
       +-- RPC server, if enabled
-      +-- Wallet clients, if enabled
+      +-- Wallet / PSBT paths, if enabled
       +-- Peer-to-peer networking
       +-- Address manager and seed state
+      +-- Header synchronization
       +-- Mempool and transaction sharing policy
       +-- Block and transaction validation
+      +-- Replay/data-restriction consensus checks
       +-- Chainstate and UTXO view
       +-- Block storage and indexes
-      +-- Mining interface / candidate block assembly paths
+      +-- Mining / candidate block assembly
+      +-- ShockWave next-work calculation
       |
       v
 BitcoinII peer-to-peer network
@@ -58,259 +54,92 @@ BitcoinII peer-to-peer network
 
 ## Core startup path
 
-Startup prepares the node before normal peer operation begins.
+Startup prepares the node before normal peer operation begins. Existing MoreBC2 source reviews cover argument handling, initialization, chainstate loading, networking, RPC registration, indexes, wallet loading, mempool loading, and shutdown wiring.
 
-Reviewed startup topics include:
-
-- Runtime argument and shutdown wiring.
-- Parameter interaction.
-- Sanity checks and directory locks.
-- Logging and scheduler setup.
-- Validation signals.
-- Wallet interface construction.
-- RPC registration and warmup.
-- Network component preparation.
-- Chainstate and block index loading.
-- Peer manager creation.
-- Index initialization.
-- Wallet loading.
-- Mempool loading.
-- Final startup handoff.
-
-Related:
-
-- [Node startup](node-startup.md)
-- [Source atlas: startup initialization](../developers/source-atlas/init-cpp.md)
-- [Source atlas: wallet startup](../developers/source-atlas/wallet-startup.md)
+Dated local runtime evidence is largely `v29.1.0`-scoped. Use those records as historical evidence until equivalent `v31.1.0` runtime tests are added.
 
 ## Consensus and validation
 
-Consensus rules decide whether blocks and transactions are valid.
+Current high-level consensus anchors include:
 
-Reviewed consensus-adjacent areas include:
+- BitcoinII chain parameters and genesis identity;
+- proof-of-work target checks;
+- ShockWave per-block next-work calculation after height `57750`;
+- transaction consensus helpers and script validation;
+- BitcoinII replay protection;
+- consensus-level data restrictions;
+- block/header validation and chain selection;
+- UTXO connection/disconnection and reorganization handling.
 
-- Chain parameters.
-- Genesis block values.
-- Proof-of-work checks.
-- Difficulty retargeting.
-- Transaction consensus helpers.
-- Script engine first-pass behavior.
-- Header checks.
-- Context-free and contextual block checks.
-- Block connection against the UTXO view.
-- Reorganization handling.
+The [Consensus model](consensus-model.md) and [Consensus overview](../documentation/consensus-overview.md) contain the current v31-facing summary.
 
-Still pending:
-
-- Full mandatory-vs-policy script flag mapping.
-- Full deployment-state review.
-- Full checkpoint behavior review.
-- Release-branch matching against documented `main` source values.
-
-Related:
-
-- [Consensus model](consensus-model.md)
-- [Block validation flow](block-validation-flow.md)
-- [Source atlas: validation.cpp](../developers/source-atlas/validation-cpp.md)
-- [Source atlas: pow.cpp](../developers/source-atlas/pow-cpp.md)
-- [Source atlas: transaction consensus files](../developers/source-atlas/transaction-consensus.md)
-- [Source atlas: script engine](../developers/source-atlas/script-interpreter.md)
+Detailed replay-protection and data-restriction validation paths still need dedicated Source Atlas coverage.
 
 ## Mempool and transaction acceptance
 
-The mempool is local node state for unconfirmed transactions.
+Existing first-pass reviews cover mempool structure, acceptance, replacement/package behavior, transaction relay, raw-transaction RPC, and reorg interaction.
 
-Reviewed mempool topics include:
-
-- `CTxMemPool` structure.
-- Mempool entry metadata.
-- Ancestor and descendant tracking.
-- Single and package transaction acceptance.
-- Policy checks vs consensus checks.
-- Reorg interaction through disconnected transaction handling.
-- Mempool and transaction RPC surfaces.
-- Dry-run acceptance checks and local submission behavior.
-- First-pass P2P transaction sharing and send-loop behavior.
-
-Related:
-
-- [Mempool flow](mempool-flow.md)
-- [Life of a transaction](life-of-a-transaction.md)
-- [Source atlas: mempool accept](../developers/source-atlas/mempool-accept.md)
-- [Source atlas: mempool source](../developers/source-atlas/txmempool.md)
-- [Source atlas: mempool and transaction RPC](../developers/source-atlas/rpc-mempool.md)
-- [Source atlas: raw transaction RPC](../developers/source-atlas/rpc-rawtransaction.md)
-- [Source atlas: net processing transaction relay](../developers/source-atlas/net-processing-transaction-relay.md)
-- [Source atlas: net processing send loop](../developers/source-atlas/net-processing-send-loop.md)
+Because `v31.1.0` release notes identify mempool, RPC, validation, wallet, and PSBT changes, older detailed pages should be read as structural/source-review evidence unless they have been specifically refreshed against v31.
 
 ## Blocks, chainstate, and reorgs
 
-Reviewed block lifecycle topics include:
+Existing architecture reviews cover:
 
-- Header acceptance.
-- Full block acceptance.
-- Candidate selection.
-- Candidate block-template assembly.
-- Best-chain activation.
-- UTXO connection.
-- Disconnection with undo data.
-- Reconsidering disconnected block transactions for mempool entry.
-- Block storage, pruning-adjacent, reindex, and import paths.
-- Blockchain RPC surfaces for block and chainstate inspection.
-- First-pass P2P block/header sharing and send-loop behavior.
+- header and block acceptance;
+- candidate-chain selection;
+- block connection/disconnection;
+- UTXO updates and undo data;
+- reorganization handling;
+- block storage and pruning-adjacent paths.
 
-Related:
-
-- [Life of a block](life-of-a-block.md)
-- [Life of a reorganization](life-of-a-reorg.md)
-- [Source atlas: block lifecycle](../developers/source-atlas/block-acceptance.md)
-- [Source atlas: block storage](../developers/source-atlas/block-storage.md)
-- [Source atlas: block template assembly](../developers/source-atlas/miner.md)
-- [Source atlas: mining RPC](../developers/source-atlas/rpc-mining.md)
-- [Source atlas: blockchain RPC](../developers/source-atlas/rpc-blockchain.md)
-- [Source atlas: disconnected transactions](../developers/source-atlas/disconnected-transactions.md)
-- [Source atlas: net processing block and header relay](../developers/source-atlas/net-processing-block-relay.md)
-- [Source atlas: net processing send loop](../developers/source-atlas/net-processing-send-loop.md)
+`v31.1.0` additionally identifies fork-aware header synchronization. The high-level current fact is established; detailed current-release header-sync flow remains a verification priority.
 
 ## Peer-to-peer networking
 
-Reviewed P2P material is still first-pass and source-observed, but it now covers more than network RPC.
+MoreBC2 has broad first-pass source coverage for protocol primitives, connection management, address management, DNS/bootstrap paths, handshake, address relay, transaction relay, block/header relay, peer health, and send-loop behavior.
 
-Current anchors include:
+Current DNS/seed and header-sync claims must use current release/source evidence or retain explicit date/version labels.
 
-- P2P message names, headers, service flags, address serialization, and inventory helpers.
-- Lower-level connection management, including local address helpers, outbound creation, inbound admission, disconnect cleanup, socket send/receive handling, transport handling, and DNS seed/seed-node paths.
-- Address-manager behavior, including new/tried tables, quality checks, probabilistic selection, serialized peer-address state, and seed-array context.
-- Peer-list and discouragement management.
-- Network RPC commands for peer and network status.
-- Peer handshake and early feature negotiation.
-- Address sharing and peer-discovery-adjacent behavior.
-- Block and header sharing.
-- Transaction sharing.
-- Peer health, stale-tip checks, discouragement, and ping timeout behavior.
-- Peer send-loop behavior.
+## Mining and proof of work
 
-Still pending:
+Current BitcoinII mainnet targets 10-minute blocks and uses double-SHA256 block-header hashing.
 
-- Release-versus-main comparison.
-- Address-manager caller-path follow-up.
-- Peer-list RPC follow-up.
-- Live-network tests.
+The present difficulty model is **ShockWave per block from height `57750`**, not the historical 2016-block-only retarget schedule.
 
-Related:
+See:
 
-- [Peer communication model](peer-communication-model.md)
-- [Source atlas: P2P protocol primitives](../developers/source-atlas/protocol.md)
-- [Source atlas: address manager](../developers/source-atlas/addrman.md)
-- [Source atlas: peer list management](../developers/source-atlas/banman.md)
-- [Source atlas: network RPC](../developers/source-atlas/rpc-network.md)
-- [Source atlas: net connection management](../developers/source-atlas/net-connection-management.md)
-- [Source atlas: net processing handshake](../developers/source-atlas/net-processing-handshake.md)
-- [Source atlas: net processing address relay](../developers/source-atlas/net-processing-address-relay.md)
-- [Source atlas: net processing block and header relay](../developers/source-atlas/net-processing-block-relay.md)
-- [Source atlas: net processing transaction relay](../developers/source-atlas/net-processing-transaction-relay.md)
-- [Source atlas: net processing peer eviction and stale-tip checks](../developers/source-atlas/net-processing-peer-eviction.md)
-- [Source atlas: net processing send loop](../developers/source-atlas/net-processing-send-loop.md)
+- [Difficulty adjustment](../encyclopedia/difficulty-adjustment.md)
+- [Mining overview](../mining/mining-overview.md)
+- [Source atlas: pow.cpp](../developers/source-atlas/pow-cpp.md)
 
 ## User and service interfaces
 
-Reviewed interface-level material is still partial but now broader than the initial framework.
+MoreBC2 has first-pass coverage for mining, blockchain, network, raw-transaction, mempool, and wallet RPC groups, plus exchange/operator integration material.
 
-Current anchors include:
+Current `v31.1.0` operator-facing exchange docs have been refreshed, while broad runtime regression testing for wallet/RPC/PSBT behavior remains open.
 
-- RPC overview pages.
-- Mining, blockchain, network, raw transaction, mempool/transaction, and wallet RPC source-atlas pages.
-- Wallet startup and wallet RPC source-atlas pages.
-- Exchange integration framework.
-- Configuration pages.
-- Node, wallet, and mining section frameworks.
+## Current review priorities
 
-Still pending:
-
-- CLI source review.
-- GUI entry paths.
-- Lower-level wallet internals.
-- Local command testing.
-
-Related:
-
-- [RPC overview](../developers/rpc-overview.md)
-- [Exchange integration](../exchange/README.md)
-- [Configuration](../configuration/README.md)
-- [Wallets](../wallets/README.md)
-- [Nodes](../nodes/README.md)
-- [Source atlas: network RPC](../developers/source-atlas/rpc-network.md)
-- [Source atlas: address manager](../developers/source-atlas/addrman.md)
-- [Source atlas: net connection management](../developers/source-atlas/net-connection-management.md)
-- [Source atlas: wallet RPC](../developers/source-atlas/wallet-rpc.md)
-- [Source atlas: wallet spend and PSBT RPC](../developers/source-atlas/wallet-spend-rpc.md)
-- [Source atlas: wallet transaction history RPC](../developers/source-atlas/wallet-transactions-rpc.md)
-
-## Areas still needing deeper review
-
-- Address-manager caller details.
-- Peer-list RPC details.
-- CLI source review.
-- Wallet database internals, key-management internals, and GUI flows.
-- Local command testing.
-- Validation-interface subscriber behavior.
-- Build and release verification.
-- Current ecosystem and explorer checks.
-
-## What this page does not claim
-
-This page does not claim:
-
-- That every listed component has been fully reviewed.
-- That BitcoinII has custom behavior in every listed area.
-- That unreviewed files are identical to Bitcoin Core.
-- That Draft architecture pages are final specifications.
-- That source-observed command behavior has been locally tested.
-- That P2P behavior has been live-network tested.
-- That source-observed seed entries or stored addresses are currently reachable.
+1. Replay-protection implementation path.
+2. Consensus data-restriction validation path.
+3. Fork-aware header synchronization.
+4. Validation/mempool changes identified by `v31.1.0`.
+5. Wallet/PSBT changes identified by `v31.1.0`.
+6. Mining/RPC changes beyond the ShockWave refresh.
+7. Fresh current-release runtime tests.
 
 ## Related pages
 
-- [Repository map](../developers/repository-map.md)
-- [Source tree guide](../developers/source-tree.md)
-- [Developer reading order](../developers/reading-order.md)
-- [Documentation coverage](../documentation-coverage.md)
+- [Consensus model](consensus-model.md)
+- [Block validation flow](block-validation-flow.md)
 - [Network specifications](../documentation/network-specifications.md)
 - [Consensus overview](../documentation/consensus-overview.md)
+- [Source Atlas](../developers/source-atlas/README.md)
 - [Open questions backlog](../verification/open-questions.md)
-
-## Sources
-
-- BitcoinII source repository currently reviewed through MoreBC2 Source Atlas entries.
-- `src/init.cpp`
-- `src/kernel/chainparams.cpp`
-- `src/chainparamsseeds.h`
-- `src/pow.cpp`
-- `src/validation.cpp`
-- `src/txmempool.*`
-- `src/kernel/mempool_entry.h`
-- `src/kernel/disconnected_transactions.*`
-- `src/node/blockstorage.*`
-- `src/node/miner.*`
-- `src/rpc/mining.cpp`
-- `src/rpc/blockchain.cpp`
-- `src/rpc/net.cpp`
-- `src/rpc/rawtransaction.cpp`
-- `src/rpc/mempool.cpp`
-- `src/wallet/rpc/*` reviewed groups
-- `src/addrman.*`
-- `src/banman.*`
-- `src/protocol.h`
-- `src/protocol.cpp`
-- `src/net.h`
-- `src/net.cpp`
-- `src/net_processing.h`
-- `src/net_processing.cpp`
-- `src/primitives/block.*`
-- `src/hash.h`
+- [v31 currentness audit](../verification/v31-currentness-audit-2026-09-02.md)
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This overview summarizes current MoreBC2 architecture and Source Atlas coverage. It was refreshed after first-pass P2P Source Atlas slices were added through address-manager review, peer-list management, lower-level connection management, protocol primitives, network RPC, handshake, address sharing, block/header sharing, transaction sharing, peer health/stale-tip checks, and send-loop behavior.
+**Primary sources checked:** Current `v31.1.0` release/source anchors plus existing MoreBC2 architecture and Source Atlas coverage
+**Notes:** This page is a high-level currentness map. It does not claim every detailed architecture/Source Atlas page has already undergone a v31-specific diff or runtime test.

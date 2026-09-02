@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-08-27
+**Last reviewed:** 2026-09-02
 
 ## Summary
 
@@ -14,135 +14,108 @@ For the full working list, use the [open questions backlog](open-questions.md) a
 
 ## Highest-priority known unknowns
 
-### Canonical public repository path drift
+### Current release authentication
 
-Project-controlled GitHub metadata reviewed on 2026-07-10 supports `Bitcoin-II/BitcoinII-Core` as the current canonical public reference implementation. Older paths are retained only for historical provenance, migration/redirect history, archived evidence, or older reviewed material.
+The current BitcoinII Core release is `v31.1.0`, published on 2026-08-29.
 
-**Needed:** Periodic recheck for repository ownership or location changes.
+MoreBC2 has observed the current release metadata, four uploaded Linux/Windows CLI/Qt assets, and GitHub-reported SHA-256 digests.
 
-**Blocks:** Nothing currently; a future path change would require synchronized operational links.
+The deeper 2026-08-27 artifact audit applies to historical `v29.1.0`, not automatically to `v31.1.0`.
+
+**Needed:** Independent `v31.1.0` downloads/hashes, current tag/commit signature review, publisher checksum/signature discovery, trusted BitcoinII release-key guidance, and reproducible-build evidence if available.
+
+**Blocks:** Strong public release-authentication claims.
+
+### v31.1.0 runtime regression coverage
+
+Release notes identify wallet, mining, mempool, RPC, validation, and PSBT updates in addition to the headline consensus changes.
+
+MoreBC2's existing local command/node evidence is largely `v29.1.0`-scoped.
+
+**Needed:** Current-release runtime records for core read-only node/RPC behavior and selected safe workflows.
+
+**Blocks:** Claims that earlier local tests prove current-release behavior.
+
+### ShockWave detailed validation and live behavior
+
+MoreBC2 has source-backed current documentation for ShockWave activation and its high-level algorithm structure.
+
+**Needed:** Detailed test/caller-path mapping plus empirical post-activation analysis of block timing, hashrate shocks, and emergency recovery behavior.
+
+**Blocks:** Strong quantitative claims about ShockWave performance.
+
+### Replay-protection transaction path
+
+MoreBC2 has confirmed mainnet replay protection activation at height `57750` and fork ID `0x01324342`.
+
+**Needed:** Detailed source review of transaction serialization/signing/validation behavior and wallet/service integration implications.
+
+**Blocks:** Detailed integration guidance beyond the activation/fork-domain facts.
+
+### Consensus data restrictions
+
+MoreBC2 has confirmed `nDataRestrictionsHeight = 57750` and the `v31.1.0` release description of Ordinals, inscriptions, and Runes mitigation.
+
+**Needed:** Detailed validation-path review and boundary testing.
+
+**Blocks:** Precise claims about which data-carrier patterns are accepted or rejected.
+
+### Fork-aware header synchronization
+
+The `v31.1.0` release explicitly identifies fork-aware header synchronization.
+
+**Needed:** Detailed source review and current-release runtime testing around competing-header/fork scenarios.
+
+**Blocks:** Strong operational claims about all synchronization edge cases.
 
 ### Official ticker source
 
-BC2 is used throughout the ecosystem, but MoreBC2 still needs the strongest official source confirming ticker usage.
+BC2 is used throughout the ecosystem, but MoreBC2 still needs the strongest project-controlled source confirming ticker usage.
 
-**Needed:** Official website, README, release note, source UI/help text, exchange listing, or maintainer statement.
-
-**Blocks:** Public launch.
-
-### Release verification model
-
-MoreBC2 has release-page observations, API metadata, uploaded asset inventory, generated source archive metadata, source comparison notes, network release comparison, a release asset inventory page, and an artifact checklist.
-
-Known current release findings for `v29.1.0`:
-
-- GitHub API reports 10 uploaded platform assets.
-- Two GitHub-generated source archives were captured separately.
-- The earlier 12-item rendered-page observation is reconciled as likely 10 uploaded assets plus 2 generated source archive links.
-- No uploaded asset name appears to be a checksum manifest or detached signature file.
-- Obvious public GitHub `guix.sigs` and detached-signature repository paths were not found.
-- The `v29.1.0` tag appears lightweight and points directly to a GitHub-reported verified commit.
-- All 10 uploaded assets and two generated source archives were downloaded and independently hashed on 2026-08-27; the uploaded-asset sizes and hashes matched GitHub API metadata.
-- The tagged commit locally verifies against GitHub's published web-flow service key. This is not a BitcoinII release key and does not bind uploaded artifacts to source.
-- No publisher checksum manifest, detached release signature, BitcoinII trusted release-key path, public build attestation, or reproducible-build proof was found.
-
-**Needed:** Official checksum/signature/key guidance, an authenticated artifact-to-source binding, public reproducible-build attestations if adopted, and maintainer confirmation if necessary.
-
-**Blocks:** Public launch.
-
-### Release trust path
-
-The source tree contains Bitcoin Core-style release-process and verification-helper material, but MoreBC2 has not confirmed that the current BitcoinII `v29.1.0` release followed that process.
-
-**Needed:** Maintainer-documented release verification process, signed checksum manifest, trusted BitcoinII release key, signed annotated tag, release-specific reproducible-build evidence, or another project-approved release trust path.
-
-**Blocks:** Public launch.
+**Needed:** Official website, README, release note, source UI/help text, or maintainer statement.
 
 ### Exchange confirmation recommendation
 
-MoreBC2 has not confirmed recommended deposit or withdrawal confirmation counts for exchanges.
+MoreBC2 has not established a recommended deposit/withdrawal confirmation policy for current v31 network conditions.
 
-**Needed:** Maintainer recommendation or community-reviewed exchange risk guidance.
+**Needed:** Maintainer recommendation or community-reviewed risk model informed by current ShockWave/reorg behavior.
 
-**Blocks:** Public launch.
+### Technical/security contact process
 
-### Technical contact process
-
-MoreBC2 has not confirmed the preferred contact process for exchanges, explorers, pools, or wallet developers.
+MoreBC2 has not confirmed the preferred public contact process for exchanges, explorers, pools, wallet developers, or security reports.
 
 **Needed:** Official contact page, repository guidance, or maintainer statement.
 
-**Blocks:** Public launch.
+### Wallet and third-party compatibility
+
+MoreBC2 has source-reviewed BitcoinII Core wallet behavior and dated public Electrum observations, but broad third-party wallet compatibility is not established.
+
+**Needed:** Safe current-release compatibility records without private keys, real funds, or unnecessary broadcast risk.
 
 ### Active ecosystem resources
 
-MoreBC2 now has an ecosystem direct-check plan, refreshed templates, and dated direct observations for some public resources.
+Explorer, API, exchange, pool, and market-service observations can become stale.
 
-Completed or partially completed records include:
+**Needed:** Dated direct rechecks before publication/recommendation and a clear stale-service policy.
 
-- explorer checks,
-- REST API checks,
-- WebSocket check,
-- Electrum checks,
-- public exchange-page observations,
-- local RPC testing,
-- release asset inventory,
-- canonical repository and project-identity evidence.
+### Architecture and Source Atlas release drift
 
-These records do not establish broad service reliability, official ownership/status for every service, wallet support, transaction-broadcast safety, account-gated exchange operation, mining-pool behavior, or community-resource completeness.
+Many Source Atlas pages were written against pre-v31 source and remain useful first-pass structural reviews, but release-specific BitcoinII modifications can invalidate detailed assumptions.
 
-**Needed:** Direct checks with URL, date, observed status, what was checked, what was not checked, and evidence level.
+**Needed:** Prioritized v31 spot-checks for files touched by the new consensus, validation, header-sync, wallet, mempool, RPC, mining, and PSBT changes.
 
-**Blocks:** Public launch.
+## Historical evidence rule
 
-### Service reliability and ownership
+Do not rewrite dated `v29.1.0` test or verification records to make them appear current.
 
-Dated checks show that some public explorers, APIs, WebSocket, Electrum, mining-statistics, price, rich-list, and exchange pages were reachable or returned expected public data during specific check windows.
+Instead:
 
-**Needed:** Repeat-check policy, ownership/official-status confirmation where relevant, documented stale-service handling, and clear limits for service-provider reuse.
-
-**Blocks:** Public launch for active-service directories and service-provider recommendations.
-
-### Wallet compatibility
-
-MoreBC2 has source-reviewed BitcoinII Core wallet behavior and public Electrum protocol observations, but it has not established BlueWallet, Cake Wallet, Komodo, or other third-party wallet compatibility.
-
-**Needed:** Safe disposable watch-only or public-address wallet compatibility records, without private keys, seeds, real funds, or transaction broadcast.
-
-**Blocks:** Public wallet recommendations.
-
-### Untested command examples
-
-MoreBC2 has many source-observed command notes. Codex performed a command-shaped example audit and found no blocker for first narrow private review, but most examples have not been run locally.
-
-**Needed:** Local command records with environment details. A stronger local repository-wide grep is still needed before public launch.
-
-**Blocks:** Public launch for user-facing guides.
-
-### Developer test execution
-
-MoreBC2 has a network test coverage map and network test run plan, but it has not run the mapped tests.
-
-**Needed:** Actual local test command records with environment, ref, command, result, and notes.
-
-**Blocks:** Public claims that behavior has been tested.
-
-### Architecture and Source Atlas link drift
-
-The Source Atlas has grown quickly. Architecture pages, glossaries, and dashboards can drift after new pages are added.
-
-**Needed:** Periodic cross-link, terminology, and dashboard synchronization passes.
-
-**Blocks:** Private review if navigation/status becomes confusing.
-
-## Rule
-
-Do not fill unknowns from memory.
-
-When an unknown is resolved, move the result to the correct documentation page and leave a note in the verification index or backlog.
+- preserve the historical record;
+- label it clearly by version/date;
+- add a new `v31.1.0` record when the workflow is re-tested.
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Open questions backlog, verification queue, verification evidence index, current coverage dashboard, local node/RPC records, public API/Electrum smoke test, release asset inventory attempt, release verification guide, ecosystem direct-check plan, network test run plan
-**Notes:** This page is a short executive list. The detailed backlog is `open-questions.md`.
+**Primary sources checked:** Current `v31.1.0` release/source anchors plus existing MoreBC2 evidence records
+**Notes:** This page is an executive list. The detailed backlog remains in `open-questions.md`.

@@ -2,80 +2,87 @@
 
 **Category:** Documentation
 **Status:** Needs Review
-**Last reviewed:** 2026-08-27
+**Last reviewed:** 2026-09-02
 
 ## Summary
 
-BitcoinII (BC2) is a peer-to-peer cryptocurrency network. BitcoinII Core is the reference software used to connect to the BitcoinII peer-to-peer network, download and validate blocks and transactions, and optionally provide wallet and graphical user interface functionality.
+BitcoinII (BC2) is a peer-to-peer proof-of-work cryptocurrency network. BitcoinII Core is the reference software used to connect to the BitcoinII peer-to-peer network, download and validate blocks and transactions, and optionally provide wallet and graphical user interface functionality.
 
-This page is intentionally factual and narrow. It does not make price claims, investment claims, or roadmap claims.
+This page is intentionally factual and narrow. It does not make price, investment, or roadmap claims.
 
-## What BitcoinII Core does
+## Current release baseline
 
-The public BitcoinII repository README describes BitcoinII Core as software that:
+The current documented BitcoinII Core release is `v31.1.0`, published on 2026-08-29.
 
-- Connects to the BitcoinII peer-to-peer network.
-- Downloads blocks and transactions.
-- Fully validates blocks and transactions.
-- Includes wallet functionality.
-- Can optionally build a graphical user interface.
+Its release notes identify these consensus-level changes:
+
+- ShockWave per-block difficulty adjustment;
+- consensus-level Ordinals, inscriptions, and Runes mitigation;
+- BC2 transaction replay protection;
+- fork-aware header synchronization;
+- associated wallet, mining, mempool, RPC, validation, and PSBT updates.
 
 ## Relationship to Bitcoin Core
 
-The BitcoinII source headers state that the project was forked from Bitcoin Core version `0.27.0`.
+BitcoinII source headers identify Bitcoin Core lineage, while BitcoinII now also contains BitcoinII-specific consensus behavior.
 
-The repository README describes BitcoinII as a “Sister Chain” that currently follows Bitcoin development and upgrade paths unless Bitcoin development ceases.
+Current documentation should therefore distinguish between inherited Bitcoin-style architecture and rules that are specific to modern BitcoinII releases.
 
-## Source-backed notes currently under review
+## Source-backed current notes
 
-The current MoreBC2 technical drafts have source-backed notes for:
+- Target block spacing: 10 minutes.
+- Current difficulty adjustment: ShockWave per block from mainnet height `57750`.
+- Historical pre-57750 difficulty: inherited Bitcoin-style 2016-block retarget path.
+- Subsidy halving interval: 210,000 blocks.
+- Block-header hash path: double-SHA256 via `HashWriter::GetHash()`.
+- Mainnet P2P port: `8338`.
+- ShockWave, data restrictions, and replay protection activate at height `57750`.
+- Replay-protection fork ID: `0x01324342`.
+- Bitcoin-like Base58 and Bech32 address encodings remain present.
+- Explicit replay protection should be mentioned when discussing those Bitcoin-like address encodings.
 
-- 10-minute target block spacing.
-- 14-day target retarget timespan.
-- 2016-block difficulty adjustment interval.
-- 210,000-block subsidy halving interval.
-- Double-SHA256 block header hashing path.
-- Mainnet P2P port `8338`.
-- Inherited/generated example configuration shows mainnet RPC port `8332`; a dated local BitcoinII Core `v29.1.0` Windows/mainnet test used `127.0.0.1:8337`. Neither observation proves a universal RPC port, so operators must verify the relevant release and runtime configuration.
-- Genesis block hash and merkle root.
-- Address prefix values.
+## RPC note
+
+Inherited/generated example configuration shows mainnet RPC port `8332`.
+
+A dated historical BitcoinII Core `v29.1.0` Windows/mainnet test used `127.0.0.1:8337`. Neither observation proves a universal `v31.1.0` runtime port. Operators must verify the exact release and active configuration.
 
 ## What this page does not claim
 
 This page does not claim:
 
-- That BitcoinII uses Dark Gravity Wave.
-- That a particular exchange confirmation count is recommended.
-- That a specific future feature is planned or guaranteed.
-- That market price or future value can be predicted.
+- a recommended exchange confirmation count;
+- that every v31 wallet/RPC path has been locally re-tested;
+- that a specific future feature is guaranteed;
+- that market price or future value can be predicted.
 
 ## Where to go next
 
 - [Network specifications](network-specifications.md)
 - [Consensus overview](consensus-overview.md)
 - [Releases](releases.md)
+- [Difficulty adjustment](../encyclopedia/difficulty-adjustment.md)
 - [Exchange integration package](../exchange/integration-package.md)
 - [Verification queue](../verification/README.md)
 
 ## Open items
 
-- Confirm the strongest official source for ticker `BC2`.
-- Monitor the current canonical repository path for future ownership or location changes.
-- Confirm official community links and maintainer contact process.
-- Confirm release verification model.
+- Confirm strongest official source for ticker `BC2`.
+- Confirm official technical/security contact process.
+- Complete independent `v31.1.0` release-artifact authentication work.
+- Complete detailed source review of replay protection, data restrictions, and fork-aware header synchronization.
 
 ## Sources
 
-- Current canonical repository: `Bitcoin-II/BitcoinII-Core`
-- Current observed README: `Bitcoin-II/BitcoinII-Core` `README.md`
-- Current observed chain parameters source: `Bitcoin-II/BitcoinII-Core` `src/kernel/chainparams.cpp`
-- Current observed difficulty source: `Bitcoin-II/BitcoinII-Core` `src/pow.cpp`
-- Current observed block primitive source: `Bitcoin-II/BitcoinII-Core` `src/primitives/block.cpp`
-- Current observed hash source: `Bitcoin-II/BitcoinII-Core` `src/hash.h`
-- Current observed example config: `Bitcoin-II/BitcoinII-Core` `share/examples/bitcoinII.conf`
+- Current canonical repository: https://github.com/Bitcoin-II/BitcoinII-Core
+- Current release: https://github.com/Bitcoin-II/BitcoinII-Core/releases/tag/v31.1.0
+- `v31.1.0/src/kernel/chainparams.cpp`
+- `v31.1.0/src/pow.cpp`
+- `v31.1.0/src/primitives/block.cpp`
+- `v31.1.0/src/hash.h`
 
 ## Verification
 
 **Status:** Needs Review
 **Primary sources checked:** Partially
-**Notes:** Canonical-source wording was synchronized from the 2026-07-10 project-identity evidence on 2026-08-27. Technical claims remain source-reviewed or locally tested only where stated; official public contact channels still need review.
+**Notes:** Current-facing release and consensus summary is refreshed for `v31.1.0`. Detailed review and runtime testing remain version-scoped where stated.
