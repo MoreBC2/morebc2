@@ -6,9 +6,11 @@
 
 ## Summary
 
-This page collects major unresolved questions across MoreBC2 after the BitcoinII Core `v31.1.0` refresh.
+This page collects major unresolved questions across MoreBC2 after the BitcoinII Core `v31.1.0` refresh and first deep consensus-source audit.
 
-Historical questions that were specifically about whether BitcoinII still used the old 2016-block-only retarget model are resolved: current mainnet uses ShockWave after height `57750`.
+Historical questions about whether BitcoinII still uses the old 2016-block-only retarget model are resolved: current mainnet uses ShockWave after height `57750`.
+
+The detailed source paths for ShockWave, replay protection, BitcoinII data restrictions, and ShockWave-aware header synchronization are now documented in the Source Atlas. Remaining work is primarily test execution, runtime evidence, empirical analysis, and third-party compatibility.
 
 ## Current-release verification
 
@@ -34,37 +36,29 @@ Historical questions that were specifically about whether BitcoinII still used t
 
 ## Consensus and validation
 
-### ShockWave detailed path
+### ShockWave test and empirical mapping
 
-**Question:** Which functions/tests cover each current ShockWave mechanism and its activation boundary?
+**Resolved source question:** The activation boundary, production entry point, rolling 25-block/24-interval MTP baseline, per-block bounds, short-horizon controller, timestamp moderation, emergency-recovery constants, mining interaction, and headers-sync history requirements are now source-reviewed in [ShockWave v31](../developers/source-atlas/shockwave-v31.md).
 
-**Known:** Activation at height `57750` and high-level algorithm structure are source-backed.
+**Needed:** Map helpers to specific upstream tests, execute those tests locally, build controlled boundary vectors, and compare the source model with live-network behavior under abrupt hashrate changes.
 
-**Needed:** Test mapping, caller-path review, boundary tests, and empirical network analysis.
+### Replay-protection test vectors and compatibility
 
-### Replay protection
+**Resolved source question:** The activation, fork-id selection, signature-hash domain, mempool boundary handling, validation cache, wallet signing, raw-transaction RPC, PSBT, and external-signer paths are now source-reviewed in [Replay protection v31](../developers/source-atlas/replay-protection-v31.md).
 
-**Question:** How exactly does BC2 replay protection affect transaction signing/validation and service integration?
+**Needed:** Safe pre/post-fork digest vectors, disposable-wallet runtime tests, hardware/external-signer tests, and audits of third-party signing libraries.
 
-**Known:** Activation height `57750`; fork ID `0x01324342`.
+### Consensus data-restriction boundary tests
 
-**Needed:** Detailed transaction/wallet/validation source path and safe test vectors.
+**Resolved source question:** The explicit post-activation output and Taproot witness restrictions and their block-connection enforcement path are now documented in [Data restrictions v31](../developers/source-atlas/data-restrictions-v31.md).
 
-### Consensus data restrictions
+**Needed:** Execute located unit/functional tests, record activation-boundary behavior, and avoid overbroad claims about arbitrary data protocols beyond the explicit consensus rules.
 
-**Question:** Which data-carrier transaction patterns are rejected or altered after height `57750`?
+### Fork-aware header synchronization runtime scenarios
 
-**Known:** `nDataRestrictionsHeight = 57750`; release describes Ordinals/inscriptions/Runes mitigation.
+**Resolved source question:** The two-phase headers-sync model, fork-point anchoring, private 35-index ShockWave history, exact `GetNextWorkRequired()` validation, and failure-state clearing are now documented in [Header sync v31](../developers/source-atlas/headers-sync-v31.md).
 
-**Needed:** Detailed validation-path review and boundary tests.
-
-### Fork-aware header synchronization
-
-**Question:** How does the new header-sync behavior handle competing branches and recovery cases?
-
-**Known:** `v31.1.0` release explicitly identifies fork-aware header synchronization.
-
-**Needed:** Source mapping and current-release runtime scenarios.
+**Needed:** Map ShockWave-specific branches to individual test assertions and run current-release competing-branch/recovery scenarios.
 
 ### Confirmation recommendations
 
@@ -76,7 +70,9 @@ Historical questions that were specifically about whether BitcoinII still used t
 
 The `v31.1.0` release identifies associated updates across these areas.
 
-**Question:** Which detailed MoreBC2 Source Atlas/RPC pages remain accurate without modification, and which need release-specific annotations?
+The replay-protection audit has already established that wallet signing, raw-transaction RPC, PSBT handling and mempool validation include v31-specific fork-id behavior.
+
+**Question:** Which additional detailed MoreBC2 Source Atlas/RPC pages need release-specific annotations beyond replay protection?
 
 **Needed:** Prioritized v31 spot checks of changed upstream files/functions plus selected safe runtime tests.
 
@@ -114,12 +110,12 @@ The `v31.1.0` release identifies associated updates across these areas.
 
 ### Source Atlas currentness
 
-**Question:** Which Source Atlas pages describe inherited structure accurately but need v31-specific change notes?
+The highest-priority v31 consensus paths now have dedicated release-specific entries.
 
-**Priority order:** consensus/difficulty, chainparams, validation/header sync, transaction/replay behavior, mempool, wallet/PSBT, mining/RPC.
+**Next priority:** validation/mempool details outside the four audited consensus features, wallet/PSBT follow-up, mining/RPC changes, and any v31 release-specific caller/test annotations needed in older file-oriented pages.
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current `v31.1.0` release/source anchors, refreshed current-facing MoreBC2 docs, and existing historical verification records
-**Notes:** This is the current high-value backlog after the v31 documentation refresh.
+**Primary sources checked:** Current `v31.1.0` release/source anchors, dedicated v31 Source Atlas feature audits, refreshed current-facing MoreBC2 docs, and existing historical verification records
+**Notes:** This backlog now separates source questions that were resolved by the 2026-09-02 deep audit from runtime/test/compatibility work that remains open.
