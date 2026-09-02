@@ -2,69 +2,68 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-08-27
+**Last reviewed:** 2026-09-02
 
 ## Summary
 
 This section is for BitcoinII (BC2) node operation resources.
 
-Node pages should help readers run, configure, and troubleshoot BitcoinII Core without overstating untested commands, stale peer/network details, or unverified release behavior.
+The current release baseline is BitcoinII Core `v31.1.0`.
+
+Existing local node tests in MoreBC2 were performed on `v29.1.0` and remain useful **historical, version-scoped evidence**. They must not be presented as proof that every startup, RPC, peer-discovery, wallet, or synchronization behavior is unchanged in `v31.1.0`.
 
 ## Current pages
 
-- [Tested Windows node guide](node-guide.md) — bounded `v29.1.0` command-line startup, initial-sync observation, read-only RPC, shutdown, and restart path.
+- [Windows node guide](node-guide.md) — contains bounded historical `v29.1.0` local test evidence plus operator guidance that should be checked against the current release before production use.
+
+## v31.1.0 node-relevant changes
+
+Current release notes identify:
+
+- ShockWave per-block difficulty adjustment;
+- consensus-level data restrictions;
+- BC2 replay protection;
+- fork-aware header synchronization;
+- associated wallet, mining, mempool, RPC, validation, and PSBT updates.
+
+Fork-aware header synchronization is particularly relevant to node sync/recovery documentation and should be treated as current behavior even though MoreBC2 has not yet completed a dedicated v31 runtime test record.
 
 ## Source-backed anchors
 
-Node-related source review currently includes:
-
 - [Network specifications](../documentation/network-specifications.md)
+- [Consensus overview](../documentation/consensus-overview.md)
 - [Source atlas: chainparams.cpp](../developers/source-atlas/chainparams-cpp.md)
+- [Source atlas: pow.cpp](../developers/source-atlas/pow-cpp.md)
 - [Source atlas: startup initialization](../developers/source-atlas/init-cpp.md)
-- [Source atlas: block storage](../developers/source-atlas/block-storage.md)
 - [Source atlas: validation interface](../developers/source-atlas/validation-interface.md)
-- [Source atlas: blockchain RPC](../developers/source-atlas/rpc-blockchain.md)
-- [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
 - [RPC overview](../developers/rpc-overview.md)
 
-These pages are source-observed unless they explicitly say a command was run locally.
+## Historical local evidence
 
-## Planned pages
+The dated Windows records for `v29.1.0` remain preserved because they accurately describe what was tested at the time, including startup, initial sync, local-only RPC, shutdown/restart, and peer discovery.
 
-- Linux and macOS node paths
-- Additional production configuration examples
-- Network ports
-- Syncing from scratch
-- Backups
-- Troubleshooting
-- Seed nodes
-- Initial block download notes
-- Pruning notes
-- Reindex/import notes
-- Tested node command examples
+They should not be silently rewritten to say `v31.1.0`.
+
+## Planned current-release verification
+
+- Fresh Windows `v31.1.0` startup/sync record
+- Linux node path
+- Current RPC behavior
+- Current peer/header synchronization behavior
+- Current disk/memory/sync expectations
+- Upgrade notes from pre-v31 nodes
+- Pruning/reindex/recovery checks
 
 ## Rules
 
-- Node configuration values should be verified against current BitcoinII source code or official documentation before being marked verified.
-- Tested commands should include operating system, BitcoinII version or commit, command used, date tested, and whether the node was mainnet/testnet/regtest.
+- Always label tested commands with OS, BitcoinII version/ref, date, and network.
 - Do not recommend exposing RPC publicly.
-- Mark live peer, seed, and sync observations with dates.
 - Separate protocol defaults from local operator choices.
-- Keep pruning, reindex, import, and mempool persistence guidance clearly marked as advanced until tested.
-
-## Related pages
-
-- [Configuration](../configuration/README.md)
-- [Node configuration](../configuration/node-configuration.md)
-- [RPC configuration](../configuration/rpc-configuration.md)
-- [Architecture: node startup](../architecture/node-startup.md)
-- [Architecture: life of a block](../architecture/life-of-a-block.md)
-- [Documentation coverage](../documentation-coverage.md)
-- [Open questions backlog](../verification/open-questions.md)
-- [Documentation polish plan](../POLISH_PLAN.md)
+- Treat live peer and service observations as dated.
+- Do not convert historical `v29.1.0` test evidence into v31 evidence without re-testing.
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** The Windows `v29.1.0` command-line route has one dated local test through advancing initial sync, clean shutdown, and restart. Draft status remains because full sync, other platforms, release authenticity, and broader operational behavior are unresolved.
+**Primary sources checked:** Current `v31.1.0` release/source plus existing dated node records
+**Notes:** The node section now distinguishes current-release facts from historical local `v29.1.0` evidence. Dedicated v31 runtime testing remains open.
