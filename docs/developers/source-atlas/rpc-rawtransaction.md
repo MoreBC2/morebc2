@@ -1,35 +1,20 @@
 # Raw transaction RPC
 
 **Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-06-30
+**Status:** Source-reviewed partial
+**Last reviewed:** 2026-09-02
 
 ## Summary
 
-This page covers a first-pass review of:
+This page covers node-level raw transaction and PSBT RPC behavior centered on `src/rpc/rawtransaction.cpp`.
 
-- `src/rpc/rawtransaction.cpp`
+The command inventory remains broadly Bitcoin-style, but BitcoinII Core `v31.1.0` adds a material BitcoinII-specific signing rule: transaction signing/finalization paths derive the replay-protection signature-hash domain for the **next block**.
 
-This file contains non-wallet raw transaction and PSBT RPC behavior for reading raw transactions, creating unsigned transactions, decoding transaction/script data, combining signatures, signing with explicitly supplied keys, and working with PSBTs.
+This is not a tested command guide.
 
-This is not a tested command guide. Examples should not be marked verified until they are run against BitcoinII Core in a safe local environment.
+## Command surface
 
-## Why this file matters
-
-Raw transaction RPCs are important for:
-
-- Explorers and services that inspect transactions outside the wallet.
-- Offline or staged signing workflows.
-- PSBT-based coordination.
-- Advanced transaction construction.
-- Descriptor-assisted PSBT processing.
-- Service integrations that should not depend on wallet state.
-
-These commands can be easy to misuse, so MoreBC2 should keep raw transaction examples separate from beginner wallet guides.
-
-## Registered commands reviewed
-
-`RegisterRawTransactionRPCCommands()` registers these commands in the `rawtransactions` category:
+Reviewed commands include:
 
 - `getrawtransaction`
 - `createrawtransaction`
@@ -47,131 +32,98 @@ These commands can be easy to misuse, so MoreBC2 should keep raw transaction exa
 - `joinpsbts`
 - `analyzepsbt`
 
-This file does not register wallet RPCs. Wallet-specific signing and funding are covered by the wallet RPC source-atlas entries.
+Read-only lookup/decoding behavior remains structurally consistent with the earlier MoreBC2 review.
 
-## Transaction lookup and decoding
+## v31 next-block sighash domain
 
-Reviewed commands include:
+`src/rpc/rawtransaction.cpp` defines `NextBlockSighashForkId`.
 
-- `getrawtransaction`
-- `decoderawtransaction`
-- `decodescript`
+The helper locks chain state, reads the active-chain height, and asks consensus for:
 
-`getrawtransaction` behavior observed from source:
+```text
+SighashForkId(active_height + 1)
+```
 
-- By default, it only returns a transaction if it is in the mempool.
-- With transaction indexing enabled and no block hash, it can return mempool or indexed block transactions.
-- With a block hash, it looks in the specified block when available.
-- It rejects the genesis block coinbase transaction as not an ordinary transaction.
-- Verbosity 0 returns transaction hex.
-- Verbosity 1 returns decoded transaction JSON plus block context when available.
-- Verbosity 2 can include fee and previous-output information when undo data is available.
-- It suggests `gettransaction` for wallet transactions.
+That choice matters at the activation boundary. A transaction signed while the current tip is immediately below replay-protection activation must already use the domain required by the block in which it could next be mined.
 
-`decoderawtransaction` decodes supplied transaction hex and can use witness/non-witness decoding controls.
+Mainnet uses fork id `0x01324342` from height `57750`.
 
-`decodescript` decodes script hex, reports inferred script information, and conditionally reports P2SH or segwit wrapping information when the script is suitable.
+## Signing and PSBT implications
 
-## Raw transaction creation and combining
+The selected fork id is passed into relevant signing/PSBT helpers rather than relying on generic Bitcoin sighashes.
 
-Reviewed commands include:
+Reviewed v31 propagation includes:
 
-- `createrawtransaction`
-- `combinerawtransaction`
+- explicit-key raw transaction signing;
+- raw-transaction signing helpers in `rpc/rawtransaction_util.cpp`;
+- PSBT precomputation and finalization;
+- PSBT analysis paths that accept the replay domain;
+- signature creation/checking through the common signing/interpreter stack.
 
-`createrawtransaction` builds an unsigned transaction from supplied inputs, outputs, optional locktime, and replaceability settings. The reviewed help text says it is not stored in the wallet and is not transmitted to the network.
+A third-party service can therefore support Bitcoin raw-transaction/PSBT formats while still being incompatible with post-activation BitcoinII if it does not implement the BC2 signature domain.
 
-`combinerawtransaction` combines multiple partially signed raw transactions into one transaction. The reviewed code gathers input coins from chain and mempool views, merges signature data from variants, and returns encoded transaction hex.
+## Read-only versus signing-sensitive commands
 
-## Explicit-key signing
+The replay-domain change does not make ordinary transaction decoding or lookup inherently BC2-specific.
 
-Reviewed command:
+The material compatibility boundary is in commands/workflows that:
 
-- `signrawtransactionwithkey`
+- create signatures;
+- verify signatures;
+- finalize/extract signed PSBTs;
+- analyze signing completeness using BC2 signature semantics.
 
-Reviewed behavior includes:
+## Existing behavior that remains useful
 
-- Decoding supplied raw transaction hex.
-- Loading explicitly provided private keys into a local signing provider.
-- Looking up input coins through node coin lookup.
-- Parsing optional previous-output data.
-- Returning signed transaction hex, completion status, and per-input errors when present.
+The earlier MoreBC2 descriptions remain structurally useful for:
 
-This command should be treated as advanced and sensitive in public docs because it handles private key material provided directly to RPC.
+- raw transaction construction;
+- transaction/script decoding;
+- transaction lookup and txindex limitations;
+- combining partially signed raw transactions;
+- PSBT create/decode/combine/join/update workflows;
+- descriptor-assisted PSBT processing.
 
-## PSBT support reviewed
+## Service guidance
 
-Reviewed commands include:
+Do not assume Bitcoin library compatibility from address/script compatibility alone.
 
-- `decodepsbt`
-- `combinepsbt`
-- `finalizepsbt`
-- `createpsbt`
-- `converttopsbt`
-- `utxoupdatepsbt`
-- `descriptorprocesspsbt`
-- `joinpsbts`
-- `analyzepsbt`
+Services that sign withdrawals should either use current BitcoinII Core RPC/wallet paths or independently implement and test BC2's replay-domain rules.
 
-Reviewed behavior includes:
+## Runtime status
 
-- Decoding PSBTs into detailed input/output metadata.
-- Combining compatible PSBT data.
-- Finalizing PSBTs and optionally extracting a complete network transaction.
-- Creating PSBTs from inputs, outputs, locktime, and replaceability settings.
-- Converting unsigned raw transactions to PSBT form.
-- Updating PSBT inputs from the UTXO set, mempool, transaction index, and descriptor data where available.
-- Joining multiple distinct PSBTs, rejecting duplicate inputs across joined PSBTs.
-- Analyzing PSBT completion state, missing data, estimated size, fee rate, fee, and next role.
-- Descriptor-assisted PSBT processing, with optional signing and finalization.
+MoreBC2 has not yet executed v31 raw-transaction signing vectors.
 
-## Relationship to wallet RPCs
+Still needed:
 
-Raw transaction RPCs and wallet RPCs overlap in user workflows, but they should stay conceptually separate:
+- deterministic pre/post-fork signature vectors;
+- raw-RPC versus wallet-signing equivalence tests;
+- PSBT finalization tests on a disposable environment;
+- third-party raw transaction library compatibility review.
 
-- Raw transaction RPCs are node-level construction, decoding, and PSBT tools.
-- Wallet RPCs add wallet-owned coins, wallet signing, wallet balance, wallet history, and wallet security state.
-- Service docs should avoid mixing wallet-private-key commands with raw transaction examples unless the workflow explicitly requires it.
+## Related pages
 
-## Documentation implications
-
-MoreBC2 should separate future raw transaction documentation into:
-
-- Read-only lookup and decoding commands.
-- Unsigned transaction construction.
-- Explicit-key signing.
-- PSBT creation/update/finalization.
-- Descriptor-assisted PSBT workflows.
-- Service-safe examples after local testing.
-
-## BitcoinII-specific notes
-
-This first-pass review saw BitcoinII naming and amount strings in RPC help text.
-
-No upstream comparison has been completed, so this page does not claim whether raw transaction RPC behavior differs from upstream Bitcoin Core beyond naming and visible strings.
-
-## Open questions
-
-- Which raw transaction examples can be tested safely on regtest?
-- Which commands belong in exchange/service documentation?
-- Which PSBT workflow should MoreBC2 recommend for safer service integrations?
-- Which examples need wallet RPCs versus raw transaction RPCs?
-- Where are transaction broadcast and mempool acceptance RPCs implemented?
-- How should txindex and pruned-node limitations be explained for services?
-- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
+- [Replay protection v31](replay-protection-v31.md)
+- [Wallet spend and PSBT RPC](wallet-spend-rpc.md)
+- [v31 wallet/mempool/mining regression audit](../../verification/v31-wallet-mempool-mining-regression-2026-09-02.md)
+- [RPC overview](../rpc-overview.md)
 
 ## Sources
 
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+Pinned to BitcoinII Core `v31.1.0`:
 
-- Current observed `main` `src/rpc/rawtransaction.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/rawtransaction.cpp
-- Current observed `main` `src/rpc/rawtransaction_util.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/rawtransaction_util.h
-- Current observed `main` `src/node/transaction.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/transaction.h
-- Current observed `main` `src/node/psbt.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/psbt.h
-- Current observed `main` `src/wallet/rpc/spend.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/spend.cpp
+- `src/rpc/rawtransaction.cpp`
+- `src/rpc/rawtransaction_util.cpp`
+- `src/psbt.cpp`
+- `src/node/psbt.cpp`
+- `src/script/sign.cpp`
+- `src/script/interpreter.cpp`
+- `src/consensus/params.h`
+
+Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This is a first-pass raw transaction and PSBT RPC review. Commands have not been run. Public examples, service recommendations, broadcast/mempool RPC linkage, upstream comparison, and release-versus-main comparison remain open.
+**Status:** Source-reviewed partial
+**Primary sources checked:** BitcoinII Core `v31.1.0`
+**Notes:** Next-block replay-domain selection and propagation are source-backed. Runtime signing examples remain unverified by MoreBC2.
