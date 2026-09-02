@@ -2,44 +2,36 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-09-02
 
 ## Summary
 
 This section is for BitcoinII (BC2) mining resources.
 
-Mining pages should distinguish source-backed protocol behavior from live ecosystem observations such as pools, software, payout policies, hashrate notes, and profitability claims.
+Current-facing mining documentation uses BitcoinII Core `v31.1.0` as the release baseline. BitcoinII targets 10-minute blocks and uses **ShockWave per-block difficulty adjustment from mainnet height `57750`**.
+
+Mining pages should distinguish source-backed protocol behavior from live ecosystem observations such as pools, software, payout policies, hashrate, and profitability.
 
 ## Current pages
 
 - [Mining overview](mining-overview.md)
-- [Ecosystem mining pools](../ecosystem/mining-pools.md)
 - [Proof-of-work](../encyclopedia/proof-of-work.md)
 - [Difficulty adjustment](../encyclopedia/difficulty-adjustment.md)
-
-## Source-backed anchors
-
-Mining-related source review currently includes:
-
 - [Source atlas: pow.cpp](../developers/source-atlas/pow-cpp.md)
-- [Source atlas: block template assembly](../developers/source-atlas/miner.md)
-- [Source atlas: mining RPC](../developers/source-atlas/rpc-mining.md)
-- [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
-- [Network specifications](../documentation/network-specifications.md)
-- [Consensus overview](../documentation/consensus-overview.md)
+- [Ecosystem mining pools](../ecosystem/mining-pools.md)
 
-These pages are source-observed unless they explicitly say a command or external service was tested.
+## Current protocol anchors
 
-## Planned pages
+Current source-backed mining facts include:
 
-- Mining software
-- Pool list with direct checks
-- Solo mining notes
-- Hardware considerations
-- Difficulty and hashrate explainers
-- Payout and confirmation basics
-- Mining troubleshooting
-- Tested mining RPC examples
+- target block spacing: 10 minutes;
+- double-SHA256 block-header hashing path;
+- ShockWave activation at height `57750`;
+- per-block post-activation difficulty adjustment;
+- historical pre-57750 Bitcoin-style retarget behavior;
+- candidate block-template and mining RPC surfaces described in first-pass Source Atlas work.
+
+The `v31.1.0` release also identifies associated mining, mempool, RPC, validation, wallet, and PSBT updates. Older detailed mining/RPC pages should not be called current-runtime tested unless they have a release-specific record.
 
 ## Rules
 
@@ -48,20 +40,27 @@ These pages are source-observed unless they explicitly say a command or external
 - Do not list a pool as active without direct checking.
 - Do not imply profitability or future value.
 - Separate source-backed protocol behavior from live mining ecosystem status.
-- Keep `getblocktemplate`, `submitblock`, and other mining RPC examples marked untested until run locally.
-- Do not claim Dark Gravity Wave or any non-reviewed difficulty system for BitcoinII unless source review proves it.
+- Keep advanced/state-changing mining RPC examples marked untested until safely exercised.
+- Describe the current algorithm as **ShockWave**; do not describe current mainnet as using only the old 2016-block retarget path.
+- Dark Gravity Wave may be discussed as part of ShockWave's lineage/baseline context, but it is not the complete current algorithm name.
+
+## Planned verification
+
+- Fresh `v31.1.0` mining RPC smoke checks.
+- Current network hashrate/difficulty observations with dates.
+- Direct current pool checks.
+- Deeper v31 mining-source regression review beyond ShockWave.
 
 ## Related pages
 
+- [Network specifications](../documentation/network-specifications.md)
+- [Consensus overview](../documentation/consensus-overview.md)
 - [RPC overview](../developers/rpc-overview.md)
-- [Mempool flow](../architecture/mempool-flow.md)
-- [Life of a block](../architecture/life-of-a-block.md)
-- [Documentation coverage](../documentation-coverage.md)
 - [Open questions backlog](../verification/open-questions.md)
-- [Documentation polish plan](../POLISH_PLAN.md)
+- [v31 currentness audit](../verification/v31-currentness-audit-2026-09-02.md)
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** Protocol-level proof-of-work, difficulty retargeting, candidate-template assembly, and mining RPC behavior have source-backed anchors. Live mining pools, software, payout policies, and hashrate data still need direct current checks.
+**Primary sources checked:** Current `v31.1.0` release/difficulty anchors plus existing MoreBC2 mining source reviews
+**Notes:** Current consensus-level mining wording is refreshed for v31. Live pools, profitability, and release-specific runtime RPC behavior remain separately verifiable.
