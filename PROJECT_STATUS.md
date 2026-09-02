@@ -1,191 +1,119 @@
 # MoreBC2 project status
 
-**Status:** Private foundation-building, ready for narrow v0.2 private review candidate
-**Last reviewed:** 2026-07-13
+**Status:** Private documentation and verification project; current-facing baseline refreshed for BitcoinII Core v31.1.0
+**Last reviewed:** 2026-09-02
 
 ## Summary
 
-MoreBC2 is a private, source-backed documentation and verification project for BitcoinII (BC2).
+MoreBC2 is a source-backed documentation and verification project for BitcoinII (BC2) in the `MoreBC2/morebc2` GitHub organization repository.
 
-The repository has moved beyond framework-only documentation. It now contains dated operational evidence from a local BitcoinII Core node, a same-time explorer comparison, a nine-command read-only RPC smoke test, release asset and authentication-gap records, direct ecosystem checks, and a project-identity source review.
+Current-facing technical documentation now uses **BitcoinII Core `v31.1.0`** as the release baseline.
 
-As of 2026-08-26, the canonical private repository is `MoreBC2/morebc2` following its transfer into the MoreBC2 GitHub organization.
+The repository also preserves dated `v29.1.0` local-runtime and release-integrity records as historical evidence. Those files are intentionally not rewritten to appear current.
 
-The fastest overview is the [verification evidence index](docs/verification/verification-index.md).
+See the [v31.1.0 currentness audit](docs/verification/v31-currentness-audit-2026-09-02.md).
 
-First-class v0.2 navigation:
+## Current BitcoinII baseline
 
-- [API documentation](docs/api/README.md)
-- [Infrastructure directory](docs/infrastructure/README.md)
-- [Releases](docs/releases/README.md)
-- [Compatibility](docs/compatibility/README.md)
-- [Developer docs](docs/developers/README.md)
-- [Verification router](docs/verification/README.md)
-- [Verification evidence index](docs/verification/verification-index.md)
+`v31.1.0`, published 2026-08-29, identifies:
 
-## Current phase
+- ShockWave per-block difficulty adjustment;
+- consensus-level Ordinals, inscriptions, and Runes mitigation;
+- BC2 transaction replay protection;
+- fork-aware header synchronization;
+- associated wallet, mining, mempool, RPC, validation, and PSBT updates.
 
-**Phase:** v0.2 narrow private-review candidate
-
-Current goal:
-
-- Send one or two exact review lanes to trusted readers.
-- Keep evidence levels, dates, releases, platforms, and network context visible.
-- Keep maintainer conversation context separate from public primary-source evidence.
-- Preserve the private-review-only license and contribution posture.
-- Avoid public-launch claims until the remaining blockers are deliberately resolved or clearly documented as unavailable.
-
-## Launch readiness
-
-MoreBC2 is **not ready for broad public launch**.
-
-It is ready for narrow private review in these lanes:
-
-- local RPC and command-safety evidence,
-- release-verification wording,
-- explorer/API evidence wording,
-- project identity and canonical-source wording,
-- P2P and network-test planning,
-- ecosystem active-claim boundaries.
-
-## Current verified and observed work
-
-### Local node and RPC
-
-A BitcoinII Core `v29.1.0` GUI node was inspected on Windows mainnet. Local-only RPC was configured on `127.0.0.1:8337` and tested without exposing credentials or wallet data.
-
-Nine read-only commands were successfully tested:
-
-- `getblockcount`
-- `getbestblockhash`
-- `getblockchaininfo`
-- `getnetworkinfo`
-- `getconnectioncount`
-- `getpeerinfo`
-- `getmempoolinfo`
-- `getdifficulty`
-- `uptime`
-
-Raw peer/network output remains subject to redaction rules.
-
-### Explorer and API
-
-The local node and `bitcoinii.ddns.net` explorer matched at height `57,420` with the same best-block hash within about eight seconds on 2026-07-10.
-
-This is a dated point-in-time agreement. It is not a permanent reliability, official-status, or service-suitability claim.
-
-Public explorer pages and harmless GET endpoints for tip, block, transaction, address, and mempool summary were also observed.
-
-### Release posture
-
-The `v29.1.0` release metadata and uploaded asset inventory are recorded. Generated source archives are distinguished from uploaded assets. The tag and GitHub-reported commit-signature metadata are documented conservatively.
-
-No public BitcoinII checksum manifest, detached release signature, signed annotated tag, trusted release-key path, or independent binary hash record has been established.
-
-The repository owner has spoken with the maintainer and understands release signing and signatures to be roadmap work that is not implemented yet. MoreBC2 records this as maintainer-supplied context, not cryptographic evidence.
-
-### Project identity
-
-Project-controlled GitHub metadata supports treating `Bitcoin-II/BitcoinII-Core` as the canonical public reference implementation. Project-controlled material also strongly supports BitcoinII / `BC2` naming.
-
-A dedicated technical/security integration contact remains unclear, and inherited upstream security-contact wording should not be treated as BitcoinII-specific guidance.
-
-### Ecosystem checks
-
-Dated direct public checks exist for:
-
-- the BitcoinII explorer and public API,
-- MiningPoolStats network/mining statistics,
-- NonKYC public BC2 pages,
-- CoinEx public BC2 pages,
-- an unconfirmed NestEx candidate.
-
-These checks do not establish exchange safety, liquidity, regional access, account-level deposit/withdrawal operation, pool payout reliability, or official status.
+Mainnet source anchors the principal new rules at height `57750`, including ShockWave, data restrictions, and replay protection.
 
 ## Current strengths
 
-- Clear separation between source review, direct observation, local testing, maintainer context, and unresolved claims.
-- Strong naming and terminology boundaries.
-- Substantial Source Atlas and architecture coverage.
-- Real Windows/mainnet local-runtime evidence.
-- Same-time local-node/explorer comparison.
-- Nine locally tested read-only RPC commands.
-- Dated release, explorer, API, exchange, and mining-statistics records.
-- Evidence-linked API and infrastructure navigation for REST, WebSocket, Electrum, public endpoints, and service-status wording.
-- Conservative release-authentication wording.
-- Narrow private-review packets and assignment lanes.
-- Verification evidence index and centralized open-question tracking.
+- Canonical source/release path is synchronized to `Bitcoin-II/BitcoinII-Core`.
+- Exchange integration/operator docs are v31.1.0-aware.
+- Network specifications, consensus, mining, proof-of-work, difficulty, and core Source Atlas pages have been refreshed for ShockWave.
+- Current release metadata and GitHub-reported asset digests are recorded.
+- Replay-protection and data-restriction activation anchors are documented.
+- Historical evidence remains explicitly version-scoped rather than silently rewritten.
+- Substantial architecture, Source Atlas, RPC, wallet, mempool, mining, and verification coverage exists.
 
-## Current risks and blockers
+## Historical operational evidence
 
-- Final public license decision is not made.
-- Public issue/PR and contributor workflow is not established.
-- No outside technical reviewer has completed a core-claims review.
-- Release binaries are not independently authenticated.
-- Public signing/checksum/trusted-key infrastructure is not currently available.
-- Wallet backup, restore, encryption, spending, and recovery workflows are not locally tested.
-- Exchange/service confirmation policy is unresolved.
-- Ecosystem observations can become stale and need dated rechecks.
-- Official technical/security contact guidance is incomplete.
-- Broader runtime and developer test-suite execution remain open.
+MoreBC2 has dated `v29.1.0` Windows/mainnet evidence for:
 
-## Recommended sharing stage
+- node startup and advancing initial sync;
+- local-only RPC configuration;
+- nine read-only RPC commands;
+- clean shutdown/restart;
+- fresh-node DNS peer discovery;
+- release-asset integrity hashing for the `v29.1.0` release.
 
-### Now
+This remains valuable evidence for what was actually tested. It is **not** current `v31.1.0` runtime evidence.
 
-Keep the repository private and begin one or two narrow invite-only review assignments.
+## Current gaps and priorities
 
-Recommended order:
+### 1. Fresh v31.1.0 runtime record
 
-1. Local RPC and command-safety review.
-2. Release-verification wording review.
-3. Explorer/API evidence wording review.
+Re-run a bounded Windows node/RPC path against `v31.1.0`, recording version, environment, sync state, peers, read-only RPC, shutdown/restart, and any header-sync observations.
 
-### Next
+### 2. Current release authentication
 
-- Record feedback in the existing review buckets.
-- Correct only evidence, wording, redaction, and version/context problems found by reviewers.
-- Decide the MoreBC2 license and contribution posture.
-- Prepare a short maintainer question covering technical/security contact and explicit ticker/contact confirmation.
+MoreBC2 has recorded the current release assets and GitHub-reported SHA-256 digests but has not yet independently authenticated the `v31.1.0` release.
 
-### Later
+Needed work includes independent hashes, signature/tag review, trusted key guidance, and reproducibility evidence if available.
 
-Consider broad public launch only after:
+### 3. New consensus-path detail
 
-- license and contribution workflow are ready,
-- at least one independent technical review is complete,
-- release-authentication gaps are clearly presented and updateable,
-- stale-service policy and exchange/service wording are settled,
-- top-level navigation and known-unknown routing are polished.
+Detailed source review remains needed for:
 
-## Current coverage snapshot
+- replay protection;
+- consensus data restrictions;
+- fork-aware header synchronization;
+- v31-related validation/mempool/wallet/RPC/PSBT changes.
 
-| Area | Status | Notes |
-|---|---|---|
-| Documentation foundation | Strong | Governance, structure, READMEs, status labels, and review rules exist. |
-| Source Atlas | Strong partial | Broad first-pass coverage exists; consistency and deeper runtime/testing work remain. |
-| Verification workflow | Strong | Evidence index, queue, trackers, dated records, review packets, and feedback workflow exist. |
-| RPC documentation | Locally tested partial | Nine read-only commands are tested on Windows mainnet; sensitive/state-changing workflows remain open. |
-| Wallet documentation | Partial | Source-backed material exists; local backup/recovery/spending tests remain open. |
-| Network/P2P documentation | Strong partial | Source review and one live peer snapshot exist; broader runtime and test-suite execution remain open. |
-| Release verification | Clearly bounded partial | Metadata and gaps are documented; no binary/signature/trusted-key verification exists. |
-| Explorer/API | Dated operational evidence | Same-time tip match and public endpoint checks exist; permanence and official status remain open. |
-| Exchange integration | Direct-check partial | Public listing pages were observed; account-level operation and policy remain unverified. |
-| Ecosystem directory | Direct-check partial | Explorer/API/mining-statistics/exchange records exist and require periodic refresh. |
-| Project identity | Strong partial | Canonical implementation and project-controlled naming evidence exist; contact path remains incomplete. |
-| Private review | Ready | Narrow reviewer lanes and evidence rules exist. |
-| Public launch | Blocked | License, outside review, contribution workflow, and several operational-policy questions remain. |
+### 4. Confirmation policy
 
-## Immediate next actions
+Exchange/service confirmation recommendations remain unresolved and should be informed by current network/reorg/hashrate behavior rather than copied from Bitcoin assumptions.
 
-1. Send the first narrow private-review assignment.
-2. Keep reviewer feedback constrained to evidence strength, version/context, safety, and overclaiming.
-3. Decide the MoreBC2 license and public contribution posture.
-4. Ask the maintainer one concise set of questions about technical/security contact, explicit ticker wording, and future release-signing publication location.
-5. Recheck live ecosystem records only on a deliberate schedule or before publication.
+### 5. Ecosystem freshness
+
+Explorer, API, exchange, mining-pool, and wallet/service observations are date-sensitive and should be rechecked before current recommendations.
+
+## Current navigation
+
+- [Docs index](docs/README.md)
+- [Network specifications](docs/documentation/network-specifications.md)
+- [Consensus overview](docs/documentation/consensus-overview.md)
+- [Releases](docs/releases/README.md)
+- [Exchange integration package](docs/exchange/integration-package.md)
+- [Verification evidence index](docs/verification/verification-index.md)
+- [Known unknowns](docs/verification/known-unknowns.md)
+- [Open questions](docs/verification/open-questions.md)
+- [v31 currentness audit](docs/verification/v31-currentness-audit-2026-09-02.md)
+
+## Coverage snapshot
+
+| Area | Current posture |
+|---|---|
+| Current release identity | Refreshed for `v31.1.0` |
+| Consensus/difficulty documentation | Refreshed for ShockWave and height-57750 activations |
+| Exchange integration | v31.1.0-aware; confirmation/runtime items still Draft |
+| Source Atlas | Strong first-pass coverage; targeted v31 spot checks still needed |
+| Local node/RPC evidence | Strong historical `v29.1.0`; fresh v31 record needed |
+| Release verification | Historical v29 integrity record + current v31 metadata; v31 independent authentication needed |
+| Wallet/mempool/RPC/PSBT | Strong structural/source coverage; current release regression review needed |
+| Ecosystem | Dated observations; freshness checks required |
+
+## Editorial rule for release transitions
+
+When BitcoinII releases change:
+
+1. Update current-facing release/consensus/operator pages.
+2. Preserve dated evidence under the release actually tested.
+3. Do not globally replace old version numbers in historical records.
+4. Add new runtime/verification evidence for the new release.
+5. Record unresolved regression areas explicitly.
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current MoreBC2 verification evidence index, local node/RPC records, release inventory and verification records, ecosystem direct-check records, project identity source check, private-review readiness page, legal/reuse posture, and review workflow documents
-**Notes:** This is a project-management dashboard. It does not itself verify BitcoinII protocol behavior, release binaries, exchanges, pools, or long-term service reliability.
+**Primary sources checked:** Current `v31.1.0` release/source anchors and MoreBC2 currentness audit
+**Notes:** This is a project-management summary, not independent proof of every BitcoinII behavior.

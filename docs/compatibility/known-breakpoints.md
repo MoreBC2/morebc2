@@ -2,33 +2,57 @@
 
 **Category:** Compatibility
 **Status:** Draft / Risk map
-**Last reviewed:** 2026-07-13
+**Last reviewed:** 2026-09-02
 
 ## Summary
 
 This page lists compatibility assumptions that can break BitcoinII / BC2 integrations.
 
-The items here are risks and boundaries, not new test results.
+The items here are risks and boundaries, not blanket claims that a specific third-party product is broken.
 
-Canonical evidence:
+## v31.1.0 consensus breakpoint
 
-- [Public API, WebSocket, and Electrum smoke test - 2026-07-12](../verification/public-api-electrum-smoke-test-2026-07-12.md)
-- [Read-only RPC smoke test - 2026-07-10](../verification/read-only-rpc-smoke-test-2026-07-10.md)
-- [Network specifications](../documentation/network-specifications.md)
-- [Wallet guide](../wallets/wallet-guide.md)
-- [API mempool.space compatibility page](../api/mempool-space-compatibility.md)
+BitcoinII Core `v31.1.0` activates several BitcoinII-specific rules at mainnet height `57750`:
 
-## Address assumptions
+- ShockWave per-block difficulty adjustment;
+- consensus-level data restrictions;
+- BC2 replay protection.
 
-Risk: Bitcoin tools may assume Bitcoin mainnet address formats, prefixes, or validation rules.
+The release also adds fork-aware header synchronization and associated wallet, mining, mempool, RPC, validation, and PSBT updates.
 
-MoreBC2 has source-reviewed address and wallet behavior in BitcoinII Core docs, but third-party address parsing remains untested.
+Integrations built around older BitcoinII assumptions should be re-reviewed against `v31.1.0` rather than assuming source/API behavior is unchanged.
+
+## Difficulty assumptions
+
+Risk: monitoring, mining, explorer, or risk systems may assume difficulty only changes every 2016 blocks.
+
+That is historical behavior before ShockWave activation. Current post-57750 BitcoinII difficulty may change every block.
+
+## Address and replay assumptions
+
+Risk: Bitcoin tooling may recognize Bitcoin-like address encodings and incorrectly assume Bitcoin transaction-domain behavior.
+
+BitcoinII retains Bitcoin-like Base58/Bech32 encodings, but `v31.1.0` activates explicit BC2 replay protection at height `57750` with fork ID `0x01324342`.
+
+Address-format similarity should not be used as evidence that cross-chain transaction behavior is identical.
+
+## Data-carrier assumptions
+
+Risk: software may assume Bitcoin-style Ordinals/inscription/Runes-related transaction behavior transfers directly to BitcoinII.
+
+`v31.1.0` activates BitcoinII-specific consensus-level data restrictions at height `57750`. Detailed compatibility effects still require workflow-specific testing.
+
+## Header synchronization assumptions
+
+Risk: node-management or explorer software may assume pre-v31 header synchronization behavior.
+
+`v31.1.0` includes fork-aware header synchronization. Integrations that depend on header-processing edge cases should be re-tested against the current release.
 
 ## Genesis assumptions
 
 Risk: Bitcoin tooling may assume Bitcoin's genesis hash.
 
-The Electrum smoke test observed BitcoinII genesis hash:
+BitcoinII genesis hash:
 
 ```text
 0000000028f062b221c1a8a5cf0244b1627315f7aa5b775b931cfec46dc17ceb
@@ -38,51 +62,39 @@ Tools that cannot configure or validate the BitcoinII genesis hash may misidenti
 
 ## Network identifiers
 
-Risk: Software may hard-code Bitcoin chain names, network magic, ticker symbols, or explorer assumptions.
+Risk: software may hard-code Bitcoin chain names, network magic, ticker symbols, or explorer assumptions.
 
-MoreBC2 has BitcoinII source and project-identity records, but broad third-party network handling remains untested.
+BitcoinII mainnet message-start bytes are `42 49 49 21` and default P2P port is `8338`.
 
-## Fee assumptions
+## RPC assumptions
 
-Risk: Wallets, services, or APIs may assume Bitcoin fee units or Bitcoin-denominated labels.
+Risk: integrations may hard-code an RPC port from inherited Bitcoin-style example material or from one historical local test.
 
-MoreBC2 has source-reviewed notes showing different RPC areas can use different units, and the public API smoke test did not establish every fee unit or wallet display behavior.
+Generated configuration has shown `8332`, while a dated MoreBC2 `v29.1.0` Windows test used `8337`. Verify the exact current release and active configuration.
 
-## Wallet assumptions
+## Fee, wallet, and broadcast assumptions
 
-Risk: Electrum connectivity may be mistaken for wallet compatibility.
+Risk: source/API compatibility may be mistaken for complete operational compatibility.
 
-Current evidence does not establish BlueWallet, Cake Wallet, Komodo Wallet, or other third-party wallet compatibility.
+MoreBC2 has not yet re-tested all state-changing wallet, PSBT, fee-estimation, and broadcast workflows under `v31.1.0`.
 
-## Broadcast assumptions
+## Electrum/API assumptions
 
-Risk: Read-only API/RPC success may be mistaken for transaction broadcast compatibility.
+Earlier dated smoke tests remain evidence for the versions/services tested at that time, not a guarantee of current complete compatibility.
 
-The public API/Electrum smoke test did not broadcast transactions. The local RPC smoke test did not run transaction creation or broadcast commands.
+Known earlier API limitations included missing mempool.space-style address UTXO endpoints and no generic `/api/v1` base response. Those should be rechecked before current integration claims.
 
-## Electrum assumptions
+## Sources
 
-Risk: A server accepting `server.version`, `server.features`, and `blockchain.headers.subscribe` may still fail wallet-history, address-history, fee, subscription, or broadcast workflows.
-
-MoreBC2 has only narrow read-only Electrum evidence.
-
-## UTXO endpoint differences
-
-Risk: mempool.space-style integrations may expect address UTXO endpoints.
-
-The 2026-07-12 smoke test found:
-
-- `/api/address/{address}/utxo` returned 404,
-- `/api/address/{address}/utxos` returned 404.
-
-## API version assumptions
-
-Risk: developers may assume `/api/v1` is a valid base path or that every endpoint has a `/api/v1` alias.
-
-The 2026-07-12 smoke test observed `/api/v1` returning 404 while concrete endpoints worked.
+- BitcoinII Core `v31.1.0` release: https://github.com/Bitcoin-II/BitcoinII-Core/releases/tag/v31.1.0
+- [Network specifications](../documentation/network-specifications.md)
+- [Consensus overview](../documentation/consensus-overview.md)
+- [Exchange integration package](../exchange/integration-package.md)
+- [Public API/Electrum smoke test — historical](../verification/public-api-electrum-smoke-test-2026-07-12.md)
+- [Read-only RPC smoke test — historical](../verification/read-only-rpc-smoke-test-2026-07-10.md)
 
 ## Verification
 
-**Status:** Draft / Risk map  
-**Primary sources checked:** Existing compatibility-related records linked above  
-**Notes:** This page summarizes known compatibility risks. It does not perform new testing.
+**Status:** Draft / Risk map
+**Primary sources checked:** Current `v31.1.0` release/source anchors plus existing dated compatibility records
+**Notes:** Current v31-specific breakpoints are now represented. Workflow-specific third-party compatibility still requires direct testing.
