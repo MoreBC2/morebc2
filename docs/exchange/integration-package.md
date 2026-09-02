@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-08-27
+**Last reviewed:** 2026-09-02
 
 ## Summary
 
@@ -18,15 +18,22 @@ It should only include confirmed values. Anything not yet confirmed is listed un
 - Public website: https://bitcoin-ii.org/
 - Current release page: https://github.com/Bitcoin-II/BitcoinII-Core/releases
 - Canonical public reference-implementation repository: https://github.com/Bitcoin-II/BitcoinII-Core
-- License: MIT
+- Current documented release: `v31.1.0`
 
-## Mainnet technical values checked from source
+### Licensing note
+
+BitcoinII Core contains MIT-licensed upstream code derived from Bitcoin Core and Dash/Darkcoin. Original ShockWave implementation portions in `src/pow.cpp` carry separate proprietary source-review terms. Those terms allow review, compilation, execution, testing, and interoperability evaluation of BitcoinII, while restricting reuse, porting, redistribution, or deployment of the proprietary ShockWave implementation in another blockchain or product without permission.
+
+This distinction should not be presented as preventing ordinary BitcoinII node operation or exchange integration.
+
+## Mainnet technical values checked from v31.1.0 source
 
 - Target block spacing: 10 minutes
-- Retarget timespan: 14 days
-- Miner confirmation window: 2016 blocks
 - Subsidy halving interval: 210,000 blocks
-- Difficulty adjustment: Bitcoin-style 2016-block retargeting, bounded to 1/4x through 4x timespan adjustment
+- Difficulty adjustment: ShockWave per-block difficulty adjustment from mainnet height `57,750`
+- ShockWave rolling baseline: 25 blocks / 24 intervals using MedianTimePast-based history
+- Per-block final difficulty adjustment bounds: true `+/-4x`
+- Emergency stall-recovery logic: enabled as part of ShockWave
 - Block header hashing path: double-SHA256 via `HashWriter::GetHash()`
 - `COIN`: 100,000,000 base units
 - `MAX_MONEY`: `21000000 * COIN`
@@ -35,11 +42,24 @@ It should only include confirmed values. Anything not yet confirmed is listed un
 - Message start bytes: `0x42 0x49 0x49 0x21`
 - Genesis hash: `0000000028f062b221c1a8a5cf0244b1627315f7aa5b775b931cfec46dc17ceb`
 - Genesis merkle root: `80d1b4e9ca868f83b88b9301036205876072bdd3ded0ad4dc022e1f9266ddc49`
-- DNS seeds:
+- Mainnet DNS seed in `v31.1.0` chain parameters:
   - `dnsseed.bitcoin-ii.org.`
-  - `bitcoinII.ddns.net.`
 
-## Address information checked from source
+The older `bitcoinII.ddns.net.` seed reference is not retained here as a current v31.1.0 chain-parameter fact.
+
+## v31.1.0 consensus activation at height 57,750
+
+BitcoinII Core v31.1.0 sets the following mainnet activation heights to `57,750`:
+
+- ShockWave per-block difficulty adjustment
+- Consensus-level data restrictions for Ordinals, inscriptions, and Runes mitigation
+- BC2 transaction replay protection
+
+The replay-protection fork/domain identifier in v31.1.0 is `0x01324342`.
+
+The v31.1.0 release also includes fork-aware header synchronization and associated wallet, mining, mempool, RPC, validation, and PSBT updates.
+
+## Address information checked from v31.1.0 source
 
 - Base58 public key address prefix: `0`
 - Base58 script address prefix: `5`
@@ -47,6 +67,8 @@ It should only include confirmed values. Anything not yet confirmed is listed un
 - Extended public key prefix: `04 88 B2 1E`
 - Extended secret key prefix: `04 88 AD E4`
 - Bech32 HRP: `bc`
+
+Because these address-format values overlap Bitcoin conventions, exchange integrators should account for BC2's v31 replay-protection behavior rather than assuming address-format separation alone prevents cross-chain replay risk.
 
 ## RPC evidence and unresolved default
 
@@ -59,32 +81,39 @@ Inherited/generated example configuration lists:
 
 It also warns not to expose the RPC server to untrusted networks such as the public internet.
 
-Separate local evidence dated 2026-07-10 configured and observed BitcoinII Core `v29.1.0` on Windows mainnet at `127.0.0.1:8337`. That test does not prove that `8337` is universal across releases, platforms, or deployments, and the generated `8332` material does not prove the `v29.1.0` runtime value. An exchange must verify its exact release source and active node configuration before integration; this package does not currently prescribe a universal RPC port.
+Separate local evidence dated 2026-07-10 configured and observed BitcoinII Core `v29.1.0` on Windows mainnet at `127.0.0.1:8337`. That test does not prove that `8337` is universal across releases, platforms, or deployments, and it predates v31.1.0. An exchange must verify its exact v31.1.0 node configuration before integration; this package does not prescribe a universal RPC port.
 
 ## Release information checked
 
-Current documented release on the canonical release page:
+Current release on the canonical release page:
 
-- `v29.1.0`
-- GitHub API `published_at` recorded by MoreBC2: `2025-11-27T04:22:39Z`
-- Release note recorded by MoreBC2: mandatory release with updated seed server and blockchain checkpoints; previous v29 releases deprecated
+- `v31.1.0`
+- Published: `2026-08-29T02:39:30Z`
+- Release note highlights:
+  - ShockWave per-block difficulty adjustment
+  - consensus-level Ordinals, inscriptions, and Runes mitigation
+  - BC2 transaction replay protection
+  - fork-aware header synchronization
+  - associated wallet, mining, mempool, RPC, validation, and PSBT updates
 
-Legacy releases observed on a redirected older repository path:
+GitHub currently exposes SHA-256 digests for the uploaded v31.1.0 release assets, including:
 
-- `v0.27.1`
-- `v0.27.0`
+- `BitcoinII-v31.1-Linux-CLI.tar.gz` — `78a88df783c2e15d09ea73c05065f7477cad34086b6e995991f7adeae781603f`
+- `BitcoinII-v31.1-Linux-Qt.tar.gz` — `745f6fc1cf7132357ca1ee09ea9c02873aac98cae92a6067ee3a26e8e5fd09ac`
+- `BitcoinII-v31.1-Win64-CLI.zip` — `74e052791cbd5183b1876693e5d99f474fb4165b795ba45d8f3c966bd5a7d687`
+- `BitcoinII-v31.1-Win64-Qt.zip` — `f7b1d16423859bd2392b1bd4f62c16ba855a034c6ffb6693af667f2ec97b375d`
 
-Those legacy observations are historical evidence, not the current operational release path. Release-page/API metadata does not authenticate binaries, checksums, signatures, or trusted keys.
+These GitHub-provided digests support repeat-download integrity checking. This page does not claim that the release currently has a separately signed checksum manifest, trusted release-signing key, or reproducible-build proof.
 
 ## Suggested exchange integration sections still to build
 
 ### 1. Wallet/daemon setup
 
-Needs verified instructions for:
+Needs verified v31.1.0 instructions for:
 
 - Linux daemon setup
 - Windows wallet setup
-- macOS wallet setup
+- macOS wallet availability/status
 - Configuration file location
 - RPC username/password setup
 - Data directory location
@@ -92,7 +121,7 @@ Needs verified instructions for:
 
 ### 2. RPC examples
 
-Needs tested examples for:
+Needs tested v31.1.0 examples for:
 
 - `getblockchaininfo`
 - `getnetworkinfo`
@@ -107,9 +136,10 @@ Needs tested examples for:
 Needs exchange-specific guidance for:
 
 - Recommended minimum confirmations
-- Reorg-risk notes
+- Reorg-risk notes under current ShockWave behavior
 - Address generation
 - Deposit monitoring
+- Replay-protection considerations
 - Handling stuck or orphaned transactions
 
 ### 4. Withdrawals
@@ -123,10 +153,10 @@ Needs exchange-specific guidance for:
 
 ### 5. Release verification
 
-Needs a clear statement on whether BitcoinII releases provide:
+Needs a clear maintained statement on whether BitcoinII releases provide:
 
-- Inline SHA256 values
-- A checksum manifest file
+- GitHub asset digests
+- A standalone checksum manifest
 - Detached signatures
 - GitHub verified commits/tags
 - Reproducible builds
@@ -136,27 +166,29 @@ Do not claim stronger release verification than currently exists.
 ## Sources
 
 - GitHub releases: https://github.com/Bitcoin-II/BitcoinII-Core/releases
-- `src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/kernel/chainparams.cpp
-- `src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/pow.cpp
-- `src/primitives/block.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/primitives/block.cpp
-- `src/hash.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/hash.h
-- `src/consensus/amount.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/src/consensus/amount.h
-- `share/examples/bitcoinII.conf`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/share/examples/bitcoinII.conf
-- README: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v29.1.0/README.md
+- v31.1.0 release: https://github.com/Bitcoin-II/BitcoinII-Core/releases/tag/v31.1.0
+- `src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/src/kernel/chainparams.cpp
+- `src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/src/pow.cpp
+- `src/primitives/block.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/src/primitives/block.cpp
+- `src/hash.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/src/hash.h
+- `src/consensus/amount.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/src/consensus/amount.h
+- `share/examples/bitcoinII.conf`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/share/examples/bitcoinII.conf
+- README: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/README.md
 - [Project identity source check - 2026-07-10](../verification/project-identity-source-check-2026-07-10.md)
 - [Local node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md)
 
 ## Needs verification
 
 - Official ticker confirmation from primary source beyond source-code unit references.
-- Current recommended confirmation count.
+- Current recommended confirmation count under v31.1.0 / ShockWave.
 - Current maintainer or technical contact process.
-- Whether release checksums are signed or only displayed on GitHub.
-- Release- and environment-specific RPC port behavior beyond the one local `v29.1.0` Windows/mainnet test.
-- Whether maintainers prefer `double-SHA256` or `SHA-256d` wording in public integration docs.
+- Whether release checksums are published in a standalone signed manifest in addition to GitHub asset digests.
+- Release- and environment-specific RPC port behavior on v31.1.0.
+- Tested v31.1.0 deposit and withdrawal workflows.
+- Current explorer and market-service status before any listing submission.
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** Canonical-source, current-release, and RPC wording were factually synchronized on 2026-08-27. The package remains Draft and should not be sent to exchanges as complete; operational setup, release authentication, confirmation policy, and state-changing workflows remain unresolved.
+**Primary sources checked:** BitcoinII Core v31.1.0 release metadata, `v31.1.0` `src/kernel/chainparams.cpp`, and `v31.1.0` `src/pow.cpp`, plus previously recorded MoreBC2 local RPC evidence.
+**Notes:** Consensus, current-release, network-constant, replay-protection, data-restriction, and ShockWave wording were refreshed on 2026-09-02. The package remains Draft and should not yet be represented as a complete production exchange runbook; confirmation policy, v31.1.0 state-changing RPC tests, technical contact process, and operational setup remain unresolved.
