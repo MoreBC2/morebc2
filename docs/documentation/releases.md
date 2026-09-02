@@ -2,200 +2,114 @@
 
 **Category:** Documentation
 **Status:** Needs Review
-**Last reviewed:** 2026-08-27
+**Last reviewed:** 2026-09-02
 
 ## Summary
 
-This page tracks public BitcoinII release information checked from GitHub.
+This page tracks public BitcoinII Core release information checked from GitHub.
 
-This page does not prove release authenticity. It records release-page/API observations and gaps that still need verification.
+It records release-page/API observations and verification boundaries. It does not prove release authenticity by itself.
 
-## Public release page observation
+## Canonical release path
 
-The public BitcoinII Core release page rechecked by MoreBC2 was:
+Current operational release and source citations use:
 
-- `https://github.com/Bitcoin-II/BitcoinII-Core/releases`
+- https://github.com/Bitcoin-II/BitcoinII-Core
+- https://github.com/Bitcoin-II/BitcoinII-Core/releases
 
-Older links such as `https://github.com/BitcoinII-Dev/BitcoinII/releases` have previously been observed redirecting to a different GitHub repository path observed as `KvantaMechanic/BitcoinII`.
+Older redirected repository/release paths are retained only as historical migration evidence.
 
-The older redirected path is retained as migration/history evidence only. Current operational release and source citations use the canonical `Bitcoin-II/BitcoinII-Core` path established by project-controlled GitHub metadata reviewed on 2026-07-10.
+## Current release: BitcoinII Core v31.1.0
 
-## Releases observed
+Observed from the canonical GitHub release page/API:
 
-### BitcoinII Core v29.1.0
+- Release title: `BitcoinII v31.1.0`
+- Tag: `v31.1.0`
+- Target commitish: `main`
+- Created: `2026-08-29T02:30:46Z`
+- Published: `2026-08-29T02:39:30Z`
+- Updated: `2026-08-29T02:39:30Z`
 
-This is the current release documented by MoreBC2 as of the 2026-08-27 factual synchronization. The dated GitHub `Latest` observation below is supporting page evidence, not a guarantee that the marker will remain unchanged.
+Release notes identify these consensus-level changes:
 
-Observed on the `Bitcoin-II/BitcoinII-Core` release page and through Codex GitHub API metadata review:
+- ShockWave per-block difficulty adjustment
+- consensus-level Ordinals, inscriptions, and Runes mitigation
+- BC2 transaction replay protection
+- fork-aware header synchronization
+- associated wallet, mining, mempool, RPC, validation, and PSBT updates
 
-- Release title: `BitcoinII Core v29.1.0`
-- Tag: `v29.1.0`
-- Target commitish from API metadata: `main`
-- Tag target object: `3f2a352467750425ec28abe3505a5db5bbc5fa35`
-- Release created_at from API metadata: `2025-11-27T04:20:37Z`
-- Release published_at from API metadata: `2025-11-27T04:22:39Z`
-- Release updated_at from API metadata: `2026-06-22T21:25:13Z`
-- Earlier rendered page observation showed a `Latest` marker.
-- Earlier rendered page observation showed GPG key ID `B5690EEEBB952194` for GitHub's verified signature system.
-- Release note shown: `Mandatory release including updated seed server and blockchain checkpoints. Previous v29 releases are now fully deprecated and should not be used.`
+### Uploaded assets observed
 
-Important caveat:
+| Asset | Size bytes | GitHub-reported SHA-256 digest |
+|---|---:|---|
+| `BitcoinII-v31.1-Linux-CLI.tar.gz` | 8,839,080 | `78a88df783c2e15d09ea73c05065f7477cad34086b6e995991f7adeae781603f` |
+| `BitcoinII-v31.1-Linux-Qt.tar.gz` | 20,629,261 | `745f6fc1cf7132357ca1ee09ea9c02873aac98cae92a6067ee3a26e8e5fd09ac` |
+| `BitcoinII-v31.1-Win64-CLI.zip` | 9,116,723 | `74e052791cbd5183b1876693e5d99f474fb4165b795ba45d8f3c966bd5a7d687` |
+| `BitcoinII-v31.1-Win64-Qt.zip` | 20,557,870 | `f7b1d16423859bd2392b1bd4f62c16ba855a034c6ffb6693af667f2ec97b375d` |
 
-GitHub API metadata resolved the timestamp that the unauthenticated rendered HTML previously showed only as `27 Nov 04:22`. This still does not prove release authenticity or asset authenticity; canonical repository evidence is documented separately in the [project identity source check](../verification/project-identity-source-check-2026-07-10.md).
+Important boundary: these digest values are GitHub hosting-provider metadata. MoreBC2 has not yet completed an independent `v31.1.0` artifact-authentication record equivalent to the dated `v29.1.0` audit.
 
-#### Uploaded release assets from GitHub API
+See [v31.1.0 release assets](../releases/v31.1.0-assets.md).
 
-Codex captured 10 uploaded assets from GitHub API metadata:
+## Historical release: v29.1.0
 
-| # | Asset name | Size bytes | Content type |
-|---:|---|---:|---|
-| 1 | `BitcoinII-29.1.0-aarch64-linux-CLI.tar.gz` | 7,313,922 | `application/gzip` |
-| 2 | `BitcoinII-29.1.0-aarch64-linux-GUI.tar.gz` | 19,831,620 | `application/gzip` |
-| 3 | `BitcoinII-29.1.0-arm-linux-gnueabihf-CLI.tar.gz` | 6,820,132 | `application/gzip` |
-| 4 | `BitcoinII-29.1.0-arm-linux-gnueabihf-GUI.tar.gz` | 17,911,678 | `application/gzip` |
-| 5 | `BitcoinII-29.1.0-arm64-apple-darwin.zip` | 15,810,838 | `application/zip` |
-| 6 | `BitcoinII-29.1.0-x86_64-apple-darwin.zip` | 17,133,023 | `application/zip` |
-| 7 | `BitcoinII-29.1.0-x86_64-linux-CLI.tar.gz` | 7,812,863 | `application/gzip` |
-| 8 | `BitcoinII-29.1.0-x86_64-linux-GUI.tar.gz` | 20,480,068 | `application/gzip` |
-| 9 | `BitcoinII-29.1.0-x86_64-win64-CLI.zip` | 7,987,528 | `application/zip` |
-| 10 | `BitcoinII-29.1.0-x86_64-win64-GUI.zip` | 19,362,931 | `application/zip` |
+`v29.1.0` was the current documented release during MoreBC2's 2026-08-27 release-authentication work.
 
-#### GitHub-generated source archives
+That dated work included:
 
-Codex also captured two GitHub-generated source archive links for the tag. These are generated by GitHub from the tag and are not part of the uploaded release asset list.
+- inventory of 10 uploaded release assets;
+- separate recording of two GitHub-generated source archives;
+- independent hashing of all 12 downloads;
+- size/hash comparison with GitHub metadata;
+- bounded tag/commit signature review;
+- search for checksum manifests, detached signatures, and a trusted release-key path.
 
-| Display name | Browser URL | Final URL | Content type | Content-Disposition |
-|---|---|---|---|---|
-| `Source code (tar.gz)` | `https://github.com/Bitcoin-II/BitcoinII-Core/archive/refs/tags/v29.1.0.tar.gz` | `https://codeload.github.com/Bitcoin-II/BitcoinII-Core/tar.gz/refs/tags/v29.1.0` | `application/x-gzip` | `attachment; filename=BitcoinII-Core-29.1.0.tar.gz` |
-| `Source code (zip)` | `https://github.com/Bitcoin-II/BitcoinII-Core/archive/refs/tags/v29.1.0.zip` | `https://codeload.github.com/Bitcoin-II/BitcoinII-Core/zip/refs/tags/v29.1.0` | `application/zip` | `attachment; filename=BitcoinII-Core-29.1.0.zip` |
+Those records remain valid historical evidence for `v29.1.0`, but `v29.1.0` is no longer the current release.
 
-Asset-count note:
+See:
 
-- Earlier rendered page observation showed 12 items.
-- GitHub API uploaded-asset metadata reported 10 uploaded assets.
-- The two GitHub-generated source archives reconcile that earlier count without treating source archives as uploaded release assets.
+- [v29.1.0 asset record](../releases/v29.1.0-assets.md)
+- [Release-artifact authentication — 2026-08-27](../verification/release-artifact-authentication-2026-08-27.md)
 
-The [2026-08-27 release-artifact authentication record](../verification/release-artifact-authentication-2026-08-27.md) downloaded and hashed all 10 uploaded assets and both generated source archives.
+## Legacy redirected release path
 
-Verification caveats:
+Earlier MoreBC2 review observed legacy releases such as `v0.27.1` and `v0.27.0` on redirected older repository paths.
 
-- Independently calculated hashes are integrity fingerprints for repeat-download comparison; they are not publisher-authenticated expected values.
-- All 10 uploaded-asset sizes and hashes matched GitHub API metadata, which remains hosting-provider metadata.
-- MoreBC2 did not verify any detached signature or signed checksum manifest.
-- No uploaded asset name appears to be a checksum manifest.
-- No uploaded asset name appears to be a detached signature file.
-- GitHub-generated source archive links are not checksum or signature artifacts.
-- MoreBC2 did not identify a BitcoinII trusted release-key source.
-- MoreBC2 did not prove release binaries match reviewed source files.
-- GitHub's verified signature marker is useful metadata, but it is not the same as verifying a downloaded release binary against a signed checksum manifest.
-- GitHub API digest fields, if present, should not be treated as independent MoreBC2 hash verification.
+Those observations are migration/history evidence only and should not be used as the current operational release path.
 
-### Legacy observed release path: v0.27.1
+## Current verification status
 
-Observed on the redirected `KvantaMechanic/BitcoinII` release page during earlier review:
-
-- Tag shown: `v0.27.1`
-- Release date shown by GitHub page: `2025-11-29 04:04`
-- Release note shown: `Update DNS seeds and chain transaction data`
-- Assets observed: 14 assets.
-- GitHub page marks the release commit as created on GitHub.com and signed with GitHub's verified signature system.
-- GitHub page shows GPG key ID `B5690EEEBB952194`.
-
-Observed asset naming pattern includes:
-
-- `BitcoinII-27.1.0-aarch64-linux-CLI.tar.gz`
-- `BitcoinII-27.1.0-aarch64-linux-GUI.tar.gz`
-- `BitcoinII-27.1.0-arm-linux-gnueabihf-CLI.tar.gz`
-- `BitcoinII-27.1.0-arm-linux-gnueabihf-GUI.tar.gz`
-- `BitcoinII-27.1.0-arm64-macos-CLI.zip`
-- `BitcoinII-27.1.0-arm64-macos-GUI.zip`
-- `BitcoinII-27.1.0-x86_64-linux-CLI.tar.gz`
-- `BitcoinII-27.1.0-x86_64-linux-GUI.tar.gz`
-- `BitcoinII-27.1.0-x86_64-macos-CLI.zip`
-- `BitcoinII-27.1.0-x86_64-macos-GUI.zip`
-- Source code archives.
-
-Verification caveats:
-
-- This appears on a redirected legacy repository path, not the current observed `Bitcoin-II/BitcoinII-Core` path.
-- MoreBC2 does not treat this as the current release path; it is retained as historical redirected-path evidence.
-- Legacy asset naming does not prove the current `v29.1.0` asset list.
-
-### Legacy observed release: v0.27.0
-
-Observed on the redirected legacy release page during earlier review:
-
-- Release title shown: `Genesis Release`
-- Tag shown: `v0.27.0`
-- Release date shown by GitHub page: `2025-07-28`
-- Release note shown: `Genesis commit of BitcoinII v0.27.0 Sourcecode`
-- Assets observed: 6 assets.
-
-## Source-tree verification helper note
-
-The current BitcoinII Core source tree contains `contrib/verify-binaries/README.md`.
-
-That file describes a Bitcoin Core-style verification model involving:
-
-- `SHA256SUMS`
-- `SHA256SUMS.asc`
-- trusted public keys
-- signature checks over the checksum file
-- hash checks of downloaded binaries
-
-However, this source-tree helper is not enough by itself to prove the current BitcoinII release workflow because:
-
-- The helper text may be inherited from upstream.
-- The helper text references external Bitcoin Core download hosts.
-- MoreBC2 has not confirmed that current BitcoinII releases publish `SHA256SUMS` and `SHA256SUMS.asc` files.
-- MoreBC2 has not confirmed which BitcoinII release keys should be trusted.
-
-## Release verification status
-
-| Question | Current status | Notes |
-|---|---|---|
-| Release page path observed | Partial | `Bitcoin-II/BitcoinII-Core/releases` is the current canonical release path; this path status does not authenticate artifacts. |
-| Latest-release marker observed | Partial | `BitcoinII Core v29.1.0` showed a GitHub `Latest` marker during the 2026-07-02 rendered-page recheck. |
-| Release date resolved | Partial | GitHub API metadata gives `published_at` as `2025-11-27T04:22:39Z`. |
-| Uploaded release asset list captured | Partial | GitHub API metadata reports 10 uploaded assets. |
-| Generated source archives listed separately | Partial | Two GitHub-generated tag archives were captured and are distinct from uploaded assets. |
-| Rendered asset count reconciled | Partial | Earlier rendered page showed 12 items, likely matching 10 uploaded assets plus two generated source archive links. |
-| Asset hashes independently calculated | Integrity recorded | All 10 uploaded assets and two generated source archives were hashed on 2026-08-27. |
-| Checksum manifest found | Not found | No publisher manifest was found in the checked release, archives, canonical repository material, or obvious public signature-repository paths. |
-| Detached signature found | Not found | No detached release-asset signature was found in the checked public locations. |
-| Release tag signature checked | Bounded result | The tag is lightweight. Its source commit verifies against GitHub's web-flow service key, not a BitcoinII release key. |
-| Trusted release keys identified | Not established | GitHub's service-key identity was established, but no BitcoinII release-key trust path was found. |
-| Source comparison performed | Partial | Release source comparison and network release comparison exist, but source comparison does not verify release binaries. |
-| Exchange-grade verification path confirmed | No | Requires manifest/signature/key workflow or maintainer-approved alternative. |
+| Question | Current status |
+|---|---|
+| Canonical release path | Observed |
+| Current release identity | `v31.1.0` observed |
+| Current uploaded asset list | Observed |
+| GitHub-reported asset digests | Observed |
+| Independent v31.1.0 hashes | Not yet recorded |
+| Publisher checksum manifest | Not established |
+| Detached release signature | Not established |
+| Trusted BitcoinII release key | Not established |
+| Binary-to-source binding | Not established |
+| Reproducible build proof | Not established |
 
 ## Open items
 
-- Monitor the canonical repository and release path for future changes.
-- Confirm whether release assets include checksum manifests outside uploaded assets.
-- Confirm whether checksum manifests are signed.
-- Confirm whether tags are signed separately from GitHub's verified commit marker.
-- Confirm which key or keys should be trusted for BitcoinII releases.
-- Obtain an authenticated publisher checksum/signature/key chain or public reproducible-build attestations, then compare them with the dated local hashes.
-- Create a user-facing wallet release-verification guide only after the actual release model is confirmed.
+- Independently download and hash all `v31.1.0` assets.
+- Check current tag/commit signature state.
+- Check whether publisher checksum/signature material exists outside uploaded assets.
+- Establish any maintainer-approved trusted release-key path.
+- Keep historical `v29.1.0` verification clearly version-scoped.
 
 ## Sources
 
-- Release page rechecked 2026-07-02: `https://github.com/Bitcoin-II/BitcoinII-Core/releases`
-- Release tag page rechecked 2026-07-02: `https://github.com/Bitcoin-II/BitcoinII-Core/releases/tag/v29.1.0`
-- Codex GitHub API asset inventory report, 2026-07-04
-- Codex GitHub-generated source archive metadata report, 2026-07-04
-- Legacy redirected release page observed during earlier review: `https://github.com/BitcoinII-Dev/BitcoinII/releases`
-- `contrib/verify-binaries/README.md` in `Bitcoin-II/BitcoinII-Core`
+- Current release page: https://github.com/Bitcoin-II/BitcoinII-Core/releases/tag/v31.1.0
+- Canonical release index: https://github.com/Bitcoin-II/BitcoinII-Core/releases
+- [v31.1.0 release assets](../releases/v31.1.0-assets.md)
 - [Release verification guide](../developers/release-verification.md)
-- [Release asset inventory attempt](../verification/release-asset-inventory-attempt.md)
-- [Release artifact checklist](../verification/release-artifact-checklist.md)
-- [Release-artifact authentication — 2026-08-27](../verification/release-artifact-authentication-2026-08-27.md)
-- [Release source comparison notes](../verification/release-source-comparison.md)
-- [Network release comparison](../verification/network-release-comparison.md)
-- [Open questions backlog](../verification/open-questions.md)
+- [Historical v29.1.0 authentication record](../verification/release-artifact-authentication-2026-08-27.md)
 
 ## Verification
 
 **Status:** Needs Review
-**Primary sources checked:** Partially
-**Notes:** GitHub release pages/API, all 10 uploaded assets, both generated source archives, tag/commit signature state, public authentication-material paths, and source-tree verification-helper text were checked. Canonical-source wording was synchronized on 2026-08-27. Artifact integrity was recorded; manifests, detached release signatures, BitcoinII trusted release keys, binary-to-source binding, and reproducible-build proof remain unverified.
+**Primary sources checked:** GitHub current release page/API plus existing MoreBC2 historical verification records
+**Notes:** Current-release identity and metadata are refreshed to `v31.1.0`. Independent current-release authentication remains open.
