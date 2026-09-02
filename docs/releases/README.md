@@ -2,71 +2,72 @@
 
 **Category:** Releases
 **Status:** Draft / Evidence-linked summary
-**Last reviewed:** 2026-08-27
+**Last reviewed:** 2026-09-02
 
 ## Summary
 
-This section summarizes BitcoinII Core release information already recorded in MoreBC2.
+This section summarizes BitcoinII Core release information recorded in MoreBC2.
 
-It summarizes a completed integrity audit, but it does not authenticate binaries, source archives, signatures, trusted keys, or release provenance.
+The current release baseline is **BitcoinII Core `v31.1.0`**, published on 2026-08-29.
 
-Canonical evidence remains in the Verification section:
-
-- [Verification evidence index](../verification/verification-index.md)
-- [Release asset inventory attempt](../verification/release-asset-inventory-attempt.md)
-- [Release-artifact authentication — 2026-08-27](../verification/release-artifact-authentication-2026-08-27.md)
-- [Release artifact checklist](../verification/release-artifact-checklist.md)
-- [Release source comparison notes](../verification/release-source-comparison.md)
-- [Network release comparison](../verification/network-release-comparison.md)
-- [Developer release verification guide](../developers/release-verification.md)
-- [BitcoinII releases](../documentation/releases.md)
+Older `v29.1.0` verification records remain valuable historical evidence, but they must not be presented as current-release authentication.
 
 ## Current release pages
 
-- [v29.1.0 uploaded assets](v29.1.0-assets.md)
+- [v31.1.0 uploaded assets and GitHub-reported digests](v31.1.0-assets.md)
+- [v29.1.0 uploaded assets — historical audit](v29.1.0-assets.md)
 - [GitHub-generated source archives](source-archives.md)
 - [Authentication status](authentication-status.md)
 - [Release verification guide](release-verification-guide.md)
 - [Signing and checksum roadmap](signing-and-checksum-roadmap.md)
 
-## Evidence labels
-
-Use narrow labels:
-
-- **Observed** - recorded from a public page, GitHub API metadata, or committed evidence record.
-- **Locally Tested** - exercised in a documented local environment. Release downloads and hashes have a bounded integrity record; binary authenticity does not have this status.
-- **Source Reviewed** - found in source-tree documentation or source comparison records.
-- **Maintainer Statement** - maintainer-supplied context; not cryptographic proof.
-- **Unknown** - not established by current evidence.
-- **Roadmap** - planned or expected, not current release evidence.
-
 ## Current release posture
 
-MoreBC2 has recorded metadata, inventory, and local integrity fingerprints for BitcoinII Core `v29.1.0`.
+Observed current release:
 
-Current evidence supports saying:
+- Tag: `v31.1.0`
+- Published: `2026-08-29T02:39:30Z`
+- Four uploaded Linux/Windows CLI/Qt assets were observed through GitHub release metadata.
+- GitHub reports SHA-256 digests for those uploaded assets.
+- Release notes describe ShockWave, data restrictions, replay protection, fork-aware header synchronization, and associated wallet/mining/mempool/RPC/validation/PSBT updates.
 
-- the release metadata was observed,
-- 10 uploaded release assets were inventoried from GitHub API metadata,
-- two GitHub-generated source archives were listed separately,
-- all 12 release-page downloads were independently hashed on 2026-08-27,
-- all 10 uploaded-asset sizes and hashes matched GitHub API metadata,
-- the `v29.1.0` tag appears lightweight in the recorded metadata,
-- the tagged source commit locally verified against GitHub's web-flow service key,
-- no uploaded asset name appeared to be `SHA256SUMS`, `SHA256SUMS.asc`, a detached signature, or a release-key file,
-- no trusted BitcoinII release-key path has been established.
+Current evidence supports saying that the release and its GitHub-hosted metadata were observed.
 
-Current evidence does not support saying:
+Current evidence does **not** yet support saying that MoreBC2 has independently authenticated the `v31.1.0` binaries, established a trusted BitcoinII release-signing key, proven reproducible builds, or bound the distributed binaries to reviewed source.
 
-- release binaries are authenticated,
-- release binaries match source,
-- release assets are signed,
-- source archives are verified,
-- a trusted release-key path exists,
-- BitcoinII releases are public-launch ready from a verification standpoint.
+## Historical v29.1.0 evidence
+
+MoreBC2 performed a deeper artifact-integrity audit of `v29.1.0` on 2026-08-27, including independent hashing of 10 uploaded assets and two GitHub-generated source archives.
+
+That work remains preserved as dated evidence for `v29.1.0`. It does not automatically carry forward to `v31.1.0`.
+
+## Evidence labels
+
+- **Observed** — recorded from a public page, GitHub API metadata, or committed evidence record.
+- **Locally Tested** — exercised in a documented local environment.
+- **Source Reviewed** — found in reviewed source material.
+- **Maintainer Statement** — maintainer-supplied context; not cryptographic proof.
+- **Unknown** — not established by current evidence.
+- **Roadmap** — planned or expected, not current evidence.
+
+## Current verification priorities
+
+1. Independently hash the `v31.1.0` uploaded assets.
+2. Check current checksum/signature publication paths.
+3. Check tag/commit signature state for `v31.1.0`.
+4. Preserve the distinction between hosting-provider digest metadata and publisher-authenticated expected hashes.
+5. Keep the `v29.1.0` audit explicitly historical.
+
+## Related verification records
+
+- [Verification evidence index](../verification/verification-index.md)
+- [Release-artifact authentication — 2026-08-27](../verification/release-artifact-authentication-2026-08-27.md)
+- [Release artifact checklist](../verification/release-artifact-checklist.md)
+- [Developer release verification guide](../developers/release-verification.md)
+- [BitcoinII release documentation](../documentation/releases.md)
 
 ## Verification
 
-**Status:** Draft / Evidence-linked summary  
-**Primary sources checked:** Existing MoreBC2 release verification records linked above  
-**Notes:** This section summarizes committed evidence. Local integrity fingerprints do not authenticate publisher intent, binary provenance, or signer identity.
+**Status:** Draft / Evidence-linked summary
+**Primary sources checked:** Current `v31.1.0` GitHub release metadata plus existing dated MoreBC2 release evidence
+**Notes:** Current release metadata is refreshed. Independent `v31.1.0` authentication work remains open.
