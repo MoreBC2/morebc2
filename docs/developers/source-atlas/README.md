@@ -2,13 +2,24 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-07-02
+**Last reviewed:** 2026-09-02
 
 ## Summary
 
-The source atlas is a file-by-file companion to the BitcoinII Core codebase.
+The source atlas is a file-by-file and feature-path companion to the BitcoinII Core codebase.
 
-Each page should explain one important source file in plain language, link it to related MoreBC2 documentation, and record open questions.
+Each page should explain one important source file or tightly related implementation path in plain language, link it to related MoreBC2 documentation, and record open questions.
+
+## v31.1.0 consensus feature paths
+
+The current release-specific deep-review entries are:
+
+- [ShockWave difficulty adjustment](shockwave-v31.md)
+- [Replay protection](replay-protection-v31.md)
+- [Consensus data restrictions](data-restrictions-v31.md)
+- [Fork-aware header synchronization](headers-sync-v31.md)
+
+These pages are pinned to the canonical BitcoinII Core `v31.1.0` source and are intended to complement the older file-oriented atlas entries.
 
 ## Current atlas entries
 
@@ -68,11 +79,13 @@ Each source atlas page should include:
 
 - Do not claim more than the file review supports.
 - Quote sparingly, summarize carefully.
-- Prefer source links and line references when available.
-- Mark uncertain items as Needs Review.
+- Prefer release-pinned source links for current-release claims.
+- Keep mutable `main` observations clearly separate from release-pinned evidence.
+- Mark unexecuted upstream tests as located, not locally verified.
+- Mark uncertain items as Needs Review or Source-reviewed partial.
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** The atlas starts with files already reviewed for MoreBC2 core technical pages. Network RPC, peer list management, address manager, protocol primitives, lower-level connection management, net-processing handshake, address sharing, block/header sharing, transaction sharing, peer health/stale-tip checks, and send-loop slices now have first-pass source reviews. Remaining lower-level network review should focus on release-versus-main comparison, missing RPC/test follow-up, and any deeper fixed-seed caller details.
+**Primary sources checked:** Partially, with dedicated `v31.1.0` source review for ShockWave, replay protection, data restrictions, and header synchronization
+**Notes:** The atlas now contains both broad file-oriented first-pass coverage and release-specific feature-path reviews for the principal BitcoinII v31 consensus changes.

@@ -6,9 +6,9 @@
 
 ## Purpose
 
-This record documents the MoreBC2 refresh triggered by BitcoinII Core `v31.1.0`.
+This record documents the MoreBC2 refresh triggered by BitcoinII Core `v31.1.0` and the first deep follow-up audit of its principal BitcoinII-specific consensus changes.
 
-The goal is to prevent current-facing MoreBC2 pages from continuing to present `v29.1.0` as the current release or the pre-ShockWave 2016-block-only difficulty path as current mainnet behavior.
+The goal is to prevent current-facing MoreBC2 pages from continuing to present `v29.1.0` as the current release, the pre-ShockWave 2016-block-only difficulty path as current behavior, or release-note feature names without source-path detail.
 
 ## Current upstream baseline checked
 
@@ -24,7 +24,7 @@ Release notes identify:
 - fork-aware header synchronization;
 - associated wallet, mining, mempool, RPC, validation, and PSBT updates.
 
-Reviewed `v31.1.0` mainnet chain parameters additionally establish:
+Reviewed `v31.1.0` mainnet chain parameters establish:
 
 - `nShockWaveActivationHeight = 57750`
 - `nDataRestrictionsHeight = 57750`
@@ -34,9 +34,42 @@ Reviewed `v31.1.0` mainnet chain parameters additionally establish:
 - default P2P port remains `8338`
 - Bitcoin-like address prefixes remain present
 
-Reviewed `v31.1.0/src/pow.cpp` establishes the current ShockWave implementation and its per-block post-activation difficulty behavior.
+## Deep consensus-source audit completed
 
-## Current-facing pages refreshed in this pass
+The following release-note areas now have dedicated release-pinned Source Atlas reviews:
+
+1. [ShockWave v31](../developers/source-atlas/shockwave-v31.md)
+   - activation boundary and production `GetNextWorkRequired()` dispatch;
+   - 25-block / 24-interval MTP rolling baseline;
+   - short-horizon response and timestamp moderation;
+   - emergency stall recovery constants and recovery behavior;
+   - mining candidate-time recalculation;
+   - exact history requirements for header synchronization.
+
+2. [Replay protection v31](../developers/source-atlas/replay-protection-v31.md)
+   - fork-id selection by block height;
+   - signature-hash domain behavior;
+   - next-block mempool validation and activation-boundary mempool clearing;
+   - validation-cache separation;
+   - wallet, raw-transaction RPC, PSBT and external-signer paths.
+
+3. [Data restrictions v31](../developers/source-atlas/data-restrictions-v31.md)
+   - post-activation OP_RETURN count/size rules;
+   - OP_13 detection in OP_RETURN scripts;
+   - bare multisig restriction;
+   - Taproot annex, tapscript-size and Ordinals-envelope restrictions;
+   - block-connection enforcement;
+   - located unit/functional test surfaces.
+
+4. [Header sync v31](../developers/source-atlas/headers-sync-v31.md)
+   - existing PRESYNC/REDOWNLOAD anti-DoS model;
+   - candidate branch anchoring at the known fork point;
+   - private 35-index branch-specific ShockWave/MTP history;
+   - exact `GetNextWorkRequired()` verification during header sync;
+   - per-peer state clearing on failure;
+   - located unit/fuzz test surfaces.
+
+## Current-facing pages refreshed in the v31 baseline pass
 
 - `README.md`
 - `docs/README.md`
@@ -73,13 +106,16 @@ Dated evidence records remain tied to the version and environment actually teste
 
 A historical record saying `v29.1.0` is not stale merely because a newer release exists, provided the record clearly describes a dated `v29.1.0` observation/test.
 
-## Wording rules after this refresh
+## Wording rules after this audit
 
 Current-facing documentation should not say:
 
 - `v29.1.0` is the current BitcoinII release;
 - current BitcoinII mainnet changes difficulty only every 2016 blocks;
 - Dark Gravity Wave alone is the current BitcoinII algorithm name;
+- replay protection is an address-format change;
+- the data restrictions constitute a proven blanket ban on every arbitrary-data protocol;
+- header sync itself chooses the active chain;
 - older local `v29.1.0` RPC/node observations prove `v31.1.0` runtime behavior.
 
 Current-facing documentation may say:
@@ -88,34 +124,35 @@ Current-facing documentation may say:
 - ShockWave applies per-block difficulty adjustment beginning at mainnet height `57750`;
 - pre-57750 history used the inherited Bitcoin-style retarget path;
 - v31 activates replay protection and data restrictions at height `57750`;
-- current release notes include fork-aware header synchronization and related subsystem updates;
+- replay protection adds a BC2 signature-hash domain with fork id `0x01324342`;
+- the explicit post-activation transaction-data rules are documented from source;
+- header synchronization reproduces branch-specific ShockWave history for candidate branches within the existing anti-DoS sync framework;
 - historical tests remain version-scoped evidence.
 
-## Remaining currentness risks
+## Remaining follow-up priorities
 
-This pass prioritizes pages that state current release, consensus, mining, node, compatibility, or verification posture.
+The first three source-mapping priorities from the original currentness pass are now substantially resolved at the source-review level.
 
-The repository contains a large Source Atlas and many older first-pass architecture/RPC/wallet/mempool pages. Those pages may remain structurally useful even when they predate v31, but detailed behavior in files touched by v31 should be spot-checked before being elevated as current release-specific evidence.
+Remaining high-value work:
 
-Priority follow-up areas:
-
-1. replay-protection implementation path;
-2. data-restriction validation path;
-3. fork-aware header synchronization;
-4. wallet/PSBT changes;
-5. mempool/RPC/validation changes;
-6. mining subsystem changes beyond difficulty;
-7. fresh `v31.1.0` runtime node/RPC testing;
-8. independent `v31.1.0` artifact authentication.
+1. execute/map v31 consensus and header-sync tests locally;
+2. generate safe replay-protection pre/post-fork test vectors;
+3. run data-restriction activation-boundary tests;
+4. run current-release competing-branch/header-sync scenarios;
+5. review wallet/PSBT changes beyond the replay-protection path;
+6. review mempool/RPC/validation changes outside these audited features;
+7. review mining subsystem changes beyond difficulty;
+8. perform fresh `v31.1.0` runtime node/RPC testing;
+9. independently authenticate `v31.1.0` release artifacts.
 
 ## Evidence boundary
 
-This audit is a documentation-currentness pass. It does not claim that every source file in BitcoinII Core was diffed or every MoreBC2 runtime workflow was re-executed.
+This audit is a source/documentation review. It does not claim that every BitcoinII Core source file was diffed or that MoreBC2 executed the upstream test suite.
 
-Where current source/release facts are established, current-facing wording was corrected. Where current runtime evidence does not yet exist, older evidence remains version-labeled and the gap is recorded rather than guessed away.
+Where source paths are established, the documentation now records them. Where runtime/test evidence does not yet exist, the gap remains explicit.
 
 ## Verification
 
 **Status:** Audit record
-**Primary sources checked:** BitcoinII Core `v31.1.0` release metadata, `v31.1.0/src/kernel/chainparams.cpp`, `v31.1.0/src/pow.cpp`, and affected MoreBC2 current-facing pages
-**Notes:** Use this record as the boundary between the 2026-08-27/28 v29 evidence cycle and the v31.1.0 documentation baseline.
+**Primary sources checked:** BitcoinII Core `v31.1.0` release metadata and release-pinned source paths for chain parameters, difficulty, validation, transaction data rules, replay-protection signing/validation, wallet/PSBT, and headers synchronization
+**Notes:** Use this record as the boundary between the initial v31 currentness refresh and the deeper feature-path audit completed on 2026-09-02.
