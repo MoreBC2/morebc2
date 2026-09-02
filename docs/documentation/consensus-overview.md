@@ -2,95 +2,72 @@
 
 **Category:** Documentation
 **Status:** Needs Review
-**Last reviewed:** 2026-06-29
+**Last reviewed:** 2026-09-02
 
 ## Summary
 
-This page summarizes consensus-related behavior that has been checked against public BitcoinII source code.
+This page summarizes BitcoinII consensus behavior that has been checked against public source code and the current BitcoinII Core `v31.1.0` release.
 
-It is intentionally conservative. If a value or rule has not been checked against source or official release materials, it should remain out of this page or be listed as an open item.
+It is intentionally conservative and is not a complete consensus specification.
 
-For a higher-level reader path, see [Consensus model](../architecture/consensus-model.md).
+## Current v31.1.0 consensus changes
 
-## Source-backed areas reviewed so far
+BitcoinII Core `v31.1.0` release notes identify these consensus-level changes:
 
-MoreBC2 has reviewed first-pass source anchors for:
+- ShockWave per-block difficulty adjustment;
+- consensus-level Ordinals, inscriptions, and Runes mitigation;
+- BC2 transaction replay protection;
+- fork-aware header synchronization;
+- associated wallet, mining, mempool, RPC, validation, and PSBT updates.
 
-- Chain parameters.
-- Proof-of-work and difficulty adjustment.
-- Block header hashing.
-- Monetary amount sanity helpers.
-- Context-independent transaction checks.
-- Transaction finality and sequence-lock helpers.
-- UTXO-input checks.
-- Transaction unlocking and verification helpers.
-- Block validation and connection paths.
-- Reorganization handling.
+Mainnet chain parameters activate the principal new consensus rules at height `57750`:
 
-This page still should not be treated as a complete consensus specification.
+- `nDataRestrictionsHeight = 57750`
+- `nShockWaveActivationHeight = 57750`
+- `nReplayProtectionHeight = 57750`
+- `nReplayProtectionForkId = 0x01324342`
 
-## Block interval and retargeting
+## Block interval and difficulty
 
-BitcoinII mainnet is configured for:
+BitcoinII mainnet remains configured for 10-minute target block spacing.
 
-- 10-minute target block spacing.
-- 14-day target retarget timespan.
-- 2016-block difficulty adjustment interval.
+The old Bitcoin-style 14-day / 2016-block retarget model describes the pre-ShockWave historical path. Since height `57750`, current mainnet difficulty is calculated **per block** by ShockWave.
 
-`src/pow.cpp` shows that difficulty changes only at the configured adjustment interval. On mainnet, blocks between adjustment intervals keep the previous `nBits` value.
+Reviewed ShockWave source includes:
 
-## Difficulty adjustment calculation
+- a 25-block / 24-interval MedianTimePast rolling baseline;
+- a six-interval fast-hashrate sensor;
+- true `+/-4x` final per-block adjustment bounds;
+- timestamp-consistency and trusted-history guards;
+- emergency stall recovery;
+- recovery-regime reset and post-recovery stabilization;
+- integer-only consensus arithmetic.
 
-`GetNextWorkRequired()` checks whether the next block height falls on the configured difficulty adjustment interval.
-
-If it does not, and min-difficulty blocks are not allowed, the previous block's `nBits` value is reused.
-
-At an adjustment interval, the function finds the first block in the adjustment window and calls `CalculateNextWorkRequired()`.
-
-## Difficulty adjustment limits
-
-`CalculateNextWorkRequired()` limits the actual timespan used for retargeting:
-
-- Minimum actual timespan: target timespan divided by 4.
-- Maximum actual timespan: target timespan multiplied by 4.
-
-It then scales the old target by actual timespan divided by target timespan and caps the result at `powLimit`.
-
-This means a single retarget step is bounded in either direction.
-
-## Difficulty transition checks
-
-`PermittedDifficultyTransition()` checks whether an observed transition is within permitted bounds.
-
-Source-backed behavior:
-
-- If min-difficulty blocks are allowed, it returns true.
-- At adjustment heights, it checks the new target against the 1/4x to 4x permitted range.
-- Away from adjustment heights, it rejects changes where `old_nbits` and `new_nbits` differ.
+The inherited `nPowTargetTimespan` and 2016-block deployment-window parameters remain present in chain parameters, but should not be described as the current post-57750 difficulty-adjustment schedule.
 
 ## Proof-of-work target checks
 
-`CheckProofOfWork()` verifies that a block hash satisfies the target encoded by `nBits`.
+`CheckProofOfWork()` continues to verify that a block hash satisfies the target encoded by `nBits` and rejects negative, zero, overflowed, over-limit, or insufficient-work targets.
 
-Source-backed behavior:
+The block-header hash path remains double-SHA256 through `HashWriter::GetHash()`.
 
-- It rejects negative targets.
-- It rejects zero targets.
-- It rejects overflowed targets.
-- It rejects targets above `powLimit`.
-- It rejects hashes greater than the target.
+## Replay protection
 
-## No Dark Gravity Wave claim
+BitcoinII now has explicit BC2 replay protection beginning at height `57750` with a BitcoinII-specific replay-domain fork ID.
 
-This page does **not** claim that BitcoinII implements Dark Gravity Wave.
+This is especially relevant because BitcoinII retains Bitcoin-like address encodings. MoreBC2 should therefore avoid implying that matching address prefixes mean cross-chain replay behavior is unchanged.
 
-Based on the checked source path, the current verified description is Bitcoin-style 2016-block retargeting.
+A full transaction-format and wallet-UX explanation of the replay mechanism remains a separate source-review task.
 
-## Block header hashing
+## Consensus-level data restrictions
 
-`CBlockHeader::GetHash()` uses `HashWriter::GetHash()`.
+`v31.1.0` activates BitcoinII-specific data restrictions at height `57750`. Release notes describe this as mitigation for Ordinals, inscriptions, and Runes.
 
-`HashWriter::GetHash()` performs SHA-256, then SHA-256 again over the first result. The source comments describe this as double-SHA256.
+MoreBC2 should describe this as a consensus change without overstating its scope until the complete validation and policy paths have been mapped.
+
+## Header synchronization
+
+The `v31.1.0` release includes fork-aware header synchronization. This belongs in current node and architecture documentation because header-processing behavior can affect recovery and synchronization around competing branches.
 
 ## Monetary units and money range
 
@@ -99,71 +76,36 @@ Based on the checked source path, the current verified description is Bitcoin-st
 - `COIN = 100000000`
 - `MAX_MONEY = 21000000 * COIN`
 
-The source comments call `MAX_MONEY` a consensus-critical money-range sanity check rather than a direct statement that the total supply equals that number at all times.
+The subsidy halving interval remains `210000` blocks.
 
-## Context-independent transaction checks
+## Existing consensus areas retained from earlier review
 
-`src/consensus/tx_check.*` defines `CheckTransaction`, which checks transaction shape without relying on chain or mempool state.
+MoreBC2 has also reviewed first-pass source anchors for:
 
-Reviewed behavior includes:
+- context-independent transaction checks;
+- transaction finality and sequence locks;
+- UTXO-input checks;
+- script execution and verification helpers;
+- block validation and connection;
+- reorganization handling;
+- mempool-policy boundaries.
 
-- Inputs cannot be empty.
-- Outputs cannot be empty.
-- Size without witness, scaled by witness factor, cannot exceed maximum block weight.
-- Output values cannot be negative.
-- Output values cannot exceed `MAX_MONEY`.
-- Total output value must remain in range.
-- Duplicate inputs are rejected.
-- Coinbase scriptSig length is bounded.
-- Non-coinbase transactions cannot spend null previous outputs.
-
-## Context-dependent transaction checks
-
-`src/consensus/tx_verify.*` defines helpers for finality, sequence locks, operation-cost accounting, and UTXO-input checks.
-
-Reviewed behavior includes:
-
-- `IsFinalTx` handles locktime finality relative to block height or block time.
-- Sequence-lock helpers calculate and evaluate BIP68-style relative locks.
-- Operation-cost helpers count legacy, P2SH, and witness-related operation costs where applicable.
-- `Consensus::CheckTxInputs` checks input availability, coinbase maturity, value ranges, input/output value comparison, and fee calculation.
-
-`Consensus::CheckTxInputs` does not modify the UTXO set and does not perform lower-level unlocking checks by itself.
-
-## Transaction unlocking checks
-
-`src/script/interpreter.*` implements the lower-level engine that evaluates whether transaction-provided data satisfies the conditions on outputs being spent.
-
-Reviewed behavior includes:
-
-- Verification flags.
-- Execution versions.
-- Stack-machine evaluation.
-- Signature-checking hooks.
-- Locktime and sequence checker hooks.
-- P2SH handling.
-- Witness program handling.
-- Taproot and Tapscript handling.
-- Clean-stack and unexpected-witness checks when enabled.
-
-Important caveat:
-
-Verification flags depend on caller context. MoreBC2 has not yet fully mapped which flags are mandatory block-validation rules and which are mempool policy or standardness rules.
+Those sections are not invalidated merely because v31 changed other consensus paths, but release-specific caller changes still need spot-checking where the `v31.1.0` release notes identify validation, mempool, wallet, RPC, or PSBT changes.
 
 ## Open items
 
-- Confirm preferred public wording for the mining algorithm: `double-SHA256`, `SHA-256d`, or another maintainer-preferred phrase.
-- Verify current block subsidy schedule from the subsidy calculation code, not just halving interval.
-- Verify activation status and behavior for SegWit/Taproot from chain state or release notes.
-- Confirm any BitcoinII-specific consensus changes outside reviewed source areas.
-- Map mandatory block-validation flags vs mempool policy flags.
-- Review caller paths that pass verification flags during block connection and mempool acceptance.
-- Compare transaction and unlocking-check files against the upstream Bitcoin Core version BitcoinII forked from.
+- Map the replay-protection transaction path in detail.
+- Map the consensus-level data-restriction validation path in detail.
+- Review fork-aware header synchronization caller behavior.
+- Re-check mandatory block-validation flags vs mempool policy under `v31.1.0`.
+- Verify current block subsidy calculation from code, not only the halving interval.
+- Confirm maintainer-preferred public wording for the PoW hash function (`double-SHA256` vs `SHA-256d`).
 
 ## Sources
 
-- `src/kernel/chainparams.cpp`
-- `src/pow.cpp`
+- BitcoinII Core `v31.1.0` release: https://github.com/Bitcoin-II/BitcoinII-Core/releases/tag/v31.1.0
+- `v31.1.0/src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/src/kernel/chainparams.cpp
+- `v31.1.0/src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/src/pow.cpp
 - `src/primitives/block.cpp`
 - `src/hash.h`
 - `src/consensus/amount.h`
@@ -176,4 +118,4 @@ Verification flags depend on caller context. MoreBC2 has not yet fully mapped wh
 
 **Status:** Needs Review
 **Primary sources checked:** Partially
-**Notes:** This page has been refreshed after first-pass transaction-helper and unlocking-check reviews. It should still be reviewed against the currently running release and caller paths before being marked Verified.
+**Notes:** Current-facing consensus and difficulty wording is refreshed for `v31.1.0`. Detailed review of the new replay-protection, data-restriction, fork-aware synchronization, and associated validation/RPC paths remains open.
