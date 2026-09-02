@@ -2,37 +2,44 @@
 
 **Category:** Research
 **Status:** Draft
-**Last reviewed:** Not yet reviewed
+**Last reviewed:** 2026-09-02
 
 ## Summary
 
-This page is a placeholder for researching BitcoinII difficulty adjustment behavior and related community discussion.
+This page tracks research questions around BitcoinII difficulty adjustment, including how the current ShockWave implementation differs from earlier behavior and from related algorithms.
 
 ## Current BitcoinII status
 
-This page does **not** claim that BitcoinII uses Dark Gravity Wave.
+BitcoinII Core `v31.1.0` verifies that BitcoinII now uses **ShockWave** for per-block difficulty adjustment beginning at mainnet height `57750`.
 
-Dark Gravity Wave has been discussed by community members, but as of this draft, it should be treated as a research or discussion topic only unless current BitcoinII source code or official release notes verify otherwise.
+The current source no longer supports describing present-day BitcoinII mainnet as using only Bitcoin-style 2016-block retargeting.
 
-## Why this page exists
+ShockWave uses a rolling baseline derived in part from Dark Gravity Wave v3 concepts/code, but adds BitcoinII-specific rapid response, overshoot control, timestamp uncertainty handling, emergency stall recovery, and stabilization logic.
 
-Difficulty adjustment affects how quickly the network responds to changes in hashrate. Because this topic comes up in mining and network discussions, MoreBC2 should eventually document:
+Accordingly:
 
-- What BitcoinII currently uses.
-- Where that behavior is implemented in source code.
-- How it compares to other algorithms.
-- What has only been discussed and not implemented.
+- `ShockWave` is the correct current algorithm name.
+- `Dark Gravity Wave` alone is incomplete wording for the current BitcoinII implementation.
+- The inherited 2016-block retarget remains historically relevant before ShockWave activation.
 
-## Questions to answer
+## Research questions
 
-- What difficulty adjustment algorithm does current BitcoinII Core implement?
-- What source files define the behavior?
-- What parameters control the retarget period?
-- Are there historical changes across BitcoinII versions?
-- Has any alternative algorithm been formally proposed?
+- How does ShockWave behave under abrupt rental/mining hashrate spikes?
+- How quickly does difficulty recover after hashrate leaves?
+- How often does emergency stall recovery activate under real network conditions?
+- How do raw timestamps and MedianTimePast interact in edge cases?
+- What tests cover aggressive tightening, overshoot reset, and recovery refill?
+- How did live block timing change after activation at height `57750`?
+- How does ShockWave compare empirically with DGWv3 and other per-block algorithms without implying code equivalence?
+
+## Sources
+
+- BitcoinII Core `v31.1.0` release: https://github.com/Bitcoin-II/BitcoinII-Core/releases/tag/v31.1.0
+- `v31.1.0/src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/src/pow.cpp
+- `v31.1.0/src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/src/kernel/chainparams.cpp
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** No
-**Notes:** This page intentionally avoids making implementation claims until source code is reviewed.
+**Primary sources checked:** Yes
+**Notes:** Current implementation identity and activation are source-backed. This page remains Research because empirical network-performance questions are still open.
