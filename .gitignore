@@ -10,11 +10,11 @@ Thumbs.db
 *.log
 
 # Build output
-site/
-dist/
-build/
-.cache/
-.astro/
+/site/
+/dist/
+/build/
+/.cache/
+/.astro/
 
 # Generated Starlight content (source remains in docs/ and root Markdown files)
 src/content/docs/

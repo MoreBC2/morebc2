@@ -1,8 +1,10 @@
 # Stale wording scan
 
 **Category:** Verification
-**Status:** Draft
+**Status:** Archived project-management history
 **Last reviewed:** 2026-07-04
+
+> Archived: this is a dated scan log. Its recorded findings are historical and its former readiness recommendations are not current.
 
 ## Summary
 

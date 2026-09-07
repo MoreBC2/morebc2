@@ -72,7 +72,8 @@ Do not read this page as an endorsement, uptime guarantee, official-status claim
 | Service | Purpose | Current status | Last checked | Evidence source | Known limitations |
 |---|---|---|---|---|---|
 | `https://github.com/Bitcoin-II/BitcoinII-Core` | Canonical public reference implementation | Source-reviewed | 2026-07-10 | [Project identity source check](../verification/project-identity-source-check-2026-07-10.md) | Maintainer structure and future repository ownership can change. |
-| `https://github.com/Bitcoin-II/BitcoinII-Core/releases/tag/v29.1.0` | Release metadata and uploaded-asset inventory source | Directly observed partial | 2026-07-04 | [Release asset inventory attempt](../verification/release-asset-inventory-attempt.md) | Asset inventory is not binary verification; no checksums, signatures, or trusted-key path were established. |
+| `https://github.com/Bitcoin-II/BitcoinII-Core/releases/tag/v31.1.0` | Current release metadata and uploaded-asset inventory source | Directly observed partial | 2026-09-02 | [v31.1.0 asset record](../releases/v31.1.0-assets.md) | GitHub-reported digests are recorded, but independent authentication, publisher signatures, and a trusted-key path are not established. |
+| `https://github.com/Bitcoin-II/BitcoinII-Core/releases/tag/v29.1.0` | Historical release metadata and artifact-audit source | Historical evidence | 2026-08-27 | [Historical authentication record](../verification/release-artifact-authentication-2026-08-27.md) | This evidence applies only to `v29.1.0` and is not current-release authentication. |
 | `https://github.com/Bitcoin-II` | Project GitHub organization | Source-reviewed | 2026-07-10 | [Project identity source check](../verification/project-identity-source-check-2026-07-10.md) | No public members were listed in the recorded check. |
 
 ## Discord

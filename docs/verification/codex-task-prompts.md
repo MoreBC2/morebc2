@@ -1,8 +1,10 @@
 # Codex task prompts
 
 **Category:** Verification
-**Status:** Draft
+**Status:** Archived project-management history
 **Last reviewed:** 2026-07-04
+
+> Archived: these prompts describe an earlier review phase. They are retained as workflow history, not as the current public-release plan.
 
 ## Summary
 

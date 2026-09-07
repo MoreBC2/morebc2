@@ -152,7 +152,7 @@ No upstream comparison has been completed, so this page does not claim whether b
 - Which rescan failure cases should be documented for operators?
 - Which platform path examples are accurate for BitcoinII releases?
 - Which commands should be avoided entirely in exchange/service guides?
-- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
+- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for this file before upgrading status.
 
 ## Sources
 

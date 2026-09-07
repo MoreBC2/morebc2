@@ -47,7 +47,7 @@ MoreBC2 currently cites these files for:
 
 - Confirm whether any BitcoinII-specific changes exist in block primitives beyond naming/header changes.
 - Confirm whether related serialization behavior should be documented for developers.
-- Confirm whether `v29.1.0` differs from current `main` for these files before upgrading status.
+- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for these files before upgrading status.
 
 ## Sources
 
@@ -60,4 +60,4 @@ The mutable current-upstream `main` links below were re-observed on 2026-08-27 a
 
 **Status:** Needs Review
 **Primary sources checked:** Yes
-**Notes:** Block structure and hash call path have been checked from source, but this page should be reviewed against `v29.1.0` and current `main` before being marked Verified.
+**Notes:** Block structure and hash call path have been checked from source, but this page should be reviewed against the `v31.1.0` release baseline and subsequent `main` changes before being marked Verified.

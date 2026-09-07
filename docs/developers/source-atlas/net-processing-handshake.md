@@ -126,7 +126,7 @@ MoreBC2 can use this page to support cautious explanations of:
 
 ## Open questions
 
-- Compare this handshake slice between current `main` and `v29.1.0`.
+- Compare this handshake slice between the `v31.1.0` baseline and subsequent `main` changes.
 - Review the rest of `net_processing.cpp` in smaller slices.
 - Document address relay separately.
 - Document block/header relay separately.

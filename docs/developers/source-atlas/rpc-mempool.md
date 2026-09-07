@@ -182,7 +182,7 @@ No upstream comparison has been completed, so this page does not claim whether m
 - How should package submission be described while it is marked experimental?
 - How should mempool persistence warnings be worded for operators?
 - Which policy defaults should be linked from the mempool RPC docs?
-- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
+- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for this file before upgrading status.
 
 ## Sources
 

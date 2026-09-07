@@ -219,7 +219,7 @@ The reviewed file structure appears Bitcoin-style, but no upstream comparison ha
 - Which block-storage failures should be explained for troubleshooting users?
 - How should assumeutxo-related storage behavior be explained, if at all, for BitcoinII readers?
 - Which tests cover block storage and pruning behavior?
-- Confirm whether `v29.1.0` differs from current `main` for these files before upgrading status.
+- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for these files before upgrading status.
 
 ## Sources
 

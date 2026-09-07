@@ -128,7 +128,7 @@ No upstream comparison has been completed, so this page does not claim whether c
 - How should immature coinbase outputs be explained for miners?
 - How should watch-only and avoid-reuse behavior be explained to non-developers?
 - Which output-selection workflows map to GUI coin-control behavior?
-- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
+- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for this file before upgrading status.
 
 ## Sources
 

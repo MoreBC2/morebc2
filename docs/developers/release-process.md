@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-09-07
 
 ## Summary
 
@@ -22,13 +22,13 @@ Older release links such as `https://github.com/BitcoinII-Dev/BitcoinII/releases
 
 ## What is known from current review
 
-The current observed release page shows:
+The current observed release page and MoreBC2 release record show:
 
-- `BitcoinII Core v29.1.0`
-- tag `v29.1.0`
-- release commit observed as `3f2a352467750425ec28abe3505a5db5bbc5fa35`
-- release note stating the release is mandatory and previous v29 releases are deprecated
-- 12 assets shown by the release page view, but MoreBC2 has not captured the complete asset list
+- `BitcoinII Core v31.1.0`
+- tag `v31.1.0`
+- publication timestamp `2026-08-29T02:39:30Z`
+- four uploaded Linux/Windows CLI/Qt assets recorded from GitHub release metadata
+- GitHub-reported SHA-256 asset digests, which are hosting-provider metadata rather than publisher-signed authentication
 
 MoreBC2 also observed legacy release-page entries for:
 
@@ -48,7 +48,7 @@ These files describe a release-checking workflow with tags, build attestations, 
 
 Important caveat:
 
-Source-tree process documents are useful evidence about intended or inherited process shape, but they do not prove that the current BitcoinII `v29.1.0` release actually published all related release-check materials.
+Source-tree process documents are useful evidence about intended or inherited process shape, but they do not prove that the current BitcoinII `v31.1.0` release published all related release-check materials.
 
 ## Release information still to document
 
@@ -79,7 +79,7 @@ Those claims need direct review.
 ## Open items
 
 - Monitor the canonical repository and release path for future changes.
-- Capture full `v29.1.0` asset list.
+- Independently hash the recorded `v31.1.0` asset set.
 - Check whether checksum files are published.
 - Check whether release authenticity files are published.
 - Check whether release tags are independently checkable.
@@ -89,6 +89,7 @@ Those claims need direct review.
 ## Sources
 
 - Current observed BitcoinII Core releases: https://github.com/Bitcoin-II/BitcoinII-Core/releases
+- [Current v31.1.0 asset record](../releases/v31.1.0-assets.md)
 - [Release verification guide](release-verification.md)
 - [Release source comparison notes](../verification/release-source-comparison.md)
 - [Release artifact checklist](../verification/release-artifact-checklist.md)
@@ -97,4 +98,4 @@ Those claims need direct review.
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** Release-page observations and source-tree process files have been reviewed at a high level. Release download checking workflow, asset list, checksums, authenticity files, and trusted keys are not yet confirmed.
+**Notes:** Current release metadata is synchronized to `v31.1.0`. Independent asset hashing, publisher checksums/signatures, reproducibility evidence, and trusted keys remain unresolved.

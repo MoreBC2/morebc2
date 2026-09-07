@@ -176,7 +176,7 @@ No upstream comparison has been completed, so this page does not claim whether t
 - How should pruned-node limitations be documented for wallet rescans and service monitoring?
 - How should reorg-related removed transactions be explained for exchange/service operators?
 - Which GUI transaction-history paths map to these RPC helpers?
-- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
+- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for this file before upgrading status.
 
 ## Sources
 

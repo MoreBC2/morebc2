@@ -1,119 +1,67 @@
 # MoreBC2 project status
 
-**Status:** Private documentation and verification project; current-facing baseline refreshed for BitcoinII Core v31.1.0
-**Last reviewed:** 2026-09-02
+**Status:** Public-release readiness review; owner decision pending
+**Last reviewed:** 2026-09-07
 
 ## Summary
 
-MoreBC2 is a source-backed documentation and verification project for BitcoinII (BC2) in the `MoreBC2/morebc2` GitHub organization repository.
+MoreBC2 is an independently maintained, source-backed documentation and verification project for BitcoinII (BC2). Current-facing technical documentation uses BitcoinII Core `v31.1.0` as its baseline, while dated `v29.1.0` runtime and release records remain historical evidence.
 
-Current-facing technical documentation now uses **BitcoinII Core `v31.1.0`** as the release baseline.
+The repository is suitable for owner review, but it is **not ready to change visibility**. The missing repository license is a blocking item, and privacy treatment, third-party rights and attribution, a public security-reporting route, and owner approval remain open.
 
-The repository also preserves dated `v29.1.0` local-runtime and release-integrity records as historical evidence. Those files are intentionally not rewritten to appear current.
+## Current baseline
 
-See the [v31.1.0 currentness audit](docs/verification/v31-currentness-audit-2026-09-02.md).
-
-## Current BitcoinII baseline
-
-`v31.1.0`, published 2026-08-29, identifies:
+The current documentation records the height-`57750` mainnet activation of:
 
 - ShockWave per-block difficulty adjustment;
-- consensus-level Ordinals, inscriptions, and Runes mitigation;
-- BC2 transaction replay protection;
-- fork-aware header synchronization;
-- associated wallet, mining, mempool, RPC, validation, and PSBT updates.
-
-Mainnet source anchors the principal new rules at height `57750`, including ShockWave, data restrictions, and replay protection.
-
-## Current strengths
-
-- Canonical source/release path is synchronized to `Bitcoin-II/BitcoinII-Core`.
-- Exchange integration/operator docs are v31.1.0-aware.
-- Network specifications, consensus, mining, proof-of-work, difficulty, and core Source Atlas pages have been refreshed for ShockWave.
-- Current release metadata and GitHub-reported asset digests are recorded.
-- Replay-protection and data-restriction activation anchors are documented.
-- Historical evidence remains explicitly version-scoped rather than silently rewritten.
-- Substantial architecture, Source Atlas, RPC, wallet, mempool, mining, and verification coverage exists.
-
-## Historical operational evidence
-
-MoreBC2 has dated `v29.1.0` Windows/mainnet evidence for:
-
-- node startup and advancing initial sync;
-- local-only RPC configuration;
-- nine read-only RPC commands;
-- clean shutdown/restart;
-- fresh-node DNS peer discovery;
-- release-asset integrity hashing for the `v29.1.0` release.
-
-This remains valuable evidence for what was actually tested. It is **not** current `v31.1.0` runtime evidence.
-
-## Current gaps and priorities
-
-### 1. Fresh v31.1.0 runtime record
-
-Re-run a bounded Windows node/RPC path against `v31.1.0`, recording version, environment, sync state, peers, read-only RPC, shutdown/restart, and any header-sync observations.
-
-### 2. Current release authentication
-
-MoreBC2 has recorded the current release assets and GitHub-reported SHA-256 digests but has not yet independently authenticated the `v31.1.0` release.
-
-Needed work includes independent hashes, signature/tag review, trusted key guidance, and reproducibility evidence if available.
-
-### 3. New consensus-path detail
-
-Detailed source review remains needed for:
-
 - replay protection;
-- consensus data restrictions;
-- fork-aware header synchronization;
-- v31-related validation/mempool/wallet/RPC/PSBT changes.
+- consensus-level data restrictions; and
+- fork-aware header-synchronization-related behavior.
 
-### 4. Confirmation policy
+Current source-facing coverage is substantial, but status labels remain Draft, Partial, Source Reviewed, or Needs Review where the evidence does not support Verified.
 
-Exchange/service confirmation recommendations remain unresolved and should be informed by current network/reorg/hashrate behavior rather than copied from Bitcoin assumptions.
+## What has evidence
 
-### 5. Ecosystem freshness
+- `v31.1.0` source and release metadata have been reviewed for the current documentation refresh.
+- Dedicated source notes cover ShockWave, replay protection, data restrictions, and fork-aware header synchronization.
+- Dated `v29.1.0` Windows/mainnet records cover node startup, local-only RPC, nine read-only commands, shutdown/restart, peer discovery, and release-asset integrity work.
+- Site generation, rendered-output checks, and documentation-specific validation are automated.
 
-Explorer, API, exchange, mining-pool, and wallet/service observations are date-sensitive and should be rechecked before current recommendations.
+The dated `v29.1.0` evidence establishes only what those records say. It is not `v31.1.0` runtime verification.
 
-## Current navigation
+## Blocking items before public visibility
 
-- [Docs index](docs/README.md)
-- [Network specifications](docs/documentation/network-specifications.md)
-- [Consensus overview](docs/documentation/consensus-overview.md)
-- [Releases](docs/releases/README.md)
-- [Exchange integration package](docs/exchange/integration-package.md)
+1. Choose and add a repository license; no license is selected by this readiness pass.
+2. Decide how to handle personal Windows paths and the named individual in exact historical records without destroying or misrepresenting evidence.
+3. Complete an attribution inventory for copied or adapted third-party text, code excerpts, algorithms, images, and branding; add notices where required.
+4. Establish a public security-reporting contact or process appropriate for a documentation repository.
+5. Obtain explicit owner review and approval before publication.
+
+## Important unresolved technical and operational work
+
+- Fresh bounded `v31.1.0` runtime and RPC evidence.
+- Independent authentication of `v31.1.0` release assets and a trusted signing-key path.
+- Detailed regression coverage for wallet, mempool, mining, RPC, validation, and PSBT behavior.
+- Exchange/service confirmation policy based on current network evidence.
+- Current wallet, explorer, API, exchange, and mining-service observations.
+- Live-network verification of activation and synchronization behavior.
+- Independent technical review of consequential current-facing claims is strongly encouraged as a public-review and quality task, but its absence alone is not a visibility blocker once the actual publication blockers are resolved.
+- Recheck live external services and links immediately before publication.
+
+## Navigation
+
+- [README](README.md)
+- [Documentation index](docs/README.md)
+- [Documentation coverage](docs/documentation-coverage.md)
+- [Repository audit](docs/AUDIT.md)
+- [Roadmap](ROADMAP.md)
+- [Legal and reuse posture](docs/LEGAL_REUSE.md)
 - [Verification evidence index](docs/verification/verification-index.md)
 - [Known unknowns](docs/verification/known-unknowns.md)
-- [Open questions](docs/verification/open-questions.md)
 - [v31 currentness audit](docs/verification/v31-currentness-audit-2026-09-02.md)
-
-## Coverage snapshot
-
-| Area | Current posture |
-|---|---|
-| Current release identity | Refreshed for `v31.1.0` |
-| Consensus/difficulty documentation | Refreshed for ShockWave and height-57750 activations |
-| Exchange integration | v31.1.0-aware; confirmation/runtime items still Draft |
-| Source Atlas | Strong first-pass coverage; targeted v31 spot checks still needed |
-| Local node/RPC evidence | Strong historical `v29.1.0`; fresh v31 record needed |
-| Release verification | Historical v29 integrity record + current v31 metadata; v31 independent authentication needed |
-| Wallet/mempool/RPC/PSBT | Strong structural/source coverage; current release regression review needed |
-| Ecosystem | Dated observations; freshness checks required |
-
-## Editorial rule for release transitions
-
-When BitcoinII releases change:
-
-1. Update current-facing release/consensus/operator pages.
-2. Preserve dated evidence under the release actually tested.
-3. Do not globally replace old version numbers in historical records.
-4. Add new runtime/verification evidence for the new release.
-5. Record unresolved regression areas explicitly.
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current `v31.1.0` release/source anchors and MoreBC2 currentness audit
-**Notes:** This is a project-management summary, not independent proof of every BitcoinII behavior.
+**Primary sources checked:** Current MoreBC2 evidence records and the BitcoinII Core `v31.1.0` release/source anchors cited by those records
+**Notes:** This is a project dashboard. It does not independently verify BitcoinII runtime behavior, release binaries, external services, or public-release readiness.

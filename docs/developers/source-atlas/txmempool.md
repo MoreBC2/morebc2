@@ -332,7 +332,7 @@ The reviewed files show BitcoinII naming and fork metadata, but this pass has no
 - Review replacement policy files.
 - Review package acceptance in `validation.cpp` together with mempool limits.
 - Review mempool persistence behavior.
-- Confirm whether `v29.1.0` differs from current `main` for these files before upgrading status.
+- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for these files before upgrading status.
 
 ## Sources
 

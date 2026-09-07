@@ -199,7 +199,7 @@ The reviewed file shows BitcoinII naming and fork metadata, but this first pass 
 - Review mining/block-template selection to confirm how virtual transaction size and ancestor data are used.
 - Review replacement policy interactions with entry metadata.
 - Review fee-estimation use of entry data.
-- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
+- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for this file before upgrading status.
 
 ## Sources
 

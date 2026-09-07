@@ -1,266 +1,97 @@
-# Repository audit
+# Repository public-release readiness audit
 
 **Category:** Project maintenance
-**Status:** Draft
-**Last reviewed:** 2026-06-30
+**Status:** Owner review required
+**Last reviewed:** 2026-09-07
+**Audit baseline:** BitcoinII Core `v31.1.0`
 
-## Summary
+## Assessment
 
-This audit reviews the MoreBC2 repository as a documentation project, not as BitcoinII protocol documentation.
+MoreBC2 has a strong documentation structure, unusually careful evidence labels, a functioning Astro/Starlight validation path, and current-facing BitcoinII documentation aligned to the `v31.1.0` baseline. The repository is ready for owner review but is **not ready for a visibility change**.
 
-The repository is in good shape for private foundation-building. The main issue is no longer lack of content. The main issue is now polish, navigation, tested examples, and readiness for invite-only review.
+The primary blockers are licensing, treatment of personal environment details in exact historical evidence, incomplete third-party rights and attribution review, lack of a public security-reporting path, and owner approval. Current release runtime, artifact-authentication, and independent technical-review gaps must remain visible but do not need invented answers.
 
-## Audit scope
+## Scope reviewed
 
-Reviewed areas:
+The audit covered root project documents, GitHub ownership/workflow/templates, all documentation sections, verification and release records, package metadata, Astro/Starlight configuration, scripts, and GitHub Actions.
 
-- Root README and root governance/style files.
-- Main docs index.
-- Architecture section.
-- Documentation section.
-- Developer section and Source Atlas.
-- Verification queue.
-- Exchange section.
-- Ecosystem section.
-- Mining, wallets, nodes, research, discussion, and history section indexes.
-- Current documentation coverage dashboard.
-- Current project status dashboard.
+Searches covered obsolete private-review framing, release and difficulty wording, v29/v31 context, TODO-style markers, machine-specific paths, personal identifiers, common credential patterns, endpoints, generated files, links, stale dates, conflicting status claims, verification overstatement, and licensing/attribution gaps.
 
-## Overall assessment
+## Current-facing technical posture
 
-MoreBC2 has a strong foundation and has reached the point where a broader cleanup pass makes sense.
+- Current documentation baseline: BitcoinII Core `v31.1.0`.
+- Mainnet activation height `57750`: ShockWave per-block difficulty adjustment, replay protection, consensus-level data restrictions, and fork-aware header-synchronization-related behavior.
+- Pre-activation Bitcoin-style 2016-block retarget material is historical/inherited context, not the current post-activation schedule.
+- Current source review is not presented as equivalent to runtime testing.
+- Fresh `v31.1.0` runtime verification and independent release authentication remain unresolved.
 
-The strongest parts are:
+## Historical evidence preserved
 
-- Clear mission and editorial philosophy.
-- Strong separation between documentation, research, discussion, history, and ecosystem tracking.
-- Conservative verification language.
-- Growing Source Atlas tied to reviewed code paths.
-- Architecture explainers that are easier to read than raw source notes.
-- RPC overview with first-pass source review of mining, blockchain, raw transaction, mempool/broadcast, and wallet command groups.
-- Wallet guide with source-backed notes across startup, address, backup/import, spend/PSBT, encryption, balances, and transaction history.
+Dated `v29.1.0` verification records are intentionally unchanged. They remain evidence for the exact release, date, platform, network, commands, and observations recorded. Higher-level current-facing pages label them historical and do not convert them into `v31.1.0` verification.
 
-The weakest parts are now:
+## Public-release blockers
 
-- Top-level polish.
-- Centralized open-question cleanup.
-- Section README consistency.
-- Command examples that are intentionally untested.
-- Release verification against real release artifacts.
-- Ecosystem/explorer/exchange checks from direct current sources.
+### Legal and attribution
 
-## Critical findings
+- No `LICENSE` file exists. The owner must choose the license; this audit does not do so.
+- A complete third-party attribution and notice inventory is not present.
+- Branding, screenshots, copied excerpts, adapted code/algorithm explanations, and generated evidence artifacts need a rights/provenance review.
 
-### 1. Project dashboard exists but needs current polish
+### Privacy and security
 
-Before the first audit, readers had to infer the project state from many separate files.
+- Exact historical `v29.1.0` records contain the Windows username `Dan` and absolute paths under `C:\Users\Dan`, the Desktop, AppData, and `C:\bcli`. They contain no credential values found by this audit, but they disclose a personal/machine environment. Because the records must remain exact, the owner must decide whether that disclosure is acceptable or whether a separately documented preservation/redaction strategy is required before publication.
+- No public, BitcoinII-specific security reporting contact or documented process is established.
+- Live peer/network outputs are described as requiring redaction. Common private-key and service-token patterns were not found in the tracked current tree or a patch-history scan of 694 reachable commits (excluding dependency-lock diffs), but this is not a substitute for owner review or a dedicated secret-scanning tool.
 
-Fix status:
+### Owner approval
 
-- Added `PROJECT_STATUS.md`.
-- Refreshed it for the current Source Atlas/RPC/wallet coverage.
+- The owner must review and explicitly approve publication after the blockers above are resolved.
 
-Remaining work:
+## Important public-review and quality tasks
 
-- Keep this page aligned with `docs/documentation-coverage.md` during polish.
+- Independent technical review of the most consequential current-facing claims is strongly encouraged. Its absence alone is not a visibility blocker once the licensing, privacy, third-party rights and attribution, security-reporting, and owner-approval blockers are resolved.
+- Date-sensitive external services and external links should be rechecked immediately before publication.
+- Repository team handles in CODEOWNERS must be confirmed to exist and be appropriate; the file itself cannot guarantee enforcement.
 
-### 2. Documentation coverage dashboard exists
+## Non-blocking unresolved technical work
 
-Before the first audit, the repository needed one page showing which areas had been reviewed, partially reviewed, or not started.
+- Fresh version-scoped `v31.1.0` node/RPC/runtime evidence.
+- Independent current-release asset hashes, trusted signing-key guidance, and reproducibility evidence.
+- Deeper regression review for wallet, mempool, mining, RPC, validation, PSBT, replay protection, data restrictions, and header synchronization.
+- Evidence-based exchange confirmation policy.
+- Broader live-network and cross-platform checks.
 
-Fix status:
+These gaps must stay labeled. They must not be converted to Verified merely to prepare the repository for release.
 
-- Added `docs/documentation-coverage.md`.
-- Expanded it repeatedly as new Source Atlas pages were added.
+## Presentation changes in this pass
 
-Remaining work:
+- Reworked the README for a first-time external maintainer: purpose, non-official status, audience, current baseline, evidence boundaries, contribution path, validation commands, roadmap, and evidence navigation are now visible quickly.
+- Replaced active private-foundation and invite-only-review framing in root status, roadmap, contribution, governance, legal, and ownership documents.
+- Converted the old review handoff to an owner public-release review checklist.
+- Marked legacy private-review coordination and polish pages as archived project-management history outside normal reader-facing navigation.
+- Tightened issue templates so Source Reviewed cannot be silently treated as runtime Verified.
+- Kept site deployment/indexing settings unchanged.
 
-- Reconcile it after each major polish batch.
-- Keep priority order realistic rather than letting old tasks linger after completion.
+## Generated and temporary material
 
-### 3. Developer reading order exists
+Build outputs, dependency directories, editor settings, logs, environment files, caches, and generated Starlight content are ignored. The tracked immutable-evidence JSON is a deliberate generated audit artifact, not stray build output. No unexpected generated build directory was found tracked in the current tree.
 
-New contributors needed a guided path through architecture, Source Atlas, and verification rules.
+## Link posture
 
-Fix status:
+The site build validates internal content routing and rendered output. A network-enabled 2026-09-07 scan requested 160 distinct external URLs. Eleven returned DNS/connection failures, HTTP 404, or HTTP 502; each was already used in explicit broken-link, failed-check, base-path, or historical release-download context rather than presented as a healthy current service. Six additional URLs rejected automated access with an access-control response.
 
-- Added `docs/developers/reading-order.md`.
+External links and services remain date-sensitive. Repeat the scan immediately before publication and review each current recommendation manually; an automated HTTP response alone does not establish ownership, safety, or reliability.
 
-Remaining work:
+## Recommended repository metadata
 
-- Refresh the reading order after the broad polish pass so it reflects current RPC and wallet coverage.
+**Description:** Independently maintained, source-backed documentation and verification records for BitcoinII (BC2), with explicit evidence and uncertainty boundaries.
 
-### 4. Open questions are still spread across many pages
+**Topics:** `bitcoinii`, `bc2`, `documentation`, `cryptocurrency`, `blockchain`, `proof-of-work`, `astro`, `starlight`
 
-Many pages contain local open questions. That is useful, but the project also needs a central backlog that reduces duplication.
-
-Fix status:
-
-- Added `docs/verification/open-questions.md`.
-
-Remaining work:
-
-- Consolidate repeated open questions from Source Atlas pages, architecture pages, and user-operation pages.
-- Mark which questions block invite-only review versus public launch.
-
-## High-priority findings
-
-### Section README consistency
-
-Some section README files are strong and current, especially:
-
-- `docs/architecture/README.md`
-- `docs/configuration/README.md`
-- `docs/developers/README.md`
-- `docs/developers/source-atlas/README.md`
-- `docs/ecosystem/README.md`
-
-Some are still thinner and should be normalized during polish:
-
-- `docs/mining/README.md`
-- `docs/wallets/README.md`
-- `docs/nodes/README.md`
-- `docs/research/README.md`
-- `docs/history/README.md`
-- `docs/discussion/README.md`
-
-Recommendation:
-
-Every section README should include:
-
-- Category/status/date block when appropriate.
-- Summary.
-- Current pages.
-- Planned pages.
-- Rules.
-- Verification block.
-
-### Architecture section is ahead of some navigation
-
-Architecture pages are substantial enough to be part of the recommended reading path.
-
-Fix status:
-
-- Added reading order.
-- Added repository map and source tree guide.
-- Added more cross-links from Source Atlas pages.
-
-Remaining work:
-
-- Refresh root README and docs index around the current architecture/source coverage.
-- Check whether architecture pages duplicate or drift from Source Atlas pages.
-
-### Source Atlas needs periodic coverage indexing
-
-The Source Atlas index now lists many current pages, but coverage status belongs in the dedicated coverage dashboard, not the atlas index.
-
-Fix status:
-
-- Added and expanded `docs/documentation-coverage.md`.
-
-Remaining work:
-
-- Keep Source Atlas index simple.
-- Keep detailed coverage status in the dashboard.
-
-## Medium-priority findings
-
-### Terminology
-
-Preferred terms should be:
-
-- `Block lifecycle` for high-level architecture.
-- `Block acceptance` for source-level implementation path.
-- `Mempool acceptance` or `transaction acceptance` depending on context.
-- `Source Atlas` for file-by-file implementation notes.
-- `Architecture` for conceptual flow pages.
-- `Raw transaction RPC` for `src/rpc/rawtransaction.cpp`.
-- `Mempool and broadcast RPC` for `src/rpc/mempool.cpp`.
-
-### Duplication
-
-There is expected overlap between architecture pages and Source Atlas pages.
-
-Current duplication is acceptable because:
-
-- Architecture explains why and how to think about the flow.
-- Source Atlas explains where behavior is implemented.
-
-Future risk:
-
-- If both layers keep expanding without rules, they may drift.
-
-Recommended fix:
-
-- During polish, ensure architecture pages summarize and Source Atlas pages anchor implementation.
-- Avoid adding new implementation detail to architecture pages unless it points back to a Source Atlas page.
-
-### Verification block normalization
-
-Most technical pages include a verification block, but older section README files and some framework pages may not use the newer format.
-
-Recommended fix:
-
-- Normalize section READMEs during the broad cleanup pass.
-- Do not mark command examples Verified until commands have been run locally.
-
-## Low-priority findings
-
-### Diagrams
-
-Text diagrams are useful and consistent enough for now.
-
-Later, the project could add SVG diagrams, but that should wait until structure stabilizes.
-
-### Page naming
-
-Current names are mostly fine. Avoid large renames until public launch planning, because renames can make the audit harder to follow.
-
-Small naming cleanup is acceptable when it reduces confusion, but avoid churn.
-
-## Launch-readiness assessment
-
-### Private development
-
-Ready.
-
-### Invite-only review
-
-Getting close after the broad polish pass.
-
-Before invite-only review, finish:
-
-- Root README refresh.
-- Docs index refresh.
-- Documentation coverage reconciliation.
-- Open-question consolidation.
-- Section README normalization.
-- One pass over Source Atlas links and verification blocks.
-
-### Public launch
-
-Not ready yet.
-
-Reasons:
-
-- Public contribution workflow and license posture should be decided first.
-- Release verification needs real artifact checks.
-- Ecosystem/explorer/exchange pages need direct current checks.
-- Command examples should be tested or clearly separated as untested.
-- Core technical claims should get at least one outside review.
-
-## Recommended next tasks
-
-1. Refresh root README and docs README around current coverage.
-2. Normalize thin section README files.
-3. Reconcile `docs/documentation-coverage.md` with current Source Atlas pages.
-4. Consolidate repeated open questions into `docs/verification/open-questions.md`.
-5. Run a cross-link pass from architecture pages to Source Atlas pages.
-6. Separate untested command examples from future verified examples.
-7. After polish, choose the next source-backed work stream: release verification, explorer/API framework, network RPC, or wallet internals.
+These are recommendations only. This audit does not change GitHub settings.
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Repository files listed in audit scope
-**Notes:** This is a project-maintenance audit. It does not verify BitcoinII protocol behavior.
+**Status:** Owner review required
+**Primary sources checked:** Current repository tree, tracked project documents, scripts, workflows, and cited version-scoped evidence
+**Notes:** Passing repository checks verifies documentation tooling, not BitcoinII software or live-network behavior.

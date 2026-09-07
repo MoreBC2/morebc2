@@ -289,7 +289,7 @@ MoreBC2 can use this page to support cautious explanations of:
 - Review addrman internals separately.
 - Review banman behavior separately.
 - Review socket handler loops and receive/send edge cases more deeply.
-- Compare this slice between current `main` and `v29.1.0`.
+- Compare this slice between the `v31.1.0` baseline and subsequent `main` changes.
 - Confirm which lower-level connection details belong in user-facing node docs.
 
 ## Sources

@@ -161,7 +161,7 @@ Questions:
 
 - Which address-manager caller paths still need deeper review?
 - Which peer-list RPC details need a separate review?
-- Which P2P details differ, if any, between current `main` and `v29.1.0`?
+- Which P2P details differ, if any, between the `v31.1.0` release baseline and subsequent `main` changes?
 - Which network details should stay developer-only rather than appearing in service-provider guides?
 - Which connection-management and address-manager details belong in user-facing node troubleshooting docs?
 

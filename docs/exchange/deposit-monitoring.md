@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-08-27
+**Last reviewed:** 2026-09-07
 
 ## Summary
 
@@ -26,7 +26,8 @@ A deposit-monitoring guide should eventually explain:
 Current source-backed values relevant to this topic:
 
 - Target block spacing: 10 minutes.
-- Difficulty adjustment interval: 2016 blocks.
+- Current post-height-`57750` difficulty adjustment: ShockWave per block.
+- Historical pre-activation behavior: inherited Bitcoin-style 2016-block retargeting.
 - Mainnet P2P port: `8338`.
 - Mainnet RPC evidence: inherited/generated configuration shows `8332`; one dated local BitcoinII Core `v29.1.0` Windows/mainnet test configured and observed `127.0.0.1:8337`.
 - Block header hash path: double-SHA256 via `HashWriter::GetHash()`.
@@ -92,13 +93,14 @@ MoreBC2 has not yet documented BitcoinII-specific reorganization risk or recomme
 
 ## Sources
 
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+The release-pinned source links below support the current `v31.1.0` baseline.
 
-- `src/kernel/chainparams.cpp` in the current observed BitcoinII Core repository: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/chainparams.cpp
-- `share/examples/bitcoinII.conf` in the current observed BitcoinII Core repository: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/share/examples/bitcoinII.conf
+- `v31.1.0/src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/src/kernel/chainparams.cpp
+- `v31.1.0/src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/src/pow.cpp
+- `v31.1.0/share/examples/bitcoinII.conf`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/share/examples/bitcoinII.conf
 
 ## Verification
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This is a framework. Canonical-source and RPC wording were synchronized on 2026-08-27. Command examples and confirmation policy need testing/review before use in production documentation, and release-specific RPC behavior beyond the dated local test remains unresolved.
+**Notes:** This is a framework. Difficulty and source links were synchronized to the `v31.1.0` baseline on 2026-09-07. Command examples and confirmation policy need testing/review before use in production documentation, and release-specific RPC behavior beyond the dated historical test remains unresolved.

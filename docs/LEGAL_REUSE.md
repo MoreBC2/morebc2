@@ -1,100 +1,55 @@
 # Legal and reuse posture
 
 **Category:** Project maintenance
-**Status:** Draft
-**Last reviewed:** 2026-06-30
+**Status:** Blocking decision required
+**Last reviewed:** 2026-09-07
 
 ## Summary
 
-This page records the current legal/reuse posture for MoreBC2 before private review.
+MoreBC2 does not currently have a repository `LICENSE` file. That is a blocker for public open-source release.
 
-MoreBC2 does not currently have a repository license file.
+This audit does not select or recommend a specific license. Until the owner makes and implements the decision, readers and contributors must not assume permission to copy, redistribute, modify, or reuse repository content.
 
-Until a license is chosen, treat MoreBC2 as private-review material only.
+## Separate works and rights
 
-## Current posture
+MoreBC2 documentation and BitcoinII Core source code are separate works. A license applying to BitcoinII Core does not automatically license MoreBC2 documentation.
 
-Current status:
+A repository-wide decision may also need to distinguish among:
 
-- No `LICENSE` file was found in the MoreBC2 repository during this check.
-- MoreBC2 is not ready to be presented as open licensed public documentation.
-- Private reviewers may read and comment on the repository if invited.
-- Reviewers should not redistribute, mirror, republish, or reuse large portions of MoreBC2 unless the repository owner explicitly allows it.
+- original MoreBC2 prose and code;
+- quoted or adapted source material;
+- algorithms or explanations derived from third-party implementations;
+- screenshots, diagrams, logos, and branding;
+- generated evidence inventories and captured metadata; and
+- contributor submissions.
 
-## Important distinction
+## Required owner decisions
 
-MoreBC2 documentation and BitcoinII Core source code are different works.
+Before changing repository visibility:
 
-BitcoinII Core may have its own license inherited from or based on upstream source code.
+1. Choose and add the repository license or clearly defined license set.
+2. Decide whether different content categories need separate terms.
+3. Inventory third-party material and record required copyright and license notices.
+4. Confirm that branding and logos may be distributed in the intended way.
+5. Decide what contributor representation or sign-off is required for provenance and licensing.
+6. Have the final files reviewed by an appropriately qualified person if legal certainty is needed.
 
-MoreBC2 still needs its own documentation/repository license decision.
+## Attribution findings
 
-Do not assume BitcoinII Core's software license automatically defines MoreBC2's documentation license.
+Current documentation cites BitcoinII Core and upstream concepts extensively. The ShockWave documentation explicitly notes derivation in part from Dark Gravity Wave v3 concepts and code, but this repository does not yet contain a complete third-party attribution or notice inventory.
 
-## Before broader sharing
-
-Before MoreBC2 is shared beyond trusted private review, decide one of these paths:
-
-### Option A: Private review only
-
-Use this if the repo should stay private while the documentation matures.
-
-Recommended note:
-
-```md
-This repository is shared for private review only. No public reuse or redistribution is granted until a license is added.
-```
-
-### Option B: Open documentation license
-
-Use this if the goal is public community documentation.
-
-Possible license families to consider later:
-
-- Creative Commons documentation license.
-- MIT-style documentation/project license.
-- Another license chosen by the repository owner after review.
-
-MoreBC2 should not pick a license by accident. The repository owner should decide intentionally.
-
-### Option C: Mixed licensing
-
-Use this if MoreBC2 includes different content types that need different treatment, such as:
-
-- Original documentation.
-- Source-code excerpts.
-- Screenshots.
-- Logos or branding assets.
-- Third-party quotes.
-- Generated diagrams.
-
-This may require clearer attribution and reuse rules.
-
-## Recommended private-review wording
-
-Until a license is added, use this wording in private-review invitations:
-
-```md
-MoreBC2 is shared with you for private review only. Please do not redistribute, mirror, republish, or reuse substantial portions unless Daniel explicitly gives permission or a repository license is added later.
-```
-
-## Open items
-
-- Decide whether to add a repository `LICENSE` file before private review.
-- Decide whether documentation should use a Creative Commons style license or a software-style license.
-- Decide whether logos, screenshots, or third-party materials need separate attribution rules.
-- Decide whether contributor submissions need a simple contributor-license statement.
-- Decide whether public issues/PRs should be enabled before or after the license decision.
+Source links are useful provenance, but links alone may not satisfy applicable license or attribution obligations. The owner should review copied snippets, quotations, algorithms, images, logos, and generated artifacts before public release.
 
 ## Related pages
 
-- [Private review handoff](REVIEW_HANDOFF.md)
-- [Documentation coverage](documentation-coverage.md)
 - [Contributing guide](../CONTRIBUTING.md)
-- [Open questions backlog](verification/open-questions.md)
+- [Project status](../PROJECT_STATUS.md)
+- [Repository audit](AUDIT.md)
+- [Owner review handoff](REVIEW_HANDOFF.md)
+- [Open questions](verification/open-questions.md)
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** MoreBC2 repository file check for `LICENSE`
-**Notes:** No legal advice is provided here. This page is a project-management note to avoid accidental public-reuse assumptions before a license decision.
+**Status:** Blocking decision required
+**Primary sources checked:** Repository root file inventory and current project documentation
+**Notes:** This is a project risk record, not legal advice, and it deliberately does not choose a license.

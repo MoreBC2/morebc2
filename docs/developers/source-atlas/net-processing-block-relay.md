@@ -179,7 +179,7 @@ MoreBC2 can use this page to cautiously support explanations of:
 - Review block/header send-loop behavior in `SendMessages`.
 - Review compact-block reconstruction branches more deeply.
 - Review block download timeout and stalling behavior separately.
-- Compare this slice between current `main` and `v29.1.0`.
+- Compare this slice between the `v31.1.0` baseline and subsequent `main` changes.
 - Confirm which block/header relay details belong in user-facing node docs.
 - Confirm whether any BitcoinII-specific behavior exists here beyond naming and visible comments.
 

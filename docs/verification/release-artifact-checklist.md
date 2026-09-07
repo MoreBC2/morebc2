@@ -2,19 +2,25 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-08-27
+**Last reviewed:** 2026-09-07
 
 ## Summary
 
-This page defines the next release-artifact verification checklist for BitcoinII Core.
+This page preserves the checklist and completed procedure details for the historical BitcoinII Core `v29.1.0` artifact audit. Apply the same evidence buckets to `v31.1.0`, but record new results separately rather than overwriting the historical values below.
 
 It is a working checklist. The download-and-hash portion was completed in the [dated release-artifact authentication record](release-artifact-authentication-2026-08-27.md); the authentication chain remains incomplete.
 
-MoreBC2 downloaded and independently hashed all 10 uploaded release assets and both generated source archives for `v29.1.0`. No publisher checksum/signature chain was found.
+MoreBC2 downloaded and independently hashed all 10 uploaded release assets and both generated source archives for `v29.1.0`. No publisher checksum/signature chain was found. The current `v31.1.0` release has a metadata record, but equivalent independent authentication work remains open.
 
-## Target release
+## Current target
 
-Current target release for this checklist:
+- Release tag: `v31.1.0`
+- Current metadata: [v31.1.0 asset record](../releases/v31.1.0-assets.md)
+- Next work: independent hashes, checksum/signature path, tag/commit review, trusted-key guidance, and reproducibility evidence if available
+
+## Historical target recorded below
+
+The completed table and observations below apply to:
 
 - Repository: `Bitcoin-II/BitcoinII-Core`
 - Release tag: `v29.1.0`
@@ -106,7 +112,7 @@ Relevant source-observed release-process notes include:
 
 Important caveat:
 
-The release-process document appears to be inherited/adapted from Bitcoin Core-style release procedures. MoreBC2 should not assume that the current BitcoinII `v29.1.0` GitHub release actually followed every step until the actual release assets and signatures are checked.
+The release-process document appears to be inherited/adapted from Bitcoin Core-style release procedures. MoreBC2 should not assume that the historical BitcoinII `v29.1.0` GitHub release followed every step; the same caution applies independently to `v31.1.0`.
 
 ## Minimum acceptable release-asset record
 
@@ -190,4 +196,4 @@ Do not claim yet that:
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This checklist is based on release-page/API observations, the 2026-08-27 download-and-hash record, workflow review, source-tree release process material, and current release verification docs. Artifact integrity was recorded; authenticity remains unverified.
+**Notes:** The detailed tables preserve the 2026-08-27 `v29.1.0` download-and-hash work. `v31.1.0` is the current target and still needs a separate independent authentication record.

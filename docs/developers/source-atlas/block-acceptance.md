@@ -244,7 +244,7 @@ This page does not yet fully document block file allocation, pruning, or block s
 - Review net-processing caller paths for incoming network blocks and headers.
 - Review disk import and reindex paths more deeply.
 - Decide whether this page should later split into network block acceptance and disk/reindex block acceptance.
-- Confirm whether `v29.1.0` differs from current `main` for these paths before upgrading status.
+- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for these paths before upgrading status.
 
 ## Sources
 

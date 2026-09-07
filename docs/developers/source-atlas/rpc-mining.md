@@ -246,7 +246,7 @@ No upstream comparison has been completed, so this page does not claim whether m
 - Which public mining software or pool tooling actually uses `getblocktemplate` for BitcoinII today?
 - How should satoshi-vs-BC2 amount units be highlighted in service integration docs?
 - Should hidden generation RPCs be documented only in developer/testing sections?
-- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
+- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for this file before upgrading status.
 
 ## Sources
 
