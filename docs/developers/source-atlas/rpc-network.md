@@ -177,7 +177,7 @@ No upstream comparison has been completed, so this page does not claim whether n
 - Which hidden/testing commands should be left out of public docs entirely?
 - How should v2 transport and BIP324 be explained for BitcoinII users?
 - Which lower-level P2P files should be reviewed next?
-- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
+- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for this file before upgrading status.
 
 ## Sources
 

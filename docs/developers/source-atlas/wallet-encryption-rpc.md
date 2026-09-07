@@ -123,7 +123,7 @@ No upstream comparison has been completed, so this page does not claim whether e
 - Which GUI flows map to these RPC commands?
 - Which wallet database formats or wallet types affect encryption behavior?
 - Which support warnings should be added around passphrase handling?
-- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
+- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for this file before upgrading status.
 
 ## Sources
 

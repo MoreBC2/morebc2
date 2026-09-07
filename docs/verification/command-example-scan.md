@@ -1,8 +1,10 @@
 # Command example scan
 
 **Category:** Verification
-**Status:** Draft
+**Status:** Archived project-management history
 **Last reviewed:** 2026-07-04
+
+> Archived: this scan records an earlier review checkpoint. Its dated findings remain useful, but its readiness language is not current.
 
 ## Summary
 

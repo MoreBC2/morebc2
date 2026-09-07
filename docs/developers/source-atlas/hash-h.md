@@ -38,7 +38,7 @@ MoreBC2 currently cites this file for:
 
 - Confirm maintainer-preferred public wording: `double-SHA256`, `SHA-256d`, or another phrase.
 - Confirm whether any BitcoinII-specific hashing changes exist elsewhere.
-- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
+- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes before upgrading status.
 
 ## Sources
 
@@ -50,4 +50,4 @@ The mutable current-upstream `main` links below were re-observed on 2026-08-27 a
 
 **Status:** Needs Review
 **Primary sources checked:** Yes
-**Notes:** Hashing helper behavior has been checked from source, but this page should be reviewed against `v29.1.0` and current `main` before being marked Verified.
+**Notes:** Hashing helper behavior has been checked from source, but this page should be reviewed against the `v31.1.0` release baseline and subsequent `main` changes before being marked Verified.

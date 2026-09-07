@@ -1,8 +1,10 @@
-# Documentation polish plan
+# Archived documentation polish plan
 
 **Category:** Project maintenance
-**Status:** Draft
+**Status:** Archived project-management history
 **Last reviewed:** 2026-06-30
+
+> Archived: this plan describes an earlier private-review preparation phase. It is retained for project history and is not the current roadmap. See [ROADMAP.md](../ROADMAP.md) and [Repository audit](AUDIT.md).
 
 ## Summary
 

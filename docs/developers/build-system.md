@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-06-30
+**Last reviewed:** 2026-09-07
 
 ## Summary
 
@@ -21,7 +21,7 @@ The project is declared as `BitcoinIICore`, with C++ enabled and C++20 required.
 Reviewed metadata from the top-level CMake file includes:
 
 - `CLIENT_NAME`: `BitcoinII Core`
-- Version fields: `29.1.0`
+- Version fields in the current documentation baseline: `31.1.0`
 - Release flag: `CLIENT_VERSION_IS_RELEASE=true`
 - Homepage URL: `https://Bitcoin-II.org/`
 
@@ -206,4 +206,4 @@ Those require separate testing or release verification.
 
 **Status:** Draft
 **Primary sources checked:** Partially
-**Notes:** This page now contains a first-pass source-backed build-system map. Commands remain unverified until run in a clean environment.
+**Notes:** Build metadata was synchronized to the `v31.1.0` baseline. This page remains a first-pass source-backed map, and commands remain unverified until run in a clean environment.

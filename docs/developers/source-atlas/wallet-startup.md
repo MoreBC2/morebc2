@@ -227,7 +227,7 @@ No upstream comparison has been completed, so this page does not claim whether w
 - Which backup and restore instructions can be tested safely?
 - Which wallet event paths should be mapped to validation-interface events?
 - Which GUI wallet flows differ from daemon/CLI flows?
-- Confirm whether `v29.1.0` differs from current `main` for these files before upgrading status.
+- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for these files before upgrading status.
 
 ## Sources
 

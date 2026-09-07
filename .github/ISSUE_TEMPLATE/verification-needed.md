@@ -34,6 +34,8 @@ Why does this matter?
 - [ ] Still unknown
 - [ ] Moved to Research or Discussion
 
+If Verified is selected, link the evidence and describe whether the result came from source review, direct observation, or a version-scoped runtime test. Source review alone must not be described as runtime verification.
+
 ## Notes
 
 Add details here.

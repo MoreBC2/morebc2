@@ -6,6 +6,16 @@ This changelog tracks MoreBC2 itself, not BitcoinII software releases.
 
 ## Unreleased
 
+### Changed
+
+- Reframed the repository entry points for owner public-release review without changing visibility or deployment settings.
+- Made the BitcoinII Core `v31.1.0` baseline and height-`57750` ShockWave-era behavior prominent.
+- Preserved dated `v29.1.0` records as historical, version-scoped evidence.
+- Archived obsolete invite-only review coordination pages outside the active release workflow.
+- Clarified the missing license, attribution inventory, privacy treatment, security contact, and independent-review blockers.
+- Tightened issue templates so source review is not presented as runtime verification.
+- Corrected the exchange deposit-monitoring difficulty summary to the current ShockWave baseline.
+
 ### Added
 
 - Project foundation documents.
@@ -39,6 +49,6 @@ This changelog tracks MoreBC2 itself, not BitcoinII software releases.
   - Ecosystem index.
   - Timeline.
 
-### Notes
+### Historical notes
 
-The project is still in early foundation-building mode. Most pages are Draft or Needs Review until sources and test results are reviewed more deeply.
+The entries below describe the initial foundation-building phase. Most technical pages remain Draft, Partial, Source Reviewed, or Needs Review unless their own evidence blocks support a stronger status.

@@ -10,7 +10,7 @@ This section tracks MoreBC2 evidence records, open questions, test plans, and ve
 
 Start with the [Verification evidence index](verification-index.md). It is the canonical evidence summary for MoreBC2.
 
-The dated records contain the detailed evidence. Plans are not completed results. Private review readiness is not public launch readiness.
+The dated records contain the detailed evidence. Plans are not completed results, and archived readiness dashboards are not current public-release assessments.
 
 ## 1. Evidence index
 
@@ -90,9 +90,9 @@ Ecosystem records and plans should distinguish reachable services from reliable,
 - [Infrastructure service directory](../infrastructure/service-directory.md)
 - [Infrastructure status policy](../infrastructure/status-policy.md)
 
-## 7. Private review coordination
+## 7. Archived review coordination
 
-Private review coordination exists for narrow invite-only review and does not make MoreBC2 public-ready. Those working pages are intentionally omitted from this reader-facing index and from normal site navigation/search.
+Earlier invite-only review packets and coordination pages are retained as project-management history. They are intentionally omitted from this reader-facing index and from normal site navigation/search. Use the current [owner public-release review handoff](../REVIEW_HANDOFF.md) for release-readiness work.
 
 ## 8. Project identity and status evidence
 
@@ -110,7 +110,7 @@ Use these pages to keep canonical-source, naming, contact, and status claims sco
 2. Follow the linked dated record for detailed evidence.
 3. Keep unresolved items in [Open questions](open-questions.md) or [Known unknowns](known-unknowns.md).
 4. Keep plans separate from completed records.
-5. Keep private review coordination separate from public launch readiness.
+5. Keep archived review coordination separate from current public-release readiness.
 6. Do not upgrade a page or claim without the required evidence record.
 
 ## Rules

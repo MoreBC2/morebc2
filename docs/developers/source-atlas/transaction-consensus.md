@@ -169,7 +169,7 @@ The reviewed code appears Bitcoin-style in structure, but no upstream comparison
 - Which script flags are mandatory consensus flags vs policy flags in the current BitcoinII source?
 - How should MoreBC2 explain transaction finality and sequence locks for non-developer readers?
 - Should operation-count accounting receive its own encyclopedia explainer?
-- Confirm whether `v29.1.0` differs from current `main` for these files before upgrading status.
+- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for these files before upgrading status.
 
 ## Sources
 

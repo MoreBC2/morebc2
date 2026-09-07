@@ -1,8 +1,10 @@
 # First review packet: command safety
 
 **Category:** Verification
-**Status:** Draft
+**Status:** Archived project-management history
 **Last reviewed:** 2026-07-04
+
+> Archived: this completed preparation packet is retained as workflow history and is not the current review handoff.
 
 ## Summary
 

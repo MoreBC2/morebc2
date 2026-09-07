@@ -1,8 +1,10 @@
 # Narrow private review assignments
 
 **Category:** Verification
-**Status:** Draft
+**Status:** Archived project-management history
 **Last reviewed:** 2026-07-02
+
+> Archived: these assignment cards document the earlier invite-only review phase. Use the current [owner review handoff](../REVIEW_HANDOFF.md) for release-readiness work.
 
 ## Summary
 

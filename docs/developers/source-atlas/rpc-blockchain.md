@@ -218,7 +218,7 @@ No upstream comparison has been completed, so this page does not claim whether b
 - Which pruning and block-data failures should be documented for operators?
 - Which descriptor scan commands are relevant to BitcoinII users without wallet context?
 - Does BitcoinII differ from upstream Bitcoin Core in blockchain RPC behavior beyond naming?
-- Confirm whether `v29.1.0` differs from current `main` for this file before upgrading status.
+- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for this file before upgrading status.
 
 ## Sources
 

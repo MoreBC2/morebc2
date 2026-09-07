@@ -118,7 +118,7 @@ MoreBC2 should not yet claim:
 - Review local-address broadcast behavior.
 - Review address relay destination rotation.
 - Review `getaddr` response construction.
-- Compare address relay behavior between current `main` and `v29.1.0`.
+- Compare address relay behavior between the `v31.1.0` baseline and subsequent `main` changes.
 - Confirm which address-relay details belong in user-facing node docs.
 - Confirm whether any BitcoinII-specific behavior exists here beyond naming and visible comments.
 

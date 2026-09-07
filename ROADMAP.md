@@ -1,186 +1,46 @@
-# MoreBC2 Roadmap
+# MoreBC2 roadmap
 
-**Status:** Framework
+**Status:** Active project roadmap
+**Last reviewed:** 2026-09-07
 
-This roadmap is for organizing MoreBC2 work. It is not a BitcoinII protocol roadmap and should not be presented as one.
+This roadmap organizes MoreBC2 work. It is not the BitcoinII protocol or software roadmap.
 
-## Current project stage
+## Current stage — owner public-release review
 
-**Stage:** Private foundation-building
+The documentation foundation and Starlight site exist, and current-facing BitcoinII material has been refreshed to the `v31.1.0` baseline. Repository visibility must remain unchanged until the blocking legal, privacy, attribution, and review decisions in [project status](PROJECT_STATUS.md) and the [repository audit](docs/AUDIT.md) are resolved.
 
-MoreBC2 should stay private until the documentation framework, coverage tracking, verification workflow, glossary framework, and contributor path are stronger.
+## Release-readiness priorities
 
-See also:
+1. Owner review of the proposed public-facing scope and project description.
+2. Owner selection of a repository license and any content-specific licensing boundaries.
+3. Privacy decision for exact historical records containing personal, machine-specific paths.
+4. Third-party attribution inventory and required notices.
+5. Independent review of high-impact `v31.1.0` consensus and operator-facing claims.
+6. Fresh external-link and service checks immediately before publication.
 
-- [Project status](PROJECT_STATUS.md)
-- [Repository audit](docs/AUDIT.md)
-- [Documentation coverage](docs/documentation-coverage.md)
-- [Open questions backlog](docs/verification/open-questions.md)
+## Technical evidence priorities
 
-## Phase 0 — Foundation
+- Add new, explicitly version-scoped `v31.1.0` runtime and RPC test records.
+- Independently authenticate current release assets if a trusted verification path becomes available.
+- Review replay protection, data restrictions, fork-aware synchronization, wallet, mempool, mining, RPC, validation, and PSBT paths in more depth.
+- Keep exchange confirmation policy and other unsupported operational recommendations unresolved until evidence exists.
+- Preserve `v29.1.0` evidence as historical material; never relabel it as current testing.
 
-**Status:** Mostly complete / ongoing maintenance
+## Documentation and tooling priorities
 
-Goals:
+- Keep the README, project status, coverage dashboard, evidence index, and known-unknowns page synchronized.
+- Keep issue and pull-request templates conservative about verification.
+- Run the documented npm/site checks on every relevant change.
+- Maintain current source links and date-sensitive ecosystem observations.
+- Retain archived private-review coordination pages as project history, outside normal reader-facing site navigation.
 
-- Establish founding principles.
-- Establish contribution rules.
-- Establish documentation categories.
-- Establish page templates.
-- Create initial verified technical drafts.
-- Track unknowns openly.
-- Add project status and audit dashboards.
+## Future work
 
-## Phase 1 — Verified core documentation
+- Expand developer, architecture, node, wallet, mining, API, and integration material as evidence permits.
+- Add diagrams or examples only when they improve understanding and do not overstate verification.
+- Revisit website indexing, production URL, custom domain, and deployment only through a separate owner-approved change.
+- Develop a sustainable maintainer and review model after public contribution terms are clear.
 
-**Status:** In progress
+## Completion rule
 
-Goals:
-
-- Project overview.
-- Network specifications.
-- Consensus overview.
-- Release information.
-- Wallet installation basics.
-- Node operation basics.
-- RPC basics.
-- Mining overview.
-- Explorer resources.
-
-Rule:
-
-Only mark pages Verified after checking primary sources.
-
-## Phase 2 — Architecture handbook
-
-**Status:** In progress
-
-Goals:
-
-- Life of a transaction.
-- Life of a block.
-- Life of a reorganization.
-- Block validation flow.
-- Mempool flow.
-- Node startup.
-- Consensus model.
-- Network stack.
-- Wallet flow.
-- Mining flow.
-
-## Phase 3 — Source Atlas core
-
-**Status:** In progress
-
-Reviewed or partially reviewed areas:
-
-- Chain parameters.
-- Proof-of-work.
-- Validation flow.
-- Block lifecycle.
-- Reorganizations.
-- Mempool.
-- Mempool acceptance.
-- Mempool entries.
-- Disconnected transactions.
-
-Still needed:
-
-- Transaction consensus files.
-- Script interpreter.
-- Block storage.
-- Networking.
-- Mining/block assembly.
-- Wallet internals.
-- RPC internals.
-- Validation interface callbacks.
-
-## Phase 4 — Integration package
-
-**Status:** Framework exists
-
-Goals:
-
-- Exchange integration guide.
-- Wallet/service-provider integration notes.
-- RPC examples.
-- Deposit monitoring notes.
-- Release verification guide.
-- Branding asset index.
-- Technical-contact process.
-
-Current blockers:
-
-- Recommended confirmation counts.
-- Release verification model.
-- Technical contact process.
-- Tested RPC examples.
-
-## Phase 5 — Community knowledge base
-
-**Status:** Framework exists
-
-Goals:
-
-- Historical timeline.
-- Community projects index.
-- Mining pool index.
-- Explorer index.
-- Research articles.
-- Discussion/RFC process.
-
-Current blockers:
-
-- Direct checks of explorers, pools, exchanges, and community tools.
-- Clear process for community contributions.
-
-## Phase 6 — Developer handbook
-
-**Status:** Started
-
-Goals:
-
-- Developer reading order.
-- Source review guide.
-- Verification standards workflow.
-- Repository tour.
-- Glossary framework.
-- Local development environment guide.
-
-## Phase 7 — Public website
-
-**Status:** Early planning
-
-Goals:
-
-- Publish docs as a website.
-- Add navigation.
-- Add search if practical.
-- Connect custom domain if desired.
-- Keep GitHub as the editable source.
-
-## Invite-only review gate
-
-Before inviting outside reviewers, complete:
-
-- Documentation coverage dashboard.
-- Developer reading order.
-- Verification standards workflow.
-- Glossary framework.
-- Master open-questions backlog.
-- README normalization pass.
-
-## Public launch gate
-
-Before making the repository public, complete:
-
-- License decision.
-- Public contribution workflow.
-- Issue templates and labels.
-- Outside review of core technical claims.
-- Clear homepage and project status.
-- Source links checked for stability.
-
-## Long-term goal
-
-Make MoreBC2 the place people go when they need organized, source-backed BitcoinII information.
+No roadmap item changes a page to Verified by itself. Verification requires the evidence and review described in [EVIDENCE_SCALE.md](EVIDENCE_SCALE.md) and [CONTRIBUTING.md](CONTRIBUTING.md).

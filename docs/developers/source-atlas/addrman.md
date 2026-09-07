@@ -229,7 +229,7 @@ MoreBC2 can use this page to support cautious explanations of:
 - Review `src/net.cpp` addrman caller paths more completely.
 - Review fixed-seed fallback behavior in more detail.
 - Review addrman test coverage.
-- Compare current `main` addrman behavior with `v29.1.0`.
+- Compare the `v31.1.0` addrman behavior with subsequent `main` changes.
 - Decide what, if anything, belongs in beginner node troubleshooting docs.
 - Run live DNS/fixed-seed reachability checks separately if needed.
 

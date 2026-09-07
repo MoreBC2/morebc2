@@ -1,12 +1,15 @@
 # MoreBC2 Governance
 
-**Status:** Framework
+**Status:** Draft
+**Last reviewed:** 2026-09-07
 
 ## Current model
 
-MoreBC2 starts as a community documentation project.
+MoreBC2 is a community documentation project.
 
-The project is maintained by its first steward, with room for future contributors, reviewers, editors, and technical reviewers.
+Maintainers steward repository standards and decisions, with participation from contributors, editors, and technical reviewers. This document describes roles, not current contributor counts or endorsements.
+
+Repository licensing, visibility, organization administration, and deployment decisions remain with the repository owner unless authority is explicitly delegated.
 
 ## Stewardship
 

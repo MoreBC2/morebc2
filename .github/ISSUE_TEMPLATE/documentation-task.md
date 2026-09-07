@@ -35,6 +35,12 @@ List sources that should be checked.
 - [ ] Verified
 - [ ] Historical
 
+Do not select Verified from source review alone. Link the evidence and any applicable runtime or test record below.
+
+## Evidence or test record
+
+Add links or write `None yet`.
+
 ## Notes
 
 Add caveats or context here.

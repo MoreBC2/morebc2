@@ -1,8 +1,10 @@
 # Private review readiness
 
 **Category:** Verification
-**Status:** Draft
+**Status:** Archived project-management history
 **Last reviewed:** 2026-07-10
+
+> Archived: this dashboard describes an earlier invite-only review gate. It is not the current public-release assessment; see the [repository audit](../AUDIT.md).
 
 ## Summary
 

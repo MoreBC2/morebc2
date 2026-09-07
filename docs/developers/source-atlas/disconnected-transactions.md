@@ -146,7 +146,7 @@ After chain switch handling
 - Confirm exact mempool re-add order after `take()`.
 - Confirm whether any BitcoinII-specific behavior differs from inherited Bitcoin Core behavior.
 - Decide whether disconnected transaction handling belongs in a separate reorg architecture page.
-- Confirm whether `v29.1.0` differs from current `main` for these files before upgrading status.
+- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for these files before upgrading status.
 
 ## Sources
 

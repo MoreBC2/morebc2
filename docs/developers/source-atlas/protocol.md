@@ -194,7 +194,7 @@ The protocol structure appears Bitcoin-style, but no upstream comparison has bee
 - How should BIP324/v2 transport be explained in user-facing docs?
 - Which address relay and address-manager files should be reviewed next?
 - Which `net_processing` paths use each protocol message type?
-- Confirm whether `v29.1.0` differs from current `main` for these files before upgrading status.
+- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for these files before upgrading status.
 
 ## Sources
 

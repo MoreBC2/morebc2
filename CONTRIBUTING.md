@@ -1,25 +1,21 @@
 # Contributing to MoreBC2
 
-**Status:** Draft / private-review workflow
-**Last reviewed:** 2026-08-26
+**Status:** Draft public contribution workflow; license decision pending
+**Last reviewed:** 2026-09-07
 
 ## Summary
 
-MoreBC2 is currently a private, source-backed documentation project for BitcoinII (BC2).
-
-This contribution guide is written for trusted reviewers, invited contributors, and agents helping with narrow review tasks.
-
-Do not treat MoreBC2 as public-ready documentation yet.
+MoreBC2 is a source-backed community documentation project for BitcoinII (BC2). This guide is intended for reviewers and contributors preparing focused issues and pull requests.
 
 ## Current contribution posture
 
-Until a license and public contribution policy are finalized:
+Until the owner adds a repository license:
 
-- Treat this repository as private-review material.
-- Do not redistribute large portions of the repository.
+- Do not assume permission to copy, redistribute, or reuse repository content.
 - Do not publish MoreBC2 pages as official BitcoinII documentation.
 - Do not imply that Draft, Partial, or Needs Review pages are final.
 - Do not upgrade claims from memory or community assumption.
+- Keep contributions narrow enough for factual, licensing, and provenance review.
 
 ## Core rule
 
@@ -196,16 +192,16 @@ Good first tasks are narrow:
 - Add one open question to the backlog.
 - Review one explorer/API/pool/exchange listing with a direct date.
 
-## Avoid for now
+## Changes requiring extra review
 
-Avoid these until the public contribution process is ready:
+Use a narrowly scoped proposal and maintainer review for:
 
 - Rewriting many pages at once.
 - Marking pages Verified.
 - Adding install guides with copy/paste commands.
 - Adding wallet movement or recovery guides.
 - Adding active ecosystem listings without direct checks.
-- Making public launch claims.
+- Making repository-readiness or adoption claims.
 - Changing consensus claims without source review.
 
 ## Pull request or review note checklist
@@ -230,7 +226,7 @@ Use **BitcoinII** for the project name and **BC2** for the ticker. Avoid using *
 ## Related pages
 
 - [Docs index](docs/README.md)
-- [Private review handoff](docs/REVIEW_HANDOFF.md)
+- [Owner review handoff](docs/REVIEW_HANDOFF.md)
 - [Documentation coverage](docs/documentation-coverage.md)
 - [Known unknowns](docs/verification/known-unknowns.md)
 - [Open questions backlog](docs/verification/open-questions.md)
@@ -241,4 +237,4 @@ Use **BitcoinII** for the project name and **BC2** for the ticker. Avoid using *
 
 **Status:** Draft
 **Primary sources checked:** Current MoreBC2 project status, review handoff, verification queue, command tracker, and release tracker
-**Notes:** This is a private-review contribution workflow. It is not a final public contribution policy or license statement.
+**Notes:** This workflow remains Draft until the owner resolves the repository license and final public contribution terms.

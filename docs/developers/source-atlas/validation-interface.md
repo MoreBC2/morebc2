@@ -188,7 +188,7 @@ The reviewed file structure appears Bitcoin-style, but no upstream comparison ha
 - Which events are most important for explaining index updates?
 - Does BitcoinII differ from upstream Bitcoin Core in event ordering or event coverage?
 - Should MoreBC2 add a dedicated architecture page for validation notifications?
-- Confirm whether `v29.1.0` differs from current `main` for these files before upgrading status.
+- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for these files before upgrading status.
 
 ## Sources
 

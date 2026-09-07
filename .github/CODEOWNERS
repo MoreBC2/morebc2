@@ -1,6 +1,5 @@
-# GitHub does not currently enable CODEOWNERS for this private repository on
-# the organization's plan. These rules record the intended ownership model for
-# human review now and for GitHub enforcement if the plan supports it later.
+# Intended review ownership. Whether GitHub automatically requests or enforces
+# these reviewers depends on repository and organization settings.
 
 # Default ownership for repository content, including documentation and site content.
 * @MoreBC2/reviewers

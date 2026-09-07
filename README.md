@@ -1,102 +1,76 @@
 # MoreBC2
 
-**Status:** Needs Review
+**Status:** Public-release readiness review; owner approval required
 
-Community documentation and resources for the BitcoinII (BC2) ecosystem.
+MoreBC2 is community-maintained, source-backed documentation for the BitcoinII (BC2) ecosystem. It helps users, node operators, miners, developers, exchanges, and infrastructure providers find technical context and the evidence behind it.
 
-MoreBC2 is not intended to replace the official BitcoinII website, repositories, releases, or developer communications. It exists to preserve, organize, and explain publicly verifiable information so that users, miners, developers, exchanges, and infrastructure providers can find what they need faster.
+MoreBC2 is **not** the official BitcoinII website, reference implementation, release channel, or source of truth. When this repository and a canonical BitcoinII source disagree, treat the difference as unresolved until it is investigated.
 
 > MoreBC2 is not the source of truth. It is a map to the source of truth.
 
-## Mission
-
-Preserve, organize, and expand publicly verifiable knowledge about the BitcoinII ecosystem.
-
 ## Current BitcoinII baseline
 
-Current-facing technical documentation is being maintained against **BitcoinII Core `v31.1.0`**, published on 2026-08-29.
+Current-facing technical documentation targets **BitcoinII Core `v31.1.0`**, published on 2026-08-29.
 
-Key current source-backed changes represented in MoreBC2 include:
+The documented mainnet activation at height `57750` includes:
 
-- ShockWave per-block difficulty adjustment from mainnet height `57750`;
-- consensus-level data restrictions from height `57750`;
-- BC2 replay protection from height `57750` with fork ID `0x01324342`;
-- fork-aware header synchronization;
-- associated wallet, mining, mempool, RPC, validation, and PSBT changes identified by the `v31.1.0` release.
+- ShockWave per-block difficulty adjustment;
+- replay protection;
+- consensus-level data restrictions; and
+- fork-aware header-synchronization-related behavior.
 
-Older `v29.1.0` local tests and verification records remain preserved as **historical, version-scoped evidence**. They are not silently relabeled as current-release tests.
+The detailed implementation pages remain conservatively labeled where source review or runtime coverage is incomplete. In particular, source review does not by itself establish live-network or runtime behavior.
 
-## Current project status
+## Evidence boundaries
 
-The project has substantial source-backed coverage across BitcoinII Core architecture, chain parameters, proof of work, validation, block storage, mempool behavior, wallet RPC groups, mining RPC, blockchain RPC, raw transaction RPC, and service integration.
+MoreBC2 distinguishes source review, direct observation, local testing, historical evidence, maintainer statements, and unresolved claims.
 
-Some operational evidence remains version- or date-specific. Sensitive, unsupported, account-gated, wallet-moving, release-authentication, and long-term service-reliability claims remain explicitly bounded.
+- Current `v31.1.0` source and release metadata support the present documentation baseline.
+- Dated `v29.1.0` Windows, node, RPC, peer-discovery, and release-integrity records are intentionally preserved as **historical, version-scoped evidence**.
+- Those `v29.1.0` records are not current runtime verification and must not be globally rewritten as `v31.1.0` tests.
+- Current `v31.1.0` runtime coverage, independent release authentication, confirmation policy, and several ecosystem claims remain incomplete.
 
-Start here:
+See the [verification evidence index](docs/verification/verification-index.md), [known unknowns](docs/verification/known-unknowns.md), and [v31 currentness audit](docs/verification/v31-currentness-audit-2026-09-02.md).
 
-- [Project status](PROJECT_STATUS.md)
-- [Docs index](docs/README.md)
+## Start here
+
 - [What is BitcoinII?](docs/documentation/what-is-bitcoinii.md)
+- [Project status](PROJECT_STATUS.md)
+- [Documentation index](docs/README.md)
 - [Network specifications](docs/documentation/network-specifications.md)
 - [Consensus overview](docs/documentation/consensus-overview.md)
-- [Releases](docs/releases/README.md)
+- [Node guide](docs/nodes/node-guide.md)
 - [Mining overview](docs/mining/mining-overview.md)
-- [Exchange integration package](docs/exchange/integration-package.md)
-- [Verification evidence index](docs/verification/verification-index.md)
-- [Known unknowns](docs/verification/known-unknowns.md)
+- [Release evidence](docs/releases/README.md)
+- [Exchange integration](docs/exchange/integration-package.md)
+- [Roadmap](ROADMAP.md)
 
-## Current source-backed highlights
+## Contributing
 
-MoreBC2 currently documents:
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening an issue or pull request. Keep claims tied to evidence, preserve uncertainty labels, and never promote Draft, Partial, Needs Review, or Source Reviewed material to Verified without the required record.
 
-- Mainnet chain identity and genesis data.
-- 10-minute target block spacing.
-- Double-SHA256 block-header hashing.
-- ShockWave per-block difficulty adjustment after height `57750`.
-- Historical pre-ShockWave Bitcoin-style retarget behavior.
-- v31 replay-protection and data-restriction activation anchors.
-- Transaction consensus helper files and script-engine behavior.
-- Block validation, lifecycle, chain selection, and reorganization paths.
-- Mempool acceptance and storage.
-- Candidate block-template assembly and mining RPC surfaces.
-- Wallet, blockchain, raw-transaction, mempool/broadcast, and network RPC groups.
-- Exchange/operator integration boundaries.
+The repository currently has **no `LICENSE` file**. The owner must choose and add an appropriate license before public release; do not assume permission to reuse repository content in the meantime. See [legal and reuse posture](docs/LEGAL_REUSE.md).
 
-All coverage remains Draft/Partial unless the relevant page says otherwise.
+## Site and tooling validation
 
-## Important caution
+The documentation site is generated with Astro and Starlight. From a clean checkout with Node.js 22.12 or newer:
 
-Source-reviewed does not always mean locally tested.
+```sh
+npm ci
+npm run check
+npm run build
+npm run check:windows-node-docs
+```
 
-Many pages describe behavior observed in BitcoinII Core source. Command examples should not be treated as verified instructions unless the page explicitly says the command was run against a specific BitcoinII Core version and environment.
+`npm run check` prepares generated site content, runs Astro validation, and runs the site-adapter tests. `npm run build` also checks the rendered site output. The Windows-node documentation check protects the exact, version-scoped historical command records.
 
-In particular, existing dated `v29.1.0` Windows/node/RPC records are historical evidence. Current `v31.1.0` runtime coverage should be added through new test records rather than rewriting those historical files.
+The current site configuration remains a non-indexed review deployment. Publishing or deployment changes require a separate owner decision and are outside this readiness pass.
 
-## Documentation model
-
-MoreBC2 separates information into clearly labeled categories:
-
-- **Documentation** — how BitcoinII works today, based on current source code, releases, and official project resources.
-- **Architecture** — source-backed conceptual explanations of BitcoinII Core components and flows.
-- **Developers** — Source Atlas, build notes, RPC notes, and developer-focused resources.
-- **API / Infrastructure** — public endpoint and service observations with evidence boundaries.
-- **Releases** — current release metadata plus version-scoped historical verification evidence.
-- **Compatibility** — integration assumptions and known breakpoints.
-- **Exchange** — service-provider integration documentation.
-- **Research / Discussion** — analysis and ideas clearly separated from implemented behavior.
-- **History** — past events and archived context.
-- **Ecosystem** — wallets, explorers, exchanges, pools, tools, and community resources.
-- **Verification** — open questions, known unknowns, dated evidence, and claims needing checks.
-
-## Core editorial rule
+## Editorial rule
 
 Document reality. Explore possibilities. Clearly separate the two.
 
-Current example: BitcoinII now implements **ShockWave**. Historical MoreBC2 language saying current mainnet uses only Bitcoin-style 2016-block retargeting is obsolete and should remain only where it is explicitly describing pre-activation history or a dated older-source review.
-
-## Repository
-
-The canonical private repository is `MoreBC2/morebc2` in the MoreBC2 GitHub organization.
+Historical Bitcoin-style 2016-block retarget descriptions apply to pre-ShockWave behavior. Current post-height-57750 documentation should describe ShockWave and should leave any unverified operational conclusions unresolved.
 
 ## Project phrase
 

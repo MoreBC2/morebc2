@@ -168,7 +168,7 @@ MoreBC2 can use this page to support cautious explanations of:
 - Review banman behavior separately.
 - Review lower-level connection management in `src/net.cpp`.
 - Review send-loop behavior related to pings, inventory, and queued messages.
-- Compare this slice between current `main` and `v29.1.0`.
+- Compare this slice between the `v31.1.0` baseline and subsequent `main` changes.
 - Confirm which peer-health details belong in user-facing node docs.
 - Confirm whether any BitcoinII-specific behavior exists here beyond naming and visible comments.
 

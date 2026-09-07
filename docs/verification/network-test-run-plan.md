@@ -199,7 +199,7 @@ When a test is run, add a dated record like this:
 
 | Date | Ref | OS | Build notes | Command | Result | Notes |
 |---|---|---|---|---|---|---|
-| YYYY-MM-DD | `v29.1.0` or commit SHA | Windows/Linux/macOS | TBD | `TBD` | Pass/Fail/Skipped | TBD |
+| YYYY-MM-DD | `v31.1.0` or commit SHA | Windows/Linux/macOS | TBD | `TBD` | Pass/Fail/Skipped | TBD |
 
 Do not summarize a test as passed unless the command was actually run and the output was checked.
 

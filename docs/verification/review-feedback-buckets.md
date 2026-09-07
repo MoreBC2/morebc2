@@ -1,8 +1,10 @@
 # Review feedback buckets
 
 **Category:** Verification
-**Status:** Draft
+**Status:** Archived project-management history
 **Last reviewed:** 2026-06-30
+
+> Archived: these buckets are retained as workflow history. Current review coordination lives in the [owner review handoff](../REVIEW_HANDOFF.md).
 
 ## Summary
 
