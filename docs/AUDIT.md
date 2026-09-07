@@ -9,7 +9,7 @@
 
 MoreBC2 has a strong documentation structure, unusually careful evidence labels, a functioning Astro/Starlight validation path, and current-facing BitcoinII documentation aligned to the `v31.1.0` baseline. The repository is ready for owner review but is **not ready for a visibility change**.
 
-The primary blockers are legal licensing, treatment of personal environment details in exact historical evidence, incomplete third-party attribution review, lack of a public security-reporting path, and incomplete independent technical review. Current release runtime and artifact-authentication gaps must remain visible but do not need invented answers.
+The primary blockers are licensing, treatment of personal environment details in exact historical evidence, incomplete third-party rights and attribution review, lack of a public security-reporting path, and owner approval. Current release runtime, artifact-authentication, and independent technical-review gaps must remain visible but do not need invented answers.
 
 ## Scope reviewed
 
@@ -43,9 +43,13 @@ Dated `v29.1.0` verification records are intentionally unchanged. They remain ev
 - No public, BitcoinII-specific security reporting contact or documented process is established.
 - Live peer/network outputs are described as requiring redaction. Common private-key and service-token patterns were not found in the tracked current tree or a patch-history scan of 694 reachable commits (excluding dependency-lock diffs), but this is not a substitute for owner review or a dedicated secret-scanning tool.
 
-### Review and freshness
+### Owner approval
 
-- At least one independent technical review of the most consequential current-facing claims is still needed.
+- The owner must review and explicitly approve publication after the blockers above are resolved.
+
+## Important public-review and quality tasks
+
+- Independent technical review of the most consequential current-facing claims is strongly encouraged. Its absence alone is not a visibility blocker once the licensing, privacy, third-party rights and attribution, security-reporting, and owner-approval blockers are resolved.
 - Date-sensitive external services and external links should be rechecked immediately before publication.
 - Repository team handles in CODEOWNERS must be confirmed to exist and be appropriate; the file itself cannot guarantee enforcement.
 
@@ -80,7 +84,7 @@ External links and services remain date-sensitive. Repeat the scan immediately b
 
 ## Recommended repository metadata
 
-**Description:** Community-maintained, source-backed documentation and verification records for BitcoinII (BC2), with explicit evidence and uncertainty boundaries.
+**Description:** Independently maintained, source-backed documentation and verification records for BitcoinII (BC2), with explicit evidence and uncertainty boundaries.
 
 **Topics:** `bitcoinii`, `bc2`, `documentation`, `cryptocurrency`, `blockchain`, `proof-of-work`, `astro`, `starlight`
 

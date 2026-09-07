@@ -5,9 +5,9 @@
 
 ## Summary
 
-MoreBC2 is a source-backed, community documentation and verification project for BitcoinII (BC2). Current-facing technical documentation uses BitcoinII Core `v31.1.0` as its baseline, while dated `v29.1.0` runtime and release records remain historical evidence.
+MoreBC2 is an independently maintained, source-backed documentation and verification project for BitcoinII (BC2). Current-facing technical documentation uses BitcoinII Core `v31.1.0` as its baseline, while dated `v29.1.0` runtime and release records remain historical evidence.
 
-The repository is suitable for owner review, but it is **not ready to change visibility**. The missing repository license is a blocking item, and several privacy, attribution, security-contact, external-review, runtime, and release-authentication decisions remain open.
+The repository is suitable for owner review, but it is **not ready to change visibility**. The missing repository license is a blocking item, and privacy treatment, third-party rights and attribution, a public security-reporting route, and owner approval remain open.
 
 ## Current baseline
 
@@ -35,8 +35,7 @@ The dated `v29.1.0` evidence establishes only what those records say. It is not 
 2. Decide how to handle personal Windows paths and the named individual in exact historical records without destroying or misrepresenting evidence.
 3. Complete an attribution inventory for copied or adapted third-party text, code excerpts, algorithms, images, and branding; add notices where required.
 4. Establish a public security-reporting contact or process appropriate for a documentation repository.
-5. Obtain owner review and at least one independent technical review of the most consequential current-facing claims.
-6. Recheck live external services and links immediately before publication.
+5. Obtain explicit owner review and approval before publication.
 
 ## Important unresolved technical and operational work
 
@@ -46,6 +45,8 @@ The dated `v29.1.0` evidence establishes only what those records say. It is not 
 - Exchange/service confirmation policy based on current network evidence.
 - Current wallet, explorer, API, exchange, and mining-service observations.
 - Live-network verification of activation and synchronization behavior.
+- Independent technical review of consequential current-facing claims is strongly encouraged as a public-review and quality task, but its absence alone is not a visibility blocker once the actual publication blockers are resolved.
+- Recheck live external services and links immediately before publication.
 
 ## Navigation
 

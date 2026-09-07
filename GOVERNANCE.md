@@ -5,9 +5,9 @@
 
 ## Current model
 
-MoreBC2 is a community documentation project.
+MoreBC2 is an independently maintained documentation project.
 
-Maintainers steward repository standards and decisions, with participation from contributors, editors, and technical reviewers. This document describes roles, not current contributor counts or endorsements.
+Maintainers steward repository standards and decisions. The roles below describe ways people may contribute in the future; they do not claim an existing contributor community, contributor count, or endorsement.
 
 Repository licensing, visibility, organization administration, and deployment decisions remain with the repository owner unless authority is explicitly delegated.
 
@@ -62,7 +62,7 @@ When there is disagreement:
 
 ## Relationship to BitcoinII
 
-MoreBC2 is community-maintained.
+MoreBC2 is independently maintained.
 
 It should complement official BitcoinII resources, not replace them.
 

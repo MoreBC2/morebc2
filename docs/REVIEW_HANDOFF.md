@@ -58,10 +58,13 @@ Before changing visibility, confirm all of the following:
 - privacy treatment is approved;
 - no secrets or credentials are present in the publishable tree or history;
 - security reporting and contribution routes are usable;
-- current-facing technical claims received independent review;
 - all documented repository checks pass;
 - date-sensitive links and external services were freshly checked; and
 - the owner explicitly approves the visibility change.
+
+## Important quality task
+
+Independent technical review is strongly encouraged for consequential current-facing claims. It may occur before or during public review, and its absence alone does not block visibility once the actual publication blockers and owner approval are resolved.
 
 ## Archived coordination material
 

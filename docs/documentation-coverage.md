@@ -32,7 +32,8 @@ This dashboard summarizes coverage. It does not turn source review, plans, or da
 | Ecosystem | Needs Recheck | Dated observations must be refreshed before recommendations. |
 | Contribution and governance | Draft | Public-facing workflow exists; license, final contribution terms, and team/enforcement details need owner confirmation. |
 | Site tooling | Automated checks | Astro/Starlight generation, adapter tests, rendered output, and Windows evidence guards exist. Passing them does not verify protocol claims. |
-| Public-release readiness | Blocked | License, privacy, attribution, security contact, owner review, and independent technical review remain open. |
+| Independent technical review | Important quality task | Strongly encouraged for consequential current-facing claims; absence alone is not a visibility blocker. |
+| Public-release readiness | Blocked | Licensing, privacy treatment, third-party rights and attribution, a public security-reporting route, and owner approval remain open. |
 
 ## Current routes
 

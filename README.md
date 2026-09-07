@@ -2,7 +2,7 @@
 
 **Status:** Public-release readiness review; owner approval required
 
-MoreBC2 is community-maintained, source-backed documentation for the BitcoinII (BC2) ecosystem. It helps users, node operators, miners, developers, exchanges, and infrastructure providers find technical context and the evidence behind it.
+MoreBC2 is independently maintained, source-backed documentation for the BitcoinII (BC2) ecosystem. It helps users, node operators, miners, developers, exchanges, and infrastructure providers find technical context and the evidence behind it.
 
 MoreBC2 is **not** the official BitcoinII website, reference implementation, release channel, or source of truth. When this repository and a canonical BitcoinII source disagree, treat the difference as unresolved until it is investigated.
 

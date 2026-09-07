@@ -7,7 +7,7 @@ This roadmap organizes MoreBC2 work. It is not the BitcoinII protocol or softwar
 
 ## Current stage — owner public-release review
 
-The documentation foundation and Starlight site exist, and current-facing BitcoinII material has been refreshed to the `v31.1.0` baseline. Repository visibility must remain unchanged until the blocking legal, privacy, attribution, and review decisions in [project status](PROJECT_STATUS.md) and the [repository audit](docs/AUDIT.md) are resolved.
+The documentation foundation and Starlight site exist, and current-facing BitcoinII material has been refreshed to the `v31.1.0` baseline. Repository visibility must remain unchanged until the blocking licensing, privacy, third-party rights and attribution, security-reporting, and owner-approval decisions in [project status](PROJECT_STATUS.md) and the [repository audit](docs/AUDIT.md) are resolved.
 
 ## Release-readiness priorities
 
@@ -15,7 +15,7 @@ The documentation foundation and Starlight site exist, and current-facing Bitcoi
 2. Owner selection of a repository license and any content-specific licensing boundaries.
 3. Privacy decision for exact historical records containing personal, machine-specific paths.
 4. Third-party attribution inventory and required notices.
-5. Independent review of high-impact `v31.1.0` consensus and operator-facing claims.
+5. Strongly encouraged independent review of high-impact `v31.1.0` consensus and operator-facing claims as a public-review and quality task, not a visibility blocker by itself.
 6. Fresh external-link and service checks immediately before publication.
 
 ## Technical evidence priorities

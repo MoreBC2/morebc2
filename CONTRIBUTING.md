@@ -5,7 +5,7 @@
 
 ## Summary
 
-MoreBC2 is a source-backed community documentation project for BitcoinII (BC2). This guide is intended for reviewers and contributors preparing focused issues and pull requests.
+MoreBC2 is an independently maintained, source-backed documentation project for BitcoinII (BC2). This guide is intended for reviewers and contributors preparing focused issues and pull requests.
 
 ## Current contribution posture
 

@@ -12,7 +12,7 @@ This changelog tracks MoreBC2 itself, not BitcoinII software releases.
 - Made the BitcoinII Core `v31.1.0` baseline and height-`57750` ShockWave-era behavior prominent.
 - Preserved dated `v29.1.0` records as historical, version-scoped evidence.
 - Archived obsolete invite-only review coordination pages outside the active release workflow.
-- Clarified the missing license, attribution inventory, privacy treatment, security contact, and independent-review blockers.
+- Clarified the missing license, attribution inventory, privacy treatment, security-reporting, and owner-approval blockers, while classifying independent technical review as an important quality task.
 - Tightened issue templates so source review is not presented as runtime verification.
 - Corrected the exchange deposit-monitoring difficulty summary to the current ShockWave baseline.
 
