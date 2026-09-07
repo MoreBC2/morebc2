@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-09-02
+**Last reviewed:** 2026-09-07
 
 ## Summary
 
@@ -14,16 +14,9 @@ BitcoinII (BC2) targets 10-minute blocks. Since mainnet height `57750`, current 
 
 BitcoinII Core `v31.1.0` activates ShockWave at mainnet height `57750` through `nShockWaveActivationHeight`.
 
-Current reviewed source shows that ShockWave:
+For every block at or above that height, the implementation calculates a required target using recent chain history. Its longer sample covers 25 blocks and 24 completed intervals measured with MedianTimePast. A separate calculation uses the latest six completed intervals. The final normal target is limited to a fourfold change in either direction from the previous block's target.
 
-- calculates the next work requirement on a per-block basis after activation;
-- uses a 25-block / 24-interval rolling baseline based on MedianTimePast;
-- includes a short six-interval fast-hashrate sensor;
-- applies true `+/-4x` per-block final difficulty-adjustment bounds;
-- includes timestamp-consistency handling and trusted-history guards;
-- includes emergency stall recovery with deterministic easing rules;
-- includes recovery and post-recovery stabilization behavior;
-- uses integer-only consensus arithmetic.
+Candidate header time is also an input to a defined stalled-chain path. The source, rather than this overview, remains the authority for the internal conditions and transition logic.
 
 The configured target block spacing remains 10 minutes.
 
@@ -40,9 +33,9 @@ Those parameters remain present in chain parameters because they are still relev
 
 ## Dark Gravity Wave relationship
 
-ShockWave is a BitcoinII-specific algorithm. Its rolling baseline is derived in part from concepts and code originating in Dark Gravity Wave v3, while the current implementation adds separate BitcoinII mechanisms for rapid hashrate response, overshoot control, timestamp uncertainty, emergency recovery, and stabilization.
+The BitcoinII source notice attributes part of the rolling calculation to Dark Gravity Wave v3 concepts and code. The complete post-activation implementation is identified by BitcoinII as **ShockWave**, so the names should not be used interchangeably.
 
-Accordingly, MoreBC2 should describe the current algorithm as **ShockWave**, not simply as Dark Gravity Wave.
+Original ShockWave source and comments remain subject to the separate terms stated in `v31.1.0/src/pow.cpp`; this independently written overview does not relicense them.
 
 ## Why it matters
 

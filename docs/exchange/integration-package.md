@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-09-02
+**Last reviewed:** 2026-09-07
 
 ## Summary
 
@@ -22,9 +22,9 @@ It should only include confirmed values. Anything not yet confirmed is listed un
 
 ### Licensing note
 
-BitcoinII Core contains MIT-licensed upstream code derived from Bitcoin Core and Dash/Darkcoin. Original ShockWave implementation portions in `src/pow.cpp` carry separate proprietary source-review terms. Those terms allow review, compilation, execution, testing, and interoperability evaluation of BitcoinII, while restricting reuse, porting, redistribution, or deployment of the proprietary ShockWave implementation in another blockchain or product without permission.
+The notice in BitcoinII Core `v31.1.0/src/pow.cpp` applies MIT terms to identified Bitcoin Core and Dash/Darkcoin portions but not to original ShockWave implementation material. The latter is governed by separate, non-open-source terms stated in that file.
 
-This distinction should not be presented as preventing ordinary BitcoinII node operation or exchange integration.
+This package does not reproduce or license the ShockWave implementation. It records facts relevant to integrating with BitcoinII; the upstream notice remains controlling for use of the source and does not state that ordinary node operation or exchange integration is prohibited.
 
 ## Mainnet technical values checked from v31.1.0 source
 

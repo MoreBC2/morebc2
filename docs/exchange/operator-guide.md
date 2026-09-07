@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-09-02
+**Last reviewed:** 2026-09-07
 
 ## Summary
 
@@ -42,7 +42,7 @@ An exchange integration should eventually document:
 
 ## ShockWave operational note
 
-From mainnet height `57,750`, BitcoinII no longer relies on the historical Bitcoin-style 2016-block difficulty interval as its active difficulty-adjustment behavior. ShockWave recalculates required work per block using a rolling baseline and additional rapid-response, timestamp-safety, overshoot-control, and stall-recovery logic.
+From mainnet height `57,750`, BitcoinII no longer relies on the historical Bitcoin-style 2016-block difficulty interval as its active difficulty-adjustment behavior. Required work is recalculated for each block from recent chain data, and candidate header time can affect the calculation when the chain has been stalled long enough to meet the source-defined threshold.
 
 The target block spacing remains 10 minutes.
 
@@ -70,9 +70,9 @@ Those digests are useful for repeat-download integrity checking, but this guide 
 
 ## Licensing note
 
-BitcoinII Core includes MIT-licensed upstream material. Original ShockWave implementation portions in `src/pow.cpp` carry separate proprietary source-review terms.
+BitcoinII Core's `v31.1.0/src/pow.cpp` notice distinguishes MIT-covered inherited material from original ShockWave implementation material under separate, non-open-source terms.
 
-Those terms permit review, compilation, execution, testing, and interoperability evaluation of BitcoinII while restricting reuse or deployment of the proprietary ShockWave implementation in another blockchain or product without permission. This is not presented here as a restriction on normal BC2 node operation or exchange integration.
+This guide states operational facts and does not grant rights in that implementation or its comments. The source-file notice controls their use; MoreBC2 does not interpret it as prohibiting normal BC2 node operation or exchange integration.
 
 ## Deposit handling
 
