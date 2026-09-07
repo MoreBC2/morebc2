@@ -31,7 +31,7 @@ The source-atlas material also closely maps MIT-licensed BitcoinII Core and Bitc
 
 The npm lockfile records 561 dependency package entries. Dependencies are referenced through the package manager and are not vendored in this repository. Their licenses should not be replaced by a MoreBC2 repository-level software license, and the notices actually distributed in a built site should be assessed from the release artifact rather than by copying every lockfile entry into a root notice.
 
-The favicon's Git history was traced through both the feature branch and the squashed `main` commit. That history does not establish authorship, generation terms, or a third-party source. `public/favicon.svg` must therefore be excluded from the future repository licenses and replaced with a newly created, rights-cleared MoreBC2 asset before public release.
+The original favicon's Git history did not establish authorship, generation terms, or a third-party source. That asset has now been removed and replaced with a new SVG created specifically for MoreBC2 from basic geometric primitives, without third-party artwork or source material. The replacement is eligible for the future MoreBC2 original-material licensing scope.
 
 ## Focused P-03 and P-09 rights-clearance follow-up
 
@@ -74,18 +74,19 @@ The following are not being claimed as MoreBC2-licensed material:
 
 The controlling upstream source remains https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/src/pow.cpp. Source attribution is retained in all five reviewed documents.
 
-### Favicon trace and disposition
+### Favicon trace and resolution
 
 The tracked evidence establishes this sequence:
 
 1. The parent `4a9dcc174dfafeeadf93f763d3d59691ae166564` did not contain a favicon. Its site-planning page, `docs/site/README.md:97-105`, still listed “Logo and favicon” as an open website decision.
 2. `public/favicon.svg` first appeared as blob `5a101e1eb6390db694683db92cab2c60624047af` in feature-branch commit `fcda9e78dd8ac051d9db7801a665f0f6b22985b8` (`Harden Starlight site generation and QA`, 2026-08-23).
 3. The identical blob entered `main` in squashed commit `4ffafd45670ae1557853251df30f7c34f9d3440f` (`Scaffold MoreBC2 Starlight site preview (#3)`, 2026-08-27), whose parent is `3e51b0d3fc54ff54fb7d31bd97a2e14ec4137a66`.
-4. The favicon has no later content change. Searches of tracked files and all available refs found no design source, generator reference, prompt, issue text, attribution, license, or authorship statement tied to the SVG. The local environment did not provide GitHub CLI access to inspect any untracked PR discussion.
+4. The old favicon had no later content change before this cleanup. Searches of tracked files and all available refs found no design source, generator reference, prompt, issue text, attribution, license, or authorship statement tied to that SVG. The local environment did not provide GitHub CLI access to inspect any untracked PR discussion.
+5. On 2026-09-07, the unresolved SVG was removed. Its replacement was authored directly for MoreBC2 in this repository from a square background and two original stroked paths forming an abstract `M2` mark.
 
-The evidence therefore does **not** establish that the favicon was authored specifically for MoreBC2, generated under usable terms, or copied/adapted from a third party. Provenance remains unresolved.
+The evidence did **not** establish that the removed favicon was authored specifically for MoreBC2, generated under usable terms, or copied/adapted from a third party. No geometry from that asset was reused or traced.
 
-Disposition: **exclude `public/favicon.svg` from both future MoreBC2 repository licenses and replace it with a newly created, rights-cleared MoreBC2 favicon before public release.** No replacement was created in this follow-up because no existing clearly original source asset establishes an unambiguous basis for one.
+Disposition: **P-09 is resolved.** The replacement uses no third-party asset, logo, font, image, downloaded SVG, source artwork, or embedded raster content. It may be included in the future licensing scope for original MoreBC2 project material; no license grant is made by this audit.
 
 ## Detailed findings
 
@@ -185,17 +186,17 @@ Disposition: **exclude `public/favicon.svg` from both future MoreBC2 repository 
 8. **Confidence:** High that present use is textual and referential; legal treatment remains jurisdiction- and context-dependent.
 9. **Uncertainty:** This audit does not determine trademark ownership, registration, or service-specific brand guidelines.
 
-### P-09 — MoreBC2 favicon with unresolved authorship record — resolved by exclusion
+### P-09 — MoreBC2 favicon — resolved by replacement
 
-1. **Repository path and asset:** `public/favicon.svg` (entire four-line asset).
-2. **Material type:** Original-appearing vector icon: a geometric “M” on a rounded square.
-3. **Apparent upstream/rightsholder:** Unknown. The blob first appeared in feature-branch commit `fcda9e78dd8ac051d9db7801a665f0f6b22985b8` and entered `main` unchanged in squashed commit `4ffafd45670ae1557853251df30f7c34f9d3440f`; neither the file nor available history records an author, source, generator, or license.
-4. **Upstream source:** None identifiable from the file or repository history.
-5. **Apparent upstream license:** Unresolved.
-6. **Apparent relationship:** **Visual/branding**; it appears customized for MoreBC2, but originality and rights cannot be inferred from appearance or filename.
-7. **Recommended treatment:** **Exclude from MoreBC2 repository-level license** and replace with a newly created, rights-cleared asset before public release. Do not infer that Starlight owns it merely because it arrived in a scaffold commit.
-8. **Confidence:** High that provenance is undocumented; low on actual authorship.
-9. **Uncertainty:** No evidence in tracked history identifies whether it was hand-authored, generated, adapted, or supplied by a third party. The exclusion resolves the repository-license scope but not authorship.
+1. **Repository path and asset:** `public/favicon.svg` (the replacement asset in its entirety).
+2. **Material type:** Original vector icon built from one background rectangle and two stroked paths forming an abstract `M2`.
+3. **Apparent upstream/rightsholder:** Created specifically for the MoreBC2 project in the 2026-09-07 rights-clearance task; no upstream artwork or rightsholder applies.
+4. **Upstream source:** None. The SVG was written directly from basic geometric primitives in this repository.
+5. **Apparent upstream license:** Not applicable. No license is granted here; the asset is eligible for inclusion in the future license covering original MoreBC2 material.
+6. **Apparent relationship:** Original MoreBC2 **visual/branding** material. It does not reuse or trace the removed favicon geometry.
+7. **Recommended treatment:** Include the replacement in the future original-material licensing scope and retain its embedded provenance comment.
+8. **Confidence:** High. The creation method and absence of external resources are directly reviewable in the SVG and task diff.
+9. **Uncertainty:** No third-party provenance uncertainty remains. The owner still must apply the future repository license.
 
 ### P-10 — Astro/Starlight site integration and scaffold-shaped configuration
 
@@ -207,7 +208,7 @@ Disposition: **exclude `public/favicon.svg` from both future MoreBC2 repository 
 6. **Apparent relationship:** Mostly original project-specific software; common setup fragments may be **adapted** from framework documentation or starter conventions. No framework copyright header or obvious substantial verbatim template was found.
 7. **Recommended treatment:** **Source citation sufficient** for ordinary API use; **upstream license notice should be preserved** if a substantial starter/template portion is identified. Record Astro/Starlight as dependencies, not co-owners of all MoreBC2 tooling.
 8. **Confidence:** Medium-high based on code review and Git history.
-9. **Uncertainty:** Commit history does not identify whether every initial scaffold fragment was written from scratch or copied from an example. The favicon is separately unresolved in P-09.
+9. **Uncertainty:** Commit history does not identify whether every initial scaffold fragment was written from scratch or copied from an example. The favicon is separately resolved in P-09.
 
 ### P-11 — npm dependency graph and package-manager metadata
 
@@ -268,7 +269,7 @@ The owner could implement the following separation after resolving the open righ
 ### Original MoreBC2 software and site tooling
 
 - Define the software scope: project-specific `scripts/`, `src/`, and configuration files.
-- State the chosen software license only after confirming authorship of scaffold-era contributions and the favicon disposition.
+- State the chosen software license after completing the remaining owner review of scaffold-era contributions; the replacement favicon's provenance is documented in P-09.
 - Clarify that dependencies keep their own licenses.
 
 ### BitcoinII Core-derived material
@@ -291,7 +292,7 @@ The owner could implement the following separation after resolving the open righ
 
 ### Third-party assets and branding
 
-- Resolve `public/favicon.svg` authorship before licensing it.
+- Include the independently created replacement `public/favicon.svg` in the original MoreBC2 asset scope and retain its provenance comment.
 - List any future logos, screenshots, icons, or datasets individually with source, owner, license/permission, modifications, and exclusions.
 - Include a neutral trademark/non-affiliation statement if approved by the owner.
 
@@ -310,11 +311,11 @@ The following require resolution before applying that structure:
 
 1. **ShockWave:** The focused follow-up rewrote the 15 close, near-copied, or uncertain passage units as independently organized factual prose and original rights-boundary statements. The future documentation license must expressly exclude upstream ShockWave source, comments, implementation, and notice.
 2. **MIT-derived source expression:** Substantial copied/adapted BitcoinII Core, Bitcoin Core, or DGW/Dash expression must retain the applicable copyright and MIT permission notice. A CC BY label should clearly exclude those portions or be accompanied by a compatible, accurate notice structure.
-3. **Favicon:** Rights remain unresolved. Exclude `public/favicon.svg` from both repository licenses and replace it with a newly created, rights-cleared asset before publication.
+3. **Favicon:** Resolved. The old unresolved asset was removed; the independently created replacement is eligible for the future original MoreBC2 licensing scope.
 4. **Service data:** Current records are bounded factual observations, not substantial datasets. Future redistribution of API bodies, market data, screenshots, or schemas requires service-specific review.
 5. **Dependencies:** Package dependencies remain under their own licenses. Distribution obligations depend on the produced artifact, not solely on the lockfile.
 
-No tracked material was conclusively identified as incompatible with the contemplated plan if the plan is limited to original MoreBC2 work and the exclusions/notices above are implemented. P-03 has been cleared by rewriting the affected MoreBC2 expression and excluding upstream material from the proposed license scope. P-09 has been cleared for licensing-structure purposes by excluding the unresolved asset, but the asset still must be replaced before publication.
+No tracked material was conclusively identified as incompatible with the contemplated plan if the plan is limited to original MoreBC2 work and the exclusions/notices above are implemented. P-03 has been cleared by rewriting the affected MoreBC2 expression and excluding upstream material from the proposed license scope. P-09 has been cleared by removing the unresolved asset and replacing it with independently created MoreBC2 artwork.
 
 ## Recommended contents for a future `NOTICE`
 
@@ -327,7 +328,7 @@ A concise project-facing `NOTICE` could contain:
 - an explicit ShockWave file-specific rights boundary, without paraphrasing it as an open-source license;
 - a pointer to `THIRD_PARTY_NOTICES.md` for detailed notices and exclusions;
 - a trademark/non-affiliation statement approved by the owner; and
-- a statement excluding the current favicon from the repository licenses until its required replacement is committed.
+- identification of the replacement favicon as original MoreBC2 material, if the owner wants the root notice to enumerate project assets.
 
 ## Recommended contents for a future `THIRD_PARTY_NOTICES.md`
 
@@ -338,13 +339,12 @@ The detailed notices file could contain one section per provenance family:
 3. Dark Gravity Wave v3/Dash/Darkcoin-derived material, with exact revision and author attribution once established, plus MIT notice.
 4. ShockWave proprietary source-review material, quoting or linking the controlling file notice only after legal review and listing excluded MoreBC2 passages or obtained permission.
 5. Third-party data/API observations, identifying source services, dates, and whether only facts or any redistributable payload is included.
-6. Assets and branding, recording the current favicon exclusion, its eventual replacement provenance, and any future screenshots/logos with explicit permissions.
+6. Assets and branding, recording the replacement favicon's original provenance and any future screenshots/logos with explicit permissions.
 7. Distributed npm/framework components, generated from the actual release artifact and containing required license texts/notices rather than an unreviewed dump of every lockfile entry.
 
 ## Owner/legal decisions still required
 
 - Trace the exact Dark Gravity Wave v3 revision and attribution chain used by BitcoinII if a precise software-derived notice is desired.
-- Replace the excluded `public/favicon.svg` with a newly created, rights-cleared asset and record its author, source, and applicable terms.
 - Establish a policy for when source-atlas prose requires preservation of an upstream MIT notice.
 - Decide whether and how to state trademark/non-affiliation language.
 - Generate and review notices against the actual site/release artifact, especially for LGPL/MPL/transitive dependencies.
@@ -352,4 +352,4 @@ The detailed notices file could contain one section per provenance family:
 
 ## Readiness conclusion
 
-The two focused licensing-scope blockers now have defined dispositions: P-03 was resolved by rewriting MoreBC2 expression and reserving upstream ShockWave material to its controlling terms; P-09 was resolved by excluding the unresolved favicon from the proposed licenses. The repository is ready for the owner to **draft and apply** a path-scoped CC BY 4.0 plus MIT structure if those exclusions and the third-party notices are implemented accurately. The current favicon must still be replaced before public release, and the remaining notice, contributor-authority, and artifact-specific dependency work identified above still requires owner review.
+The focused licensing-scope blockers now have defined dispositions: P-03 was resolved by rewriting MoreBC2 expression and reserving upstream ShockWave material to its controlling terms; P-09 was resolved by replacing the unresolved favicon with an independently created MoreBC2 asset. The repository is ready for the owner to **draft and apply** a path-scoped CC BY 4.0 plus MIT structure if the remaining exclusions and third-party notices are implemented accurately. Notice, contributor-authority, and artifact-specific dependency work identified above still requires owner review.
