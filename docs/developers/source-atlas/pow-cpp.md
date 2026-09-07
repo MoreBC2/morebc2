@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Needs Review
-**Last reviewed:** 2026-09-02
+**Last reviewed:** 2026-09-07
 
 ## Purpose
 
@@ -12,23 +12,13 @@ For BitcoinII Core `v31.1.0`, this file is also the primary source location for 
 
 ## Current file-header licensing note
 
-The `v31.1.0` file header distinguishes between inherited MIT-licensed Bitcoin Core / Dash-derived portions and original ShockWave implementation code carrying separate proprietary source-review terms.
+The notice in `v31.1.0/src/pow.cpp` places inherited Bitcoin Core and Dash/Darkcoin portions under their applicable MIT terms. It gives original ShockWave implementation material separate terms that are not an open-source license.
 
-Those ShockWave terms permit review, interoperability analysis, compilation, execution, and testing for BitcoinII evaluation while restricting reuse or deployment of the proprietary ShockWave implementation in other projects without permission.
-
-This should not be summarized as meaning normal BitcoinII node operation is prohibited.
+This MoreBC2 page reports technical facts from review of that file. It neither reproduces the source license nor grants rights in the ShockWave implementation or source comments. The upstream notice controls use of those materials and is not a restriction stated by MoreBC2 on ordinary BitcoinII node operation.
 
 ## Why it matters
 
-This file helps verify:
-
-- when ShockWave becomes active;
-- how per-block difficulty is calculated after activation;
-- how rapid hashrate changes are detected;
-- how timestamp uncertainty is handled;
-- how emergency stall recovery works;
-- how post-recovery stabilization works;
-- how proof-of-work targets are validated.
+Reviewing this file establishes the activation boundary, the inputs to per-block target calculation, and the checks applied to a claimed proof-of-work target. It also establishes that candidate time and recent chain history can select different calculation paths. Precise internal behavior remains defined by the source.
 
 ## Activation
 
@@ -38,26 +28,13 @@ Mainnet `v31.1.0` chain parameters set:
 
 - `nShockWaveActivationHeight = 57750`
 
-Therefore block `57750` is the first block whose required work is calculated using ShockWave.
+At height `57750`, the node begins using ShockWave to determine the block's required `nBits` value.
 
-## ShockWave source-backed features
+## ShockWave calculation scope
 
-The current file header and implementation identify:
+After activation, the code computes a new target for each block. The calculation considers a 25-block MTP-based history and a shorter six-interval view of header timing. It bounds the resulting target relative to the preceding block and contains a candidate-time path for a sufficiently long chain stall.
 
-- a MedianTimePast-based 25-block / 24-interval rolling baseline;
-- a six-interval difficulty-normalized fast tightening sensor;
-- true `+/-4x` per-block final difficulty-adjustment bounds;
-- aggressive tightening continuation for unmistakably fast blocks;
-- overshoot-regime reset behavior after a real post-ratchet stall;
-- newest-block tightening and easing guards;
-- trusted-history rules when timestamps are uncertain;
-- dual raw/MTP timestamp-consistency checks;
-- deterministic candidate-time emergency stall recovery;
-- 25% emergency difficulty reductions every five minutes once recovery begins;
-- deterministic recovery-regime reset after an emergency block;
-- immediate per-block authority while the post-recovery history window refills;
-- bounded raw interval timing during recovery refill;
-- integer-only consensus arithmetic.
+Those observations describe inputs, thresholds, and externally relevant results. This page intentionally does not reproduce the source comments' ordered feature list or its detailed explanation of the internal control rules. The implementation remains the authority for those details.
 
 ## Historical pre-ShockWave path
 
@@ -93,7 +70,7 @@ Do not describe current BitcoinII mainnet as using only 2016-block retargeting.
 
 ## Dark Gravity Wave relationship
 
-ShockWave's rolling baseline is derived in part from Dark Gravity Wave v3 concepts/code, but ShockWave adds separate BitcoinII mechanisms and should be named as its own algorithm in current documentation.
+The `src/pow.cpp` notice says part of ShockWave's rolling calculation comes from Dark Gravity Wave v3 concepts and code. That lineage does not make the complete BitcoinII algorithm identical to DGW, so current documentation should use the name **ShockWave** and preserve the Dash/Darkcoin attribution.
 
 ## Related pages
 

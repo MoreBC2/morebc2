@@ -2,7 +2,7 @@
 
 **Category:** Developer / Source Atlas
 **Status:** Source-reviewed partial
-**Last reviewed:** 2026-09-02
+**Last reviewed:** 2026-09-07
 
 ## Purpose
 
@@ -28,51 +28,23 @@ Mining code recalculates required work when candidate time changes so block-temp
 
 ## Rolling baseline
 
-The normal controller uses:
-
-- 25 sampled blocks;
-- 24 completed intervals;
-- MedianTimePast timing;
-- an arithmetic mean of sampled targets;
-- an ordinary 1/4x-to-4x window-timespan governor;
-- explicit final per-block target bounds relative to the immediately previous block.
-
-The final bound means normal next-block target cannot become more than four times harder or four times easier than the previous target, subject to `powLimit`.
+The normal calculation reads 25 block-index entries, which provide 24 time gaps. It obtains its time endpoints through `GetMedianTimePast()` and averages the targets represented by those entries. The elapsed-time input and the final target are each bounded; in normal operation the next target stays between one quarter and four times the preceding target, subject to `powLimit`.
 
 ## Short-horizon response
 
-The implementation also contains a six-interval raw-timestamp controller intended to react faster than the 25-block rolling baseline when observed work changes sharply.
+The 25-block calculation is not the algorithm's only input. The code also examines the six most recent completed intervals, taking account of the target assigned to each interval. Depending on that recent evidence, the next target may be constrained or may move more quickly than the longer-window result.
 
-Source comments identify mechanisms including:
-
-- difficulty-normalized short-interval tightening;
-- aggressive-ratchet continuation for unmistakably fast blocks;
-- overshoot-regime reset after a real stall;
-- newest-block tightening/easing vetoes;
-- trusted-history handling when raw timestamps and MTP disagree.
-
-MoreBC2 should describe these as source-observed mechanisms rather than trying to reduce ShockWave to one moving-average formula.
+This page does not reproduce the source comments' catalogue or labels for the internal decision rules. Review `src/pow.cpp` for the controlling implementation.
 
 ## Timestamp handling
 
-ShockWave uses both MedianTimePast and raw header timestamps.
-
-The code projects the MTP clock toward the effective tip and compares it with recent raw timestamps. Raw timing that is materially ahead of the projected MTP clock loses authority for easing/moderation decisions.
-
-This is designed so timestamp disagreement may delay easier work but cannot manufacture easier work.
+The calculation uses MedianTimePast as well as header timestamps. When recent header time is too far ahead of the implementation's MTP-based comparison value, that header time is not accepted as evidence for reducing the required work.
 
 ## Emergency stall recovery
 
-The source defines:
+The emergency path becomes eligible only after the code calculates 30 minutes of stall time after accounting for `MAX_FUTURE_BLOCK_TIME`. At that threshold it applies one 25% difficulty reduction; another is applied for every additional five minutes, subject to the implementation's limits.
 
-- stall trigger: 30 minutes;
-- recovery step: 5 minutes;
-- emergency reductions: 25% difficulty reduction for each five-minute recovery step once recovery becomes available;
-- Bitcoin Core `MAX_FUTURE_BLOCK_TIME` retained as the timestamp uncertainty budget.
-
-The full future-time allowance is subtracted before candidate time can justify emergency easing.
-
-After an emergency block, the algorithm enters a recovery/refill regime while MTP history becomes clean again. During this period, post-recovery raw intervals are bounded and the code retains immediate per-block authority rather than trusting stale pre-recovery history.
+After a block qualifies for this path, later target calculations use post-event history while the normal MTP sampling window advances beyond the earlier stall. The exact transition rules are implementation details in `src/pow.cpp` and are not restated here.
 
 ## Header-sync interaction
 
@@ -84,9 +56,9 @@ That temporary history is used in both PRESYNC and REDOWNLOAD to call the same p
 
 ## Licensing boundary
 
-The `pow.cpp` header states that inherited Bitcoin Core and Dash/Darkcoin portions retain their applicable MIT terms, while original ShockWave implementation material is under separate proprietary source-review/reuse terms.
+The notice at the start of `src/pow.cpp` is controlling for that file. It identifies inherited Bitcoin Core and Dash/Darkcoin portions as MIT-licensed and applies separate, non-open-source terms to original ShockWave implementation material.
 
-The source expressly permits review, audit, compilation, execution and testing for the stated review/evaluation purposes, but does not grant reuse/deployment rights for ShockWave in another blockchain/product/service without permission.
+MoreBC2's factual account and original explanatory prose do not convey rights in the ShockWave source, its comments, or its implementation. Those upstream materials must be excluded from any future MoreBC2 documentation license; readers must consult the upstream notice for permitted uses.
 
 ## What remains open
 
