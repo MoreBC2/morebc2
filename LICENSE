@@ -1,0 +1,55 @@
+# MoreBC2 licensing map
+
+This repository uses different licenses for different categories of material. The licenses below apply only to material that MoreBC2 contributors have the authority to license. They do not grant rights in third-party material.
+
+## Original MoreBC2 documentation — CC BY 4.0
+
+Original MoreBC2-authored documentation is licensed under the Creative Commons Attribution 4.0 International Public License (CC BY 4.0). The canonical legal code is in [`LICENSES/CC-BY-4.0.txt`](LICENSES/CC-BY-4.0.txt).
+
+This documentation scope consists of original MoreBC2 prose, tables, diagrams, organization, and other documentation expression in:
+
+- Markdown files at the repository root;
+- `docs/**/*.md`;
+- `templates/**/*.md`;
+- `.github/ISSUE_TEMPLATE/*.md`; and
+- `.github/pull_request_template.md`.
+
+It also covers original MoreBC2 annotations, selection, and organization in `docs/verification/immutable-evidence-link-inventory.json`. Factual upstream paths, hashes, identifiers, and other third-party input within that generated file are not claimed as MoreBC2-owned expression.
+
+## Original MoreBC2 software, tooling, configuration, tests, and assets — MIT
+
+Original MoreBC2-authored software and related project material is licensed under the MIT License. The applicable canonical text, with the MoreBC2 contributor identification, is in [`LICENSES/MIT.txt`](LICENSES/MIT.txt).
+
+This scope consists of original MoreBC2 contributions in:
+
+- `scripts/*.mjs`, including tests;
+- `src/**`;
+- `astro.config.mjs` and `tsconfig.json`;
+- `.github/workflows/**` and `.github/CODEOWNERS`;
+- `.gitignore`, `public/_headers`, and `public/robots.txt`;
+- project-specific configuration in `package.json` and `package-lock.json`; and
+- the rights-cleared original project asset `public/favicon.svg`.
+
+Package names, registry metadata, integrity values, dependency code, and other third-party material recorded by the package manager are not relicensed under the MoreBC2 MIT grant.
+
+## Third-party material and mixed files
+
+Third-party material is not relicensed by MoreBC2. It remains subject to its applicable upstream copyright, license, proprietary notice, trademark rights, data-service terms, or other controlling terms. Relevant provenance, attribution, and exclusions are described in [`NOTICE`](NOTICE) and [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+
+This exclusion includes, where applicable:
+
+- BitcoinII Core-derived material;
+- Bitcoin Core-derived material;
+- Dark Gravity Wave / Dash / Darkcoin-derived material;
+- upstream ShockWave source code, comments, implementation structure, and proprietary notice;
+- package-manager dependencies and framework code;
+- third-party service responses, datasets, screenshots, documentation, and branding; and
+- third-party names and marks.
+
+The upstream ShockWave implementation, source code, source comments, expressive structure, and proprietary notice are specifically outside the MoreBC2 license grants. Nothing in this repository’s CC BY 4.0 or MIT licensing grants permission to use those upstream materials beyond permission provided by their applicable rightsholders and terms.
+
+When a file contains both MoreBC2 and third-party material, the applicable MoreBC2 license covers only the original MoreBC2 contribution unless the file clearly states otherwise. Any third-party notice or file-specific term continues to control the material to which it applies.
+
+Technical facts, ordinary names, identifiers, hashes, block heights, constants, and independently authored descriptions should not be treated as third-party copyrighted expression merely because they describe or identify an upstream system. This statement does not decide whether any particular passage is copyrightable or whether another right applies.
+
+This licensing map does not provide legal advice or make a representation about rights that a contributor does not hold.

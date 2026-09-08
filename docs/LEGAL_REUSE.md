@@ -1,20 +1,20 @@
 # Legal and reuse posture
 
 **Category:** Project maintenance
-**Status:** Blocking decision required
-**Last reviewed:** 2026-09-07
+**Status:** Licensing package implemented; owner review required
+**Last reviewed:** 2026-09-08
 
 ## Summary
 
-MoreBC2 does not currently have a repository `LICENSE` file. That is a blocker for public open-source release.
+MoreBC2 now has a path-scoped licensing package. Original MoreBC2 documentation is licensed under CC BY 4.0; original MoreBC2 software, site tooling, configuration, tests, and rights-cleared assets are licensed under MIT. Third-party material is excluded from those grants and remains under its applicable terms.
 
-This audit does not select or recommend a specific license. Until the owner makes and implements the decision, readers and contributors must not assume permission to copy, redistribute, modify, or reuse repository content.
+See the repository [`LICENSE`](https://github.com/MoreBC2/morebc2/blob/main/LICENSE), [`NOTICE`](https://github.com/MoreBC2/morebc2/blob/main/NOTICE), and [`THIRD_PARTY_NOTICES.md`](https://github.com/MoreBC2/morebc2/blob/main/THIRD_PARTY_NOTICES.md). These files implement the licensing structure; this page records remaining risk and review items and is not legal advice.
 
 ## Separate works and rights
 
 MoreBC2 documentation and BitcoinII Core source code are separate works. A license applying to BitcoinII Core does not automatically license MoreBC2 documentation.
 
-A repository-wide decision may also need to distinguish among:
+The licensing map distinguishes among:
 
 - original MoreBC2 prose and code;
 - quoted or adapted source material;
@@ -23,20 +23,20 @@ A repository-wide decision may also need to distinguish among:
 - generated evidence inventories and captured metadata; and
 - contributor submissions.
 
-## Required owner decisions
+## Remaining owner decisions
 
-Before changing repository visibility:
+Before changing repository visibility, the owner still needs to:
 
-1. Choose and add the repository license or clearly defined license set.
-2. Decide whether different content categories need separate terms.
-3. Inventory third-party material and record required copyright and license notices.
-4. Confirm that branding and logos may be distributed in the intended way.
-5. Decide what contributor representation or sign-off is required for provenance and licensing.
-6. Have the final files reviewed by an appropriately qualified person if legal certainty is needed.
+1. Confirm that contributors had authority to license their original contributions under the applicable repository license.
+2. Review the treatment of mixed/source-derived material and unresolved provenance items in the completed audit.
+3. Generate and review dependency notices against the actual artifact that will be distributed.
+4. Decide how privacy-sensitive historical paths will be treated.
+5. Establish a public security-reporting route.
+6. Have the final package reviewed by an appropriately qualified person if legal certainty is needed.
 
 ## Attribution findings
 
-Current documentation cites BitcoinII Core and upstream concepts extensively. The ShockWave documentation explicitly notes derivation in part from Dark Gravity Wave v3 concepts and code, but this repository does not yet contain a complete third-party attribution or notice inventory.
+Current documentation cites BitcoinII Core and upstream concepts extensively. The provenance audit and `THIRD_PARTY_NOTICES.md` record the BitcoinII Core, Bitcoin Core, Dark Gravity Wave / Dash / Darkcoin, ShockWave, service, dependency, and asset boundaries identified so far.
 
 Source links are useful provenance, but links alone may not satisfy applicable license or attribution obligations. The owner should review copied snippets, quotations, algorithms, images, logos, and generated artifacts before public release.
 
@@ -50,6 +50,6 @@ Source links are useful provenance, but links alone may not satisfy applicable l
 
 ## Verification
 
-**Status:** Blocking decision required
+**Status:** Owner review required
 **Primary sources checked:** Repository root file inventory and current project documentation
-**Notes:** This is a project risk record, not legal advice, and it deliberately does not choose a license.
+**Notes:** This is a project risk record, not legal advice. The repository licensing package is implemented, but owner review and the remaining items above are still required before publication.
