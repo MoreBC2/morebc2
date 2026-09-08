@@ -55,7 +55,7 @@ GitHub does not currently enable CODEOWNERS or enforce the preferred `main` prot
 
 ## Repository safety and privacy
 
-Do not commit secrets, API tokens, passwords, private keys, seed phrases, personal information, or unnecessary personal data. Use redacted examples and safe test data. If sensitive material is exposed, stop sharing it and notify a maintainer privately so the affected credential or data can be handled appropriately.
+Do not commit secrets, API tokens, passwords, private keys, seed phrases, personal information, or unnecessary personal data. Use redacted examples and safe test data. If sensitive material is exposed, stop sharing it and follow [`SECURITY.md`](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md). Never place the sensitive details in a public issue; the security policy explains the current limitation when no verified private intake route is available.
 
 Preserve MoreBC2's existing status vocabulary, evidence scale, sourcing standards, and verification blocks. Do not weaken an uncertainty label or strengthen a claim merely to make a change appear complete.
 
