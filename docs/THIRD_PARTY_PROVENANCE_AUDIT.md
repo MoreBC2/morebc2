@@ -1,10 +1,11 @@
 # Third-party provenance audit
 
 **Category:** Project maintenance
-**Status:** Owner/legal review required
+**Status:** Licensing package implemented; owner/legal review required
 **Audit date:** 2026-09-07
 **Repository baseline:** `7060907437d6b10f5eb449f383004a8fb6ec94e3`
 **Focused rights-clearance follow-up:** 2026-09-07, starting at `14f8536f0f472f6d545593a067909e36f9be2cd8`
+**Licensing package implementation:** 2026-09-08, starting at `196254df30421f0c0d4bc5c6b001fbf0c9124ea0`
 
 ## Purpose and limits
 
@@ -16,7 +17,7 @@ This audit:
 - reviewed relevant Git history where it could identify how an asset or site file entered the repository;
 - distinguishes technical facts and names from protectable expression;
 - does not conclude that a citation alone satisfies a license or attribution obligation;
-- does not select a license or grant permission to reuse any material; and
+- did not itself select a license; the later implementation recorded below applies the owner-directed licensing structure; and
 - is not legal advice.
 
 The classifications below describe apparent provenance, not a legal conclusion. “Adapted” means the MoreBC2 expression closely follows or reorganizes an identified upstream implementation or document. It does not mean that every fact, identifier, command, or short phrase is copyrightable.
@@ -25,13 +26,13 @@ The classifications below describe apparent provenance, not a legal conclusion. 
 
 The audit records **13 grouped findings**. The repository contains no tracked screenshots, photographs, raster images, font files, release binaries, archives, `node_modules`, or other vendored dependency directory. The only tracked standalone visual asset is `public/favicon.svg`.
 
-BitcoinII Core `v31.1.0/src/pow.cpp` expressly separates inherited MIT-licensed Bitcoin Core and Dash/Darkcoin material from original ShockWave implementation material under proprietary source-review terms. The focused follow-up below reviewed 33 ShockWave passage units and rewrote 15 that closely followed the source comments' expression, structure, or rights notice. The resulting MoreBC2 prose retains technical facts but does not reproduce the proprietary feature catalogue or detailed control-rule explanations. The upstream source, comments, and implementation remain expressly outside any future MoreBC2 documentation license.
+BitcoinII Core `v31.1.0/src/pow.cpp` expressly separates inherited MIT-licensed Bitcoin Core and Dash/Darkcoin material from original ShockWave implementation material under proprietary source-review terms. The focused follow-up below reviewed 33 ShockWave passage units and rewrote 15 that closely followed the source comments' expression, structure, or rights notice. The resulting MoreBC2 prose retains technical facts but does not reproduce the proprietary feature catalogue or detailed control-rule explanations. The upstream source, comments, and implementation remain expressly outside the MoreBC2 documentation license.
 
 The source-atlas material also closely maps MIT-licensed BitcoinII Core and Bitcoin Core code structure. Where those pages reproduce or adapt substantial expression rather than merely report facts and identifiers, the applicable copyright and MIT notice should be preserved.
 
 The npm lockfile records 561 dependency package entries. Dependencies are referenced through the package manager and are not vendored in this repository. Their licenses should not be replaced by a MoreBC2 repository-level software license, and the notices actually distributed in a built site should be assessed from the release artifact rather than by copying every lockfile entry into a root notice.
 
-The original favicon's Git history did not establish authorship, generation terms, or a third-party source. That asset has now been removed and replaced with a new SVG created specifically for MoreBC2 from basic geometric primitives, without third-party artwork or source material. The replacement is eligible for the future MoreBC2 original-material licensing scope.
+The original favicon's Git history did not establish authorship, generation terms, or a third-party source. That asset has now been removed and replaced with a new SVG created specifically for MoreBC2 from basic geometric primitives, without third-party artwork or source material. The replacement is included in the MIT-licensed MoreBC2 original-material scope.
 
 ## Focused P-03 and P-09 rights-clearance follow-up
 
@@ -86,7 +87,7 @@ The tracked evidence establishes this sequence:
 
 The evidence did **not** establish that the removed favicon was authored specifically for MoreBC2, generated under usable terms, or copied/adapted from a third party. No geometry from that asset was reused or traced.
 
-Disposition: **P-09 is resolved.** The replacement uses no third-party asset, logo, font, image, downloaded SVG, source artwork, or embedded raster content. It may be included in the future licensing scope for original MoreBC2 project material; no license grant is made by this audit.
+Disposition: **P-09 is resolved.** The replacement uses no third-party asset, logo, font, image, downloaded SVG, source artwork, or embedded raster content. The repository licensing map now includes it in the MIT-licensed scope for original MoreBC2 project material.
 
 ## Detailed findings
 
@@ -122,7 +123,7 @@ Disposition: **P-09 is resolved.** The replacement uses no third-party asset, lo
 4. **Upstream source:** https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/src/pow.cpp
 5. **Apparent upstream license:** Mixed. The file says inherited Bitcoin Core and Dash/Darkcoin portions remain under applicable MIT terms, while original 2026 ShockWave implementation material is proprietary and available only under stated review/evaluation permissions. It expressly says that those permissions are not an open-source license.
 6. **Apparent relationship:** Following the focused review, the retained prose is **purely factual/reference-only**, independently expressed explanation, ordinary identifiers/constants, or attributed MIT-derived lineage. Fifteen close, near-copied, or uncertain passage units were rewritten.
-7. **Recommended treatment:** The reviewed MoreBC2 prose may remain within the owner's future documentation-license scope with source attribution. Explicitly exclude upstream ShockWave source, comments, implementation, and notice; the upstream file's terms remain controlling.
+7. **Recommended treatment:** The reviewed MoreBC2 prose remains within the CC BY 4.0 documentation scope with source attribution. The licensing map explicitly excludes upstream ShockWave source, comments, implementation, and notice; the upstream file's terms remain controlling.
 8. **Confidence:** High for the expression-level comparison performed against tagged `v31.1.0/src/pow.cpp`; medium on ultimate legal characterization, which only qualified counsel can provide.
 9. **Uncertainty:** Future additions could recreate the issue. Do not import the upstream feature catalogue, source comments, or detailed control-rule expression without a new review.
 
@@ -192,11 +193,11 @@ Disposition: **P-09 is resolved.** The replacement uses no third-party asset, lo
 2. **Material type:** Original vector icon built from one background rectangle and two stroked paths forming an abstract `M2`.
 3. **Apparent upstream/rightsholder:** Created specifically for the MoreBC2 project in the 2026-09-07 rights-clearance task; no upstream artwork or rightsholder applies.
 4. **Upstream source:** None. The SVG was written directly from basic geometric primitives in this repository.
-5. **Apparent upstream license:** Not applicable. No license is granted here; the asset is eligible for inclusion in the future license covering original MoreBC2 material.
+5. **Apparent upstream license:** Not applicable. The repository licensing map includes the replacement in the MIT-licensed scope for original MoreBC2 material.
 6. **Apparent relationship:** Original MoreBC2 **visual/branding** material. It does not reuse or trace the removed favicon geometry.
-7. **Recommended treatment:** Include the replacement in the future original-material licensing scope and retain its embedded provenance comment.
+7. **Recommended treatment:** Keep the replacement in the original MoreBC2 MIT scope and retain its embedded provenance comment.
 8. **Confidence:** High. The creation method and absence of external resources are directly reviewable in the SVG and task diff.
-9. **Uncertainty:** No third-party provenance uncertainty remains. The owner still must apply the future repository license.
+9. **Uncertainty:** No third-party provenance uncertainty remains. Owner review of the implemented repository licensing package remains required.
 
 ### P-10 — Astro/Starlight site integration and scaffold-shaped configuration
 
@@ -255,21 +256,21 @@ Disposition: **P-09 is resolved.** The replacement uses no third-party asset, lo
 - No third-party logo asset was found. Textual project and service names are covered by P-08.
 - The repository's simple `public/_headers`, `public/robots.txt`, `.gitignore`, and issue/PR templates contain ordinary project configuration or prompts; no substantial third-party expression was identified.
 
-## Proposed attribution structure
+## Implemented attribution structure
 
-The owner could implement the following separation after resolving the open rights questions. This is a structure proposal, not a license selection.
+The repository licensing map, `NOTICE`, and `THIRD_PARTY_NOTICES.md` implement the following separation. The remaining owner/legal questions below are not silently resolved by those files.
 
 ### Original MoreBC2 documentation
 
 - Define the documentation scope by path, normally repository Markdown authored for MoreBC2.
-- State the chosen documentation license only after confirming contributor authority.
+- Apply CC BY 4.0 only to original MoreBC2 documentation contributions that contributors had authority to license.
 - Carve out quoted, adapted, generated, and otherwise identified third-party material.
 - Point to `THIRD_PARTY_NOTICES.md` for P-01 through P-08 and P-13.
 
 ### Original MoreBC2 software and site tooling
 
 - Define the software scope: project-specific `scripts/`, `src/`, and configuration files.
-- State the chosen software license after completing the remaining owner review of scaffold-era contributions; the replacement favicon's provenance is documented in P-09.
+- Apply MIT only to original MoreBC2 software, tooling, configuration, tests, and the replacement favicon; contributor-authority review remains open.
 - Clarify that dependencies keep their own licenses.
 
 ### BitcoinII Core-derived material
@@ -303,53 +304,53 @@ The owner could implement the following separation after resolving the open righ
 - Preserve package license and notice files in accordance with each package; do not claim dependencies are covered by the MoreBC2 software license.
 - Treat build-only dependencies differently from code/assets included in the published site or downloadable tooling.
 
-## Compatibility with the contemplated licensing plan
+## Compatibility with the implemented licensing plan
 
-The contemplated structure—CC BY 4.0 for original documentation and MIT for original MoreBC2 software—does not appear inherently incompatible with the repository's original material. It must, however, be scoped so it does not purport to relicense third-party material.
+The implemented structure—CC BY 4.0 for original documentation and MIT for original MoreBC2 software, tooling, configuration, tests, and rights-cleared assets—does not appear inherently incompatible with the repository's original material. It is scoped so it does not purport to relicense third-party material.
 
-The following require resolution before applying that structure:
+The implementation addresses the identified boundaries as follows:
 
-1. **ShockWave:** The focused follow-up rewrote the 15 close, near-copied, or uncertain passage units as independently organized factual prose and original rights-boundary statements. The future documentation license must expressly exclude upstream ShockWave source, comments, implementation, and notice.
+1. **ShockWave:** The focused follow-up rewrote the 15 close, near-copied, or uncertain passage units as independently organized factual prose and original rights-boundary statements. The licensing map expressly excludes upstream ShockWave source, comments, implementation, and notice.
 2. **MIT-derived source expression:** Substantial copied/adapted BitcoinII Core, Bitcoin Core, or DGW/Dash expression must retain the applicable copyright and MIT permission notice. A CC BY label should clearly exclude those portions or be accompanied by a compatible, accurate notice structure.
-3. **Favicon:** Resolved. The old unresolved asset was removed; the independently created replacement is eligible for the future original MoreBC2 licensing scope.
+3. **Favicon:** Resolved. The old unresolved asset was removed; the independently created replacement is included in the MoreBC2 MIT scope.
 4. **Service data:** Current records are bounded factual observations, not substantial datasets. Future redistribution of API bodies, market data, screenshots, or schemas requires service-specific review.
 5. **Dependencies:** Package dependencies remain under their own licenses. Distribution obligations depend on the produced artifact, not solely on the lockfile.
 
-No tracked material was conclusively identified as incompatible with the contemplated plan if the plan is limited to original MoreBC2 work and the exclusions/notices above are implemented. P-03 has been cleared by rewriting the affected MoreBC2 expression and excluding upstream material from the proposed license scope. P-09 has been cleared by removing the unresolved asset and replacing it with independently created MoreBC2 artwork.
+No tracked material was conclusively identified as incompatible with the implemented plan because the grants are limited to original MoreBC2 work and carry the exclusions and notices above. P-03 was cleared by rewriting the affected MoreBC2 expression and excluding upstream material from the license scope. P-09 was cleared by removing the unresolved asset and replacing it with independently created MoreBC2 artwork.
 
-## Recommended contents for a future `NOTICE`
+## Implemented `NOTICE` structure
 
-A concise project-facing `NOTICE` could contain:
+The project-facing `NOTICE` now contains:
 
-- MoreBC2 project identity and owner-approved copyright statement;
-- a clear path-based split between original documentation and original software/tooling;
+- MoreBC2 project identity without inventing a legal entity;
+- a pointer to the licensing map’s path-based split between original documentation and original software/tooling;
 - a statement that third-party material and dependencies retain their own terms;
 - top-level acknowledgements of BitcoinII Core, Bitcoin Core, and Dark Gravity Wave/Dash lineage;
 - an explicit ShockWave file-specific rights boundary, without paraphrasing it as an open-source license;
 - a pointer to `THIRD_PARTY_NOTICES.md` for detailed notices and exclusions;
-- a trademark/non-affiliation statement approved by the owner; and
-- identification of the replacement favicon as original MoreBC2 material, if the owner wants the root notice to enumerate project assets.
+- neutral trademark/non-affiliation wording for owner review; and
+- identification of the replacement favicon as original MoreBC2 material.
 
-## Recommended contents for a future `THIRD_PARTY_NOTICES.md`
+## Implemented `THIRD_PARTY_NOTICES.md` structure
 
-The detailed notices file could contain one section per provenance family:
+The detailed notices file contains one section per provenance family:
 
-1. BitcoinII Core MIT-covered source-derived material, with repository/tag, affected MoreBC2 paths, copyright notice, MIT text, and modifications/summary status.
-2. Bitcoin Core-derived material, with the Bitcoin Core `v27.0` source reference and preserved MIT notice.
-3. Dark Gravity Wave v3/Dash/Darkcoin-derived material, with exact revision and author attribution once established, plus MIT notice.
-4. ShockWave proprietary source-review material, quoting or linking the controlling file notice only after legal review and listing excluded MoreBC2 passages or obtained permission.
-5. Third-party data/API observations, identifying source services, dates, and whether only facts or any redistributable payload is included.
+1. BitcoinII Core MIT-covered source-derived material, with repository/tag, MoreBC2 relationship, upstream copyright lines, MIT reference, and the file-specific-term boundary.
+2. Bitcoin Core-derived material, with the Bitcoin Core `v27.0` source and MIT references.
+3. Dark Gravity Wave v3/Dash/Darkcoin-derived material, with the known lineage and explicit uncertainty about exact revision and author allocation.
+4. ShockWave proprietary source-review material, linking the controlling source and summarizing the boundary without reproducing its substantial notice text.
+5. Third-party service/data categories and the boundary between factual references and redistributable third-party payloads.
 6. Assets and branding, recording the replacement favicon's original provenance and any future screenshots/logos with explicit permissions.
-7. Distributed npm/framework components, generated from the actual release artifact and containing required license texts/notices rather than an unreviewed dump of every lockfile entry.
+7. Direct npm/framework families and the requirement to generate any further license bundle from the actual distributed artifact rather than dumping every lockfile entry.
 
 ## Owner/legal decisions still required
 
 - Trace the exact Dark Gravity Wave v3 revision and attribution chain used by BitcoinII if a precise software-derived notice is desired.
 - Establish a policy for when source-atlas prose requires preservation of an upstream MIT notice.
-- Decide whether and how to state trademark/non-affiliation language.
+- Review and approve the neutral trademark/non-affiliation language in `NOTICE`.
 - Generate and review notices against the actual site/release artifact, especially for LGPL/MPL/transitive dependencies.
 - Confirm that each contributor had authority to license their MoreBC2 contributions under the owner's selected structure.
 
 ## Readiness conclusion
 
-The focused licensing-scope blockers now have defined dispositions: P-03 was resolved by rewriting MoreBC2 expression and reserving upstream ShockWave material to its controlling terms; P-09 was resolved by replacing the unresolved favicon with an independently created MoreBC2 asset. The repository is ready for the owner to **draft and apply** a path-scoped CC BY 4.0 plus MIT structure if the remaining exclusions and third-party notices are implemented accurately. Notice, contributor-authority, and artifact-specific dependency work identified above still requires owner review.
+The focused licensing-scope blockers have defined dispositions: P-03 was resolved by rewriting MoreBC2 expression and reserving upstream ShockWave material to its controlling terms; P-09 was resolved by replacing the unresolved favicon with an independently created MoreBC2 asset. The path-scoped CC BY 4.0 plus MIT licensing map and repository notices are now implemented. Contributor-authority review, remaining provenance judgments, and an artifact-specific dependency license bundle still require owner review before publication.

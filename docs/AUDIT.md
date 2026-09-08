@@ -2,14 +2,14 @@
 
 **Category:** Project maintenance
 **Status:** Owner review required
-**Last reviewed:** 2026-09-07
+**Last reviewed:** 2026-09-08
 **Audit baseline:** BitcoinII Core `v31.1.0`
 
 ## Assessment
 
 MoreBC2 has a strong documentation structure, unusually careful evidence labels, a functioning Astro/Starlight validation path, and current-facing BitcoinII documentation aligned to the `v31.1.0` baseline. The repository is ready for owner review but is **not ready for a visibility change**.
 
-The primary blockers are licensing, treatment of personal environment details in exact historical evidence, incomplete third-party rights and attribution review, lack of a public security-reporting path, and owner approval. Current release runtime, artifact-authentication, and independent technical-review gaps must remain visible but do not need invented answers.
+The path-scoped licensing and third-party notice package is now implemented. Remaining blockers are treatment of personal environment details in exact historical evidence, owner review of contributor authority and residual provenance questions, lack of a public security-reporting path, and owner approval. Current release runtime, artifact-authentication, and independent technical-review gaps must remain visible but do not need invented answers.
 
 ## Scope reviewed
 
@@ -33,9 +33,9 @@ Dated `v29.1.0` verification records are intentionally unchanged. They remain ev
 
 ### Legal and attribution
 
-- No `LICENSE` file exists. The owner must choose the license; this audit does not do so.
-- A complete third-party attribution and notice inventory is not present.
-- Branding, screenshots, copied excerpts, adapted code/algorithm explanations, and generated evidence artifacts need a rights/provenance review.
+- `LICENSE`, canonical CC BY 4.0 and MIT texts, `NOTICE`, and `THIRD_PARTY_NOTICES.md` now implement the owner-directed path-scoped model.
+- The owner must still confirm contributor authority, the notice treatment of mixed/source-derived material, and the remaining provenance uncertainties recorded in `docs/THIRD_PARTY_PROVENANCE_AUDIT.md`.
+- An artifact-specific dependency license inventory must be generated and reviewed for the actual site or other artifact distributed.
 
 ### Privacy and security
 

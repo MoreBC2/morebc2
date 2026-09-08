@@ -2,7 +2,7 @@
 
 **Category:** Project maintenance
 **Status:** Draft
-**Last reviewed:** 2026-09-07
+**Last reviewed:** 2026-09-08
 
 This dashboard summarizes coverage. It does not turn source review, plans, or dated observations into runtime verification.
 
@@ -30,10 +30,10 @@ This dashboard summarizes coverage. It does not turn source review, plans, or da
 | API and infrastructure | Needs Recheck | Dated public-service observations exist; permanence, ownership, reliability, and complete schemas are not established. |
 | Exchange integration | Partial | Operator guidance is v31-aware; confirmation policy and account-level behavior remain unresolved. |
 | Ecosystem | Needs Recheck | Dated observations must be refreshed before recommendations. |
-| Contribution and governance | Draft | Public-facing workflow exists; license, final contribution terms, and team/enforcement details need owner confirmation. |
+| Contribution and governance | Draft | Licensing guidance exists; final contribution workflow and team/enforcement details need owner confirmation. |
 | Site tooling | Automated checks | Astro/Starlight generation, adapter tests, rendered output, and Windows evidence guards exist. Passing them does not verify protocol claims. |
 | Independent technical review | Important quality task | Strongly encouraged for consequential current-facing claims; absence alone is not a visibility blocker. |
-| Public-release readiness | Blocked | Licensing, privacy treatment, third-party rights and attribution, a public security-reporting route, and owner approval remain open. |
+| Public-release readiness | Blocked | The licensing package is present; privacy treatment, residual rights/attribution review, a public security-reporting route, and owner approval remain open. |
 
 ## Current routes
 

@@ -1,7 +1,7 @@
 # Contributing to MoreBC2
 
-**Status:** Draft public contribution workflow; license decision pending
-**Last reviewed:** 2026-09-07
+**Status:** Draft public contribution workflow; owner review pending
+**Last reviewed:** 2026-09-08
 
 ## Summary
 
@@ -9,13 +9,24 @@ MoreBC2 is an independently maintained, source-backed documentation project for 
 
 ## Current contribution posture
 
-Until the owner adds a repository license:
+The repository uses a path-scoped licensing model described in [`LICENSE`](https://github.com/MoreBC2/morebc2/blob/main/LICENSE):
 
-- Do not assume permission to copy, redistribute, or reuse repository content.
+- Original MoreBC2 documentation is licensed under CC BY 4.0.
+- Original MoreBC2 software, site tooling, configuration, tests, and rights-cleared project assets are licensed under MIT.
+- Third-party material is not relicensed and remains under its applicable terms.
+
+When contributing:
+
 - Do not publish MoreBC2 pages as official BitcoinII documentation.
 - Do not imply that Draft, Partial, or Needs Review pages are final.
 - Do not upgrade claims from memory or community assumption.
 - Keep contributions narrow enough for factual, licensing, and provenance review.
+
+## Licensing of contributions
+
+Submit only material that you have the authority to contribute. By submitting an original contribution, you agree that it may be distributed under the repository license applicable to that material: CC BY 4.0 for original documentation and MIT for original software, tooling, configuration, tests, and project assets.
+
+You retain your copyright; contributing does not assign it to MoreBC2. Identify third-party material and its source and license in the pull request. Do not submit proprietary, confidential, or otherwise restricted material without documented permission compatible with its intended use. No contributor license agreement or Developer Certificate of Origin is introduced by this policy.
 
 ## Core rule
 
@@ -237,4 +248,4 @@ Use **BitcoinII** for the project name and **BC2** for the ticker. Avoid using *
 
 **Status:** Draft
 **Primary sources checked:** Current MoreBC2 project status, review handoff, verification queue, command tracker, and release tracker
-**Notes:** This workflow remains Draft until the owner resolves the repository license and final public contribution terms.
+**Notes:** This workflow remains Draft until the owner approves the final public contribution and enforcement process. The repository licensing map is implemented.

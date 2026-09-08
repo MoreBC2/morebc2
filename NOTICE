@@ -1,0 +1,15 @@
+MoreBC2
+
+MoreBC2 is an independently maintained documentation and verification project for BitcoinII (BC2). It is not the BitcoinII Core repository, an official BitcoinII release channel, or a source of authority for BitcoinII software.
+
+MoreBC2 is not affiliated with, sponsored by, endorsed by, or granted official status by the BitcoinII Core, Bitcoin Core, Dash, or Darkcoin developers, or by any exchange, explorer, pool, wallet provider, API operator, or other service referenced in this repository. Names and marks are used only to identify the projects and services being discussed; this notice makes no claim about registration or ownership of any mark.
+
+The documentation references BitcoinII Core and its inherited Bitcoin Core and Dark Gravity Wave / Dash / Darkcoin lineage. Source-derived third-party material remains under its applicable upstream terms.
+
+BitcoinII Core `v31.1.0/src/pow.cpp` states separate proprietary terms for original ShockWave implementation material. Upstream ShockWave source code, comments, implementation structure, and proprietary notice are not licensed by MoreBC2. MoreBC2’s independently authored factual and explanatory documentation does not grant rights in that upstream material.
+
+The current `public/favicon.svg` is an original MoreBC2 project asset created specifically for this repository. It replaced an earlier favicon whose provenance could not be established.
+
+Package and framework dependencies retain their own licenses. Their presence in package-manager metadata does not place them under the MoreBC2 software license.
+
+See `LICENSE` for the repository licensing map and `THIRD_PARTY_NOTICES.md` for detailed provenance, attribution, exclusions, and upstream references.

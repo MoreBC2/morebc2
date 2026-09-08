@@ -49,7 +49,9 @@ See the [verification evidence index](docs/verification/verification-index.md), 
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening an issue or pull request. Keep claims tied to evidence, preserve uncertainty labels, and never promote Draft, Partial, Needs Review, or Source Reviewed material to Verified without the required record.
 
-The repository currently has **no `LICENSE` file**. The owner must choose and add an appropriate license before public release; do not assume permission to reuse repository content in the meantime. See [legal and reuse posture](docs/LEGAL_REUSE.md).
+## Licensing
+
+Original MoreBC2 documentation is licensed under CC BY 4.0. Original MoreBC2 software, site tooling, configuration, tests, and the rights-cleared favicon are licensed under MIT. Third-party material remains under its own terms. See the [licensing map](https://github.com/MoreBC2/morebc2/blob/main/LICENSE), [NOTICE](https://github.com/MoreBC2/morebc2/blob/main/NOTICE), and [third-party notices](https://github.com/MoreBC2/morebc2/blob/main/THIRD_PARTY_NOTICES.md).
 
 ## Site and tooling validation
 
