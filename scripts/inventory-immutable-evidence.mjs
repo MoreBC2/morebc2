@@ -6,7 +6,7 @@ const RELEASE_TAG = 'v29.1.0';
 const OBSERVED_DATE = '2026-08-27';
 const EXPECTED_TAG_COMMIT = '3f2a352467750425ec28abe3505a5db5bbc5fa35';
 const EXPECTED_MAIN_COMMIT = '218d1b7e0f682c2aa43c3698d927cbfbb7adfe76';
-const SOURCE_MOREBC2_COMMIT = 'ca08df7369f22953b19d845218766233e5b4ca1d';
+const SOURCE_MOREBC2_COMMIT = '1adfbfc5efa36bc9d332d171e08f675f6ac6feb2';
 const CURRENT_NOTE = `The mutable current-upstream \`main\` links below were re-observed on ${OBSERVED_DATE} and are intentionally retained to track upstream state. They are not release-pinned evidence.`;
 
 const releaseSpecificFiles = new Set([

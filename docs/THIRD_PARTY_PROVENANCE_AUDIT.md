@@ -3,9 +3,9 @@
 **Category:** Project maintenance
 **Status:** Licensing package implemented; owner/legal review required
 **Audit date:** 2026-09-07
-**Repository baseline:** `7060907437d6b10f5eb449f383004a8fb6ec94e3`
-**Focused rights-clearance follow-up:** 2026-09-07, starting at `14f8536f0f472f6d545593a067909e36f9be2cd8`
-**Licensing package implementation:** 2026-09-08, starting at `196254df30421f0c0d4bc5c6b001fbf0c9124ea0`
+**Repository baseline:** `3854cc403037d00af8d3788280ef38964a6e281f`
+**Focused rights-clearance follow-up:** 2026-09-07, starting at `22bc5ed1629f61faa2f54a073c663ee6b9b27c60`
+**Licensing package implementation:** 2026-09-08, starting at `aef247cd4b5a766a39aa47da2d374aff0d0dc140`
 
 ## Purpose and limits
 
@@ -79,9 +79,9 @@ The controlling upstream source remains https://github.com/Bitcoin-II/BitcoinII-
 
 The tracked evidence establishes this sequence:
 
-1. The parent `4a9dcc174dfafeeadf93f763d3d59691ae166564` did not contain a favicon. Its site-planning page, `docs/site/README.md:97-105`, still listed “Logo and favicon” as an open website decision.
-2. `public/favicon.svg` first appeared as blob `5a101e1eb6390db694683db92cab2c60624047af` in feature-branch commit `fcda9e78dd8ac051d9db7801a665f0f6b22985b8` (`Harden Starlight site generation and QA`, 2026-08-23).
-3. The identical blob entered `main` in squashed commit `4ffafd45670ae1557853251df30f7c34f9d3440f` (`Scaffold MoreBC2 Starlight site preview (#3)`, 2026-08-27), whose parent is `3e51b0d3fc54ff54fb7d31bd97a2e14ec4137a66`.
+1. The parent `314b751fa81f51d480444ae6ec25255c26183f81` did not contain a favicon. Its site-planning page, `docs/site/README.md:97-105`, still listed “Logo and favicon” as an open website decision.
+2. `public/favicon.svg` first appeared as blob `5a101e1eb6390db694683db92cab2c60624047af` in feature-branch commit `a84055e1ee6a400ec3736a06a1861b5a97ca63ca` (`Harden Starlight site generation and QA`, 2026-08-23).
+3. The identical blob entered `main` in squashed commit `4a0d229db6f22b21e985e33ddd1d331fb70951fc` (`Scaffold MoreBC2 Starlight site preview (#3)`, 2026-08-27), whose parent is `3de7b1c40c8a426481c011925e174fcd204df127`.
 4. The old favicon had no later content change before this cleanup. Searches of tracked files and all available refs found no design source, generator reference, prompt, issue text, attribution, license, or authorship statement tied to that SVG. The local environment did not provide GitHub CLI access to inspect any untracked PR discussion.
 5. On 2026-09-07, the unresolved SVG was removed. Its replacement was authored directly for MoreBC2 in this repository from a square background and two original stroked paths forming an abstract `M2` mark.
 
@@ -201,7 +201,7 @@ Disposition: **P-09 is resolved.** The replacement uses no third-party asset, lo
 
 ### P-10 — Astro/Starlight site integration and scaffold-shaped configuration
 
-1. **Repository path and range:** `astro.config.mjs:1-61`; `src/content.config.ts:1-7`; `src/pages/404.astro:1-34`; `src/styles/morebc2.css:1-87`; `tsconfig.json`; and the six `scripts/*.mjs` files. These files first arrived, or were developed, through the site-scaffold history culminating in commit `4ffafd45670ae1557853251df30f7c34f9d3440f`.
+1. **Repository path and range:** `astro.config.mjs:1-61`; `src/content.config.ts:1-7`; `src/pages/404.astro:1-34`; `src/styles/morebc2.css:1-87`; `tsconfig.json`; and the six `scripts/*.mjs` files. These files first arrived, or were developed, through the site-scaffold history culminating in commit `4a0d229db6f22b21e985e33ddd1d331fb70951fc`.
 2. **Material type:** Site integration code, API-shaped configuration, custom adapter/check scripts, CSS, and an error page.
 3. **Apparent upstream/rightsholder:** MoreBC2 for project-specific implementation; Astro and Starlight contributors for APIs, framework packages, and any starter-derived conventions.
 4. **Upstream source:** https://github.com/withastro/astro and https://github.com/withastro/starlight

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "observed_date": "2026-08-27",
-  "source_morebc2_commit": "ca08df7369f22953b19d845218766233e5b4ca1d",
+  "source_morebc2_commit": "1adfbfc5efa36bc9d332d171e08f675f6ac6feb2",
   "source_repository": "Bitcoin-II/BitcoinII-Core",
   "release_tag": "v29.1.0",
   "release_commit": "3f2a352467750425ec28abe3505a5db5bbc5fa35",
