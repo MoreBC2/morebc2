@@ -7,7 +7,7 @@
 
 MoreBC2 is an independently maintained, source-backed documentation and verification project for BitcoinII (BC2). Current-facing technical documentation uses BitcoinII Core `v31.1.0` as its baseline, while dated `v29.1.0` runtime and release records remain historical evidence.
 
-The repository is suitable for owner review, but it is **not ready to change visibility**. The path-scoped licensing and third-party notice package is present, and unnecessary personal local-user path details have been removed from the current tree. Owner review of contributor authority and third-party notices, a public security-reporting route, and owner approval remain open.
+The repository is suitable for owner review, but it is **not ready to change visibility**. The path-scoped licensing and third-party notice package is present, unnecessary personal local-user path details have been removed from the current tree, and [`SECURITY.md`](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md) now separates ordinary public issues from sensitive reports. A verified private security intake route is not yet available; owner review of contributor authority and third-party notices, establishment of that private route, and owner approval remain open.
 
 ## Current baseline
 
@@ -33,7 +33,7 @@ The dated `v29.1.0` evidence establishes only what those records say. It is not 
 
 1. Review and approve the implemented path-scoped licensing map and third-party notices, including contributor authority and remaining provenance uncertainties.
 2. Generate and review artifact-specific dependency notices for the actual site or other artifact that will be distributed.
-3. Establish a public security-reporting contact or process appropriate for a documentation repository.
+3. Establish and verify a private security-reporting route, then update `SECURITY.md` with the usable route before public visibility.
 4. Obtain explicit owner review and approval before publication.
 
 ## Important unresolved technical and operational work

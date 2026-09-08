@@ -49,6 +49,10 @@ See the [verification evidence index](docs/verification/verification-index.md), 
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening an issue or pull request. Keep claims tied to evidence, preserve uncertainty labels, and never promote Draft, Partial, Needs Review, or Source Reviewed material to Verified without the required record.
 
+## Security reporting
+
+Use [public GitHub issues](https://github.com/MoreBC2/morebc2/issues) for ordinary, non-sensitive documentation problems. Do not publish secrets, exploit details, personal information, or other sensitive security information in an issue. See [SECURITY.md](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md) for scope, the upstream boundary, and the current private-reporting limitation.
+
 ## Licensing
 
 Original MoreBC2 documentation is licensed under CC BY 4.0. Original MoreBC2 software, site tooling, configuration, tests, and the rights-cleared favicon are licensed under MIT. Third-party material remains under its own terms. See the [licensing map](https://github.com/MoreBC2/morebc2/blob/main/LICENSE), [NOTICE](https://github.com/MoreBC2/morebc2/blob/main/NOTICE), and [third-party notices](https://github.com/MoreBC2/morebc2/blob/main/THIRD_PARTY_NOTICES.md).

@@ -19,14 +19,15 @@ This checklist hands the repository to its owner for a decision about further pu
 7. [Known unknowns](verification/known-unknowns.md)
 8. [v31 currentness audit](verification/v31-currentness-audit-2026-09-02.md)
 9. [Contribution guide](../CONTRIBUTING.md)
-10. [Roadmap](../ROADMAP.md)
+10. [Security reporting policy](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md)
+11. [Roadmap](../ROADMAP.md)
 
 ## Owner decisions required
 
 - Select and add a repository license or defined license set.
 - Decide whether exact personal/machine paths in historical evidence are acceptable for publication.
 - Approve the third-party attribution and notice approach.
-- Establish an appropriate public security-reporting route.
+- Establish and verify a private security-reporting route, then update `SECURITY.md` with the usable route before public visibility.
 - Confirm CODEOWNERS teams and the intended public contribution/review model.
 - Decide whether and when the site should become indexable or move from its review deployment; no deployment change is included here.
 
@@ -57,7 +58,7 @@ Before changing visibility, confirm all of the following:
 - required attribution and notices are present;
 - the current-tree personal-path cleanup is complete;
 - no secrets or credentials are present in the publishable tree or history;
-- security reporting and contribution routes are usable;
+- the public issue guidance and a verified private security-reporting route are usable;
 - all documented repository checks pass;
 - date-sensitive links and external services were freshly checked; and
 - the owner explicitly approves the visibility change.

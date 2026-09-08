@@ -7,15 +7,16 @@ This roadmap organizes MoreBC2 work. It is not the BitcoinII protocol or softwar
 
 ## Current stage — owner public-release review
 
-The documentation foundation and Starlight site exist, current-facing BitcoinII material has been refreshed to the `v31.1.0` baseline, a path-scoped licensing and third-party notice package is present, and the current-tree personal-path cleanup is complete. Repository visibility must remain unchanged until remaining third-party/contributor-authority review, security reporting, and owner approval in [project status](PROJECT_STATUS.md) and the [repository audit](docs/AUDIT.md) are resolved.
+The documentation foundation and Starlight site exist, current-facing BitcoinII material has been refreshed to the `v31.1.0` baseline, a path-scoped licensing and third-party notice package is present, and the current-tree personal-path cleanup is complete. A public security policy now distinguishes ordinary issues from sensitive reports, but its private intake route remains an owner action. Repository visibility must remain unchanged until that route, remaining third-party/contributor-authority review, and owner approval in [project status](PROJECT_STATUS.md) and the [repository audit](docs/AUDIT.md) are resolved.
 
 ## Release-readiness priorities
 
 1. Owner review of the proposed public-facing scope and project description.
 2. Owner review of the implemented repository licensing map, contributor authority, notices, and remaining content-specific boundaries.
 3. Artifact-specific dependency notice review for the material actually distributed.
-4. Strongly encouraged independent review of high-impact `v31.1.0` consensus and operator-facing claims as a public-review and quality task, not a visibility blocker by itself.
-5. Fresh external-link and service checks immediately before publication.
+4. Establish and verify a private security-reporting route and update [`SECURITY.md`](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md) before public visibility.
+5. Strongly encouraged independent review of high-impact `v31.1.0` consensus and operator-facing claims as a public-review and quality task, not a visibility blocker by itself.
+6. Fresh external-link and service checks immediately before publication.
 
 ## Technical evidence priorities
 

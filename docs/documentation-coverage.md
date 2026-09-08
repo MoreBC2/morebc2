@@ -32,8 +32,9 @@ This dashboard summarizes coverage. It does not turn source review, plans, or da
 | Ecosystem | Needs Recheck | Dated observations must be refreshed before recommendations. |
 | Contribution and governance | Draft | Licensing guidance exists; final contribution workflow and team/enforcement details need owner confirmation. |
 | Site tooling | Automated checks | Astro/Starlight generation, adapter tests, rendered output, and Windows evidence guards exist. Passing them does not verify protocol claims. |
+| Security reporting | Partial / owner action | `SECURITY.md` routes ordinary issues publicly and defines sensitive/upstream boundaries; no verified private intake route is available yet. |
 | Independent technical review | Important quality task | Strongly encouraged for consequential current-facing claims; absence alone is not a visibility blocker. |
-| Public-release readiness | Blocked | The licensing package and current-tree personal-path cleanup are complete; residual rights/attribution review, a public security-reporting route, and owner approval remain open. |
+| Public-release readiness | Blocked | The licensing package, current-tree personal-path cleanup, and public security policy are complete; residual rights/attribution review, a verified private security intake route, and owner approval remain open. |
 
 ## Current routes
 
