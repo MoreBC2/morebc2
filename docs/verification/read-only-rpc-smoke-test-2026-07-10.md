@@ -4,6 +4,8 @@
 **Status:** Locally tested  
 **Date tested:** 2026-07-10
 
+> **Public-release privacy note:** Personal local-user path component minimally redacted for public release; technical content otherwise unchanged. The current-tree record is not byte-identical to the original committed version, which remains in Git history.
+
 ## Summary
 
 This page records a narrow read-only RPC smoke test against a locally running BitcoinII Core v29.1.0 mainnet GUI node on Windows.

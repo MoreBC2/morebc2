@@ -7,7 +7,7 @@
 
 MoreBC2 is an independently maintained, source-backed documentation and verification project for BitcoinII (BC2). Current-facing technical documentation uses BitcoinII Core `v31.1.0` as its baseline, while dated `v29.1.0` runtime and release records remain historical evidence.
 
-The repository is suitable for owner review, but it is **not ready to change visibility**. The path-scoped licensing and third-party notice package is now present. Privacy treatment, owner review of contributor authority and third-party notices, a public security-reporting route, and owner approval remain open.
+The repository is suitable for owner review, but it is **not ready to change visibility**. The path-scoped licensing and third-party notice package is present, and unnecessary personal local-user path details have been removed from the current tree. Owner review of contributor authority and third-party notices, a public security-reporting route, and owner approval remain open.
 
 ## Current baseline
 
@@ -32,10 +32,9 @@ The dated `v29.1.0` evidence establishes only what those records say. It is not 
 ## Blocking items before public visibility
 
 1. Review and approve the implemented path-scoped licensing map and third-party notices, including contributor authority and remaining provenance uncertainties.
-2. Decide how to handle personal Windows paths and the named individual in exact historical records without destroying or misrepresenting evidence.
-3. Generate and review artifact-specific dependency notices for the actual site or other artifact that will be distributed.
-4. Establish a public security-reporting contact or process appropriate for a documentation repository.
-5. Obtain explicit owner review and approval before publication.
+2. Generate and review artifact-specific dependency notices for the actual site or other artifact that will be distributed.
+3. Establish a public security-reporting contact or process appropriate for a documentation repository.
+4. Obtain explicit owner review and approval before publication.
 
 ## Important unresolved technical and operational work
 

@@ -30,9 +30,8 @@ Before changing repository visibility, the owner still needs to:
 1. Confirm that contributors had authority to license their original contributions under the applicable repository license.
 2. Review the treatment of mixed/source-derived material and unresolved provenance items in the completed audit.
 3. Generate and review dependency notices against the actual artifact that will be distributed.
-4. Decide how privacy-sensitive historical paths will be treated.
-5. Establish a public security-reporting route.
-6. Have the final package reviewed by an appropriately qualified person if legal certainty is needed.
+4. Establish a public security-reporting route.
+5. Have the final package reviewed by an appropriately qualified person if legal certainty is needed.
 
 ## Attribution findings
 

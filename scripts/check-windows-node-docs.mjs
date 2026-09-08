@@ -97,7 +97,11 @@ for (const unsafe of ['createwallet', 'getnewaddress', 'sendtoaddress', 'dumppri
   assert.ok(!combined.includes(unsafe), `Node documentation unexpectedly contains wallet/mining command: ${unsafe}`);
 }
 
-assert.ok(!combined.includes('C:\\Users\\Dan'), 'Node documentation contains a personal filesystem path');
+assert.doesNotMatch(
+  combined,
+  /C:\\Users\\(?!<user>\\)[^\\\r\n]+\\/i,
+  'Node documentation contains an unredacted personal filesystem path',
+);
 assert.ok(!combined.includes('rpcbind=0.0.0.0'), 'Node documentation contains a public RPC bind');
 
 const guideIpv4Literals = [...new Set(guide.match(/\b(?:\d{1,3}\.){3}\d{1,3}\b/g) ?? [])];
