@@ -24,11 +24,11 @@ This checklist hands the repository to its owner for a decision about further pu
 
 ## Owner decisions required
 
-- Select and add a repository license or defined license set.
+- Review and approve the implemented path-scoped CC BY 4.0 and MIT license set and its third-party exclusions.
 - Decide whether exact personal/machine paths in historical evidence are acceptable for publication.
 - Approve the third-party attribution and notice approach.
 - Approve a controlled publication transition in which GitHub Private Vulnerability Reporting is enabled and verified immediately after the visibility change and before active announcement or promotion.
-- Confirm CODEOWNERS teams and the intended public contribution/review model.
+- Decide whether to populate the empty `reviewers` and `maintainers` teams and move CODEOWNERS back to team handles; until then, the verified organization owner is the effective CODEOWNER.
 - Decide whether and when the site should become indexable or move from its review deployment; no deployment change is included here.
 
 ## Technical review lanes

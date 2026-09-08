@@ -13,7 +13,7 @@ The documentation foundation and Starlight site exist, current-facing BitcoinII 
 
 1. Owner review of the proposed public-facing scope and project description.
 2. Owner review of the implemented repository licensing map, contributor authority, notices, and remaining content-specific boundaries.
-3. Artifact-specific dependency notice review for the material actually distributed.
+3. Before newly distributing a built site, downloadable release, or other generated artifact, review artifact-specific dependency notices for that exact material; this is not a blocker for the source-only repository visibility change.
 4. Obtain owner approval to begin the controlled publication transition.
 5. Immediately after changing visibility, enable and verify GitHub Private Vulnerability Reporting and update [`SECURITY.md`](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md); do not actively announce or promote the repository until the route works.
 6. Strongly encouraged independent review of high-impact `v31.1.0` consensus and operator-facing claims as a public-review and quality task, not a visibility blocker by itself.

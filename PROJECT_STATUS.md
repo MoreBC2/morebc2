@@ -32,9 +32,10 @@ The dated `v29.1.0` evidence establishes only what those records say. It is not 
 ## Blocking items before public visibility
 
 1. Review and approve the implemented path-scoped licensing map and third-party notices, including contributor authority and remaining provenance uncertainties.
-2. Generate and review artifact-specific dependency notices for the actual site or other artifact that will be distributed.
-3. Confirm the repository contents and documented checks are acceptable for the visibility transition.
-4. Obtain explicit owner review and approval to begin the publication transition.
+2. Confirm the repository contents and documented checks are acceptable for the visibility transition.
+3. Obtain explicit owner review and approval to begin the publication transition.
+
+The visibility transition publishes the tracked source repository; it does not publish a tracked build, release archive, binary, vendored dependency tree, or other generated artifact. The current `NOTICE` and `THIRD_PARTY_NOTICES.md` are sufficient for that source-only step. Before a built site, downloadable release, or other generated artifact is newly distributed or treated as a publication artifact, generate and review dependency notices against that exact artifact.
 
 ## Immediate publication-transition gate
 

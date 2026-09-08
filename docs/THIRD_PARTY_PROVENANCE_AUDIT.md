@@ -300,7 +300,7 @@ The repository licensing map, `NOTICE`, and `THIRD_PARTY_NOTICES.md` implement t
 ### npm and framework dependencies
 
 - Keep `package.json`/`package-lock.json` as dependency records.
-- Generate an artifact-specific dependency/license inventory for whatever is actually distributed.
+- Generate an artifact-specific dependency/license inventory before a built site, downloadable release, or other generated artifact is newly distributed; source-only repository publication does not require a bundle for unvendored lockfile dependencies.
 - Preserve package license and notice files in accordance with each package; do not claim dependencies are covered by the MoreBC2 software license.
 - Treat build-only dependencies differently from code/assets included in the published site or downloadable tooling.
 
@@ -348,9 +348,9 @@ The detailed notices file contains one section per provenance family:
 - Trace the exact Dark Gravity Wave v3 revision and attribution chain used by BitcoinII if a precise software-derived notice is desired.
 - Establish a policy for when source-atlas prose requires preservation of an upstream MIT notice.
 - Review and approve the neutral trademark/non-affiliation language in `NOTICE`.
-- Generate and review notices against the actual site/release artifact, especially for LGPL/MPL/transitive dependencies.
+- Before newly distributing a built site or release artifact, generate and review notices against that exact artifact, especially for LGPL/MPL/transitive dependencies.
 - Confirm that each contributor had authority to license their MoreBC2 contributions under the owner's selected structure.
 
 ## Readiness conclusion
 
-The focused licensing-scope blockers have defined dispositions: P-03 was resolved by rewriting MoreBC2 expression and reserving upstream ShockWave material to its controlling terms; P-09 was resolved by replacing the unresolved favicon with an independently created MoreBC2 asset. The path-scoped CC BY 4.0 plus MIT licensing map and repository notices are now implemented. Contributor-authority review, remaining provenance judgments, and an artifact-specific dependency license bundle still require owner review before publication.
+The focused licensing-scope blockers have defined dispositions: P-03 was resolved by rewriting MoreBC2 expression and reserving upstream ShockWave material to its controlling terms; P-09 was resolved by replacing the unresolved favicon with an independently created MoreBC2 asset. The path-scoped CC BY 4.0 plus MIT licensing map and repository notices are now implemented. Contributor-authority review and the remaining provenance judgments still require owner review before source-repository publication. An artifact-specific dependency license bundle is a separate prerequisite before a built site, downloadable release, or other generated artifact is newly distributed or treated as a publication artifact.

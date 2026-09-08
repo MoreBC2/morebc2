@@ -35,7 +35,7 @@ Dated `v29.1.0` verification records preserve the release, date, platform, netwo
 
 - `LICENSE`, canonical CC BY 4.0 and MIT texts, `NOTICE`, and `THIRD_PARTY_NOTICES.md` now implement the owner-directed path-scoped model.
 - The owner must still confirm contributor authority, the notice treatment of mixed/source-derived material, and the remaining provenance uncertainties recorded in `docs/THIRD_PARTY_PROVENANCE_AUDIT.md`.
-- An artifact-specific dependency license inventory must be generated and reviewed for the actual site or other artifact distributed.
+- The repository tracks source and package-manager metadata, not `dist`, release archives, binaries, vendored dependencies, or another generated distribution artifact. The current notices are sufficient for source-only repository publication. An artifact-specific dependency license inventory must be generated and reviewed before a built site, downloadable release, or other generated artifact is newly distributed or treated as a publication artifact.
 
 ### Privacy and security
 
@@ -54,7 +54,7 @@ Dated `v29.1.0` verification records preserve the release, date, platform, netwo
 
 - Independent technical review of the most consequential current-facing claims is strongly encouraged. Its absence alone is not a visibility blocker once the licensing, third-party rights and attribution, security-reporting, and owner-approval blockers are resolved.
 - Date-sensitive external services and external links should be rechecked immediately before publication.
-- Repository team handles in CODEOWNERS must be confirmed to exist and be appropriate; the file itself cannot guarantee enforcement.
+- Authenticated review confirmed that `@MoreBC2/reviewers` and `@MoreBC2/maintainers` exist and each has repository access, but both teams have zero members. `@toiletslayer` is the organization’s sole verified owner, so CODEOWNERS now names that account directly until the teams are populated. The file itself cannot guarantee enforcement.
 
 ## Non-blocking unresolved technical work
 
@@ -81,7 +81,7 @@ Build outputs, dependency directories, editor settings, logs, environment files,
 
 ## Link posture
 
-The site build validates internal content routing and rendered output. A network-enabled 2026-09-07 scan requested 160 distinct external URLs. Eleven returned DNS/connection failures, HTTP 404, or HTTP 502; each was already used in explicit broken-link, failed-check, base-path, or historical release-download context rather than presented as a healthy current service. Six additional URLs rejected automated access with an access-control response.
+The site build validates internal content routing and rendered output. A network-enabled 2026-09-08 scan requested 785 distinct tracked-tree HTTP(S) URLs: 763 returned HTTP 200, five rejected automated access with HTTP 403, and 17 returned an expected private-repository 404, a documented broken/base-path/historical result, a test-fixture 404, HTTP 502, DNS failure, or connection refusal. The canonical BitcoinII repository and `v31.1.0` release page, Bitcoin-II.org, the MoreBC2 preview origin, and concrete current service endpoints were reachable. None of the non-200 results was misleadingly presented as a healthy current service.
 
 External links and services remain date-sensitive. Repeat the scan immediately before publication and review each current recommendation manually; an automated HTTP response alone does not establish ownership, safety, or reliability.
 
