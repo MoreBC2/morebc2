@@ -46,12 +46,12 @@ The preferred review flow is:
 2. Complete the relevant checks in this guide and record the validation in the pull request.
 3. Ask a reviewer to check substantive changes. Authors should not approve their own substantive work.
 4. Verify factual and technical claims against the cited evidence; a formatting-only review is not enough for those claims.
-5. Involve `@MoreBC2/maintainers` when a change affects repository administration, dependencies, validation, build behavior, deployment behavior, or other workflow-sensitive paths.
+5. Involve `@toiletslayer` when a change affects repository administration, dependencies, validation, build behavior, deployment behavior, or other workflow-sensitive paths.
 6. Merge only after the requested review and validation are complete.
 
-The `contributors`, `reviewers`, and `maintainers` teams provide the repository access needed for these roles. Contributors do not need organization Owner access.
+The `contributors`, `reviewers`, and `maintainers` teams are the intended long-term access model, but the verified `reviewers` and `maintainers` teams currently have no members. Until those teams are populated, `@toiletslayer`, the verified organization owner, is the effective CODEOWNER. Contributors do not need organization Owner access.
 
-GitHub does not currently enable CODEOWNERS or enforce the preferred `main` protections for this private repository on the organization's current plan. The CODEOWNERS file records the intended ownership model, but GitHub will not automatically request those teams or require their approval under the current plan. The pull-request and review steps above are project policy even where the GitHub interface cannot require them. They are intended to remain the same if CODEOWNERS and enforceable branch protections or rulesets become available later.
+GitHub does not currently enable CODEOWNERS or enforce the preferred `main` protections for this private repository on the organization's current plan. The CODEOWNERS file records the effective owner, but GitHub will not automatically request or require that approval under the current plan. The pull-request and review steps above are project policy even where the GitHub interface cannot require them. They are intended to remain the same if CODEOWNERS and enforceable branch protections or rulesets become available later.
 
 ## Repository safety and privacy
 

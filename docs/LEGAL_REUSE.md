@@ -29,9 +29,10 @@ Before changing repository visibility, the owner still needs to:
 
 1. Confirm that contributors had authority to license their original contributions under the applicable repository license.
 2. Review the treatment of mixed/source-derived material and unresolved provenance items in the completed audit.
-3. Generate and review dependency notices against the actual artifact that will be distributed.
-4. Approve the controlled publication sequence in [`SECURITY.md`](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md), including immediate post-visibility enablement and verification of Private Vulnerability Reporting before active announcement or promotion.
-5. Have the final package reviewed by an appropriately qualified person if legal certainty is needed.
+3. Approve the controlled publication sequence in [`SECURITY.md`](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md), including immediate post-visibility enablement and verification of Private Vulnerability Reporting before active announcement or promotion.
+4. Have the final package reviewed by an appropriately qualified person if legal certainty is needed.
+
+The initial visibility transition publishes tracked source and package-manager metadata only. The current notices are sufficient for that repository-publication step. Before newly distributing or promoting a built site, downloadable release, or other generated artifact, generate and review dependency notices against that exact artifact.
 
 ## Attribution findings
 

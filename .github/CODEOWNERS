@@ -1,22 +1,23 @@
-# Intended review ownership. Whether GitHub automatically requests or enforces
-# these reviewers depends on repository and organization settings.
+# Effective review ownership. The organization teams exist but had no members
+# when this file was last reviewed, so the verified organization owner is used.
+# Team handles may replace this account after the teams are populated.
 
 # Default ownership for repository content, including documentation and site content.
-* @MoreBC2/reviewers
+* @toiletslayer
 
 # Repository administration and GitHub Actions workflows.
-/.github/** @MoreBC2/maintainers
-/.github/CODEOWNERS @MoreBC2/maintainers
-/.github/workflows/** @MoreBC2/maintainers
+/.github/** @toiletslayer
+/.github/CODEOWNERS @toiletslayer
+/.github/workflows/** @toiletslayer
 
 # Dependency and build configuration.
-/package.json @MoreBC2/maintainers
-/package-lock.json @MoreBC2/maintainers
-/astro.config.mjs @MoreBC2/maintainers
-/tsconfig.json @MoreBC2/maintainers
-/src/content.config.ts @MoreBC2/maintainers
+/package.json @toiletslayer
+/package-lock.json @toiletslayer
+/astro.config.mjs @toiletslayer
+/tsconfig.json @toiletslayer
+/src/content.config.ts @toiletslayer
 
 # Validation, build, and deployment behavior.
-/scripts/** @MoreBC2/maintainers
-/public/_headers @MoreBC2/maintainers
-/public/robots.txt @MoreBC2/maintainers
+/scripts/** @toiletslayer
+/public/_headers @toiletslayer
+/public/robots.txt @toiletslayer
