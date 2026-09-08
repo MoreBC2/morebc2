@@ -7,7 +7,7 @@
 
 MoreBC2 is an independently maintained, source-backed documentation and verification project for BitcoinII (BC2). Current-facing technical documentation uses BitcoinII Core `v31.1.0` as its baseline, while dated `v29.1.0` runtime and release records remain historical evidence.
 
-The repository is suitable for owner review, but it is **not ready to change visibility**. The path-scoped licensing and third-party notice package is present, unnecessary personal local-user path details have been removed from the current tree, and [`SECURITY.md`](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md) now separates ordinary public issues from sensitive reports. A verified private security intake route is not yet available; owner review of contributor authority and third-party notices, establishment of that private route, and owner approval remain open.
+The repository is suitable for owner review, but it is **not ready to begin the publication transition**. The path-scoped licensing and third-party notice package is present, unnecessary personal local-user path details have been removed from the current tree, and [`SECURITY.md`](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md) now separates ordinary public issues from sensitive reports. A verified private security intake route is not available while the repository remains private. Owner review of contributor authority and third-party notices and approval to begin the controlled publication transition remain open.
 
 ## Current baseline
 
@@ -33,8 +33,12 @@ The dated `v29.1.0` evidence establishes only what those records say. It is not 
 
 1. Review and approve the implemented path-scoped licensing map and third-party notices, including contributor authority and remaining provenance uncertainties.
 2. Generate and review artifact-specific dependency notices for the actual site or other artifact that will be distributed.
-3. Establish and verify a private security-reporting route, then update `SECURITY.md` with the usable route before public visibility.
-4. Obtain explicit owner review and approval before publication.
+3. Confirm the repository contents and documented checks are acceptable for the visibility transition.
+4. Obtain explicit owner review and approval to begin the publication transition.
+
+## Immediate publication-transition gate
+
+After changing the repository to public visibility, the owner should immediately enable GitHub Private Vulnerability Reporting, verify the external private-reporting interface, and update `SECURITY.md` with the working instructions and link. Do not actively announce, promote, or treat the repository as publication-complete until those steps succeed. If Private Vulnerability Reporting cannot be enabled or verified, establish another verified private intake route before active publication proceeds.
 
 ## Important unresolved technical and operational work
 

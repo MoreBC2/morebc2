@@ -27,7 +27,7 @@ This checklist hands the repository to its owner for a decision about further pu
 - Select and add a repository license or defined license set.
 - Decide whether exact personal/machine paths in historical evidence are acceptable for publication.
 - Approve the third-party attribution and notice approach.
-- Establish and verify a private security-reporting route, then update `SECURITY.md` with the usable route before public visibility.
+- Approve a controlled publication transition in which GitHub Private Vulnerability Reporting is enabled and verified immediately after the visibility change and before active announcement or promotion.
 - Confirm CODEOWNERS teams and the intended public contribution/review model.
 - Decide whether and when the site should become indexable or move from its review deployment; no deployment change is included here.
 
@@ -58,10 +58,12 @@ Before changing visibility, confirm all of the following:
 - required attribution and notices are present;
 - the current-tree personal-path cleanup is complete;
 - no secrets or credentials are present in the publishable tree or history;
-- the public issue guidance and a verified private security-reporting route are usable;
+- the public issue guidance is usable and the owner is prepared to complete the private-reporting transition below;
 - all documented repository checks pass;
 - date-sensitive links and external services were freshly checked; and
 - the owner explicitly approves the visibility change.
+
+Immediately after changing visibility, enable GitHub Private Vulnerability Reporting, verify that its external reporting interface works, and update `SECURITY.md` with the usable instructions and link. Do not actively announce, promote, or treat publication as complete until the route is verified. If it cannot be enabled or verified, establish another verified private intake route before active publication proceeds.
 
 ## Important quality task
 

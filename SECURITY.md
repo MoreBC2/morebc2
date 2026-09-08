@@ -30,7 +30,9 @@ Treat a report as sensitive when immediate public disclosure could create meanin
 
 The repository does **not currently have a verified private intake route for external reporters**. [GitHub Private Vulnerability Reporting](https://docs.github.com/en/code-security/how-tos/report-and-fix-vulnerabilities/configure-vulnerability-reporting/configure-for-a-repository) is available for public repositories, so it is not available while this repository is private and was not verified as enabled when this policy was added. Do not submit sensitive details through a public issue.
 
-If you need to alert the MoreBC2 maintainers before a verified private route is listed here, you may open a public issue containing no vulnerability details and ask for a private contact method. Do not send confidential information until the maintainer provides a route that you can independently verify. Before public visibility, the repository owner must establish and verify a private reporting route and update this policy.
+If you need to alert the MoreBC2 maintainers before a verified private route is listed here, you may open a public issue containing no vulnerability details and ask for a private contact method. Do not send confidential information until the maintainer provides a route that you can independently verify.
+
+When the owner begins the publication transition, the owner should change the repository to public visibility and then immediately enable GitHub Private Vulnerability Reporting, verify that an external reporter can reach the private reporting interface, and update this policy with the working instructions and link. The repository should not be actively announced, promoted, or treated as publication-complete until those steps succeed. If Private Vulnerability Reporting cannot be enabled or verified after the visibility change, publication remains incomplete and active promotion should wait until another private intake route is established and verified.
 
 ## Upstream and third-party findings
 
