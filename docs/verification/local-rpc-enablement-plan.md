@@ -4,6 +4,8 @@
 **Status:** Planned / Not yet executed  
 **Last reviewed:** 2026-08-27
 
+> **Public-release privacy note:** Personal local-user path component minimally redacted for public release; technical content otherwise unchanged. The current-tree record is not byte-identical to the original committed version, which remains in Git history.
+
 ## Summary
 
 This page records a proposed safe configuration for enabling local-only JSON-RPC access to a BitcoinII Core v29.1.0 GUI node on Windows.

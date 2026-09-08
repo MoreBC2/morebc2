@@ -9,7 +9,7 @@
 
 MoreBC2 has a strong documentation structure, unusually careful evidence labels, a functioning Astro/Starlight validation path, and current-facing BitcoinII documentation aligned to the `v31.1.0` baseline. The repository is ready for owner review but is **not ready for a visibility change**.
 
-The path-scoped licensing and third-party notice package is now implemented. Remaining blockers are treatment of personal environment details in exact historical evidence, owner review of contributor authority and residual provenance questions, lack of a public security-reporting path, and owner approval. Current release runtime, artifact-authentication, and independent technical-review gaps must remain visible but do not need invented answers.
+The path-scoped licensing and third-party notice package is implemented, and the current tree’s unnecessary personal local-user path component has been minimally redacted. Remaining blockers are owner review of contributor authority and residual provenance questions, lack of a public security-reporting path, and owner approval. Current release runtime, artifact-authentication, and independent technical-review gaps must remain visible but do not need invented answers.
 
 ## Scope reviewed
 
@@ -27,7 +27,7 @@ Searches covered obsolete private-review framing, release and difficulty wording
 
 ## Historical evidence preserved
 
-Dated `v29.1.0` verification records are intentionally unchanged. They remain evidence for the exact release, date, platform, network, commands, and observations recorded. Higher-level current-facing pages label them historical and do not convert them into `v31.1.0` verification.
+Dated `v29.1.0` verification records preserve the release, date, platform, network, commands, results, and observations recorded. Three current-tree records now replace only the personal Windows username component with `<user>` and carry an explicit privacy annotation. They are therefore not byte-identical to their original committed versions, which remain in Git history. Higher-level current-facing pages continue to label them historical and do not convert them into `v31.1.0` verification.
 
 ## Public-release blockers
 
@@ -39,7 +39,9 @@ Dated `v29.1.0` verification records are intentionally unchanged. They remain ev
 
 ### Privacy and security
 
-- Exact historical `v29.1.0` records contain the Windows username `Dan` and absolute paths under `C:\Users\Dan`, the Desktop, AppData, and `C:\bcli`. They contain no credential values found by this audit, but they disclose a personal/machine environment. Because the records must remain exact, the owner must decide whether that disclosure is acceptable or whether a separately documented preservation/redaction strategy is required before publication.
+- A 2026-09-08 current-tree scan covered Windows user-profile, Desktop, AppData, and slash/escape variants; personal emails, phone and street-address patterns; private-device hostname patterns; and common account, token, password, and private-key patterns. It found 30 personal-path occurrences across five files: 28 path occurrences in three historical records, one audit reference, and one test guard. All 30 identifying occurrences were removed or minimally replaced; historical paths retain their useful structure as `C:\Users\<user>\...`. No credential or secret value was found. `C:\bcli` was retained because it does not identify a person.
+- The immutable-evidence link inventory records upstream links and hashes rather than content hashes for the three changed local records, so no integrity hash or generated inventory metadata required updating.
+- The original personal path remains in prior Git commits. This task cleans only the current public tree and does not claim to erase or rewrite repository history.
 - No public, BitcoinII-specific security reporting contact or documented process is established.
 - Live peer/network outputs are described as requiring redaction. Common private-key and service-token patterns were not found in the tracked current tree or a patch-history scan of 694 reachable commits (excluding dependency-lock diffs), but this is not a substitute for owner review or a dedicated secret-scanning tool.
 
@@ -49,7 +51,7 @@ Dated `v29.1.0` verification records are intentionally unchanged. They remain ev
 
 ## Important public-review and quality tasks
 
-- Independent technical review of the most consequential current-facing claims is strongly encouraged. Its absence alone is not a visibility blocker once the licensing, privacy, third-party rights and attribution, security-reporting, and owner-approval blockers are resolved.
+- Independent technical review of the most consequential current-facing claims is strongly encouraged. Its absence alone is not a visibility blocker once the licensing, third-party rights and attribution, security-reporting, and owner-approval blockers are resolved.
 - Date-sensitive external services and external links should be rechecked immediately before publication.
 - Repository team handles in CODEOWNERS must be confirmed to exist and be appropriate; the file itself cannot guarantee enforcement.
 

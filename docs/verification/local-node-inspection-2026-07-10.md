@@ -4,6 +4,8 @@
 **Status:** Partial, successful read-only RPC check  
 **Date checked:** 2026-07-10
 
+> **Public-release privacy note:** Personal local-user path component minimally redacted for public release; technical content otherwise unchanged. The current-tree record is not byte-identical to the original committed version, which remains in Git history.
+
 ## Summary
 
 This page records a local BitcoinII Core v29.1.0 GUI node inspection on Windows, successful local-only RPC enablement, five read-only RPC checks, and a same-time comparison against the public BitcoinII explorer tip endpoint.

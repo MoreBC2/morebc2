@@ -2,7 +2,7 @@
 
 **Category:** Project maintenance
 **Status:** Owner action required
-**Last reviewed:** 2026-09-07
+**Last reviewed:** 2026-09-08
 
 ## Purpose
 
@@ -47,7 +47,7 @@ Reviewers should report evidence strength, version, network, platform, date, and
 
 ## Historical evidence rule
 
-Do not rewrite dated `v29.1.0` records to say `v31.1.0`. Add a new test record for a new release. If the owner decides personal paths cannot be published, define a documented strategy that preserves the original evidence and makes any public derivative visibly redacted rather than silently altering history.
+Do not rewrite dated `v29.1.0` records to say `v31.1.0`. Add a new test record for a new release. The current-tree copies of three records minimally replace only the personal local-user path component and visibly disclose that change; their original committed versions remain in Git history.
 
 ## Final gate
 
@@ -55,7 +55,7 @@ Before changing visibility, confirm all of the following:
 
 - a license is present and its scope is clear;
 - required attribution and notices are present;
-- privacy treatment is approved;
+- the current-tree personal-path cleanup is complete;
 - no secrets or credentials are present in the publishable tree or history;
 - security reporting and contribution routes are usable;
 - all documented repository checks pass;
