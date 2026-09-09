@@ -5,19 +5,14 @@
 
 This roadmap organizes MoreBC2 work. It is not the BitcoinII protocol or software roadmap.
 
-## Current stage — owner public-release review
+## Current stage — public source repository
 
-The documentation foundation and Starlight site exist, current-facing BitcoinII material has been refreshed to the `v31.1.0` baseline, a path-scoped licensing and third-party notice package is present, and the current-tree personal-path cleanup is complete. A public security policy now distinguishes ordinary issues from sensitive reports, but a verified private intake route is unavailable while the repository remains private. Repository visibility must remain unchanged until the remaining third-party/contributor-authority review, repository checks, and owner approval in [project status](PROJECT_STATUS.md) and the [repository audit](docs/AUDIT.md) are complete. Private Vulnerability Reporting is an immediate post-visibility publication-transition gate, not a pre-visibility prerequisite.
+The documentation foundation and Starlight site exist, current-facing BitcoinII material has been refreshed to the `v31.1.0` baseline, a path-scoped licensing and third-party notice package is present, the repository history has been cleaned of the identified personal-path disclosure, and the source repository is public. GitHub Private Vulnerability Reporting is enabled and verified. Production-site publication, indexing, releases, and other generated artifacts remain separate future decisions.
 
-## Release-readiness priorities
+## Current priorities
 
-1. Owner review of the proposed public-facing scope and project description.
-2. Owner review of the implemented repository licensing map, contributor authority, notices, and remaining content-specific boundaries.
-3. Before newly distributing a built site, downloadable release, or other generated artifact, review artifact-specific dependency notices for that exact material; this is not a blocker for the source-only repository visibility change.
-4. Obtain owner approval to begin the controlled publication transition.
-5. Immediately after changing visibility, enable and verify GitHub Private Vulnerability Reporting and update [`SECURITY.md`](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md); do not actively announce or promote the repository until the route works.
-6. Strongly encouraged independent review of high-impact `v31.1.0` consensus and operator-facing claims as a public-review and quality task, not a visibility blocker by itself.
-7. Fresh external-link and service checks immediately before publication.
+1. Before newly distributing a built site, downloadable release, or other generated artifact, review artifact-specific dependency notices for that exact material; this is not a blocker for the source-only repository visibility change.
+2. Strongly encouraged independent review of high-impact `v31.1.0` consensus and operator-facing claims as a public-review and quality task, not a visibility blocker by itself.
 
 ## Technical evidence priorities
 

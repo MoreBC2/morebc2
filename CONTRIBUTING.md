@@ -1,6 +1,6 @@
 # Contributing to MoreBC2
 
-**Status:** Draft public contribution workflow; owner review pending
+**Status:** Public contribution workflow
 **Last reviewed:** 2026-09-08
 
 ## Summary
@@ -51,11 +51,11 @@ The preferred review flow is:
 
 The `contributors`, `reviewers`, and `maintainers` teams are the intended long-term access model, but the verified `reviewers` and `maintainers` teams currently have no members. Until those teams are populated, `@toiletslayer`, the verified organization owner, is the effective CODEOWNER. Contributors do not need organization Owner access.
 
-GitHub does not currently enable CODEOWNERS or enforce the preferred `main` protections for this private repository on the organization's current plan. The CODEOWNERS file records the effective owner, but GitHub will not automatically request or require that approval under the current plan. The pull-request and review steps above are project policy even where the GitHub interface cannot require them. They are intended to remain the same if CODEOWNERS and enforceable branch protections or rulesets become available later.
+The CODEOWNERS file records the effective owner, but GitHub does not currently enforce the preferred `main` review protections for this repository. The pull-request and review steps above remain project policy even where the GitHub interface does not require them.
 
 ## Repository safety and privacy
 
-Do not commit secrets, API tokens, passwords, private keys, seed phrases, personal information, or unnecessary personal data. Use redacted examples and safe test data. If sensitive material is exposed, stop sharing it and follow [`SECURITY.md`](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md). Never place the sensitive details in a public issue; the security policy explains the current limitation when no verified private intake route is available.
+Do not commit secrets, API tokens, passwords, private keys, seed phrases, personal information, or unnecessary personal data. Use redacted examples and safe test data. If sensitive material is exposed, stop sharing it and follow [`SECURITY.md`](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md). Never place sensitive details in a public issue; the security policy provides the verified private reporting route.
 
 Preserve MoreBC2's existing status vocabulary, evidence scale, sourcing standards, and verification blocks. Do not weaken an uncertainty label or strengthen a claim merely to make a change appear complete.
 
@@ -248,4 +248,4 @@ Use **BitcoinII** for the project name and **BC2** for the ticker. Avoid using *
 
 **Status:** Draft
 **Primary sources checked:** Current MoreBC2 project status, review handoff, verification queue, command tracker, and release tracker
-**Notes:** This workflow remains Draft until the owner approves the final public contribution and enforcement process. The repository licensing map is implemented.
+**Notes:** The repository licensing map is implemented. Review and enforcement practices may evolve as the maintainer team grows.

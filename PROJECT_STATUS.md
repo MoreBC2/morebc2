@@ -1,13 +1,13 @@
 # MoreBC2 project status
 
-**Status:** Public-release readiness review; owner decision pending
+**Status:** Public source repository; ongoing verification and documentation work
 **Last reviewed:** 2026-09-08
 
 ## Summary
 
 MoreBC2 is an independently maintained, source-backed documentation and verification project for BitcoinII (BC2). Current-facing technical documentation uses BitcoinII Core `v31.1.0` as its baseline, while dated `v29.1.0` runtime and release records remain historical evidence.
 
-The repository is suitable for owner review, but it is **not ready to begin the publication transition**. The path-scoped licensing and third-party notice package is present, unnecessary personal local-user path details have been removed from the current tree, and [`SECURITY.md`](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md) now separates ordinary public issues from sensitive reports. A verified private security intake route is not available while the repository remains private. Owner review of contributor authority and third-party notices and approval to begin the controlled publication transition remain open.
+The source repository is public. The path-scoped licensing and third-party notice package is present, unnecessary personal local-user path details have been removed from reachable repository history, and [SECURITY.md](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md) separates ordinary public issues from sensitive reports and provides a verified private reporting route.
 
 ## Current baseline
 
@@ -29,17 +29,17 @@ Current source-facing coverage is substantial, but status labels remain Draft, P
 
 The dated `v29.1.0` evidence establishes only what those records say. It is not `v31.1.0` runtime verification.
 
-## Blocking items before public visibility
+## Completed publication prerequisites
 
-1. Review and approve the implemented path-scoped licensing map and third-party notices, including contributor authority and remaining provenance uncertainties.
-2. Confirm the repository contents and documented checks are acceptable for the visibility transition.
-3. Obtain explicit owner review and approval to begin the publication transition.
+1. The implemented path-scoped licensing map and third-party notices were reviewed and approved for source-repository publication.
+2. The repository contents and documented checks were accepted for public visibility.
+3. Owner approval for the controlled source-repository publication was completed.
 
 The visibility transition publishes the tracked source repository; it does not publish a tracked build, release archive, binary, vendored dependency tree, or other generated artifact. The current `NOTICE` and `THIRD_PARTY_NOTICES.md` are sufficient for that source-only step. Before a built site, downloadable release, or other generated artifact is newly distributed or treated as a publication artifact, generate and review dependency notices against that exact artifact.
 
-## Immediate publication-transition gate
+## Security reporting
 
-After changing the repository to public visibility, the owner should immediately enable GitHub Private Vulnerability Reporting, verify the external private-reporting interface, and update `SECURITY.md` with the working instructions and link. Do not actively announce, promote, or treat the repository as publication-complete until those steps succeed. If Private Vulnerability Reporting cannot be enabled or verified, establish another verified private intake route before active publication proceeds.
+GitHub Private Vulnerability Reporting is enabled and the external private-reporting interface has been verified. [SECURITY.md](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md) contains the working private-reporting instructions.
 
 ## Important unresolved technical and operational work
 

@@ -1,6 +1,6 @@
 # MoreBC2
 
-**Status:** Public-release readiness review; owner approval required
+**Status:** Public source repository
 
 MoreBC2 is independently maintained, source-backed documentation for the BitcoinII (BC2) ecosystem. It helps users, node operators, miners, developers, exchanges, and infrastructure providers find technical context and the evidence behind it.
 
@@ -51,7 +51,7 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening an issue or pull request.
 
 ## Security reporting
 
-Use [public GitHub issues](https://github.com/MoreBC2/morebc2/issues) for ordinary, non-sensitive documentation problems. Do not publish secrets, exploit details, personal information, or other sensitive security information in an issue. See [SECURITY.md](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md) for scope, the upstream boundary, and the current private-reporting limitation.
+Use [public GitHub issues](https://github.com/MoreBC2/morebc2/issues) for ordinary, non-sensitive documentation problems. Do not publish secrets, exploit details, personal information, or other sensitive security information in an issue. See [SECURITY.md](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md) for scope, the upstream boundary, and the verified private-reporting route.
 
 ## Licensing
 
