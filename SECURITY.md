@@ -28,11 +28,9 @@ Treat a report as sensitive when immediate public disclosure could create meanin
 - a repository-automation weakness that could permit unauthorized modification; or
 - a security-sensitive upstream finding that should not initially be public.
 
-The repository does **not currently have a verified private intake route for external reporters**. [GitHub Private Vulnerability Reporting](https://docs.github.com/en/code-security/how-tos/report-and-fix-vulnerabilities/configure-vulnerability-reporting/configure-for-a-repository) is available for public repositories, so it is not available while this repository is private and was not verified as enabled when this policy was added. Do not submit sensitive details through a public issue.
+[GitHub Private Vulnerability Reporting](https://github.com/MoreBC2/morebc2/security/advisories/new) is enabled as the verified private intake route for external reporters. Sign in to GitHub, open the linked reporting form, and select **Report a vulnerability** from the repository's Security page if the form is not already displayed. Submit the report there so its details are shared privately with the MoreBC2 maintainers through a proposed repository security advisory.
 
-If you need to alert the MoreBC2 maintainers before a verified private route is listed here, you may open a public issue containing no vulnerability details and ask for a private contact method. Do not send confidential information until the maintainer provides a route that you can independently verify.
-
-When the owner begins the publication transition, the owner should change the repository to public visibility and then immediately enable GitHub Private Vulnerability Reporting, verify that an external reporter can reach the private reporting interface, and update this policy with the working instructions and link. The repository should not be actively announced, promoted, or treated as publication-complete until those steps succeed. If Private Vulnerability Reporting cannot be enabled or verified after the visibility change, publication remains incomplete and active promotion should wait until another private intake route is established and verified.
+Do not submit secrets, exploit details, or other sensitive information through a public issue, pull request, discussion, or other public channel. GitHub account access is required to use the private reporting form.
 
 ## Upstream and third-party findings
 
