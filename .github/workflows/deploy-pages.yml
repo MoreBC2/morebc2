@@ -91,3 +91,37 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=morebc2 --branch=main --commit-hash=${{ github.sha }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify live indexing policy
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          robots_url='https://morebc2.pages.dev/robots.txt'
+          site_url='https://morebc2.pages.dev/'
+
+          for attempt in {1..12}; do
+            robots="$(curl --fail --silent --show-error "$robots_url")"
+            headers="$(curl --fail --silent --show-error --head "$site_url" | tr -d '\r')"
+
+            if ! grep -Eq '^Disallow:[[:space:]]*/[[:space:]]*$' <<<"$robots" \
+              && ! grep -Ei '^x-robots-tag:' <<<"$headers" | grep -Eiq 'noindex|nofollow|noarchive|nosnippet'; then
+              echo 'Live robots.txt:'
+              printf '%s\n' "$robots"
+              echo 'Live response headers:'
+              printf '%s\n' "$headers"
+              echo 'Live indexing policy verification passed.'
+              exit 0
+            fi
+
+            if [ "$attempt" -lt 12 ]; then
+              sleep 5
+            fi
+          done
+
+          echo 'Live indexing policy verification failed.' >&2
+          echo 'robots.txt:' >&2
+          printf '%s\n' "$robots" >&2
+          echo 'response headers:' >&2
+          printf '%s\n' "$headers" >&2
+          exit 1
