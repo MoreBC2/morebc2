@@ -1,100 +1,180 @@
-# Repository public-release readiness audit
+# Repository audit
 
-**Category:** Project maintenance
-**Status:** Owner review required
-**Last reviewed:** 2026-09-08
-**Audit baseline:** BitcoinII Core `v31.1.0`
+**Category:** Project maintenance  
+**Status:** Reviewed / Ongoing maintenance  
+**Last reviewed:** 2026-09-12  
+**Current technical baseline:** BitcoinII Core `v31.1.0`
 
 ## Assessment
 
-MoreBC2 has a strong documentation structure, unusually careful evidence labels, a functioning Astro/Starlight validation path, and current-facing BitcoinII documentation aligned to the `v31.1.0` baseline. The repository is ready for owner review but is **not ready for a visibility change**.
+MoreBC2 is now a **public source repository with a deployed documentation site**. The earlier audit state that said the repository was not ready for a visibility change is historical and no longer describes the project.
 
-The path-scoped licensing and third-party notice package is implemented, and the current tree’s unnecessary personal local-user path component has been minimally redacted. A root security policy now provides a public route for ordinary issues and warns against public disclosure of sensitive reports, but no verified private intake route is available while the repository remains private. Remaining pre-transition blockers are owner review of contributor authority and residual provenance questions, repository acceptance, and owner approval. Immediately after the visibility change, Private Vulnerability Reporting must be enabled and verified before the repository is actively announced, promoted, or treated as publication-complete. Current release runtime, artifact-authentication, and independent technical-review gaps must remain visible but do not need invented answers.
+The current repository has a coherent evidence-first documentation structure, a current v31 technical baseline, repeated CI/deployment checks, explicit security-reporting guidance, and a broad completed documentation audit. Important technical and operational gaps remain visible and should remain visible.
 
-## Scope reviewed
+Public/deployed does not mean every BitcoinII claim or integration workflow is Verified.
 
-The audit covered root project documents, GitHub ownership/workflow/templates, all documentation sections, verification and release records, package metadata, Astro/Starlight configuration, scripts, and GitHub Actions.
+## Current publication state
 
-Searches covered obsolete private-review framing, release and difficulty wording, v29/v31 context, TODO-style markers, machine-specific paths, personal identifiers, common credential patterns, endpoints, generated files, links, stale dates, conflicting status claims, verification overstatement, and licensing/attribution gaps.
+Current project state includes:
 
-## Current-facing technical posture
+- public GitHub repository;
+- production Astro/Starlight documentation site on Cloudflare Pages;
+- repository Markdown as the editable source of record;
+- GitHub Private Vulnerability Reporting enabled and verified for MoreBC2;
+- root `SECURITY.md` separating ordinary documentation issues, sensitive MoreBC2 reports, and upstream/third-party vulnerabilities;
+- path-scoped licensing/notice package and provenance documentation;
+- generated-output private-path protection in the deployment workflow;
+- live indexing-policy verification after production deployment.
 
-- Current documentation baseline: BitcoinII Core `v31.1.0`.
-- Mainnet activation height `57750`: ShockWave per-block difficulty adjustment, replay protection, consensus-level data restrictions, and fork-aware header-synchronization-related behavior.
-- Pre-activation Bitcoin-style 2016-block retarget material is historical/inherited context, not the current post-activation schedule.
-- Current source review is not presented as equivalent to runtime testing.
-- Fresh `v31.1.0` runtime verification and independent release authentication remain unresolved.
+## Completed documentation audit sequence
 
-## Historical evidence preserved
+The principal reader-facing sections were reviewed against the same current evidence base during the September 12 audit sequence:
 
-Dated `v29.1.0` verification records preserve the release, date, platform, network, commands, results, and observations recorded. Three current-tree records now replace only the personal Windows username component with `<user>` and carry an explicit privacy annotation. They are therefore not byte-identical to their original committed versions, which remain in Git history. Higher-level current-facing pages continue to label them historical and do not convert them into `v31.1.0` verification.
+- Documentation
+- Configuration
+- Nodes
+- Releases
+- API / Explorer Resources
+- Infrastructure
+- Wallets
+- Mining
+- Developers / Source Atlas
+- Architecture
+- Ecosystem
+- Exchange integration
+- Encyclopedia
+- Research
+- History
+- Discussion
+- News
+- Verification navigation/current queues
 
-## Public-release blockers
+A section may remain **Reviewed / Partial** after audit because real evidence gaps remain. That status is preferable to overstating certainty.
 
-### Legal and attribution
+## Current v31 technical posture
 
-- `LICENSE`, canonical CC BY 4.0 and MIT texts, `NOTICE`, and `THIRD_PARTY_NOTICES.md` now implement the owner-directed path-scoped model.
-- The owner must still confirm contributor authority, the notice treatment of mixed/source-derived material, and the remaining provenance uncertainties recorded in `docs/THIRD_PARTY_PROVENANCE_AUDIT.md`.
-- The repository tracks source and package-manager metadata, not `dist`, release archives, binaries, vendored dependencies, or another generated distribution artifact. The current notices are sufficient for source-only repository publication. An artifact-specific dependency license inventory must be generated and reviewed before a built site, downloadable release, or other generated artifact is newly distributed or treated as a publication artifact.
+Current source-backed documentation includes:
 
-### Privacy and security
+- ShockWave per-block difficulty from mainnet height `57750`;
+- replay protection from `57750` with domain `0x01324342`;
+- consensus data restrictions from `57750`;
+- fork-aware header synchronization;
+- accumulated-chainwork best-chain selection;
+- ShockWave-aware candidate-time / `nBits` handling in mining/template paths;
+- wallet/raw/PSBT/mempool/block/cache replay-domain propagation;
+- current mainnet P2P `8338`, RPC default `8332`, and current chain/network constants.
 
-- A 2026-09-08 current-tree scan covered Windows user-profile, Desktop, AppData, and slash/escape variants; personal emails, phone and street-address patterns; private-device hostname patterns; and common account, token, password, and private-key patterns. It found 30 personal-path occurrences across five files: 28 path occurrences in three historical records, one audit reference, and one test guard. All 30 identifying occurrences were removed or minimally replaced; historical paths retain their useful structure as `C:\Users\<user>\...`. No credential or secret value was found. `C:\bcli` was retained because it does not identify a person.
-- The immutable-evidence link inventory records upstream links and hashes rather than content hashes for the three changed local records, so no integrity hash or generated inventory metadata required updating.
-- The original personal path remains in prior Git commits. This task cleans only the current public tree and does not claim to erase or rewrite repository history.
-- [`SECURITY.md`](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md) now distinguishes ordinary public documentation issues, sensitive MoreBC2 reports, and upstream or third-party vulnerabilities. The policy does not present MoreBC2 as the BitcoinII Core security authority.
-- On 2026-09-08, an authenticated GitHub REST check made with repository administrator access returned `404` for the private-vulnerability-reporting endpoint while repository metadata confirmed `private` visibility. [GitHub documents Private Vulnerability Reporting as a public-repository feature](https://docs.github.com/en/code-security/how-tos/report-and-fix-vulnerabilities/configure-vulnerability-reporting/configure-for-a-repository). It was therefore not enabled or available in the repository's current private state. As part of the controlled publication operation, the owner should change visibility, immediately enable and verify Private Vulnerability Reporting, and update `SECURITY.md` with the working route. If that cannot be completed, publication remains incomplete and active promotion must wait for another verified private intake route.
-- Live peer/network outputs are described as requiring redaction. Common private-key and service-token patterns were not found in the tracked current tree or a patch-history scan of 694 reachable commits (excluding dependency-lock diffs), but this is not a substitute for owner review or a dedicated secret-scanning tool.
+Current runtime evidence includes:
 
-### Owner approval
+- bounded Windows `v31.1.0` mainnet node/RPC startup, peer discovery, advancing IBD, cookie RPC, shutdown/restart, and disposable-wallet isolation;
+- separate isolated zero-peer regtest wallet/PSBT signing/finalization/mempool/local-submission workflow.
 
-- The owner must review and explicitly approve publication after the blockers above are resolved.
+These do not establish universal production/cross-platform behavior.
 
-## Important public-review and quality tasks
+## Release-integrity posture
 
-- Independent technical review of the most consequential current-facing claims is strongly encouraged. Its absence alone is not a visibility blocker once the licensing, third-party rights and attribution, security-reporting, and owner-approval blockers are resolved.
-- Date-sensitive external services and external links should be rechecked immediately before publication.
-- Authenticated review confirmed that `@MoreBC2/reviewers` and `@MoreBC2/maintainers` exist and each has repository access, but both teams have zero members. `@toiletslayer` is the organization’s sole verified owner, so CODEOWNERS now names that account directly until the teams are populated. The file itself cannot guarantee enforcement.
+Current release evidence includes:
 
-## Non-blocking unresolved technical work
+- six `v31.1.0` assets with GitHub-reported SHA-256 metadata;
+- lightweight `v31.1.0` tag target recorded;
+- target commit GitHub-verified/valid;
+- independent MoreBC2 hash match for the Windows Qt release archive;
+- extracted Windows Qt executable observed as `Authenticode: NotSigned`.
 
-- Fresh version-scoped `v31.1.0` node/RPC/runtime evidence.
-- Independent current-release asset hashes, trusted signing-key guidance, and reproducibility evidence.
-- Deeper regression review for wallet, mempool, mining, RPC, validation, PSBT, replay protection, data restrictions, and header synchronization.
-- Evidence-based exchange confirmation policy.
-- Broader live-network and cross-platform checks.
+Still unresolved:
 
-These gaps must stay labeled. They must not be converted to Verified merely to prepare the repository for release.
+- independent hashing of the other five current assets;
+- a publisher-authenticated checksum/signature path;
+- trusted release-key guidance;
+- reproducible-build proof.
 
-## Presentation changes in this pass
+A verified source commit is not binary authentication.
 
-- Reworked the README for a first-time external maintainer: purpose, non-official status, audience, current baseline, evidence boundaries, contribution path, validation commands, roadmap, and evidence navigation are now visible quickly.
-- Replaced active private-foundation and invite-only-review framing in root status, roadmap, contribution, governance, legal, and ownership documents.
-- Converted the old review handoff to an owner public-release review checklist.
-- Marked legacy private-review coordination and polish pages as archived project-management history outside normal reader-facing navigation.
-- Tightened issue templates so Source Reviewed cannot be silently treated as runtime Verified.
-- Kept site deployment/indexing settings unchanged.
+## Public-service and ecosystem posture
 
-## Generated and temporary material
+Current dated observations exist for:
 
-Build outputs, dependency directories, editor settings, logs, environment files, caches, and generated Starlight content are ignored. The tracked immutable-evidence JSON is a deliberate generated audit artifact, not stray build output. No unexpected generated build directory was found tracked in the current tree.
+- Official BitcoinII Explorer;
+- project-linked and supplemental Mempool-style explorer/API services;
+- REST/WebSocket behavior;
+- Electrum TCP/TLS reachability;
+- current exchange confirmation settings for several BC2 venues;
+- current pool/Stratum configuration and payout-language observations.
 
-## Link posture
+These remain point-in-time observations. They do not prove long-term uptime, backend independence, payout reliability, custody-grade behavior, or valid public transaction broadcast.
 
-The site build validates internal content routing and rendered output. A network-enabled 2026-09-08 scan requested 785 distinct tracked-tree HTTP(S) URLs: 763 returned HTTP 200, five rejected automated access with HTTP 403, and 17 returned an expected private-repository 404, a documented broken/base-path/historical result, a test-fixture 404, HTTP 502, DNS failure, or connection refusal. The canonical BitcoinII repository and `v31.1.0` release page, Bitcoin-II.org, the MoreBC2 preview origin, and concrete current service endpoints were reachable. None of the non-200 results was misleadingly presented as a healthy current service.
+## Exchange/custody posture
 
-External links and services remain date-sensitive. Repeat the scan immediately before publication and review each current recommendation manually; an automated HTTP response alone does not establish ownership, safety, or reliability.
+MoreBC2 currently uses **50 confirmations as a provisional normal-deposit baseline**, supported by current NonKYC and NestEx settings. CoinEx uses a much more aggressive staged policy.
 
-## Recommended repository metadata
+This is operational guidance, not BitcoinII consensus finality.
 
-**Description:** Independently maintained, source-backed documentation and verification records for BitcoinII (BC2), with explicit evidence and uncertainty boundaries.
+Still open:
 
-**Topics:** `bitcoinii`, `bc2`, `documentation`, `cryptocurrency`, `blockchain`, `proof-of-work`, `astro`, `starlight`
+- cumulative-chainwork settlement example;
+- large-value escalation thresholds;
+- empirical reorganization history;
+- production custody architecture;
+- deposit/withdrawal/reorg incident runbooks;
+- periodic policy rechecks.
 
-These are recommendations only. This audit does not change GitHub settings.
+## Security and privacy posture
+
+Current tracked/project workflows include safeguards against publishing known private local-user path variants in generated output.
+
+Historical evidence retains useful path structure with identifying components redacted where previously audited. The project does not claim that old Git history was rewritten or erased.
+
+Sensitive MoreBC2 security reports should follow `SECURITY.md` and the verified private-reporting route. MoreBC2 does not represent itself as the upstream BitcoinII Core security authority.
+
+## Legal / provenance posture
+
+The repository retains:
+
+- root licensing files;
+- `NOTICE` / third-party notices;
+- [Legal and reuse posture](LEGAL_REUSE.md);
+- [Third-party provenance audit](THIRD_PARTY_PROVENANCE_AUDIT.md).
+
+The provenance audit remains a dated rights-review record rather than a legal warranty. New copied/adapted upstream material, generated distributable artifacts, or dependency bundles should receive their own rights review as appropriate.
+
+## Remaining high-value work
+
+The repository no longer needs another blanket “is anything documented?” pass. The important remaining work is targeted:
+
+- stronger release authentication/reproducibility;
+- complete/long-duration current node operation;
+- controlled ShockWave/reorg/activation-boundary tests;
+- external/hardware/third-party signer compatibility;
+- wallet backup/restore/encryption/recovery tests;
+- end-to-end pool Stratum/share/payout qualification where useful;
+- production exchange/custody runbooks and chainwork-aware risk thresholds;
+- periodic service/release freshness checks;
+- independent technical review of consequential current-facing claims.
+
+See [Verification evidence index](verification/verification-index.md), [Known unknowns](verification/known-unknowns.md), and [Open questions](verification/open-questions.md).
+
+## Automated quality gate
+
+The production workflow currently checks, among other things:
+
+- type/content correctness;
+- static-site build;
+- rendered internal links/output;
+- Windows node-documentation assumptions;
+- blocked private-path variants in generated output;
+- Cloudflare Pages production deployment;
+- live indexing policy.
+
+Passing those checks validates the documentation/deployment mechanics for the commit. It is not a BitcoinII protocol certification.
+
+## Audit conclusion
+
+The broad documentation/currentness cleanup is substantially complete. The project is public, deployed, navigable, and explicit about its uncertainty boundaries.
+
+Future audits should be **change-triggered**—new BitcoinII releases, new runtime evidence, changed services, new integrations, or discovered provenance/security issues—rather than repeatedly redoing the same full repository review without a concrete trigger.
 
 ## Verification
 
-**Status:** Owner review required
-**Primary sources checked:** Current repository tree, tracked project documents, scripts, workflows, and cited version-scoped evidence
-**Notes:** Passing repository checks verifies documentation tooling, not BitcoinII software or live-network behavior.
+**Status:** Reviewed / Ongoing maintenance  
+**Primary evidence checked:** Current project status, completed section audits, current verification index/queues, v31 runtime and source records, release records, public-service evidence, security/publication state, and deployment workflow results  
+**Notes:** This is a repository-maintenance assessment. It does not independently verify BitcoinII consensus or guarantee production suitability.
