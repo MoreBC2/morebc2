@@ -37,6 +37,7 @@ const files = await listMarkdownFiles(docsRoot);
 let protectedPages = 0;
 let forcedHiddenPages = 0;
 let homepageRepairs = 0;
+let noindexPages = 0;
 
 for (const filename of files) {
   let markdown = await fs.readFile(filename, 'utf8');
@@ -48,11 +49,11 @@ for (const filename of files) {
   }
 
   if (!markdown.startsWith('---\n')) {
-    if (homepageRepairs > 0) await fs.writeFile(filename, markdown, 'utf8');
+    if (relative === 'index.md' && homepageRepairs > 0) await fs.writeFile(filename, markdown, 'utf8');
     continue;
   }
 
-  const closing = markdown.indexOf('\n---\n', 4);
+  let closing = markdown.indexOf('\n---\n', 4);
   if (closing === -1) {
     throw new Error(`Generated page has malformed frontmatter: ${relative}`);
   }
@@ -60,15 +61,22 @@ for (const filename of files) {
   if (forceHiddenPages.has(relative) && !/^sidebar:\n  hidden: true$/m.test(markdown)) {
     markdown = `${markdown.slice(0, closing)}\nsidebar:\n  hidden: true${markdown.slice(closing)}`;
     forcedHiddenPages += 1;
+    closing = markdown.indexOf('\n---\n', 4);
   }
 
-  if (/^sidebar:\n  hidden: true$/m.test(markdown) && !/^pagefind:\s*false$/m.test(markdown)) {
-    const currentClosing = markdown.indexOf('\n---\n', 4);
-    markdown = `${markdown.slice(0, currentClosing)}\npagefind: false${markdown.slice(currentClosing)}`;
+  const hidden = /^sidebar:\n  hidden: true$/m.test(markdown);
+  if (hidden && !/^pagefind:\s*false$/m.test(markdown)) {
+    markdown = `${markdown.slice(0, closing)}\npagefind: false${markdown.slice(closing)}`;
     protectedPages += 1;
+    closing = markdown.indexOf('\n---\n', 4);
+  }
+
+  if (hidden && !/^\s*name:\s*robots\s*$/m.test(markdown)) {
+    markdown = `${markdown.slice(0, closing)}\nhead:\n  - tag: meta\n    attrs:\n      name: robots\n      content: "noindex, nofollow"${markdown.slice(closing)}`;
+    noindexPages += 1;
   }
 
   await fs.writeFile(filename, markdown, 'utf8');
 }
 
-console.log(`Site content protection: excluded ${protectedPages} hidden page(s) from Pagefind search; force-hid ${forcedHiddenPages} legacy page(s); repaired ${homepageRepairs} homepage sentence(s).`);
+console.log(`Site content protection: excluded ${protectedPages} hidden page(s) from Pagefind search; marked ${noindexPages} hidden page(s) noindex; force-hid ${forcedHiddenPages} legacy page(s); repaired ${homepageRepairs} homepage sentence(s).`);
