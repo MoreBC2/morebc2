@@ -8,11 +8,11 @@
 
 This guide is for exchanges and service providers considering BitcoinII (BC2) integration.
 
-It is not complete and should not be used as final listing documentation yet. It records known source-backed information and clearly lists what still needs verification.
+It is not complete and should not be used as a final production runbook yet. It records current source-backed information, current-dated exchange evidence, and unresolved operational work.
 
 ## Operator goals
 
-An exchange integration should eventually document:
+An exchange integration should document:
 
 - How to run BitcoinII Core safely.
 - How to verify release downloads.
@@ -20,7 +20,7 @@ An exchange integration should eventually document:
 - How to generate deposit addresses.
 - How to monitor deposits.
 - How to process withdrawals.
-- How many confirmations to require.
+- How many confirmations to require and how to layer chain-health checks around that threshold.
 - How to handle maintenance and upgrades.
 - How to recover from reindex/rescan or wallet issues.
 
@@ -48,7 +48,7 @@ From mainnet height `57,750`, BitcoinII no longer relies on the historical Bitco
 
 The target block spacing remains 10 minutes.
 
-Exchange monitoring should therefore avoid assumptions that difficulty can remain fixed for an entire 2016-block period. Height, tip age, observed difficulty, peer state, and chain progress should be monitored continuously.
+Exchange monitoring should therefore avoid assumptions that difficulty can remain fixed for an entire 2016-block period. Height, tip age, observed difficulty, peer state, chainwork, and chain progress should be monitored continuously.
 
 ## Replay-protection note
 
@@ -66,7 +66,7 @@ A dated MoreBC2 v29.1.0 Windows test used `127.0.0.1:8337`; that value is histor
 
 The v31 JSON-RPC documentation states that the headless daemon enables its RPC API by default, while the Qt GUI requires server mode for network RPC access.
 
-The default/configuration model is **Source-confirmed**. Actual v31.1.0 startup and RPC command execution remain **Runtime-unverified** by MoreBC2.
+Fresh MoreBC2 v31.1.0 Windows validation has now exercised isolated loopback cookie-authenticated RPC and read-only node/network commands. That does not turn a test setup into a production architecture.
 
 Use firewall rules, private networking, strong authentication, least-privilege access, and operational separation between hot-wallet systems and public-facing infrastructure.
 
@@ -93,19 +93,45 @@ This guide states operational facts and does not grant rights in that implementa
 
 ## Deposit handling
 
-Needs verification before publication:
+### Provisional confirmation baseline
 
-- Recommended minimum confirmations under current ShockWave behavior.
-- Reorg-risk guidance.
-- Address generation flow.
-- Deposit scanning method.
-- Replay-protection behavior in tested production-like flows.
-- Handling chain reorganizations.
-- Handling orphaned blocks.
+Current exchange evidence recorded on 2026-09-12 shows:
+
+- CoinEx: `2` safe confirmations and `6` confirmations at its exchange-defined `irreversible` stage.
+- NonKYC: `50` required confirmations.
+- NestEx: explicit BC2 backend value `conf = 50`.
+- Biconomy: confirmation count not publicly verified.
+
+See [Exchange confirmation evidence — 2026-09-12](../verification/exchange-confirmation-evidence-2026-09-12.md).
+
+MoreBC2 therefore currently uses **50 confirmations as a provisional normal-deposit baseline** for exchange integration guidance.
+
+This is not a consensus rule, a maintainer mandate, or a claim of mathematical finality. CoinEx's use of the label `irreversible` must not be repeated as a protocol guarantee.
+
+At the 10-minute target spacing, 50 blocks is about 8 hours 20 minutes under an idealized steady schedule. Actual elapsed time will vary.
+
+Operators should not rely on block count alone. BC2 selects the best chain by accumulated work, while ShockWave can change required work per block. A production policy should combine the minimum count with chainwork, tip age, current difficulty/work rate, peer/node health, reorganization signals, deposit value, and account risk.
+
+For large or unusual deposits, hold longer or require manual review when the risk model calls for it. MoreBC2 does not currently promote `100` confirmations as a universal automatic second tier.
+
+No finite confirmation count protects against an adversary that can sustain majority chainwork indefinitely.
+
+### Deposit workflow still needing production validation
+
+- Address-generation architecture.
+- Wallet-based versus non-wallet scanning.
+- Production `txindex` policy where relevant.
+- Handling chain reorganizations and orphaned blocks.
+- Replay-protection behavior in production-like deposit/withdrawal flows.
+- Chainwork-based alert thresholds and examples.
+
+See [Deposit monitoring](deposit-monitoring.md) for the current workflow model.
 
 ## Withdrawal handling
 
-Needs verification before publication:
+MoreBC2 does not currently define a separate universal withdrawal-confirmation count. An exchange may allow withdrawals after credited deposits only when its own fraud, custody, liquidity, and chain-risk controls are satisfied.
+
+Still needing production validation:
 
 - Fee handling.
 - Hot-wallet controls.
@@ -113,10 +139,11 @@ Needs verification before publication:
 - Transaction broadcast monitoring.
 - Failure/retry behavior.
 - Manual review procedure.
+- Policy for withdrawing recently credited deposits during abnormal chain conditions.
 
 ## Maintenance handling
 
-Needs verification before publication:
+Needs additional production-focused documentation for:
 
 - v31.1.0 upgrade process.
 - Wallet backup process.
@@ -124,22 +151,23 @@ Needs verification before publication:
 - Rescan process.
 - Node monitoring.
 - Disk/memory expectations.
-- Behavior and alerting around prolonged tip stalls or rapid difficulty changes.
+- Behavior and alerting around prolonged tip stalls, reorganizations, or rapid difficulty changes.
 
 ## Open items
 
 - Confirm current technical/security contact process.
-- Establish a confirmation-count recommendation or reviewed risk model.
-- Independently exercise v31.1.0 RPC examples.
-- Test v31.1.0 deposit/withdrawal flows using an isolated test environment.
-- Produce replay-protection transaction vectors.
-- Freshly re-test Electrum TCP/TLS behavior.
+- Add a chainwork-based monitoring example around the provisional 50-confirmation baseline.
+- Complete production-like deposit/withdrawal flow testing using an isolated environment.
+- Produce replay-protection transaction vectors for external/third-party signers.
 - Test transaction broadcast without relying on production custody wallets.
 - Confirm whether a standalone signed checksum manifest or formal release-key workflow exists.
+- Periodically recheck exchange confirmation settings because they are operational policy, not protocol constants.
 
 ## Related pages
 
 - [Exchange integration package](integration-package.md)
+- [Deposit monitoring](deposit-monitoring.md)
+- [Exchange confirmation evidence — 2026-09-12](../verification/exchange-confirmation-evidence-2026-09-12.md)
 - [RPC configuration](../configuration/rpc-configuration.md)
 - [Node configuration](../configuration/node-configuration.md)
 - [Network specifications](../documentation/network-specifications.md)
@@ -157,11 +185,12 @@ Needs verification before publication:
 - `src/policy/feerate.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/src/policy/feerate.h
 - `share/examples/bitcoinII.conf`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/share/examples/bitcoinII.conf
 - `doc/JSON-RPC-interface.md`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/doc/JSON-RPC-interface.md
-- [Project identity source check - 2026-07-10](../verification/project-identity-source-check-2026-07-10.md)
-- [Local node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md)
+- [Windows v31.1.0 node and RPC validation — 2026-09-11](../verification/windows-v31-node-rpc-validation-2026-09-11.md)
+- [Windows v31.1.0 PSBT and replay-protection validation — 2026-09-11](../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
+- [Exchange confirmation evidence — 2026-09-12](../verification/exchange-confirmation-evidence-2026-09-12.md)
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** BitcoinII Core v31.1.0 release metadata, release-pinned source and generated documentation, plus scoped pre-v31 MoreBC2 local RPC evidence and current public explorer observations.
-**Notes:** Current-release, ticker, RPC-default, ShockWave, replay-protection, data-restriction, release-authentication, licensing, and explorer-hierarchy wording were refreshed on 2026-09-12. The guide remains a draft integration framework until v31.1.0 state-changing RPC and deposit/withdrawal workflows are tested and a confirmation policy is established.
+**Primary sources checked:** BitcoinII Core v31.1.0 release metadata and release-pinned source, current MoreBC2 v31.1.0 runtime records, and current-dated exchange API evidence
+**Notes:** The guide now includes a provisional 50-confirmation normal-deposit baseline grounded in current exchange observations. It remains a draft because confirmation guidance still needs chainwork examples and community/maintainer review, while production deposit/withdrawal architecture, custody controls, and technical contact process remain incomplete.
