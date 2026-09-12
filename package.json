@@ -5,7 +5,7 @@
   "scripts": {
     "prepare:site": "node scripts/build-site-content.mjs && node scripts/protect-preview-content.mjs",
     "dev": "npm run prepare:site && astro dev",
-    "build": "npm run prepare:site && astro build && npm run check:site-output",
+    "build": "npm run prepare:site && astro build && node scripts/filter-site-sitemap.mjs && npm run check:site-output",
     "check:site-output": "node scripts/check-site-output.mjs",
     "check:windows-node-docs": "node scripts/check-windows-node-docs.mjs",
     "test:site-adapter": "node --test scripts/build-site-content.test.mjs",
