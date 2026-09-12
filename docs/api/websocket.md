@@ -2,71 +2,76 @@
 
 **Category:** Developer platform
 **Status:** Draft / Observed partial
-**Last reviewed:** 2026-07-12
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-MoreBC2 has one dated WebSocket smoke test for:
+MoreBC2 has current WebSocket reachability evidence for all three tested Mempool-style BitcoinII services.
 
-```text
-wss://bc2mempool.com/api/v1/ws
+Primary evidence: [Public infrastructure smoke test — 2026-09-11](../verification/public-infrastructure-smoke-test-2026-09-11.md).
+
+## Current observed endpoints
+
+| Endpoint | Status at 2026-09-11 check |
+|---|---|
+| `wss://bc2mempool.com/api/v1/ws` | Connected; `init` returned explorer-state data. |
+| `wss://explorer.bitcoin-ii.org/api/v1/ws` | Connected; `init` returned explorer-state data. |
+| `wss://bc2.live/api/v1/ws` | Connected; `init` returned explorer-state data. |
+
+The initialization message used was:
+
+```json
+{"action":"init"}
 ```
 
-The canonical evidence is [Public API, WebSocket, and Electrum smoke test - 2026-07-12](../verification/public-api-electrum-smoke-test-2026-07-12.md).
+The returned state included mempool/explorer information. The test was intentionally bounded and did not attempt to catalog every event type or subscription mode.
 
-## Observed behavior
+## What the current evidence establishes
 
-During the 2026-07-12 smoke test:
+The September check supports saying that:
 
-- the WebSocket handshake succeeded,
-- a minimal initialization message `{"action":"init"}` was sent,
-- the server returned an initial explorer-state text event,
-- the event began with fields including `mempoolInfo` and `blocks`,
-- the connection was closed cleanly after enough evidence was collected.
+- all three WebSocket URLs accepted connections during the test window;
+- the same minimal `init` action produced an explorer-state response on each service;
+- the route family is actively implemented on all three tested hosts.
 
-## Known limitations
+## What remains unverified
 
-This is a narrow availability check only.
-
-The smoke test did not establish:
+The current evidence does not establish:
 
 - complete event schemas,
-- long-lived subscription behavior,
-- reconnect behavior,
+- long-running connection stability,
+- reconnect/backoff behavior,
+- all supported subscription actions,
+- ordering or delivery guarantees,
 - behavior under load,
-- all supported subscription messages,
-- wallet or application compatibility,
-- whether the same event shapes will remain stable.
+- schema parity with upstream `mempool.space`,
+- wallet/application compatibility,
+- backend/operator independence among the three hosts.
 
-The first received frame was large, and full-message JSON validity and all event schemas were not established from the single smoke test.
+## Redundancy caution
 
-## Compatibility status
+The three WebSocket services showed closely aligned behavior, just as their REST surfaces did.
 
-| Capability | Status | Evidence |
-|---|---|---|
-| WebSocket endpoint reachable | Observed | [Public API/Electrum smoke test](../verification/public-api-electrum-smoke-test-2026-07-12.md) |
-| Initial explorer-state event | Observed | [Public API/Electrum smoke test](../verification/public-api-electrum-smoke-test-2026-07-12.md) |
-| Full documented schema | Not yet verified | Smoke test was intentionally narrow |
-| Reconnect behavior | Not yet verified | Not tested |
-| Broadcast or state-changing behavior | Not tested | Out of scope |
+That similarity does not prove a shared backend, but it also does not establish three independent providers. Do not treat the three hostnames as independent production redundancy without separate infrastructure evidence.
 
 ## Safe wording
 
 Use:
 
-- "WebSocket handshake observed"
-- "initial explorer-state event observed"
+- "WebSocket connection observed"
+- "`init` explorer-state response observed"
 - "schema coverage incomplete"
+- "dated service observation"
 
 Do not use:
 
 - "production-ready WebSocket API"
-- "complete WebSocket compatibility"
+- "complete mempool.space WebSocket compatibility"
+- "independent redundant WebSocket providers"
 - "all event types documented"
-- "wallet compatible"
 
 ## Verification
 
 **Status:** Draft / Observed partial  
-**Primary sources checked:** [Public API, WebSocket, and Electrum smoke test - 2026-07-12](../verification/public-api-electrum-smoke-test-2026-07-12.md)  
-**Notes:** This page summarizes the committed smoke-test record and does not add new checks.
+**Primary source checked:** [Public infrastructure smoke test — 2026-09-11](../verification/public-infrastructure-smoke-test-2026-09-11.md)  
+**Notes:** September testing expands the older single-host July evidence to all three current Mempool-style services. Full schema, subscription, reconnect, load, and independence behavior remain unverified.
