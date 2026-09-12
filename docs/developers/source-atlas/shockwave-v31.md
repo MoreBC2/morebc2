@@ -1,12 +1,12 @@
 # BitcoinII v31 ShockWave difficulty adjustment
 
-**Category:** Developer / Source Atlas
-**Status:** Source-reviewed partial
-**Last reviewed:** 2026-09-07
+**Category:** Developer / Source Atlas  
+**Status:** Reviewed / Source-confirmed partial  
+**Last reviewed:** 2026-09-12
 
 ## Purpose
 
-This page records the BitcoinII Core `v31.1.0` ShockWave difficulty-adjustment path at a level deeper than the general `pow.cpp` overview.
+This page records BitcoinII Core `v31.1.0` ShockWave difficulty adjustment at a deeper level than the general [`pow.cpp`](pow-cpp.md) atlas page.
 
 ## Activation boundary
 
@@ -16,56 +16,86 @@ Mainnet sets:
 nShockWaveActivationHeight = 57750
 ```
 
-`IsShockWaveEnabledForNextBlock` treats block `H` as the first ShockWave block when `H` equals the configured activation height. Blocks before activation continue through the preserved Bitcoin-style difficulty path.
+Block height `57750` is the first mainnet block whose required work is determined by ShockWave. Earlier history uses the preserved Bitcoin-style difficulty path.
 
 ## Production entry point
 
-`GetNextWorkRequired()` remains the consensus entry point used to determine a candidate block's required `nBits`.
+`GetNextWorkRequired()` remains the consensus entry point for a candidate block's required `nBits`.
 
-Before activation it dispatches to the historical Bitcoin retarget behavior. At and after activation it dispatches to ShockWave using the previous block index plus the candidate header, which matters because candidate time can affect emergency stall recovery.
+At/after activation it dispatches to ShockWave using the previous block index plus the candidate header. Candidate time matters because the algorithm contains timestamp-aware behavior and emergency stall recovery.
 
-Mining code recalculates required work when candidate time changes so block-template `nBits` stays aligned with ShockWave.
+Mining/template code therefore recalculates required work when candidate time changes.
 
 ## Rolling baseline
 
-The normal calculation reads 25 block-index entries, which provide 24 time gaps. It obtains its time endpoints through `GetMedianTimePast()` and averages the targets represented by those entries. The elapsed-time input and the final target are each bounded; in normal operation the next target stays between one quarter and four times the preceding target, subject to `powLimit`.
+The normal calculation reads 25 block-index entries, yielding 24 completed time gaps. It uses MedianTimePast endpoints and target history to produce the longer-window result.
+
+The implementation bounds the result relative to the preceding target; in the normal path, next-target movement is limited to a fourfold change in either direction, subject to `powLimit`.
 
 ## Short-horizon response
 
-The 25-block calculation is not the algorithm's only input. The code also examines the six most recent completed intervals, taking account of the target assigned to each interval. Depending on that recent evidence, the next target may be constrained or may move more quickly than the longer-window result.
+ShockWave also examines the six most recent completed intervals. This short-horizon path allows the algorithm to respond more quickly to abrupt hashrate changes than the longer window alone.
 
-This page does not reproduce the source comments' catalogue or labels for the internal decision rules. Review `src/pow.cpp` for the controlling implementation.
+The release-pinned implementation, not descriptive prose, remains authoritative for the exact internal decision rules.
 
-## Timestamp handling
+## Timestamp safeguards
 
-The calculation uses MedianTimePast as well as header timestamps. When recent header time is too far ahead of the implementation's MTP-based comparison value, that header time is not accepted as evidence for reducing the required work.
+The code compares recent header time with MedianTimePast-derived context and prevents future-skewed timestamps from being used as inappropriate evidence for reducing required work.
 
 ## Emergency stall recovery
 
-The emergency path becomes eligible only after the code calculates 30 minutes of stall time after accounting for `MAX_FUTURE_BLOCK_TIME`. At that threshold it applies one 25% difficulty reduction; another is applied for every additional five minutes, subject to the implementation's limits.
+The emergency path becomes eligible after the code calculates 30 minutes of adjusted stall time after accounting for `MAX_FUTURE_BLOCK_TIME`.
 
-After a block qualifies for this path, later target calculations use post-event history while the normal MTP sampling window advances beyond the earlier stall. The exact transition rules are implementation details in `src/pow.cpp` and are not restated here.
+At that threshold, source review shows a 25% difficulty reduction, with additional 25% reductions for each further five-minute step, subject to the implementation's bounds/limits.
+
+The exact transition and post-event stabilization behavior remains defined by `src/pow.cpp`.
 
 ## Header-sync interaction
 
-ShockWave cannot be validated in header pre-synchronization from only the previous header's target. The rolling calculation needs historical targets and MTP state.
+ShockWave cannot be validated from only the previous header's target. The rolling history and MedianTimePast state are needed.
 
-BitcoinII therefore extends `HeadersSyncState` with a bounded synthetic `CBlockIndex` history. The header-sync code retains 25 rolling targets plus 10 additional predecessors needed for the oldest sampled block's MTP, for a total 35-entry history.
+`HeadersSyncState` therefore carries bounded synthetic `CBlockIndex` history for PRESYNC and REDOWNLOAD:
 
-That temporary history is used in both PRESYNC and REDOWNLOAD to call the same production `GetNextWorkRequired()` logic used by contextual block-header validation.
+- 25 rolling target entries;
+- 10 additional predecessors needed for the oldest sample's MTP context;
+- 35 temporary indexes total.
+
+That history is used to call the same production next-work logic used during contextual header validation.
+
+See [Fork-aware header synchronization](headers-sync-v31.md).
+
+## Chain-selection boundary
+
+ShockWave changes the work target required for each new block. It does not replace BitcoinII's accumulated-chainwork best-chain selection.
+
+This distinction matters for reorg/deposit-risk analysis: confirmation count is an operational threshold, while competing valid branches are fundamentally compared by accumulated work.
+
+## Mining/pool implication
+
+A Bitcoin-derived miner/pool/proxy that updates candidate `nTime` while assuming difficulty remains fixed between 2016-block boundaries can create invalid work under current BC2.
+
+The September 12 Mining audit records current public pool/Stratum configuration, but MoreBC2 has not performed an end-to-end BC2 Stratum share test or a controlled template-time ShockWave vector.
+
+See [Block-template assembly](miner.md), [Mining RPC](rpc-mining.md), and [Mining overview](../../mining/mining-overview.md).
+
+## Runtime boundary
+
+The September Windows `v31.1.0` runtime work established current node/header operation and isolated local regtest block generation, but it did not independently force the mainnet ShockWave activation or test candidate-time progression under controlled hashrate/stall scenarios.
+
+ShockWave activation and algorithm details here are source-confirmed, not independently reproduced consensus vectors.
 
 ## Licensing boundary
 
-The notice at the start of `src/pow.cpp` is controlling for that file. It identifies inherited Bitcoin Core and Dash/Darkcoin portions as MIT-licensed and applies separate, non-open-source terms to original ShockWave implementation material.
+The notice at the start of `src/pow.cpp` controls rights in that file. It identifies inherited Bitcoin Core and Dash/Darkcoin portions under their applicable MIT terms and gives original ShockWave implementation material separate non-open-source terms.
 
-MoreBC2's factual account and original explanatory prose do not convey rights in the ShockWave source, its comments, or its implementation. Those upstream materials must be excluded from any future MoreBC2 documentation license; readers must consult the upstream notice for permitted uses.
+MoreBC2's factual descriptions do not relicense the implementation or its comments.
 
-## What remains open
+## Open work
 
-- Map each internal ShockWave helper to specific unit/functional tests.
-- Execute the available upstream tests against a clean `v31.1.0` build.
-- Produce empirical network examples showing response to abrupt hashrate entry/exit.
-- Document exact emergency-recovery target progression with controlled test vectors.
+- Map ShockWave helpers to specific current unit/functional tests.
+- Execute the relevant upstream tests against a clean `v31.1.0` build.
+- Create controlled candidate-time/`nBits` vectors for normal and emergency paths.
+- Produce dated empirical examples only where methodology is clear and reproducible.
 
 ## Primary sources
 
@@ -83,6 +113,6 @@ Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Source-reviewed partial
-**Primary sources checked:** Yes, `v31.1.0`
-**Notes:** Activation, core controller structure, emergency timing constants, production entry point, miner interaction and headers-sync history are source-backed. Test execution and empirical behavior remain open.
+**Status:** Reviewed / Source-confirmed partial  
+**Primary evidence:** BitcoinII Core `v31.1.0` ShockWave, miner, chain-parameter, and header-sync paths  
+**Notes:** Activation, controller structure, timing inputs, emergency thresholds, mining interaction, and header-sync history are source-backed. Independent controlled ShockWave runtime vectors remain open.
