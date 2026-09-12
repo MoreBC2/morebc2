@@ -2,127 +2,128 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-07-10
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
 This page tracks BitcoinII (BC2) block explorers.
 
-Explorer links should be checked directly before they are listed as active.
+Explorer links should be checked directly before they are listed as active. Current protocol-level evidence is recorded in [Public infrastructure smoke test — 2026-09-11](../verification/public-infrastructure-smoke-test-2026-09-11.md).
 
-Use [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md) before adding or promoting explorer listings.
-
-## Listing format
-
-```md
-### Explorer name
-
-**Status:** Needs Review / Observed / Partially checked / Active, dated check / Unreachable / Historical / Do not recommend
-**Official:** Yes / No / Unknown
-**URL:**
-**Supports:** Blocks / Transactions / Addresses / API / Mempool / Other
-**Last checked:** YYYY-MM-DD
-**Evidence level:** E4/E8
-**What was checked:**
-**What was not checked:**
-**Notes:**
-```
+Public explorers are useful for observation and support, but none should be treated as the sole source of truth for exchange/custody operations without independent node infrastructure and an explicit reliability model.
 
 ## Current checked explorers
 
-### BitcoinII Explorer
+### Official BitcoinII Explorer
 
-**Status:** Active, dated check / Same-time local comparison passed  
-**Official:** Claimed by page text, not independently verified  
+**Status:** Active, dated check  
+**Official:** Yes — page explicitly identifies itself as the Official BitcoinII Explorer  
 **URL:** `https://bitcoinii.ddns.net/explorer/`  
-**Supports:** Blocks / transactions / addresses / public GET API / mempool summary  
-**Last checked:** 2026-07-10  
-**Evidence level:** E6 dated direct public API check plus same-time local-node height/hash comparison; not permanent reliability evidence
+**Supports:** Blocks / transactions / addresses / public API / mempool / mining / supply / UTXO statistics / halving data  
+**Last checked:** 2026-09-11
 
-**What was checked:**
+Direct checks observed:
 
-- HTTPS explorer pages loaded during the earlier direct check.
-- Page title and visible UI identified the site as `BitcoinII Explorer`.
-- Visible page text said `Official Explorer for the BitcoinII network`; this claim was observed but not independently verified.
-- Public block, transaction, address, tip, and mempool views/endpoints were observed.
-- On 2026-07-10, the explorer tip endpoint returned height `57420` and hash `0000000000000000130acb08cd609dc86dc72e2312a3112028617da3895bd596`.
-- A local BitcoinII Core v29.1.0 mainnet node returned the same height and best-block hash approximately eight seconds earlier.
+- frontend HTTP 200;
+- `/api/blocks/tip` returned height `58968` and best hash `0000000000000000fb4d304134d055212b16595626526fce3bce6637aff882cd`;
+- `/api/version` returned `2.0.0`;
+- block and block-header lookup by both hash and height worked;
+- supply, next-halving, mempool summary/fees, hashrate, difficulty estimate, and next-block routes responded;
+- `/api/blockchain/utxo-set` returned a statistics snapshot at height `58958`, ten blocks behind the live tip, so that endpoint should be treated as a potentially lagged/cached statistics source rather than tip authority.
 
-**Same-time comparison:**
+Observed route qualifications:
 
-| Source | Timestamp | Height | Tip hash |
-|---|---|---:|---|
-| Local BitcoinII node RPC | `2026-07-10T20:46:08.8662219-04:00` | `57420` | `0000000000000000130acb08cd609dc86dc72e2312a3112028617da3895bd596` |
-| Explorer tip API | `2026-07-10T20:46:16.9332436-04:00` | `57420` | `0000000000000000130acb08cd609dc86dc72e2312a3112028617da3895bd596` |
+- `/api/mempool/count` returned 404;
+- `/api/price` existed but returned an application-level `success:false` because exchange rates were disabled in server configuration;
+- `/api/price/marketcap` returned HTTP 500;
+- `/api/mining/miner-summary` existed but required query parameters such as `since` or a height range;
+- tested broadcast candidates returned HTTP 403, so no public transaction-submission route was established on this explorer.
 
-**What was not checked:**
+### `explorer.bitcoin-ii.org`
 
-- No POST search submission.
-- No transaction submission.
-- No account-only features.
-- No independent verification that the explorer is official.
-- No long-term uptime, rate-limit, latency, or reliability testing.
-- No claim that the explorer will remain synced after the dated comparison.
+**Status:** Active, dated check  
+**Official:** No — project-linked by domain, but the service identifies itself as independently run/community-funded  
+**Infrastructure note:** Footer identifies CapsPool.io infrastructure  
+**URL:** `https://explorer.bitcoin-ii.org`  
+**Supports:** Blocks / transactions / mempool / fees / mining / price feeds / rich list / WebSocket / public transaction-submission route  
+**Last checked:** 2026-09-11
 
-**Notes:**
+Direct checks observed a working Mempool-style REST API, WebSocket `init` response, and `/api/tx` route that accepted POST and rejected deliberately invalid transaction data with HTTP 400.
 
-The same-time comparison supports that the explorer and local node agreed at that moment. It does not establish permanent synchronization or suitability as the only source of truth for an exchange or custody service.
+The older Electrum candidate `explorer.bitcoin-ii.org:5008` timed out again and should not be represented as a currently working Electrum endpoint.
 
-The working explorer URL is `https://bitcoinii.ddns.net/explorer/`. The explorer page canonical/open-graph metadata referenced `https://bitcoiniiexplorer.org`, but that domain did not resolve during the 2026-07-06 check.
+### `bc2mempool.com`
 
-See [Local BitcoinII node inspection — 2026-07-10](../verification/local-node-inspection-2026-07-10.md).
+**Status:** Active, dated check / Supplemental  
+**Official:** No official-project designation established  
+**URL:** `https://bc2mempool.com`  
+**Supports:** Blocks / transactions / mempool / fees / mining / price feeds / rich list / WebSocket / public transaction-submission route  
+**Last checked:** 2026-09-11
 
-## Broken, unresolved, or unrelated candidates
+Direct checks observed a working Mempool-style REST API, current tip data, WebSocket `init` response, and `/api/tx` route that accepted POST and rejected deliberately invalid transaction data with HTTP 400.
 
-| Candidate URL | Date checked | Result | Status |
-|---|---|---|---|
-| `https://bitcoiniiexplorer.org` | 2026-07-06 | DNS resolution failed. Referenced by explorer metadata. | Broken / Needs Review |
-| `https://explorer.bitcoin-ii.org` | 2026-07-06 | SSL/TLS trust failure. | Broken / Needs Review |
-| `http://explorer.bitcoin-ii.org` | 2026-07-06 | Failed through same TLS trust problem. | Broken / Needs Review |
-| `https://chainz.cryptoid.info/bc2/` | 2026-07-06 | Redirected/loaded Chainz main index, not a BC2 explorer page. | Unrelated / Redirected |
-| `https://chainz.cryptoid.info/bc2/api.dws?q=getblockcount` | 2026-07-06 | `404 Not Found`. | Unrelated / Broken |
-| `https://explorer.bitcoin-ii.com` | 2026-07-06 | DNS failed. | Broken |
-| `https://explorer.bitcoinii.org` | 2026-07-06 | Connection failed. | Broken |
-| `https://blockexplorer.bitcoin-ii.org` | 2026-07-06 | DNS failed. | Broken |
+### `bc2.live`
 
-## Current status
+**Status:** Active, dated check / Supplemental  
+**Official:** No official-project designation established  
+**URL:** `https://bc2.live`  
+**Supports:** Blocks / transactions / mempool / fees / mining / price feeds / rich list / WebSocket / public transaction-submission route  
+**Last checked:** 2026-09-11
 
-MoreBC2 has one BitcoinII/BC2 explorer with a successful dated direct check and same-time local-node height/hash comparison.
+Direct checks observed a working Mempool-style REST API, current tip data, WebSocket `init` response, and `/api/tx` route that accepted POST and rejected deliberately invalid transaction data with HTTP 400.
 
-It can be described as reachable and matching a local node at the recorded time. It should not be described as permanently synced, officially maintained, highly available, or sufficient as an exchange's only source of truth.
+## Same-time comparison
 
-## What to check
+During the 2026-09-11 multi-explorer comparison, these three services reported the same tip:
 
-For each explorer, verify:
+| Service | Height | Tip hash |
+|---|---:|---|
+| Official BitcoinII Explorer | `58968` | `0000000000000000fb4d304134d055212b16595626526fce3bce6637aff882cd` |
+| `explorer.bitcoin-ii.org` | `58968` | `0000000000000000fb4d304134d055212b16595626526fce3bce6637aff882cd` |
+| `bc2.live` | `58968` | `0000000000000000fb4d304134d055212b16595626526fce3bce6637aff882cd` |
 
-- Site loads.
-- Current height is visible, if provided.
-- Recent blocks are visible, if provided.
-- Block lookup works.
-- Transaction lookup works, if supported.
-- Address lookup works, if supported.
-- Public API exists, if claimed.
-- Any sync-status claim is compared against another reliable source or local node output.
-- Last checked date is recorded.
+`bc2mempool.com` reported the same height/hash during the immediately preceding focused probe.
 
-## Open items
+This establishes point-in-time agreement only.
 
-- Confirm whether `https://bitcoinii.ddns.net/explorer/` is officially maintained.
-- Recheck `https://bitcoiniiexplorer.org` because it appears in metadata but did not resolve.
-- Repeat same-time comparisons periodically before publishing current-status claims.
-- Document exact API response fields only after another stability check.
-- Do not recommend the explorer as a sole exchange/service source of truth.
+## Redundancy interpretation
+
+The Official BitcoinII Explorer exposes a materially different API shape and server behavior from the three Mempool-style services.
+
+`explorer.bitcoin-ii.org`, `bc2mempool.com`, and `bc2.live` showed closely aligned routes, schemas, mempool/fee values, block data, WebSocket behavior, and invalid-broadcast rejection behavior.
+
+That similarity does not prove they share a literal backend, but it also does not establish independent redundancy. Do not count those three hostnames as three independent node/API providers without separate operator/backend evidence.
+
+## Historical and unresolved candidates
+
+The following entries are retained as historical observations and should not override newer dated checks:
+
+| Candidate URL | Historical result | Current interpretation |
+|---|---|---|
+| `https://bitcoiniiexplorer.org` | DNS resolution failed in July 2026 | Historical unresolved metadata-linked domain; not the current working explorer URL. |
+| `https://chainz.cryptoid.info/bc2/` | Redirected to Chainz main index | Not established as a BC2 explorer. |
+| `https://explorer.bitcoin-ii.com` | DNS failed | Broken historical candidate. |
+| `https://explorer.bitcoinii.org` | Connection failed | Broken historical candidate. |
+| `https://blockexplorer.bitcoin-ii.org` | DNS failed | Broken historical candidate. |
+
+## What remains unverified
+
+- Long-term uptime, latency, rate limits, and SLA behavior.
+- Backend/operator independence among the Mempool-style hostnames.
+- Successful broadcast of a valid BC2 transaction through any public explorer/API.
+- Custody-grade suitability.
+- Broad transaction/address edge-case coverage.
 
 ## Related pages
 
+- [Public infrastructure smoke test — 2026-09-11](../verification/public-infrastructure-smoke-test-2026-09-11.md)
+- [Public endpoints](../api/public-endpoints.md)
 - [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md)
-- [Explorer resources](../documentation/explorer-resources.md)
 - [APIs](apis.md)
-- [Local BitcoinII node inspection — 2026-07-10](../verification/local-node-inspection-2026-07-10.md)
-- [Verification queue](../verification/README.md)
+- [Verification evidence index](../verification/verification-index.md)
 
 ## Verification
 
 **Status:** Draft  
-**Primary sources checked:** Direct explorer/API observations, successful local BitcoinII RPC calls, and a same-time local/explorer tip comparison from 2026-07-10  
-**Notes:** The explorer matched a local node at height `57420` during a dated check. Official status, permanent sync, long-term reliability, and service-provider suitability remain unverified.
+**Primary evidence:** Direct public explorer/API checks from 2026-09-11 plus preserved historical records  
+**Notes:** Current reachability, route behavior, and same-time tip agreement are dated observations. They do not establish permanent synchronization, independent redundancy, or production custody suitability.
