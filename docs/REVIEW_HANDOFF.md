@@ -1,80 +1,127 @@
-# Owner public-release review handoff
+# Ongoing review handoff
 
-**Category:** Project maintenance
-**Status:** Owner action required
-**Last reviewed:** 2026-09-08
+**Category:** Project maintenance  
+**Status:** Reviewed / Ongoing owner-maintainer checklist  
+**Last reviewed:** 2026-09-12
 
 ## Purpose
 
-This checklist hands the repository to its owner for a decision about further public-release preparation. It does not authorize a visibility change, license selection, deployment change, or external publication.
+This page is now an **ongoing review checklist** for a repository that is already public and deployed.
 
-## Recommended review order
+The previous pre-publication wording about changing visibility, enabling Private Vulnerability Reporting after publication, and deciding whether the site should become public is historical. Those transitions have already occurred.
 
-1. [README](../README.md)
-2. [Project status](../PROJECT_STATUS.md)
-3. [Repository audit](AUDIT.md)
-4. [Legal and reuse posture](LEGAL_REUSE.md)
-5. [Documentation coverage](documentation-coverage.md)
-6. [Verification evidence index](verification/verification-index.md)
-7. [Known unknowns](verification/known-unknowns.md)
-8. [v31 currentness audit](verification/v31-currentness-audit-2026-09-02.md)
-9. [Contribution guide](../CONTRIBUTING.md)
-10. [Security reporting policy](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md)
-11. [Roadmap](../ROADMAP.md)
+Use this checklist when a new BitcoinII release, major documentation change, new runtime evidence, ecosystem change, or security/provenance issue requires a focused owner/maintainer review.
 
-## Owner decisions required
+## Current review order
 
-- Review and approve the implemented path-scoped CC BY 4.0 and MIT license set and its third-party exclusions.
-- Decide whether exact personal/machine paths in historical evidence are acceptable for publication.
-- Approve the third-party attribution and notice approach.
-- Approve a controlled publication transition in which GitHub Private Vulnerability Reporting is enabled and verified immediately after the visibility change and before active announcement or promotion.
-- Decide whether to populate the empty `reviewers` and `maintainers` teams and move CODEOWNERS back to team handles; until then, the verified organization owner is the effective CODEOWNER.
-- Decide whether and when the site should become indexable or move from its review deployment; no deployment change is included here.
+1. [Project status](../PROJECT_STATUS.md)
+2. [Documentation index](README.md)
+3. [Documentation coverage](documentation-coverage.md)
+4. [Repository audit](AUDIT.md)
+5. [Verification evidence index](verification/verification-index.md)
+6. [Known unknowns](verification/known-unknowns.md)
+7. [Open questions](verification/open-questions.md)
+8. [Current release records](releases/README.md)
+9. [Legal and reuse posture](LEGAL_REUSE.md)
+10. [Third-party provenance audit](THIRD_PARTY_PROVENANCE_AUDIT.md)
+11. [Contribution guide](../CONTRIBUTING.md)
+12. root `SECURITY.md`
+13. [Roadmap](../ROADMAP.md)
+
+## Current publication/security state
+
+The repository is public and the generated documentation site is deployed through Cloudflare Pages.
+
+GitHub Private Vulnerability Reporting for MoreBC2 is enabled and verified. Sensitive MoreBC2 reports should use the current `SECURITY.md` instructions. This does not make MoreBC2 the upstream BitcoinII Core security authority.
+
+## Review triggers
+
+A fresh focused review is warranted when:
+
+- BitcoinII Core publishes a new release/tag;
+- release assets or authentication material change;
+- consensus/network parameters change;
+- new runtime testing materially changes evidence status;
+- an explorer/API/Electrum/pool/exchange/wallet status changes;
+- a new integration target is being approached;
+- new copied/adapted third-party material enters the repository;
+- a security/privacy issue is reported;
+- the site build/deployment pipeline changes;
+- a consequential claim receives contradictory evidence.
 
 ## Technical review lanes
 
-Assign narrow reviews rather than asking one reviewer to certify the whole repository:
+Assign narrow reviews rather than asking one person to certify everything:
 
-- v31.1.0 consensus activation and ShockWave wording;
-- replay-protection and data-restriction boundaries;
-- fork-aware header synchronization;
-- node/RPC/operator command safety;
-- release metadata and authentication wording;
-- wallet, mempool, mining, RPC, validation, and PSBT regression scope;
-- exchange confirmation and service-integration claims; and
-- external links, services, and ecosystem freshness.
+- consensus activation / difficulty / chainwork;
+- replay protection / signing / PSBT;
+- data restrictions / validation;
+- header synchronization / reorg behavior;
+- node/RPC/operator safety;
+- wallet/recovery/external signer behavior;
+- mining/template/Stratum behavior;
+- release integrity/authentication;
+- exchange confirmation/custody guidance;
+- API/explorer/Electrum/public infrastructure;
+- ecosystem freshness;
+- licensing/provenance;
+- site build/deployment/security controls.
 
-Reviewers should report evidence strength, version, network, platform, date, and whether the result is source review, observation, or runtime testing. Unresolved claims remain unresolved.
+Each review should state the evidence type: release-pinned source, local runtime, direct public-service observation, historical record, third-party claim, or operational policy.
 
-## Historical evidence rule
+## Current evidence rules
 
-Do not rewrite dated `v29.1.0` records to say `v31.1.0`. Add a new test record for a new release. The current-tree copies of three records minimally replace only the personal local-user path component and visibly disclose that change; their original committed versions remain in Git history.
+- Do not relabel old v29 evidence as v31 evidence.
+- Do not treat source review as runtime testing.
+- Do not treat local zero-peer transaction submission as public propagation.
+- Do not treat a service's existence or endpoint as an uptime/SLA guarantee.
+- Do not treat a verified source commit as binary authentication.
+- Do not treat an exchange's confirmation count as consensus finality.
+- Do not infer signer/wallet compatibility from Bitcoin-like address/script/API structure alone.
 
-## Final gate
+## Owner / maintainer decisions that remain meaningful
 
-Before changing visibility, confirm all of the following:
+The owner/maintainers may still need to decide:
 
-- a license is present and its scope is clear;
-- required attribution and notices are present;
-- the current-tree personal-path cleanup is complete;
-- no secrets or credentials are present in the publishable tree or history;
-- the public issue guidance is usable and the owner is prepared to complete the private-reporting transition below;
-- all documented repository checks pass;
-- date-sensitive links and external services were freshly checked; and
-- the owner explicitly approves the visibility change.
+- whether new external contributions or copied material satisfy licensing/provenance requirements;
+- whether a new claim is strong enough for Documentation versus Verification/Research;
+- whether a service should be recommended, merely listed, or removed;
+- whether a new release invalidates current-facing guidance;
+- whether independent technical review is needed before outreach or promotion;
+- whether operational guidance such as confirmation/risk thresholds should change.
 
-Immediately after changing visibility, enable GitHub Private Vulnerability Reporting, verify that its external reporting interface works, and update `SECURITY.md` with the usable instructions and link. Do not actively announce, promote, or treat publication as complete until the route is verified. If it cannot be enabled or verified, establish another verified private intake route before active publication proceeds.
+## Deployment closure checklist
 
-## Important quality task
+For substantial documentation changes:
 
-Independent technical review is strongly encouraged for consequential current-facing claims. It may occur before or during public review, and its absence alone does not block visibility once the actual publication blockers and owner approval are resolved.
+- site-check workflow passes;
+- type/content check passes;
+- static build passes;
+- rendered output/internal-link audit passes;
+- Windows node-documentation guard passes when relevant;
+- generated output contains no blocked private-path variants;
+- production Cloudflare deployment succeeds;
+- live indexing policy check succeeds;
+- canonical site responds successfully;
+- preview-app state is interpreted separately from production state.
 
-## Archived coordination material
+## Evidence closure checklist
 
-Earlier invite-only review packets, assignment cards, feedback buckets, and the original polish plan are retained as project-management history. They are excluded from normal reader-facing site navigation and should not be treated as the current release process.
+For technical changes:
+
+- current release/ref named;
+- source links release-pinned where appropriate;
+- runtime environment/date recorded if executed;
+- public-service observations dated;
+- unresolved limits stated;
+- current index/known-unknown/open-question pages synchronized when the new evidence changes the queue.
+
+## Historical coordination material
+
+Earlier invite-only review packets, private-review assignments, and the archived polish plan remain project-management history. They are not the current review process.
 
 ## Verification
 
-**Status:** Owner action required
-**Primary sources checked:** Current project status, audit, legal posture, coverage dashboard, evidence index, and repository workflows
-**Notes:** This checklist coordinates owner review. It does not verify BitcoinII behavior or declare the repository ready for public release.
+**Status:** Reviewed / Ongoing owner-maintainer checklist  
+**Primary evidence checked:** Current public/deployed project state, current security route, completed documentation audits, verification index/queues, and deployment workflow  
+**Notes:** This page coordinates maintenance review. It does not itself verify BitcoinII protocol behavior.
