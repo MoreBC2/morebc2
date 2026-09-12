@@ -1,63 +1,65 @@
 # Block primitives
 
-**Category:** Documentation
-**Status:** Needs Review
-**Last reviewed:** 2026-06-30
+**Category:** Developer / Source Atlas  
+**Status:** Reviewed / Source-confirmed structural  
+**Last reviewed:** 2026-09-12
 
 ## Source files
 
-- `src/primitives/block.h`
-- `src/primitives/block.cpp`
+Pinned/current review scope:
+
+- `v31.1.0/src/primitives/block.h`
+- `v31.1.0/src/primitives/block.cpp`
 
 ## Purpose
 
-The block primitive files define BitcoinII Core block and block-header data structures and related methods.
+These files define BitcoinII Core block-header and block data structures and the block-header hash call path.
 
-## Why they matter
+## Current reviewed structure
 
-These files help verify:
+`CBlockHeader` carries the familiar fields:
 
-- Block header fields.
-- Block serialization shape.
-- Block header hashing call path.
-- Block string formatting.
+- `nVersion`
+- `hashPrevBlock`
+- `hashMerkleRoot`
+- `nTime`
+- `nBits`
+- `nNonce`
 
-## Behavior already documented from these files
+`CBlock` extends the header structure with the block transaction vector and related block state/helpers.
 
-MoreBC2 currently cites these files for:
+`CBlockHeader::GetHash()` uses the `HashWriter` path documented in [`hash.h`](hash-h.md), yielding the double-SHA256 block-header hash used by BitcoinII proof of work.
 
-- `CBlockHeader` fields:
-  - `nVersion`
-  - `hashPrevBlock`
-  - `hashMerkleRoot`
-  - `nTime`
-  - `nBits`
-  - `nNonce`
-- `CBlockHeader::GetHash()` calling `HashWriter::GetHash()`.
-- `CBlock` extending `CBlockHeader` and including transactions.
+## v31 boundary
 
-## Related MoreBC2 pages
+The primitive header layout remains structurally Bitcoin-like in the reviewed `v31.1.0` source. Current BitcoinII-specific mining behavior is introduced in the logic that calculates and validates the header's required `nBits`, not by adding a different block-header field layout.
 
-- [Consensus overview](../../documentation/consensus-overview.md)
-- [Network specifications](../../documentation/network-specifications.md)
-- [Proof-of-work](../../encyclopedia/proof-of-work.md)
+In particular:
+
+- ShockWave determines required work from height `57750`;
+- candidate `nTime` can affect required `nBits`;
+- `CheckProofOfWork` verifies the resulting header hash/target relationship;
+- fork-aware header sync validates alternate branches with sufficient ShockWave history.
+
+Therefore a familiar Bitcoin-style header layout does not imply Bitcoin-style 2016-block-only difficulty behavior.
+
+## Serialization boundary
+
+This page is a structural source map. It does not attempt to reproduce every serialization template/operator or prove compatibility with arbitrary third-party Bitcoin block libraries.
+
+Third-party tooling must also honor BC2 network identity, current difficulty rules, validation rules, and transaction/signature differences.
+
+## Related pages
+
 - [Hash helpers](hash-h.md)
-
-## Open questions
-
-- Confirm whether any BitcoinII-specific changes exist in block primitives beyond naming/header changes.
-- Confirm whether related serialization behavior should be documented for developers.
-- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for these files before upgrading status.
-
-## Sources
-
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
-
-- Current observed `main` `src/primitives/block.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/primitives/block.h
-- Current observed `main` `src/primitives/block.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/primitives/block.cpp
+- [pow.cpp](pow-cpp.md)
+- [ShockWave v31](shockwave-v31.md)
+- [Block acceptance](block-acceptance.md)
+- [Network specifications](../../documentation/network-specifications.md)
+- [Mining overview](../../mining/mining-overview.md)
 
 ## Verification
 
-**Status:** Needs Review
-**Primary sources checked:** Yes
-**Notes:** Block structure and hash call path have been checked from source, but this page should be reviewed against the `v31.1.0` release baseline and subsequent `main` changes before being marked Verified.
+**Status:** Reviewed / Source-confirmed structural  
+**Primary evidence:** BitcoinII Core `v31.1.0` block primitives and current v31 PoW/template reviews  
+**Notes:** Header/block structure and hash call path are current. This page does not claim exhaustive serialization or third-party compatibility testing.
