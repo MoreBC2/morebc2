@@ -1,427 +1,555 @@
 # Developer glossary
 
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-06-30
+**Category:** Documentation  
+**Status:** Reviewed / Partial  
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page defines developer-facing terms used throughout MoreBC2 architecture and Source Atlas pages.
+This page defines developer-facing terms used throughout MoreBC2 architecture, Source Atlas, wallet, node, mining, and integration documentation.
 
-The root [Glossary](../../GLOSSARY.md) gives short general definitions. This page is more technical and should grow as source review expands.
+The root [Glossary](../../GLOSSARY.md) gives shorter general definitions. This page adds implementation-oriented meaning and the BitcoinII-specific distinctions that matter for current `v31.1.0` work.
 
 ## Rules
 
-- Keep definitions neutral.
-- Add BitcoinII-specific values only when verified.
-- Link to Source Atlas pages where a term is implemented.
-- Do not turn glossary entries into long articles.
-- Move deeper explanations into encyclopedia or architecture pages.
+- Keep definitions short enough to remain a glossary.
+- Prefer release-pinned `v31.1.0` behavior for current BitcoinII-specific values.
+- Distinguish consensus, mempool policy, wallet behavior, RPC behavior, and service policy.
+- Do not use a Bitcoin-derived term to imply compatibility where v31 introduces a BC2-specific boundary.
+- Link deeper behavior to Architecture or Source Atlas instead of reproducing those pages here.
 
-## Active chain
+## Accumulated chainwork
 
-The branch of the blockchain that the node currently treats as its best valid chain.
+The cumulative proof-of-work represented by a chain branch.
 
-Related:
-
-- [Life of a reorganization](../architecture/life-of-a-reorg.md)
-- [Block validation flow](../architecture/block-validation-flow.md)
-
-## Ancestor
-
-In mempool context, an unconfirmed transaction that a later unconfirmed transaction depends on.
-
-Related:
-
-- [Mempool flow](../architecture/mempool-flow.md)
-- [Source atlas: txmempool](../developers/source-atlas/txmempool.md)
-
-## Best chain
-
-The valid chain selected by accumulated work and validation state.
-
-A node may know about multiple branches, but only one is active at a time.
-
-## Block file
-
-A disk file that stores serialized block data.
-
-Related:
-
-- [Source atlas: block storage](../developers/source-atlas/block-storage.md)
-
-## Block file cursor
-
-Bookkeeping used by the block-storage layer to track the current block file and related undo-file progress.
-
-Related:
-
-- [Source atlas: block storage](../developers/source-atlas/block-storage.md)
-
-## Block index
-
-The node's internal index of known block headers and related metadata.
-
-The block index helps track known branches, validation status, work, and disk positions.
-
-Related:
-
-- [Source atlas: validation.cpp](../developers/source-atlas/validation-cpp.md)
-- [Source atlas: block storage](../developers/source-atlas/block-storage.md)
-
-## Block lifecycle
-
-The full path a block follows from arrival or creation through header checks, full-block checks, storage, best-chain selection, connection, and notifications.
-
-Related:
-
-- [Life of a block](../architecture/life-of-a-block.md)
-- [Source atlas: block lifecycle](../developers/source-atlas/block-acceptance.md)
-
-## BlockTreeDB
-
-The block index database wrapper used for block metadata, block-file metadata, flags, and reindex state.
-
-Related:
-
-- [Source atlas: block storage](../developers/source-atlas/block-storage.md)
-
-## BroadcastTransaction
-
-A node-level broadcast path that can submit a transaction toward mempool processing and, when relay is requested, toward peers.
-
-Related:
-
-- [Life of a transaction](../architecture/life-of-a-transaction.md)
-- [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
-
-## Chainstate
-
-The node's current view of the active chain and spendable coin state.
-
-In Bitcoin-style codebases, chainstate is closely tied to the UTXO set and block validation.
-
-## CheckBlock
-
-A validation function that checks block properties that do not require UTXO state.
-
-Reviewed examples include merkle root checks, coinbase placement, block limits, and context-free transaction checks.
-
-Related:
-
-- [Block validation flow](../architecture/block-validation-flow.md)
-- [Source atlas: validation.cpp](../developers/source-atlas/validation-cpp.md)
-
-## CheckTransaction
-
-A context-independent transaction check helper.
-
-Reviewed behavior includes non-empty inputs and outputs, output value range checks, duplicate input rejection, coinbase scriptSig size checks, and null previous-output rejection for non-coinbase transactions.
-
-Related:
-
-- [Source atlas: transaction consensus files](../developers/source-atlas/transaction-consensus.md)
-
-## Coin
-
-An internal representation of an unspent transaction output plus metadata such as height and coinbase status.
-
-Related:
-
-- [Source atlas: validation.cpp](../developers/source-atlas/validation-cpp.md)
-
-## Coinbase transaction
-
-The first transaction in a block. It creates the block subsidy and collects transaction fees.
-
-Coinbase outputs normally require maturity before they can be spent.
-
-## Coins view
-
-An abstraction over UTXO data.
-
-Coins views can be layered, cached, and updated during validation.
-
-## ConnectBlock
-
-The validation path that applies a block to the current UTXO view.
-
-Reviewed behavior includes transaction input checks, input verification checks, fee accounting, undo data creation, coinbase payout checks, and UTXO updates.
-
-Related:
-
-- [Block validation flow](../architecture/block-validation-flow.md)
-- [Life of a block](../architecture/life-of-a-block.md)
-
-## ConnectTip
-
-The path that connects one block as the next active-chain tip, calling `ConnectBlock` and updating related state when successful.
-
-## Consensus rule
-
-A rule that determines whether a block or transaction is valid.
-
-Consensus rules must not be confused with mempool policy.
-
-## Contextual check
-
-A validation check that depends on chain context, such as height, median time, activation state, or previous block state.
-
-## Descendant
-
-In mempool context, an unconfirmed transaction that depends on an earlier unconfirmed transaction.
-
-Related:
-
-- [Mempool flow](../architecture/mempool-flow.md)
-
-## Descriptor-assisted PSBT processing
-
-A PSBT workflow where descriptor information helps update, sign, or finalize transaction data.
-
-Related:
-
-- [Source atlas: raw transaction RPC](../developers/source-atlas/rpc-rawtransaction.md)
-
-## Difficulty target
-
-The threshold a block hash must be below to satisfy proof-of-work.
-
-Related:
-
-- [Proof-of-work](proof-of-work.md)
-- [Difficulty adjustment](difficulty-adjustment.md)
-- [Source atlas: pow.cpp](../developers/source-atlas/pow-cpp.md)
-
-## DisconnectBlock
-
-The validation path that restores the UTXO view to the previous block using undo data.
-
-Related:
-
-- [Life of a reorganization](../architecture/life-of-a-reorg.md)
-- [Source atlas: validation.cpp](../developers/source-atlas/validation-cpp.md)
-
-## Disconnected transaction pool
-
-A temporary pool used during reorganization handling to hold transactions from disconnected blocks so eligible transactions can be reconsidered for mempool entry.
-
-Related:
-
-- [Source atlas: disconnected transactions](../developers/source-atlas/disconnected-transactions.md)
-
-## Dry-run acceptance
-
-A local acceptance check that reports whether transactions would pass mempool checks without submitting them for relay.
-
-Related:
-
-- [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
-
-## Finality
-
-Whether a transaction is valid for inclusion at a particular block height or time under locktime rules.
-
-Related:
-
-- [Source atlas: transaction consensus files](../developers/source-atlas/transaction-consensus.md)
-
-## Flat file
-
-A sequential disk file used to store block or undo data.
-
-Related:
-
-- [Source atlas: block storage](../developers/source-atlas/block-storage.md)
-
-## Fork point
-
-The last common block shared by the current active chain and a competing branch during a reorganization.
-
-## LockPoints
-
-Mempool metadata used to track sequence-lock validity for a transaction.
-
-Related:
-
-- [Source atlas: mempool entry](../developers/source-atlas/mempool-entry.md)
-
-## Mempool entry
-
-The node's stored metadata for one transaction in the mempool, including data used for fee, size, ancestor, descendant, and relay decisions.
-
-Related:
-
-- [Source atlas: mempool entry](../developers/source-atlas/mempool-entry.md)
-
-## Mempool policy
-
-Local node rules for accepting, keeping, and relaying unconfirmed transactions.
-
-Policy can be stricter than consensus.
-
-Related:
-
-- [Mempool flow](../architecture/mempool-flow.md)
-- [Source atlas: mempool accept](../developers/source-atlas/mempool-accept.md)
-
-## Most-work chain
-
-The candidate chain with the greatest accumulated proof-of-work that is usable by the node.
-
-Most-work selection still depends on validity and available block data.
-
-## Outpoint
-
-A reference to a specific previous transaction output, usually made from a transaction ID and output index.
-
-Transactions spend outpoints.
-
-## Package acceptance
-
-Mempool acceptance of multiple related transactions together rather than one independent transaction at a time.
-
-Related:
-
-- [Source atlas: mempool accept](../developers/source-atlas/mempool-accept.md)
-- [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
-
-## Policy rule
-
-A local rule that affects mempool acceptance, relay, mining selection, or standardness without necessarily making a transaction consensus-invalid in a block.
-
-## PSBT
-
-Partially Signed Bitcoin Transaction. A coordination format for transaction construction workflows.
-
-Related:
-
-- [Source atlas: raw transaction RPC](../developers/source-atlas/rpc-rawtransaction.md)
-- [Source atlas: wallet spend and PSBT RPC](../developers/source-atlas/wallet-spend-rpc.md)
-
-## Pruning
-
-Deleting old block data from disk while preserving enough validated state for node operation.
-
-Related:
-
-- [Source atlas: block storage](../developers/source-atlas/block-storage.md)
-
-## Raw transaction RPC
-
-RPC commands for non-wallet transaction lookup, decoding, unsigned construction, explicit-key signing, and PSBT processing.
-
-Related:
-
-- [Source atlas: raw transaction RPC](../developers/source-atlas/rpc-rawtransaction.md)
-
-## Reindex
-
-A local process that rebuilds block-index state from stored block files.
-
-Related:
-
-- [Source atlas: block storage](../developers/source-atlas/block-storage.md)
-
-## Reorganization
-
-A switch from one active chain branch to another usable branch with more accumulated work.
+BitcoinII best-chain selection compares accumulated work among valid usable candidates rather than simply choosing the greatest block height.
 
 Related:
 
 - [Reorganizations](reorganizations.md)
 - [Life of a reorganization](../architecture/life-of-a-reorg.md)
 
-## Script flags
+## Activation height
 
-Flags that control transaction input verification behavior.
+A block height at which a new consensus or protocol rule begins to apply.
 
-Some may be mandatory consensus checks, while others may be policy checks depending on caller context.
+Current BitcoinII mainnet `v31.1.0` uses height `57750` for ShockWave, replay protection, and consensus data restrictions.
+
+## Active chain
+
+The branch the node currently treats as its best valid usable chain.
+
+A node may know about multiple competing branches while only one is active.
+
+## Active tip
+
+The final block of the current active chain.
+
+A reorganization can move the active tip backward to a fork point and then forward along a different branch.
+
+## Ancestor
+
+In mempool context, an unconfirmed transaction that another unconfirmed transaction depends on.
+
+Ancestor relationships affect package accounting, policy limits, mining selection, and eviction behavior.
+
+## Best-work chain
+
+A convenient documentation term for the valid usable chain selected by accumulated chainwork.
+
+Height alone is not the selection rule.
+
+## Block file
+
+A flat file containing serialized block data on local disk.
 
 Related:
 
-- [Source atlas: script engine](../developers/source-atlas/script-interpreter.md)
+- [Block storage](../developers/source-atlas/block-storage.md)
+
+## Block file cursor
+
+Bookkeeping used by the block-storage layer to track where new block or undo records should be written.
+
+## Block header
+
+The compact block metadata containing the version, previous-block hash, merkle root, timestamp, compact difficulty target (`nBits`), and nonce.
+
+Proof of work is performed over the serialized header.
+
+## Block index
+
+The node's internal index of known block headers and related metadata such as height, chainwork, validation status, and disk positions.
+
+The block index can contain branches that are not currently active.
+
+## Block lifecycle
+
+The path a block follows through header checks, full-block checks, storage, candidate-chain consideration, connection to chainstate, notifications, and possible later disconnection.
+
+Related:
+
+- [Life of a block](../architecture/life-of-a-block.md)
+- [Block acceptance](../developers/source-atlas/block-acceptance.md)
+
+## Block subsidy
+
+The newly created amount permitted in a block's coinbase transaction before transaction fees are added.
+
+BitcoinII retains a `210000`-block halving interval in current chain parameters.
+
+## Broadcast
+
+Sending transaction or block information toward peers.
+
+Local acceptance is not the same as successful public broadcast. MoreBC2's September v31 `sendrawtransaction` test used a zero-peer regtest node and therefore proved only local mempool submission.
+
+## `BroadcastTransaction`
+
+A Core-side transaction-broadcast helper that can drive local acceptance and, when relay conditions permit, peer announcement.
+
+Its existence in source does not by itself establish successful public propagation.
+
+## Candidate block
+
+A block template under construction for possible mining.
+
+Under current BitcoinII ShockWave rules, candidate header time can affect required `nBits`.
+
+## Candidate time
+
+The `nTime` value placed in a candidate block header.
+
+In post-`57750` BitcoinII, changing candidate time can change the required target because the production next-work calculation can use candidate time in ShockWave's stall-recovery path.
+
+Related:
+
+- [ShockWave v31](../developers/source-atlas/shockwave-v31.md)
+- [Block-template assembly](../developers/source-atlas/miner.md)
+
+## Chainstate
+
+The node's validated view of the active chain and spendable coin state.
+
+Chainstate is closely tied to the UTXO set and block connection/disconnection.
+
+## `CheckBlock`
+
+A validation path for block properties that can be checked without applying the block to the UTXO state.
+
+Examples include merkle-root, coinbase-placement, structural, and block-limit checks.
+
+## `CheckProofOfWork`
+
+The proof-of-work validation helper that checks whether a compact target is valid and whether the candidate hash satisfies it.
+
+Current reviewed behavior rejects negative, zero, overflowed, over-`powLimit`, or insufficient-work targets.
+
+## `CheckTransaction`
+
+A context-independent transaction structure check.
+
+Examples include non-empty inputs/outputs, value-range checks, duplicate-input rejection, and coinbase/non-coinbase previous-output rules.
+
+## Chain reorganization
+
+A switch from the current active branch to another valid usable branch with greater accumulated work.
+
+See [Reorganizations](reorganizations.md).
+
+## Coinbase transaction
+
+The first transaction in a block. It creates the block subsidy and collects transaction fees.
+
+Coinbase outputs are subject to maturity before ordinary spending.
+
+## Coins view
+
+An abstraction over UTXO state used during validation and chainstate operations.
+
+Views can be layered and cached.
+
+## Confirmation
+
+One unit of active-chain burial depth for a transaction.
+
+A transaction in the current active tip has one confirmation; each later active-chain block increases the count.
+
+Confirmation count is not deterministic finality.
+
+## Consensus rule
+
+A rule that determines whether a block or transaction is valid to fully validating nodes.
+
+Consensus rules are distinct from mempool policy, wallet behavior, RPC permissions, or exchange settings.
+
+## Consensus data restrictions
+
+BitcoinII-specific v31 consensus rules active from mainnet height `57750` that restrict selected data-carrying constructions.
+
+Current Source Atlas coverage includes OP_RETURN count/size, actual `OP_13` opcodes in OP_RETURN scripts, bare multisig, Taproot annex data, oversized script-path tapscripts, and semantic Ordinals inscription envelopes.
+
+Related:
+
+- [Consensus data restrictions v31](../developers/source-atlas/data-restrictions-v31.md)
+
+## Contextual check
+
+A validation check whose result depends on chain context such as height, previous block, median time, activation state, or current consensus parameters.
+
+ShockWave difficulty validation is contextual because next required work depends on recent branch history and candidate context.
+
+## `ConnectBlock`
+
+The validation path that applies a valid block to the UTXO view.
+
+It performs input/script checks in the appropriate consensus context, applies UTXO changes, records undo information, and checks reward accounting.
+
+## `ConnectTip`
+
+The chainstate operation that connects one block as the next active tip after validation succeeds.
+
+## Descendant
+
+In mempool context, an unconfirmed transaction that depends directly or indirectly on another unconfirmed transaction.
+
+## Descriptor wallet
+
+A wallet whose address/script derivation is represented by output descriptors.
+
+The September Windows v31 disposable wallets used by MoreBC2 were SQLite descriptor wallets.
+
+## Difficulty
+
+A human-facing expression of how restrictive the proof-of-work target is.
+
+Higher difficulty corresponds to a lower target and more expected hashing work.
+
+## Difficulty target
+
+The numeric threshold a valid block-header hash must be less than or equal to.
+
+The compact encoding is stored in the header's `nBits` field.
+
+## Disconnected transaction pool
+
+Temporary storage used during a reorganization to hold transactions from disconnected blocks so eligible transactions can be reconsidered for mempool admission.
+
+Related:
+
+- [Disconnected transactions](../developers/source-atlas/disconnected-transactions.md)
+
+## `DisconnectBlock`
+
+The validation path that reverses a connected block's UTXO effects using undo data.
+
+## `DisconnectTip`
+
+The chainstate operation that removes the current active-tip block during reorganization or rollback handling.
+
+## Dry-run acceptance
+
+Checking whether a transaction would pass local mempool acceptance without inserting it.
+
+`testmempoolaccept` is the principal RPC example. MoreBC2 exercised it successfully on the disposable v31 regtest transaction.
+
+## Economic finality
+
+An informal risk concept describing confidence that a confirmed transaction will remain in the active chain.
+
+BitcoinII proof of work does not provide absolute economic finality at a fixed confirmation count. Exchange labels such as `irreversible_confirmations` are service-policy terminology, not a protocol guarantee.
+
+See [Confirmations](confirmations.md).
+
+## External signer
+
+A signing device or process separate from the wallet process, such as hardware-wallet integration.
+
+Current BitcoinII v31 source explicitly recognizes a replay-protection limitation: a signer that cannot produce the BC2 replay-domain-aware signature hash cannot safely sign post-activation transactions merely because it supports ordinary Bitcoin semantics.
+
+## `finalizepsbt`
+
+An RPC that attempts to finalize a PSBT into complete script/witness data and, when complete, can produce the final transaction hex.
+
+MoreBC2 exercised this successfully in the isolated v31 regtest PSBT lifecycle.
+
+## Fork point
+
+The last common block shared by the old active branch and a competing branch during a reorganization.
+
+## Fork/domain ID
+
+A value used to separate signature-hash domains for replay protection.
+
+BitcoinII mainnet v31 activates domain id `0x01324342` from height `57750`.
+
+The domain participates in signature hashing; it is not a normal serialized transaction field or an address-prefix change.
+
+## Fork-aware header synchronization
+
+BitcoinII v31 header-sync behavior that preserves enough branch-specific recent history to evaluate ShockWave difficulty for competing header branches using the production next-work path.
+
+Header synchronization does not itself select the active chain.
+
+Related:
+
+- [Header sync v31](../developers/source-atlas/headers-sync-v31.md)
+
+## `getblocktemplate`
+
+A Core mining RPC used to obtain candidate-block/template information for compatible mining infrastructure.
+
+It is source-reviewed in MoreBC2 but has not yet been exercised in the current v31 runtime records.
+
+## `getindexinfo`
+
+An RPC that reports optional index state.
+
+The September isolated Windows v31 node returned `{}`, consistent with no optional index enabled in that test.
+
+## `GetNextWorkRequired`
+
+The production consensus entry point for obtaining the required target / `nBits` for the next candidate block.
+
+After mainnet height `57750`, it dispatches to ShockWave.
+
+## Initial block download (IBD)
+
+The node state while it is still catching up to the chain and has not yet reached normal synced operation.
+
+A node can answer many RPCs and have active peers while still in IBD.
+
+## `LockPoints`
+
+Mempool metadata used to cache information relevant to sequence-lock validity.
+
+## Mempool
+
+A node-local collection of accepted unconfirmed transactions.
+
+There is no single global mempool shared by all nodes.
+
+## Mempool entry
+
+The node's metadata record for one mempool transaction, including fee/size/dependency/accounting information used by policy, relay, mining, replacement, and eviction logic.
+
+## Mempool policy
+
+Local rules for accepting, keeping, relaying, replacing, packaging, or mining unconfirmed transactions.
+
+Policy can be stricter than consensus.
+
+## Most-work candidate
+
+A valid usable chain candidate with the greatest accumulated chainwork among the candidates the node can currently activate.
+
+## `nBits`
+
+The compact block-header encoding of the proof-of-work target.
+
+Under ShockWave, a template implementation must not assume `nBits` remains valid after changing candidate `nTime`.
+
+## `nTime`
+
+The block-header timestamp field.
+
+Current BitcoinII ShockWave uses recent timing context and can use candidate time in its stalled-chain recovery path.
+
+## Outpoint
+
+A reference to a specific previous transaction output, normally identified by transaction ID plus output index.
+
+Transactions spend outpoints.
+
+## Package acceptance
+
+Mempool evaluation of a group of related transactions together rather than as unrelated single transactions.
+
+Package policy remains distinct from consensus validity.
+
+## P2P
+
+Peer-to-peer communication between BitcoinII nodes.
+
+Current mainnet v31 source/runtime uses P2P port `8338`; the September Windows runtime observed protocol version `70016` and working outbound synchronization in the bounded test environment.
+
+## Policy rule
+
+A local rule affecting mempool acceptance, standardness, relay, replacement, mining selection, or resource limits without necessarily making the transaction invalid in a block.
+
+## Proof-of-work target
+
+See [Difficulty target](#difficulty-target).
+
+## Pruning
+
+Deleting older local block data while preserving enough validated chainstate for supported node operation.
+
+Current v31 defaults observed by MoreBC2 had pruning disabled (`pruned = false`). Pruning and `txindex` are incompatible in current source/configuration.
+
+## PSBT
+
+Partially Signed Bitcoin Transaction, a format for coordinating transaction construction, metadata, signing, and finalization.
+
+Bitcoin-style PSBT structure does not by itself prove BC2 post-activation signing compatibility because signatures must use the correct replay domain.
+
+## Raw transaction RPC
+
+RPC commands for transaction lookup, decoding, construction, signing, PSBT handling, mempool dry runs, and submission outside a wallet's high-level send interface.
+
+## Reindex
+
+A local process that rebuilds block-index / validation state from block data according to the selected reindex mode.
+
+It is an operator action, not a normal troubleshooting toggle to use casually.
+
+## Reorganization
+
+See [Chain reorganization](#chain-reorganization).
+
+## Replay protection
+
+A mechanism that separates signature validity between domains/chains so a signature valid in one domain is not automatically valid in another.
+
+BitcoinII v31 mainnet activates replay protection at height `57750` with domain id `0x01324342`.
+
+Related:
+
+- [Replay protection v31](../developers/source-atlas/replay-protection-v31.md)
+
+## Replay-domain cache separation
+
+Current v31 script-validation caching includes the replay/fork domain so a verification result from one signature domain cannot be reused as though it applied to another.
+
+## sat2
+
+The current BitcoinII source display term for the base unit: `1 BC2 = 100,000,000 sat2`.
+
+## Script flags
+
+Flags controlling script-verification behavior.
+
+Whether a particular flag is consensus-mandatory, policy-only, or caller-specific depends on context; documentation should not classify the entire flag set as one category.
 
 ## Sequence locks
 
-Relative locktime rules that can prevent a transaction from being valid until certain height or time conditions are met.
+Relative locktime constraints that can defer transaction validity until specified height or time conditions are met.
+
+## ShockWave
+
+BitcoinII's current per-block difficulty-adjustment algorithm, active on mainnet from height `57750` in `v31.1.0`.
+
+It uses recent chain timing/target history, includes bounded normal adjustment and stall-recovery behavior, and makes candidate-time handling important to mining/template software.
 
 Related:
 
-- [Source atlas: transaction consensus files](../developers/source-atlas/transaction-consensus.md)
+- [Difficulty adjustment](difficulty-adjustment.md)
+- [ShockWave v31](../developers/source-atlas/shockwave-v31.md)
+
+## Signature-hash domain
+
+Context incorporated into the digest that is actually signed or verified.
+
+In BC2 v31, the replay-protection fork/domain id changes post-activation signature hashing without changing ordinary address encoding.
 
 ## Source Atlas
 
-MoreBC2's file-by-file companion to the BitcoinII Core codebase.
+MoreBC2's file-by-file and feature-path companion to the BitcoinII Core source tree.
 
-Related:
+Current-release claims should prefer release-pinned v31 pages when they overlap older inherited structural reviews.
 
-- [Source atlas index](../developers/source-atlas/README.md)
+## Stratum
 
-## Tip
+A mining-pool protocol/interface used by mining software to receive work and submit shares.
 
-The current end block of a chain branch.
+Pool Stratum is separate from BitcoinII Core's mining RPC interface. A published Stratum hostname/port does not prove successful subscribe/authorize/share submission or payout behavior.
 
-The active tip is the tip of the active chain.
+## `submitblock`
 
-## Transaction broadcast RPC
+A mining RPC that submits a candidate block into node validation.
 
-RPC behavior for submitting a signed raw transaction toward local acceptance and relay.
+The command is source-reviewed but not yet exercised in MoreBC2's current v31 runtime records.
 
-Related:
+## `testmempoolaccept`
 
-- [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
+A dry-run RPC that evaluates whether signed raw transactions would pass local mempool acceptance without inserting them.
+
+The September v31 isolated regtest transaction returned `allowed = true`.
+
+## Transaction finality (locktime sense)
+
+A consensus/policy term for whether a transaction satisfies absolute locktime conditions for a given height/time context.
+
+This is **not** the same concept as economic irreversibility after confirmations.
+
+## Transaction relay
+
+P2P announcement/request/transmission of unconfirmed transactions between nodes.
+
+Local mempool acceptance is necessary for ordinary relay paths but does not guarantee broad network propagation.
+
+## `txindex`
+
+An optional transaction index that enables broader historical transaction lookup by transaction ID.
+
+Current v31 default is off. It should not be assumed available in service designs unless explicitly enabled and operationally planned.
 
 ## Undo data
 
-Data stored so a node can return the UTXO view to an earlier state during a reorganization.
+Data recorded so the node can restore spent UTXOs when disconnecting a block.
 
-Related:
-
-- [Life of a reorganization](../architecture/life-of-a-reorg.md)
-- [Source atlas: block storage](../developers/source-atlas/block-storage.md)
+Undo data is central to safe reorganization handling.
 
 ## Undo file
 
-A disk file that stores undo data for connected blocks.
-
-Related:
-
-- [Source atlas: block storage](../developers/source-atlas/block-storage.md)
+A flat file containing serialized block-undo records.
 
 ## Unbroadcast transaction
 
-A locally accepted transaction that the node tracks for relay until it is believed to have been announced successfully.
+A locally accepted transaction the node still tracks for relay because successful announcement has not yet been established.
 
-Related:
+An unbroadcast transaction is not necessarily invalid; it reflects relay state.
 
-- [Life of a transaction](../architecture/life-of-a-transaction.md)
-- [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
+## UTXO
+
+Unspent transaction output: a spendable output that has not yet been consumed by a later transaction.
 
 ## UTXO set
 
-The set of all currently unspent transaction outputs.
-
-Bitcoin-style chains use the UTXO set to determine what can be spent.
+The current set of unspent transaction outputs represented by chainstate.
 
 ## Validation interface
 
-A callback system used to notify other components about validation events such as block connection, block rollback, mempool changes, or tip updates.
+The callback/event layer through which validation and mempool code notify wallets, indexes, UI components, and other subscribers about tip, block, and transaction events.
 
-Related:
+Subscriber ordering guarantees are scoped; the interface should not be treated as a universal cross-subscriber total order.
 
-- [Source atlas: validation interface](../developers/source-atlas/validation-interface.md)
+## Wallet load state
+
+Whether a wallet directory exists versus whether that wallet is currently loaded into the running node.
+
+In the September v31 Windows test, the disposable wallet remained present after restart, appeared in `listwalletdir`, was not automatically loaded, and then loaded successfully through explicit `loadwallet`.
 
 ## Wallet transaction history RPC
 
-Wallet RPC behavior for listing wallet transactions, polling since a block, reading one wallet transaction, abandon behavior, and rescans.
+Wallet RPC behavior for inspecting wallet transactions, listing activity, polling since a block, abandoning eligible transactions, and rescanning.
 
-Related:
+Current MoreBC2 coverage is mostly source review; the September runtime test did not qualify the full history/rescan surface.
 
-- [Source atlas: wallet transaction history RPC](../developers/source-atlas/wallet-transactions-rpc.md)
+## `walletcreatefundedpsbt`
+
+A wallet RPC that funds a PSBT using wallet coins while applying fee/change/funding logic.
+
+MoreBC2 exercised it successfully with the disposable v31 regtest wallet.
+
+## `walletprocesspsbt`
+
+A wallet RPC that can update and sign PSBT inputs using wallet information.
+
+MoreBC2 exercised it successfully in the isolated v31 regtest lifecycle.
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Existing MoreBC2 architecture and Source Atlas pages
-**Notes:** This glossary is a framework. Entries should be expanded and linked as additional source files are reviewed.
+**Status:** Reviewed / Partial  
+**Primary sources checked:** Current MoreBC2 v31 Architecture / Source Atlas pages, September 2026 node and PSBT runtime records, current Mining documentation, and the reviewed root glossary  
+**Notes:** The glossary is synchronized to the current v31 evidence boundary. Definitions are explanatory and intentionally shorter than their linked implementation pages. Empirical reorg behavior, full source-build/test-suite qualification, external signing, advanced mining RPC, and several operator workflows remain partial rather than silently inferred.
