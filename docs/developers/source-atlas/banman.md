@@ -1,237 +1,90 @@
-# Banman
+# BanMan
 
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-07-02
+**Category:** Developer / Source Atlas  
+**Status:** Reviewed / Source-confirmed structural  
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page covers a first-pass review of peer ban-list and discouragement handling in:
+This page maps explicit ban-list and peer-discouragement behavior in BitcoinII Core `v31.1.0`, centered on `src/banman.*` and selected `net_processing` / inbound-admission caller paths.
 
-- `src/banman.h`
-- `src/banman.cpp`
-- related `src/net_processing.cpp` caller paths
-- related `src/net.cpp` inbound admission behavior
+The reviewed architecture distinguishes two separate mechanisms:
 
-This is a focused Source Atlas slice. It is not a complete review of every network-security path, every RPC command, addrman internals, or live node behavior.
+- **explicit bans** — user-managed address/subnet entries;
+- **discouragement** — automatic probabilistic state used when peers misbehave.
 
-## Why this area matters
+Neither mechanism should be described as a complete denial-of-service defense.
 
-MoreBC2 already has Source Atlas pages for peer communication, connection management, peer health, and network RPC.
+## Explicit bans
 
-Banman is the part of the node that tracks two related but separate ideas:
+Reviewed behavior includes:
 
-- explicit ban-list entries
-- probabilistic discouragement of misbehaving peers
+- address/subnet bans;
+- persistence to disk and reload on startup;
+- expiry/sweep behavior;
+- default ban duration behavior;
+- ban-list dirty/write state;
+- user-facing operations corresponding to `setban`, `listbanned`, and `clearbanned`.
 
-This matters for node/operator docs because manual peer, ban-list, and network-active commands should not be treated like harmless read-only status commands.
+Explicitly banned addresses are excluded from ordinary inbound/outbound use in the reviewed paths.
 
-## Explicit ban-list behavior observed
+## Discouragement
 
-The source comments describe explicit banning as user-configured through the `setban` RPC.
+Reviewed source keeps discouragement separate from the explicit ban map.
 
-Observed behavior includes:
+Discouraged peers/addresses can be treated less favorably for connection/eviction/address-relay purposes, but discouragement is stored through a rolling probabilistic filter rather than a precise user-listable map.
 
-- explicit bans can apply to an address or subnet
-- explicitly banned addresses/subnets are not accepted as incoming peers
-- explicitly banned addresses/subnets are not used for outgoing connections
-- explicitly banned addresses/subnets are not gossiped to other peers in address messages
-- explicit bans are stored to disk on shutdown and reloaded on startup
-- default misbehavior ban time constant is 24 hours, with a note that RPC help should match it
-- ban-list dumping interval constant is 15 minutes
+Docs should therefore not describe discouragement as “the ban list.”
 
-This page does not claim the `setban` RPC has been locally tested.
+## Misbehavior path
 
-## Discouragement behavior observed
+Selected `net_processing` paths can mark a peer for discouragement after certain consensus-invalid block/transaction or protocol misuse results.
 
-The source comments describe discouragement as separate from explicit banning.
+Not every policy rejection or ordinary transaction failure is treated as malicious peer behavior. A complete punishment matrix remains beyond this page.
 
-Observed behavior includes:
+## Permissions / manual peers
 
-- misbehaving peers can have their address marked as discouraged
-- discouraged peers are still allowed to make incoming connections in some situations
-- discouraged peers are preferred for eviction when inbound slots are pressured
-- outgoing connections are not made to discouraged addresses
-- discouraged addresses are not gossiped to other peers
-- discouragement is stored in a rolling bloom filter
-- discouraged addresses cannot be listed or individually unmarked through BanMan
-- the source comments explicitly say banning/discouragement are not complete denial-of-service protections
-- the source comments warn that automatic disconnect or ban behavior can risk network splitting if applied too broadly
+Reviewed behavior treats selected permissioned/manual/local peers differently from ordinary peers when applying disconnect/discouragement actions.
 
-This distinction is important: discouragement is not the same thing as a normal user-visible ban-list entry.
+This is one reason state-changing network commands should remain operator-level material rather than beginner troubleshooting defaults.
 
-## BanMan lifecycle observed
+## Current runtime boundary
 
-`BanMan` construction and destruction behavior includes:
+The September `v31.1.0` node test exercised automatic outbound networking and read-only peer/network RPCs. It did **not** manipulate the ban list, intentionally trigger misbehavior, test peer eviction, or qualify `setban`/`clearbanned` behavior.
 
-- constructor loads the ban-list database
-- constructor dumps the ban-list after load
-- destructor dumps the ban-list
-- loading sweeps expired entries after reading from disk
-- if the ban-list database cannot be read, the in-memory map is reset and marked dirty
-- dump uses a separate static dump mutex
-- dump sweeps expired entries before writing
-- dump skips disk write if the ban-list is not dirty
-- failed disk writes mark the list dirty again
+Those operations remain source-confirmed rather than runtime-tested.
 
-## Explicit ban-list operations observed
+## RPC safety boundary
 
-Reviewed operations include:
+Commands such as `setban`, `clearbanned`, `disconnectnode`, `addnode`, and `setnetworkactive` change local network state. MoreBC2 should keep them separate from read-only status examples such as `getnetworkinfo` and `getpeerinfo`.
 
-- `Ban(const CNetAddr&)`
-- `Ban(const CSubNet&)`
-- `Unban(const CNetAddr&)`
-- `Unban(const CSubNet&)`
-- `ClearBanned()`
-- `GetBanned()`
-- `IsBanned(const CNetAddr&)`
-- `IsBanned(const CSubNet&)`
-- `SweepBanned()`
-- `DumpBanlist()`
-
-Observed behavior includes:
-
-- address bans are converted to subnet bans internally
-- non-positive ban time offset falls back to the default ban time
-- `since_unix_epoch` changes whether the provided time is treated as an absolute timestamp or offset
-- existing ban entries are only replaced when the new ban lasts longer
-- unban returns false when the subnet was not present
-- clear/unban/ban operations update the dirty flag and notify the UI when available
-- `GetBanned()` sweeps expired entries before returning a copy
-- expired or invalid entries are removed during sweep
-
-## Discourage operation observed
-
-`Discourage(const CNetAddr&)` inserts the address bytes into the rolling bloom filter.
-
-Observed behavior includes:
-
-- `IsDiscouraged(const CNetAddr&)` checks the bloom filter
-- there is no map-style listing of all discouraged peers
-- there is no individual undisourage operation in the reviewed BanMan interface
-
-Because this is a probabilistic filter, docs should avoid describing discouragement as a precise user-managed list.
-
-## Misbehavior trigger path observed
-
-In `net_processing`, each peer has a misbehavior flag:
-
-- `m_should_discourage`
-
-Observed behavior includes:
-
-- `Misbehaving(peer, message)` sets `m_should_discourage = true`
-- `MaybePunishNodeForBlock(...)` calls `Misbehaving(...)` for selected block validation results
-- `MaybePunishNodeForTx(...)` calls `Misbehaving(...)` for transaction consensus failures
-- selected bloom-filter misuse paths call `Misbehaving(...)`
-- not all policy or validation failures cause discouragement
-
-Important examples from reviewed paths:
-
-- transaction consensus failure can mark a peer as misbehaving
-- many transaction policy/conflict/missing-input style results do not mark a peer as misbehaving
-- block consensus, mutated block, invalid header, checkpoint, invalid previous block, and selected missing-prev paths can mark a peer as misbehaving
-- compact-block context changes punishment behavior for some invalid block cases
-- some cached-invalid behavior only discourages outbound peers in the reviewed logic
-
-This page should not be used as a complete punishment matrix until a line-by-line caller review is finished.
-
-## Disconnect and discourage handling observed
-
-`MaybeDiscourageAndDisconnect(...)` handles the actual action after a peer's misbehavior flag is set.
-
-Observed behavior includes:
-
-- if the peer has no misbehavior flag, nothing happens
-- the flag is cleared before action is taken
-- peers with `NetPermissionFlags::NoBan` are not disconnected or discouraged through this path
-- manually connected peers are not disconnected or discouraged through this path
-- local-address peers can be disconnected without discouraging the shared local address
-- normal peers can be disconnected and their address discouraged
-- if BanMan is available, the address is inserted into discouragement state
-- the connection manager is asked to disconnect the node by address
-
-## Inbound admission interaction observed
-
-`src/net.cpp` uses BanMan state during inbound admission.
-
-Observed behavior includes:
-
-- explicitly banned incoming addresses are dropped
-- discouraged incoming addresses can be dropped when inbound slots are nearly full and the peer lacks appropriate permission
-- discouraged peers can be marked as preferred eviction candidates when accepted
-- inbound slot pressure can trigger eviction before accepting a new peer
-
-This connects BanMan to lower-level connection management, but the full eviction algorithm remains outside this page.
-
-## RPC and command implications
-
-Network RPC source review already lists ban-list and manual peer commands as operator-focused.
-
-This page supports keeping these out of beginner smoke tests:
-
-- `setban`
-- `listbanned`
-- `clearbanned`
-- `disconnectnode`
-- `addnode`
-- `setnetworkactive`
-
-The important distinction is that these commands change network state or peer policy. They are not equivalent to read-only status commands like `getpeerinfo`.
-
-## Boundaries
-
-This page does not claim:
-
-- that any ban-list RPC command has been locally tested
-- that BanMan is a complete denial-of-service defense
-- that every misbehavior caller has been fully reviewed
-- that every peer eviction path has been fully reviewed
-- that addrman internals are reviewed here
-- that release behavior exactly matches current `main`
-- that BitcoinII differs from upstream Bitcoin Core here
-- that discouragement is a precise list of all bad peers
-
-This is source-observed documentation for the reviewed BanMan slice only.
-
-## Documentation implications
-
-MoreBC2 can use this page to support cautious explanations of:
-
-- explicit ban-list entries versus probabilistic discouragement
-- why some peer-management commands are operator-only
-- why discouraged peers may still connect in some situations
-- why manual and NoBan peers are treated differently
-- why local peers are disconnected without discouraging a shared local address
-- why policy differences should not automatically be described as malicious peer behavior
+See [Network RPC](rpc-network.md).
 
 ## Related pages
 
 - [Network RPC](rpc-network.md)
+- [Addrman](addrman.md)
 - [Net connection management](net-connection-management.md)
-- [Net processing peer eviction and stale-tip checks](net-processing-peer-eviction.md)
+- [Peer eviction / stale-tip checks](net-processing-peer-eviction.md)
 - [Peer communication model](../../architecture/peer-communication-model.md)
-- [Command testing status](../../verification/command-testing.md)
 
-## Open questions
+## Open work
 
-- Review `setban`, `listbanned`, and `clearbanned` RPC implementation details against this page.
-- Review test coverage for BanMan and discouragement behavior.
-- Review release-versus-main behavior for `src/banman.*`.
-- Review addrman interactions separately.
-- Decide which operator-facing ban-list details belong in node docs.
+- Runtime-test ban-list operations only with a disposable node fixture if operator documentation needs them.
+- Map current v31 BanMan/discouragement tests.
+- Keep automatic discouragement distinct from user-managed bans in all user-facing docs.
 
-## Sources
+## Primary sources
 
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+- `v31.1.0/src/banman.h`
+- `v31.1.0/src/banman.cpp`
+- `v31.1.0/src/net_processing.cpp`
+- `v31.1.0/src/net.cpp`
 
-- Current observed `main` `src/banman.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/banman.h
-- Current observed `main` `src/banman.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/banman.cpp
-- Current observed `main` `src/net_processing.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/net_processing.cpp
-- Current observed `main` `src/net.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/net.cpp
+Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This is a first-pass focused review of BanMan and selected caller paths. Runtime tests, release comparison, full RPC implementation review, full misbehavior-caller matrix, and addrman interactions remain open.
+**Status:** Reviewed / Source-confirmed structural  
+**Primary evidence:** BitcoinII Core `v31.1.0` BanMan and selected network caller paths  
+**Notes:** Ban/discouragement structure is current. Ban RPC mutation, intentional misbehavior, and eviction runtime scenarios remain untested.
