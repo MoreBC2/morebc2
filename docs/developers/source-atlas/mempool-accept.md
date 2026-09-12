@@ -1,18 +1,18 @@
 # `MemPoolAccept` in `src/validation.cpp`
 
 **Category:** Documentation
-**Status:** Source-reviewed partial
-**Last reviewed:** 2026-09-02
+**Status:** Source-reviewed / Runtime-tested partial
+**Last reviewed:** 2026-09-12
 
 ## Purpose
 
 `MemPoolAccept` is the BitcoinII Core path for deciding whether transactions may enter the mempool.
 
-Most of the acceptance architecture remains inherited Bitcoin-style policy/consensus plumbing. BitcoinII Core `v31.1.0`, however, adds replay-protection behavior that materially affects signature validation at the next-block boundary.
+Most acceptance architecture remains inherited Bitcoin-style policy/consensus plumbing. BitcoinII Core `v31.1.0` adds replay-protection behavior that materially affects signature validation at the next-block boundary.
 
 ## Main flow
 
-The previously reviewed high-level path remains useful:
+The reviewed high-level path remains:
 
 ```text
 AcceptSingleTransaction
@@ -24,100 +24,87 @@ AcceptSingleTransaction
   -> TransactionAddedToMempool notification
 ```
 
-Package handling still builds on `AcceptMultipleTransactions`, `AcceptPackage`, `AcceptSubPackage`, `SubmitPackage`, and related ancestor/descendant and package-feerate checks.
+Package handling builds on the related multiple/package acceptance paths and ancestor/descendant and package-feerate checks.
 
 ## v31 next-block replay domain
 
-During mempool acceptance, `validation.cpp` sets:
+During mempool acceptance, v31 sets the precomputed transaction's sighash fork id from the consensus domain for `active_chain_height + 1`.
 
-```text
-ws.m_precomputed_txdata.m_sighash_fork_id =
-    consensus.SighashForkId(active_chain_height + 1)
-```
+That means a transaction submitted immediately before activation must already be valid under the signature domain required by the block in which it could next be mined.
 
-This means mempool signatures are validated for the **next block's** signature domain.
-
-At the activation boundary, the current tip can still be below height `57750` while a submitted transaction must already be valid under the post-activation fork id `0x01324342` because the transaction could be mined in block `57750`.
-
-That behavior closes a boundary case where a legacy-domain transaction could otherwise enter the mempool immediately before activation and become invalid when mined.
+Mainnet replay protection activates at height `57750` with fork/domain id `0x01324342`.
 
 ## Activation-boundary mempool clear
 
-When chain connection reaches the point where the next block height equals `nReplayProtectionHeight`, BitcoinII clears the mempool before replay-protection activation.
+Release-pinned source also clears legacy-domain mempool state at the activation transition so transactions accepted under the old signature domain are not carried into the new domain.
 
-This deliberately removes transactions accepted under the old signature domain before the new domain becomes mandatory.
-
-For historical/operator interpretation, a mempool reset at that activation boundary was intentional v31 protocol behavior, not by itself evidence of corruption or a node failure.
+For historical/operator interpretation, a mempool reset at that boundary is intentional protocol behavior, not by itself evidence of corruption or node failure.
 
 ## Validation-cache separation
 
-The v31 script-validation cache key includes `txdata.m_sighash_fork_id`.
-
-That prevents a script result verified under one replay domain from being reused under another domain.
-
-This is an important correctness change because transaction bytes alone do not identify the signature-hash domain: the fork id is contextual consensus data.
+The v31 script-validation cache key incorporates the sighash fork id. A signature-valid result from one replay domain must not be reused as proof of validity under another domain.
 
 ## Existing acceptance behavior that remains structurally useful
 
-The earlier MoreBC2 review remains broadly applicable to:
+Earlier MoreBC2 review remains broadly useful for:
 
 - context-free transaction checks;
 - standardness policy;
 - finality and sequence locks;
 - coin/input lookup;
-- fee and minimum-relay policy;
+- fee/minimum-relay policy;
 - ancestor/descendant limits;
 - replacement policy;
 - package validation;
 - policy versus consensus script checks;
-- mempool insertion and trimming;
-- reorg re-addition through the normal acceptance path.
+- mempool insertion/trimming;
+- reorg re-addition through normal acceptance paths.
 
-This pass did not identify a BitcoinII-specific rewrite of the ordinary package-feerate or ancestor-scoring model.
+## Runtime evidence — 2026-09-11
 
-## Why this matters for services
+The isolated v31 regtest PSBT test produced a fully signed disposable transaction and exercised:
 
-A service that pre-validates withdrawals or deposits using a Bitcoin-derived transaction checker must use the same BC2 replay-domain context as the node.
+- `testmempoolaccept`, which returned `allowed = true`;
+- `sendrawtransaction`, which inserted the transaction into the zero-peer local regtest mempool;
+- `getmempoolentry`, which confirmed the entry;
+- `getmempoolinfo`, which showed the local mempool state.
 
-A locally cached "signature valid" result cannot safely be treated as height-independent across the activation domain.
+This is direct evidence that the ordinary local acceptance path worked for the documented v31 transaction/environment.
 
-## Runtime status
+It is **not** an activation-boundary replay-domain test. Regtest leaves replay protection disabled as shipped, and MoreBC2 did not alter consensus parameters to force the switch.
 
-MoreBC2 has not yet executed an isolated activation-boundary mempool test on v31.
+See [Windows v31.1.0 PSBT and replay-protection validation — 2026-09-11](../../verification/windows-v31-psbt-replay-validation-2026-09-11.md).
 
-Useful follow-up tests:
+## Remaining activation tests
 
-- legacy-domain signature submitted before activation;
+Useful follow-up work remains:
+
+- legacy-domain signature submitted immediately before activation;
 - post-fork-domain signature submitted before activation for the activation block;
 - mempool contents across activation;
-- validation-cache separation across fork-id changes;
-- raw-RPC and wallet-produced transactions through the same mempool path.
+- validation-cache separation across domain changes;
+- raw-RPC and wallet-produced signatures compared across the same boundary.
+
+## Service implication
+
+A service that pre-validates withdrawals using Bitcoin-derived signature logic must use the same BC2 replay-domain context as the node. A cached “signature valid” result cannot safely be treated as height/domain-independent across activation.
 
 ## Related pages
 
 - [Replay protection v31](replay-protection-v31.md)
-- [v31 wallet/mempool/mining regression audit](../../verification/v31-wallet-mempool-mining-regression-2026-09-02.md)
 - [Mempool flow](../../architecture/mempool-flow.md)
 - [Mempool source](txmempool.md)
 - [Validation.cpp](validation-cpp.md)
+- [v31 PSBT runtime record](../../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
 
 ## Sources
 
-Pinned to BitcoinII Core `v31.1.0`:
-
-- `src/validation.cpp`
-- `src/validation.h`
-- `src/consensus/params.h`
-- `src/script/interpreter.h`
-- `src/script/interpreter.cpp`
-- `src/node/transaction.cpp`
-- `src/txmempool.cpp`
-- `src/txmempool.h`
+Pinned BitcoinII Core `v31.1.0` paths include `src/validation.cpp`, consensus params, script interpreter, node transaction, and txmempool files.
 
 Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Source-reviewed partial
-**Primary sources checked:** BitcoinII Core `v31.1.0`
-**Notes:** Next-block fork-domain validation, activation-boundary mempool clearing and validation-cache separation are source-backed. Runtime boundary vectors remain open.
+**Status:** Source-reviewed / Runtime-tested partial  
+**Primary sources checked:** BitcoinII Core `v31.1.0` plus the 2026-09-11 isolated mempool acceptance record  
+**Notes:** Next-block fork-domain validation, activation clearing, and cache separation are source-backed. Ordinary local mempool acceptance was runtime-tested; the replay activation boundary remains runtime-unverified.
