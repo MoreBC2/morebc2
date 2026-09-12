@@ -22,8 +22,8 @@ Evidence is version-scoped. A dated `v29.1.0` test remains valid evidence for th
 | Current difficulty model | Source-reviewed | ShockWave per-block difficulty after height `57750`; 10-minute target spacing remains. | Empirical network-performance analysis remains open. |
 | Replay protection | Source-reviewed partial | Activation height `57750`; fork ID `0x01324342`. | Detailed transaction/wallet/service path review remains open. |
 | Data restrictions | Source-reviewed partial | Activation height `57750`; release describes Ordinals/inscriptions/Runes mitigation. | Detailed rule boundary/testing remains open. |
-| Local BitcoinII node | Locally tested / historical | `v29.1.0` Windows GUI/CLI startup, sync, RPC, shutdown/restart, and peer-discovery records exist. | Dedicated `v31.1.0` runtime record needed. |
-| Read-only RPC commands | Locally tested / historical | Nine read-only RPC commands passed in the dated `v29.1.0` Windows environment. | Re-test representative commands on `v31.1.0` before calling them current-runtime evidence. |
+| Local BitcoinII node | Locally tested / current-dated | Isolated Windows `v31.1.0` Qt-server startup, mainnet peer discovery, initial sync, cookie RPC, shutdown, and restart passed on 2026-09-11. | Full sync, long-duration operation, optional indexes/pruning, and a v31 headless-daemon path remain unverified. |
+| Read-only RPC commands | Locally tested / current-dated | The requested v31.1.0 node/network RPC set passed through direct cookie-authenticated loopback JSON-RPC; one newly created zero-transaction disposable wallet was isolated and inspected. | Transaction, signing, PSBT, broadcast, fee-estimation, wallet security, and production workflows remain untested. |
 | Explorer/API/WebSocket | Directly observed / current-dated | 2026-09-11 checks verified the Official BitcoinII Explorer API plus Mempool-style REST/WebSocket surfaces on `bc2mempool.com`, `explorer.bitcoin-ii.org`, and `bc2.live`; compared explorers agreed on the same tip. | Long-term uptime, custody-grade reliability, and backend/operator independence remain unverified. |
 | Electrum | Directly observed / current-dated | `infra1.bitcoin-ii.org:50008` TCP and `:50009` TLS answered `server.version` as ElectrumX `1.18.0`, protocol `1.4`; TLS hostname validation succeeded. | Wallet compatibility, spending, and Electrum broadcast behavior remain unverified. |
 | Public transaction submission | Route presence observed | `/api/tx` on three Mempool-style services accepted POST and rejected deliberately invalid transaction payloads with HTTP 400. | Successful valid-BC2 transaction broadcast has not been tested. |
@@ -32,6 +32,7 @@ Evidence is version-scoped. A dated `v29.1.0` test remains valid evidence for th
 
 ## Current release evidence
 
+- [Windows v31.1.0 node and RPC validation — 2026-09-11](windows-v31-node-rpc-validation-2026-09-11.md)
 - [v31.1.0 release asset record](../releases/v31.1.0-assets.md)
 - [BitcoinII release documentation](../documentation/releases.md)
 - [Network specifications](../documentation/network-specifications.md)
@@ -65,8 +66,8 @@ These are dated observations, not permanent reliability claims.
 
 ## Current priorities
 
-1. Independently authenticate/hash current `v31.1.0` assets.
-2. Produce a fresh `v31.1.0` node/RPC runtime record.
+1. Independently authenticate the current `v31.1.0` assets beyond the repeat-byte Windows Qt hash recorded in the new runtime test.
+2. Complete a fresh `v31.1.0` initial sync and exercise optional index/pruning configurations where needed.
 3. Map replay-protection transaction behavior in detail.
 4. Map data-restriction validation behavior in detail.
 5. Review fork-aware header synchronization internals/runtime behavior.
@@ -86,5 +87,5 @@ When new evidence is added:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current `v31.1.0` release/source anchors plus MoreBC2 dated historical evidence and the 2026-09-11 public-infrastructure probe
+**Primary sources checked:** Current `v31.1.0` release/source anchors plus MoreBC2 dated historical evidence, the 2026-09-11 public-infrastructure probe, and the 2026-09-11 isolated Windows v31 node/RPC runtime record
 **Notes:** This is an evidence navigation page; it does not independently reproduce every linked check.
