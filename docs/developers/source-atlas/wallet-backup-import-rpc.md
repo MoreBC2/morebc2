@@ -1,48 +1,34 @@
 # Wallet backup and import RPC
 
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-06-30
+**Category:** Developer / Source Atlas  
+**Status:** Reviewed / Source-only partial  
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page covers a first-pass review of:
+This page maps wallet backup, restore, import, descriptor, dump, and rescan behavior centered on `src/wallet/rpc/backup.cpp` for BitcoinII Core `v31.1.0`.
 
-- `src/wallet/rpc/backup.cpp`
+Current MoreBC2 wallet runtime evidence does **not** include an end-to-end backup/restore, import, or rescan test. The September disposable-wallet work established wallet creation/load persistence and a PSBT spend path, but deliberately did not copy, import, restore, rescan, unlock, or otherwise manipulate any existing user wallet.
 
-This file contains wallet backup, restore, import, descriptor import, dump, and rescan-related wallet RPC behavior.
-
-This is not a user command guide. These commands can affect wallet state or expose sensitive wallet material, so examples should not be published as verified until they are tested and reviewed carefully.
+This page therefore remains source-backed rather than runtime-qualified.
 
 ## Why this file matters
 
-Backup and import workflows are high-impact wallet documentation areas.
+These RPCs cover high-impact recovery/state workflows:
 
-For MoreBC2, this file matters because it touches:
+- wallet backup and restore;
+- legacy key/address import;
+- descriptor import;
+- chain rescans;
+- wallet dump/export;
+- pruned-node limitations;
+- recovery after wallet or descriptor changes.
 
-- Wallet recovery.
-- Legacy wallet import paths.
-- Descriptor wallet import paths.
-- Chain rescans after imports.
-- Pruned-node limitations.
-- Wallet dump and backup behavior.
-- Restoring a wallet from backup.
+Mistakes can expose private material or create incomplete wallet history, so public examples require more care than ordinary read-only RPCs.
 
-## Key helper behavior reviewed
+## Legacy import paths
 
-Reviewed helper behavior includes:
-
-- Dump-string encoding and decoding helpers.
-- Address lookup for legacy keys during wallet dumps.
-- `RescanWallet` wrapper around wallet rescanning from a timestamp.
-- Pruned-block checks before import rescans.
-- Import request processing for legacy and descriptor workflows.
-- Descriptor timestamp/range checks.
-- Warnings when provided import data is incomplete, inconsistent, or extra.
-
-## Legacy import RPCs reviewed
-
-Reviewed legacy import commands include:
+Source-reviewed legacy commands include:
 
 - `importprivkey`
 - `importaddress`
@@ -50,121 +36,131 @@ Reviewed legacy import commands include:
 - `importwallet`
 - `importmulti`
 
-Observed behavior includes:
+Reviewed behavior includes legacy-script-manager requirements, private-key support where needed, optional rescans, and limitations when historical block data required for rescanning is unavailable.
 
-- Legacy import paths require a legacy script manager.
-- Importing key material requires private-key support when key material is included.
-- Imports commonly support a rescan option.
-- Rescans are blocked or limited when required block data is pruned.
-- Only one wallet rescan can run at a time.
-- Importing data can make wallet balances and history incomplete until rescanning finishes.
-- `getwalletinfo` is referenced as the way to check scanning progress.
+These commands were not exercised in the September v31 disposable-wallet tests.
 
-## Descriptor import RPCs reviewed
+## Descriptor imports
 
-Reviewed descriptor command behavior includes:
+`importdescriptors` is the descriptor-wallet import path.
 
-- `importdescriptors` requires a descriptor wallet.
-- Descriptor imports require timestamps.
-- The string `now` can be used for outputs known to have no prior chain history.
-- Timestamp zero requests a full chain scan.
-- Ranged descriptors require range handling.
-- Active descriptors must be ranged.
-- Internal descriptors and ranged descriptors have label restrictions.
-- Multipath descriptor handling can mark the second path as internal when exactly two elements are provided.
-- Block filter indexes can make descriptor rescans faster when available.
+Reviewed constraints include:
 
-## Dump and export commands reviewed
+- descriptor-wallet requirement;
+- timestamp requirement;
+- `now` for entries known to have no earlier chain history;
+- timestamp zero for full-history scan intent;
+- ranged-descriptor range handling;
+- active-descriptor/range rules;
+- internal/label restrictions;
+- optional benefit from block-filter indexes during rescans.
 
-Reviewed commands include:
+Descriptor support in the disposable v31 wallet does not itself prove descriptor-import/recovery behavior. Those are separate workflows.
+
+## Backup and restore
+
+Source-reviewed commands include:
+
+- `backupwallet`
+- `restorewallet`
+
+The reviewed code synchronizes/locks wallet state around backup and routes restore through wallet-loading logic under the requested wallet name.
+
+MoreBC2 has not yet performed a disposable `backupwallet` -> remove/unload -> `restorewallet` -> balance/address/history verification cycle on v31.
+
+Until that exists, MoreBC2 should not label backup/restore as end-to-end runtime verified.
+
+## Dump/export boundary
+
+Source-reviewed surfaces include:
 
 - `dumpprivkey`
 - `dumpwallet`
 - `listdescriptors`
 
-`dumpprivkey` is legacy-wallet-only and returns sensitive key material for a wallet address after wallet unlock and address/key checks.
+Private-key/dump operations expose highly sensitive material. They should remain advanced-only and should not be used against an existing user wallet for documentation testing.
 
-`dumpwallet` writes wallet key material and related metadata to a server-side file and refuses to overwrite an existing file.
+A future qualification should use a newly created disposable wallet with no real funds and should ensure resulting sensitive artifacts are destroyed after the test.
 
-`listdescriptors` reports descriptor wallet descriptors. MoreBC2 has not yet reviewed this command deeply enough for user-facing examples.
+## Rescan boundary
 
-These commands should be handled as advanced/sensitive commands in public docs.
+Rescans can be required after imports/restores and depend on locally available chain data.
 
-## Backup and restore commands reviewed
+Important source-backed cautions include:
 
-Reviewed commands include:
+- old timestamps can require long scans;
+- pruned nodes may lack required historical blocks;
+- incomplete/failed rescans can leave wallet history incomplete;
+- background chainstate/index availability can affect recovery workflows.
 
-- `backupwallet`
-- `restorewallet`
+The September v31 mainnet node test did not run a wallet rescan.
 
-`backupwallet` syncs the wallet to the current chain view, locks the wallet, and calls the wallet backup path with the requested destination.
+## Current wallet runtime context
 
-`restorewallet` loads a wallet from a backup file under a requested wallet name and can update persistent startup loading behavior.
+What MoreBC2 **has** established on `v31.1.0`:
 
-The reviewed restore help text notes that descriptor-wallet rescans can be faster when block filters are available.
+- a fresh disposable SQLite descriptor wallet can be created;
+- it persists in the wallet directory;
+- it can be explicitly reloaded after restart;
+- an isolated regtest disposable wallet can generate an address, receive generated test funds, create/process/finalize a PSBT, and submit that transaction to its zero-peer local mempool.
 
-## Rescan and chain-data concerns
+Those results make a future disposable backup/restore test practical, but they do not substitute for it.
 
-Reviewed behavior shows rescans are central to import and restore workflows.
+## Replay-protection relevance
 
-Important source-observed concerns include:
+Backup/import itself is storage/recovery behavior. Any restored/imported wallet that later signs post-activation mainnet transactions must still produce signatures using BC2's replay-protection domain from height `57750`.
 
-- Imports with old timestamps may take a long time.
-- Pruned nodes may lack block data needed for some rescans.
-- Rescan failures can leave wallet history incomplete until corrected.
-- Some rescan errors may point to pruned data, background chainstate sync, or local data issues.
+Recovery success therefore has two distinct questions:
 
-## Documentation implications
+1. did the wallet recover the intended keys/descriptors/history/state?;
+2. can the recovered wallet sign valid current BC2 transactions under the active replay domain?
 
-MoreBC2 should not merge all wallet commands into one simple user guide.
+## Documentation policy
 
-Future wallet docs should separate:
+- Never test these workflows on an existing user wallet.
+- Do not publish private-key/dump output.
+- Treat backup creation as incomplete assurance until restore has also been tested.
+- Record wallet type, version, network, pruning/index state, rescan behavior, and exact recovery result.
+- Distinguish descriptor and legacy-wallet workflows.
+- Do not claim pruning-safe recovery without testing the relevant historical-data path.
 
-- Basic wallet status and receiving commands.
-- Normal backup commands.
-- Restore and recovery workflows.
-- Legacy import workflows.
-- Descriptor import workflows.
-- Advanced sensitive commands.
+## Related pages
 
-Commands that reveal key material or import key material should be documented with strong warnings and tested examples only.
-
-## Relationship to other pages
-
-Related pages:
-
-- [Source atlas: wallet RPC](wallet-rpc.md)
-- [Source atlas: wallet startup](wallet-startup.md)
+- [Wallet RPC](wallet-rpc.md)
+- [Wallet startup](wallet-startup.md)
 - [Wallet guide](../../wallets/wallet-guide.md)
-- [RPC overview](../rpc-overview.md)
+- [Replay protection v31](replay-protection-v31.md)
+- [Windows v31 node/RPC validation](../../verification/windows-v31-node-rpc-validation-2026-09-11.md)
+- [Windows v31 PSBT validation](../../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
 
-## BitcoinII-specific notes
+## Open work
 
-This first-pass review saw BitcoinII naming in wallet RPC strings and examples.
+Highest-value next test:
 
-No upstream comparison has been completed, so this page does not claim whether backup/import RPC behavior differs from upstream Bitcoin Core beyond naming and visible strings.
+1. create a brand-new disposable v31 wallet;
+2. create known disposable addresses/state;
+3. back it up;
+4. unload/remove only the disposable test state;
+5. restore under a separate disposable wallet name;
+6. verify descriptors/addresses/balance/history expectations;
+7. record rescan/pruning/index requirements;
+8. destroy the disposable artifacts.
 
-## Open questions
+Legacy imports, sensitive key dumps, encrypted-wallet recovery, and cross-platform paths should remain separate tests.
 
-- Which backup and restore examples can be tested safely on a temporary wallet?
-- Which import commands should appear only in advanced documentation?
-- How should descriptor wallets and legacy wallets be explained to non-developers?
-- Which rescan failure cases should be documented for operators?
-- Which platform path examples are accurate for BitcoinII releases?
-- Which commands should be avoided entirely in exchange/service guides?
-- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for this file before upgrading status.
+## Primary sources
 
-## Sources
+Pinned/current review scope includes:
 
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+- `v31.1.0/src/wallet/rpc/backup.cpp`
+- `v31.1.0/src/wallet/rpc/wallet.cpp`
+- `v31.1.0/src/wallet/wallet.*`
+- `v31.1.0/src/wallet/load.*`
 
-- Current observed `main` `src/wallet/rpc/backup.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/backup.cpp
-- Current observed `main` `src/wallet/rpc/wallet.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/wallet.cpp
-- Current observed `main` `src/wallet/wallet.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/wallet.h
-- Current observed `main` `src/wallet/load.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/load.cpp
+Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This is a first-pass backup/import/restore RPC review. Commands have not been run. Public examples, platform paths, exact recovery workflows, upstream comparison, and release-versus-main comparison remain open.
+**Status:** Reviewed / Source-only partial  
+**Primary evidence:** BitcoinII Core `v31.1.0` wallet backup/import source plus current wallet runtime records for adjacent wallet lifecycle behavior  
+**Notes:** Backup/restore/import/rescan behavior remains source-backed. No existing user wallet was used, and no end-to-end disposable recovery test has yet been completed.
