@@ -1,200 +1,128 @@
 # Net processing block and header relay
 
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-07-02
+**Category:** Developer / Source Atlas  
+**Status:** Reviewed / Runtime-corroborated partial  
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page covers a first-pass review of block and header relay behavior in:
+This page maps BitcoinII Core `v31.1.0` block/header relay behavior in `src/net_processing.*`.
 
-- `src/net_processing.cpp`
-- `src/net_processing.h`
+The broad headers-first/block-download structure remains Bitcoin-style, but current BC2 adds a material v31-specific boundary: peer-supplied ShockWave-era branches must be validated with **fork-aware header synchronization** that preserves enough branch history to reproduce production `GetNextWorkRequired()`.
 
-This is a focused slice of `net_processing`, not a complete review of transaction relay, address relay, peer eviction, compact-block reconstruction edge cases, or validation internals.
+September mainnet runtime evidence now corroborates ordinary current header acquisition and advancing block validation, but not every compact-block, timeout, alternate-branch, or send-loop branch.
 
-## Why this area matters
+## Header receive path
 
-Block and header relay are central to node synchronization and chain following.
+Reviewed header processing includes:
 
-For MoreBC2, this area matters because many user-facing ideas depend on it:
+- basic proof-of-work sanity before deeper acceptance;
+- low-work/two-phase headers-sync handling;
+- known-chain connection requirements and unconnecting-header behavior;
+- passing accepted headers into `ProcessNewBlockHeaders`;
+- invalid-header punishment paths where applicable;
+- requesting additional headers when a full response suggests more are available;
+- updating peer best-known-block/announcement state;
+- considering direct block fetch after useful headers arrive.
 
-- how a node learns about new blocks
-- why headers are handled separately from full blocks
-- why block download is not just “ask every peer for every block”
-- why compact block behavior is separate from ordinary full-block relay
-- why service and exchange docs should avoid overconfident sync or confirmation claims
+## v31 fork-aware ShockWave validation
 
-## Constants and limits observed
+Post-height-`57750`, required `nBits` depends on ShockWave history and candidate time rather than only the previous target.
 
-The reviewed source defines block/header relay limits and timing values, including:
+BitcoinII `v31.1.0` therefore extends per-peer headers sync with bounded synthetic block-index history rooted at the actual branch/fork point. That history is used during PRESYNC and REDOWNLOAD to call the production next-work calculation.
 
-- `HEADERS_DOWNLOAD_TIMEOUT_BASE`
-- `HEADERS_DOWNLOAD_TIMEOUT_PER_HEADER`
-- `HEADERS_RESPONSE_TIME`
-- `MAX_LOCATOR_SZ`
-- `MAX_BLOCKS_IN_TRANSIT_PER_PEER`
-- `BLOCK_DOWNLOAD_WINDOW`
-- `BLOCK_DOWNLOAD_TIMEOUT_BASE`
-- `BLOCK_DOWNLOAD_TIMEOUT_PER_PEER`
-- `MAX_BLOCKS_TO_ANNOUNCE`
-- `MAX_CMPCTBLOCK_DEPTH`
-- `MAX_BLOCKTXN_DEPTH`
-- compact-block version value `CMPCTBLOCKS_VERSION`
+This prevents alternate peer branches from being checked with the active chain's unrelated ShockWave history.
 
-These are source-observed implementation details, not operator recommendations.
+See [Fork-aware header synchronization](headers-sync-v31.md).
 
-## Header processing observed
+## `getheaders` / locator behavior
 
-The reviewed source contains `ProcessHeadersMessage`, which handles received headers.
+Reviewed behavior includes:
 
-Observed behavior includes:
+- locator-size limits;
+- no normal response during selected import/reindex states;
+- active-chain locator resolution;
+- optional stop-hash handling;
+- response limits;
+- tracking the best header sent to the peer.
 
-- empty headers can clear header-sync state and stop asking that peer for more headers
-- received headers are checked for basic proof-of-work sanity before deeper processing
-- low-work headers sync has special handling before ordinary header validation
-- headers must connect to something already known in the block index, otherwise unconnecting-header handling is used
-- when headers connect, the peer's last `getheaders` timestamp can be cleared
-- already-known headers that are ancestors of the best header or tip can skip some anti-DoS checks
-- trusted peers with `NoBan` permission can bypass some anti-DoS logic
-- accepted headers are passed to `ProcessNewBlockHeaders`
-- invalid headers can trigger peer punishment through block-related misbehavior handling
-- if a full `headers` response suggests more headers may exist, the node can request more with `getheaders`
-- peer state is updated after received headers, including best-known block and block announcement timing
-- direct block fetching can be considered after processing headers
+A headers response is chain-state information, not proof that every corresponding block body is locally available.
 
-## Peer state after headers observed
+## `getblocks` / inventory behavior
 
-`UpdatePeerStateForReceivedHeaders` updates what the node knows about a peer after headers are received.
+Reviewed source can walk forward from a common active-chain point and queue block inventory subject to response limits, stop hashes, and pruning/data-availability constraints.
 
-Observed behavior includes:
+Pruned nodes can legitimately be unable to serve old block bodies even if their headers remain known.
 
-- the peer's block availability is updated from the last received header
-- peers in initial block download can be disconnected if their headers chain has insufficient work and they are outbound disconnection candidates
-- full outbound peers can be protected from some bad/lagging-chain eviction logic when they appear useful
+## Full block receive
 
-## GETHEADERS response behavior observed
+The P2P-facing block path performs preliminary/mutation/work/request bookkeeping and then hands the block into the validation pipeline.
 
-The reviewed `ProcessMessage` section handles `getheaders`.
+Network receipt is not equivalent to consensus acceptance. `ProcessNewBlock` / validation still determine whether a block can be stored/activated.
 
-Observed behavior includes:
+See [Block acceptance](block-acceptance.md).
 
-- locators larger than `MAX_LOCATOR_SZ` can cause disconnection
-- `getheaders` is ignored during block import or reindexing
-- if the active chain has too little work and the peer lacks download permission, the node sends an empty headers response
-- a null locator can request the `hashStop` block if it is known and allowed
-- ordinary locators are resolved to the next block after the peer's last common block
-- responses are built as a vector of block-header-shaped `CBlock` entries because headers serialization needs the transaction-count marker
-- responses are limited by `max_headers_result` and `hashStop`
-- the peer's best-header-sent state is updated
-- the response is sent as a `headers` message
+## Compact blocks
 
-## GETBLOCKS and block inventory behavior observed
+Reviewed compact-block behavior includes header processing, previous-header handling, near-tip reconstruction decisions, in-flight/download constraints, fallback to ordinary block requests, and `getblocktxn`/blocktxn handling.
 
-The reviewed `getblocks` path:
+This page is not a complete BIP152 implementation guide and does not claim every compact-block reconstruction path has been runtime-tested on BC2.
 
-- checks locator size against `MAX_LOCATOR_SZ`
-- activates best chain before responding so responses reflect the current known best chain
-- finds the last block the peer has in the main chain
-- walks forward from that point and queues block hashes for inventory relay
-- respects a batch limit
-- stops at `hashStop`
-- avoids advertising pruned or likely-unavailable old blocks in prune mode
-- sets a continuation block when the response hits the batch limit
+## Runtime evidence — 2026-09-11
 
-This page does not yet fully document the later send-loop behavior that actually drains queued block inventory to the wire.
+The isolated Windows `v31.1.0` mainnet node:
 
-## Full block receive behavior observed
+- automatically established outbound peers;
+- acquired the current header chain;
+- advanced block validation during bounded IBD;
+- retained state across a clean restart and resumed network operation.
 
-The reviewed full-block path includes:
+This corroborates ordinary header/block synchronization for the tested environment.
 
-- mutation checks before processing a received block
-- removal of matching in-flight block requests
-- source tracking for received blocks
-- an anti-DoS work threshold check from the previous block plus claimed header work
-- `ProcessBlock` call with force-processing when the block was requested
+It does **not** isolate:
 
-This page does not replace the existing block validation flow docs. It only records the P2P-facing entry path before validation takes over.
+- a competing ShockWave branch;
+- PRESYNC/REDOWNLOAD instrumentation;
+- compact-block reconstruction;
+- block-download timeout/stalling behavior;
+- inbound serving behavior;
+- old-block serving from a pruned node.
 
-## Compact block behavior observed
+## Chainwork boundary
 
-The reviewed compact-block path includes:
+Peer relay can announce multiple candidate branches, but active-chain selection remains a validation/chainstate decision based on accumulated valid chain work.
 
-- compact blocks are ignored while importing
-- compact-block headers are processed before reconstruction work
-- missing previous headers can trigger a deeper `getheaders` request when not in initial block download
-- low-work compact-block headers can be ignored
-- invalid compact-block headers can trigger punishment through block-related misbehavior handling
-- peer block availability and last-block-announcement time can be updated
-- if the block is already known or pruned, requested blocks may fall back to ordinary `getdata`
-- near-tip compact blocks can be selected for reconstruction when in-flight and download limits allow
-
-Compact-block reconstruction has many branches. This page records only the first-pass structure and should not be treated as a full BIP152 implementation guide.
-
-## GETBLOCKTXN behavior observed
-
-The reviewed `getblocktxn` path includes:
-
-- recent block transactions can be served from the most recent block cache
-- otherwise, the block index and block data availability are checked
-- requests for blocks within `MAX_BLOCKTXN_DEPTH` can receive block transaction responses
-- older block transaction requests can fall back to a full block response path
-
-## Boundaries
-
-This page does not claim:
-
-- that a node syncs quickly or reliably in any specific live environment
-- that all compact-block branches are fully reviewed
-- that all send-loop behavior is documented
-- that BitcoinII differs from upstream Bitcoin Core here
-- that block validation itself is covered here
-- that release behavior exactly matches current `main`
-
-This is source-observed documentation for the reviewed block/header relay slice only.
-
-## Documentation implications
-
-MoreBC2 can use this page to cautiously support explanations of:
-
-- headers-first synchronization
-- why header processing precedes block download
-- why block locator size matters
-- why compact block behavior exists but should not be oversimplified
-- why pruned-node behavior can affect what old blocks are served
-- why P2P relay behavior is separate from RPC confirmation or wallet history documentation
+Relay order or first-seen status is not protocol finality.
 
 ## Related pages
 
-- [Net processing handshake](net-processing-handshake.md)
-- [Net processing address relay](net-processing-address-relay.md)
-- [P2P protocol primitives](protocol.md)
-- [Block lifecycle](block-acceptance.md)
-- [Block validation flow](../../architecture/block-validation-flow.md)
-- [Life of a block](../../architecture/life-of-a-block.md)
-- [Network specifications](../../documentation/network-specifications.md)
+- [Fork-aware header synchronization](headers-sync-v31.md)
+- [ShockWave v31](shockwave-v31.md)
+- [Block acceptance](block-acceptance.md)
+- [Protocol primitives](protocol.md)
+- [Peer communication model](../../architecture/peer-communication-model.md)
+- [Windows v31 node/RPC validation](../../verification/windows-v31-node-rpc-validation-2026-09-11.md)
 
-## Open questions
+## Open work
 
-- Review block/header send-loop behavior in `SendMessages`.
-- Review compact-block reconstruction branches more deeply.
-- Review block download timeout and stalling behavior separately.
-- Compare this slice between the `v31.1.0` baseline and subsequent `main` changes.
-- Confirm which block/header relay details belong in user-facing node docs.
-- Confirm whether any BitcoinII-specific behavior exists here beyond naming and visible comments.
+- Controlled alternate-branch ShockWave headers-sync fixture.
+- Compact-block reconstruction coverage.
+- Block download timeout/stalling runtime tests.
+- Inbound/pruned block-serving tests if operator documentation needs them.
+- Current test-suite mapping after a clean source build.
 
-## Sources
+## Primary sources
 
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+- `v31.1.0/src/net_processing.cpp`
+- `v31.1.0/src/net_processing.h`
+- `v31.1.0/src/headerssync.*`
+- `v31.1.0/src/pow.cpp`
+- `v31.1.0/src/validation.cpp`
 
-- Current observed `main` `src/net_processing.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/net_processing.cpp
-- Current observed `main` `src/net_processing.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/net_processing.h
-- [Net processing handshake](net-processing-handshake.md)
-- [Net processing address relay](net-processing-address-relay.md)
-- [Block lifecycle](block-acceptance.md)
+Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This is a first-pass focused review of block and header relay paths in `net_processing`. Runtime tests, release comparison, upstream comparison, send-loop behavior, compact-block reconstruction details, and peer-stalling behavior remain open.
+**Status:** Reviewed / Runtime-corroborated partial  
+**Primary evidence:** BitcoinII Core `v31.1.0` relay/header-sync source plus September 11 bounded mainnet header/block synchronization  
+**Notes:** Ordinary synchronization is runtime-corroborated; fork-aware alternate branches, compact blocks, stalling and serving edge cases remain source-only or untested.
