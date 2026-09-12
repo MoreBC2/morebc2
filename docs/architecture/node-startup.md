@@ -1,14 +1,14 @@
 # Node startup
 
 **Category:** Architecture
-**Status:** Draft
-**Last reviewed:** 2026-06-29
+**Status:** Reviewed / Partial
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page explains the reviewed BitcoinII Core startup path at a high level.
+This page explains the BitcoinII Core startup path at a high level and now incorporates the September 11 BitcoinII Core `v31.1.0` Windows runtime validation.
 
-Startup is the sequence that prepares configuration, local databases, validation state, optional indexes, wallet clients, RPC service state, and network components before normal node operation begins.
+Startup prepares configuration, chainstate, block-index state, optional indexes, wallet clients, RPC, mempool state, network components, peer management, and shutdown wiring before normal node operation.
 
 ## Simplified startup lifecycle
 
@@ -18,168 +18,134 @@ Process begins
   -> parameter interaction
   -> sanity checks and directory locks
   -> AppInitMain
-      -> logging, PID file, scheduler
-      -> validation signals
+      -> logging / scheduler / validation signals
       -> wallet interfaces
-      -> RPC registration / warmup
+      -> RPC registration and warmup
       -> network objects prepared
       -> chainstate and block index loaded
       -> peer manager created
-      -> indexes initialized
+      -> optional indexes initialized
       -> wallets loaded
       -> pruning / block import / mempool load
-      -> wait for active tip or genesis connection
-      -> node services enter normal operation
+      -> active tip or genesis becomes available
+      -> normal node services start
+      -> RPC warmup finishes
 ```
 
-## What startup is responsible for
+## Configuration and parameter interaction
 
-Startup is responsible for ordering.
+Reviewed startup behavior includes checks and interactions around:
 
-The reviewed `src/init.cpp` path prepares local block and UTXO state before the node moves into normal peer operation. This keeps startup from depending on incomplete local validation state.
+- pruning and indexing;
+- DNS seeding and networking options;
+- bind/listen behavior;
+- file descriptors and connection limits;
+- logging;
+- mining/block settings;
+- wallet startup options;
+- chainstate, block-manager, and mempool configuration.
 
-## Step 1: Context and shutdown wiring
+Current mainnet source parameters use P2P port `8338`. Current mainnet RPC source/default is `8332`, but RPC is operator-configurable.
 
-`InitContext` attaches global arguments and shutdown signaling into `NodeContext`.
+## Directory isolation and safety
 
-This gives later startup code a common place to access runtime arguments, shutdown handling, and notification wakeups.
+BitcoinII Core uses data-directory locking to prevent multiple processes from independently writing the same data directory.
 
-## Step 2: Parameter interaction
+MoreBC2's September runtime validation went further operationally: every test launch explicitly selected a new disposable data directory, and no existing BitcoinII data directory or wallet was opened, copied, imported, rescanned, unlocked, inspected, or spent from.
 
-Before the node fully starts, options are checked and some user-facing arguments are converted into internal configuration.
+## RPC registration and warmup
 
-Reviewed checks include:
+Core RPC commands are registered during startup. When server mode is enabled, the HTTP/RPC service starts in warmup and becomes fully available once initialization reaches the appropriate state.
 
-- Prune mode incompatibility with `-txindex`.
-- Prune mode incompatibility with `-reindex-chainstate`.
-- `-forcednsseed` incompatibility with `-dnsseed=0`.
-- Bind option restrictions when listening is disabled.
-- File descriptor checks and connection-count trimming.
-- Logging category and level setup.
-- Mining/block option sanity checks for block fee and weight options.
-- Wallet parameter interaction.
-- Restricting `-test` options to regtest.
-- Early option application for chainstate, block manager, and mempool settings.
+The September v31 runtime test directly exercised cookie-authenticated RPC on loopback. The test used explicit port `28332` because local port `8332` was already occupied by unrelated software; `28332` is therefore a **test override**, not the BitcoinII mainnet default.
 
-## Step 3: Sanity checks and directory locks
+## Network preparation
 
-Startup runs sanity checks before full initialization proceeds.
+Startup prepares network state such as:
 
-Reviewed behavior includes kernel sanity checks, ECC sanity checks, directory lock probing, and later directory lock acquisition after daemonization.
+- address manager;
+- ban/discouragement state;
+- connection manager;
+- peer-manager options;
+- proxy/onion/I2P settings where configured;
+- reachable-network state;
+- bind/listen configuration;
+- seed/connect behavior;
+- transaction-relay and fee-estimator state where applicable.
 
-Directory locks help prevent two processes from using the same data directory at the same time.
+The architecture ordering remains important: local chain/block state is prepared before the node settles into ordinary network operation.
 
-## Step 4: Application initialization
+## Chainstate and block-index loading
 
-`AppInitMain` begins by creating the PID file, starting logging, creating the scheduler, and scheduling background maintenance tasks.
+Startup constructs and loads chainstate and block-manager state, verifies the loaded chainstate, and prepares the active-chain view.
 
-Reviewed scheduled tasks include periodic entropy gathering and periodic disk-space checks.
+Initial startup, reindex, or incomplete local state may require additional block/header acquisition before the node is fully synchronized.
 
-Startup then creates validation signals and wallet interfaces.
+## Indexes and wallets
 
-## Step 5: RPC registration and warmup
+Optional indexes are initialized according to configuration.
 
-The reviewed startup path registers core RPC commands regardless of whether external RPC calls are enabled, because the GUI console may still use them.
+In the September runtime test, `getindexinfo` returned `{}`, consistent with no optional index being enabled. `txindex`, block-filter indexing, and coin-statistics indexing were deliberately left at default/off for the test.
 
-If `-server` is enabled, the RPC/HTTP server starts in warmup mode.
+The same test created a disposable SQLite descriptor wallet. On restart, the wallet remained present in `listwalletdir` but was not automatically loaded; an explicit `loadwallet` succeeded.
 
-Warmup mode means the server can exist before it is ready to process normal calls.
+That is useful current wallet-startup evidence, but it does not establish every wallet startup option or migration path.
 
-RPC warmup is finished only near the end of startup, after the active tip and chainstate view are ready.
+## Mempool load and final startup
 
-## Step 6: Network component preparation
+The startup path loads or initializes mempool state, starts remaining background work, completes service startup, and eventually finishes RPC warmup.
 
-Startup prepares network-related objects before normal peer operation begins.
+The September mainnet test observed `getmempoolinfo.loaded = true` and a functioning RPC server while the node was still in initial block download.
 
-Reviewed setup includes:
+A node can therefore be operational for local status/RPC purposes before it has completed full historical validation.
 
-- Loading ASMAP data if configured.
-- Creating netgroup manager.
-- Loading address manager.
-- Creating ban manager.
-- Creating connection manager.
-- Building peer manager options.
-- Preparing fee estimator when transaction relay is enabled.
-- Processing proxy, onion, I2P, reachable-network, user-agent, bind, whitelist, seed, and connect settings.
+## September 11 v31.1.0 runtime result
 
-The important architecture point is ordering:
+The isolated Windows 11 test directly established that BitcoinII Core `v31.1.0` could:
 
-```text
-Prepare network objects.
-Load chain/block state.
-Enter normal peer operation after local state is ready.
-```
+- start successfully in Qt server mode;
+- report runtime version `310100`, subversion `/BitcoinII:31.1.0/`, protocol `70016`;
+- listen for P2P on `0.0.0.0:8338`;
+- establish four outbound peers on the first run;
+- acquire the current header chain and advance block validation during IBD;
+- answer current status/network/mempool/chain RPCs;
+- create one new zero-transaction disposable descriptor wallet;
+- stop cleanly;
+- restart against the same disposable data directory;
+- reconnect with six outbound peers;
+- retain local chain state;
+- explicitly reload the same disposable wallet;
+- stop cleanly a second time with the RPC cookie removed and listener gone.
 
-## Step 7: Chainstate and block index loading
+The test intentionally ended before initial block download completed. It did not create, sign, submit, or broadcast a transaction.
 
-The reviewed `InitAndLoadChainstate` path constructs the mempool, chainstate options, block manager options, chainstate manager, and chainstate load options.
+## Runtime boundary
 
-Then startup calls:
+This evidence is meaningful for Windows v31 startup architecture, but it does not prove:
 
-```text
-LoadChainstate
-  -> VerifyLoadedChainstate
-```
+- Linux or macOS startup behavior;
+- a source-built binary path;
+- full initial-block-download completion;
+- every startup flag;
+- inbound peer connectivity;
+- long-duration node stability;
+- production wallet safety.
 
-When this succeeds, the block index and chainstate are considered loaded.
-
-If loading fails in a way that can be retried, GUI users may be prompted to retry with reindexing.
-
-## Step 8: Peer manager, indexes, and wallets
-
-After chainstate loading, startup creates the peer manager and registers it with validation signals.
-
-Then it initializes optional indexes such as the transaction index, block filter indexes, and coin stats index.
-
-Wallet clients are loaded after index initialization.
-
-## Step 9: Pruning, block import, and mempool loading
-
-Reviewed behavior includes:
-
-- Initial blockstore pruning when pruning is enabled and block files are indexed.
-- Setting service flags when appropriate for non-pruned operation.
-- Disk-space checks before block import.
-- Block notification command handling when configured.
-- Starting the `initload` background thread.
-
-The background thread performs block import, optional stop-after-import handling, index background sync, and mempool loading from disk.
-
-## Step 10: Wait for active tip or genesis
-
-Before the node finishes startup, it waits until a tip block is available or shutdown is requested.
-
-The source comments identify cases where the tip may need to be established during startup, including first startup with an empty data directory, reindex, and reindex-chainstate.
-
-## Step 11: Finish startup
-
-Near the end of startup, the reviewed path prepares final connection options, starts normal node services, finishes RPC warmup, emits a done-loading message, starts wallet/client hooks, schedules banlist dumping, starts peer-manager scheduled tasks, and runs startup notification when supported.
-
-At that point, startup has handed off to normal node operation.
-
-## What is not fully reviewed yet
-
-- GUI-specific entry path.
-- Daemon executable entry path.
-- Shutdown path.
-- Block storage internals.
-- Wallet internals.
-- Net-processing internals.
-- Exact startup behavior under every command-line option.
-- Local command testing on a BitcoinII binary.
+The separate September 11 regtest PSBT test provides transaction/wallet runtime evidence under a different isolated environment.
 
 ## Related pages
 
-- [Source atlas: init.cpp](../developers/source-atlas/init-cpp.md)
 - [Architecture overview](architecture-overview.md)
-- [Life of a block](life-of-a-block.md)
-- [Life of a transaction](life-of-a-transaction.md)
+- [Peer communication model](peer-communication-model.md)
 - [Mempool flow](mempool-flow.md)
-- [Node guide](../nodes/node-guide.md)
+- [Source atlas: init.cpp](../developers/source-atlas/init-cpp.md)
+- [Source atlas: wallet startup](../developers/source-atlas/wallet-startup.md)
+- [Windows v31.1.0 node and RPC validation](../verification/windows-v31-node-rpc-validation-2026-09-11.md)
+- [Windows v31.1.0 PSBT and replay validation](../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
 - [Configuration](../configuration/README.md)
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This architecture page is based on a first-pass review of `src/init.cpp`, especially `AppInitMain`, `InitAndLoadChainstate`, parameter interaction, chainstate loading, mempool loading, index initialization, and final startup handoff. It should not be treated as a full review of every startup path.
+**Status:** Reviewed / Partial  
+**Primary sources checked:** Current v31 startup/source reviews plus the September 11 Windows v31.1.0 startup, RPC, peer, disposable-wallet, restart, and shutdown validation  
+**Notes:** Windows release-binary startup now has direct bounded runtime evidence. Cross-platform startup, source-build reproduction, full IBD, inbound networking, every option path, and long-duration operation remain partial or untested.
