@@ -1,88 +1,134 @@
 # What is BitcoinII?
 
 **Category:** Documentation
-**Status:** Needs Review
-**Last reviewed:** 2026-09-02
+**Status:** Reviewed / Partial
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-BitcoinII (BC2) is a peer-to-peer proof-of-work cryptocurrency network. BitcoinII Core is the reference software used to connect to the BitcoinII peer-to-peer network, download and validate blocks and transactions, and optionally provide wallet and graphical user interface functionality.
+BitcoinII (BC2) is a peer-to-peer proof-of-work cryptocurrency network. BitcoinII Core is the current public reference implementation used to connect to the network, validate blocks and transactions, and optionally provide wallet and graphical-interface functionality.
 
-This page is intentionally factual and narrow. It does not make price, investment, or roadmap claims.
+Current-facing MoreBC2 documentation uses BitcoinII Core `v31.1.0` as the baseline.
 
-## Current release baseline
+## Current identity and units
 
-The current documented BitcoinII Core release is `v31.1.0`, published on 2026-08-29.
+Current BitcoinII Core source defines:
 
-Its release notes identify these consensus-level changes:
-
-- ShockWave per-block difficulty adjustment;
-- consensus-level Ordinals, inscriptions, and Runes mitigation;
-- BC2 transaction replay protection;
-- fork-aware header synchronization;
-- associated wallet, mining, mempool, RPC, validation, and PSBT updates.
+- formatted currency unit / ticker: `BC2`;
+- atomic unit label: `sat2`;
+- `COIN = 100000000`;
+- maximum money range: `21000000 * COIN`;
+- subsidy halving interval: `210000` blocks.
 
 ## Relationship to Bitcoin Core
 
-BitcoinII source headers identify Bitcoin Core lineage, while BitcoinII now also contains BitcoinII-specific consensus behavior.
+BitcoinII retains substantial Bitcoin Core lineage and Bitcoin-like architecture, transaction structures, address encodings, RPC concepts, wallet concepts, and proof-of-work structure.
 
-Current documentation should therefore distinguish between inherited Bitcoin-style architecture and rules that are specific to modern BitcoinII releases.
+Modern BitcoinII is not simply an unchanged Bitcoin clone. Current `v31.1.0` adds BitcoinII-specific consensus/signing behavior that integrations must account for.
 
-## Source-backed current notes
+## Current v31.1.0 behavior
 
-- Target block spacing: 10 minutes.
-- Current difficulty adjustment: ShockWave per block from mainnet height `57750`.
-- Historical pre-57750 difficulty: inherited Bitcoin-style 2016-block retarget path.
-- Subsidy halving interval: 210,000 blocks.
-- Block-header hash path: double-SHA256 via `HashWriter::GetHash()`.
-- Mainnet P2P port: `8338`.
-- ShockWave, data restrictions, and replay protection activate at height `57750`.
-- Replay-protection fork ID: `0x01324342`.
-- Bitcoin-like Base58 and Bech32 address encodings remain present.
-- Explicit replay protection should be mentioned when discussing those Bitcoin-like address encodings.
+Current source and release material establish:
 
-## RPC note
+- target block spacing: 10 minutes;
+- block-header hashing: double-SHA256;
+- current difficulty adjustment: ShockWave per block from mainnet height `57750`;
+- consensus data restrictions from height `57750`;
+- replay protection from height `57750`;
+- replay-protection fork/domain id: `0x01324342`;
+- fork-aware header synchronization;
+- mainnet P2P default: `8338`;
+- documented mainnet JSON-RPC default: `8332`, operator-configurable.
 
-Inherited/generated example configuration shows mainnet RPC port `8332`.
+The inherited 14-day / 2016-block retarget parameters describe historical/pre-ShockWave behavior and must not be presented as the current post-`57750` difficulty schedule.
 
-A dated historical BitcoinII Core `v29.1.0` Windows/mainnet test used `127.0.0.1:8337`. Neither observation proves a universal `v31.1.0` runtime port. Operators must verify the exact release and active configuration.
+## Replay protection and Bitcoin-like addresses
+
+BitcoinII still uses Bitcoin-like Base58/Bech32 encodings, including Bech32 HRP `bc`.
+
+That similarity does **not** mean ordinary Bitcoin signing semantics remain sufficient.
+
+Current BC2 replay protection changes the signature-hash domain after mainnet height `57750`. Wallets, PSBT tooling, raw-transaction code, and external signers therefore need BC2-aware signing behavior even when address or transaction formats look familiar.
+
+## Current runtime evidence
+
+MoreBC2 now has bounded `v31.1.0` runtime evidence from September 11, 2026.
+
+An isolated Windows mainnet test directly observed:
+
+- BitcoinII runtime version `31.1.0` / protocol `70016`;
+- P2P listener on `8338`;
+- outbound peer discovery and connection;
+- current header acquisition and advancing block validation during initial block download;
+- cookie-authenticated loopback RPC using an explicit test port override;
+- creation/reload of a disposable descriptor wallet;
+- clean shutdown and restart.
+
+A separate isolated regtest test directly exercised:
+
+- local disposable funds;
+- `walletcreatefundedpsbt`;
+- `walletprocesspsbt`;
+- PSBT decoding/finalization;
+- raw transaction decoding;
+- `testmempoolaccept`;
+- local-only `sendrawtransaction` and mempool entry.
+
+That regtest test had zero peers and did not broadcast to the public BitcoinII network.
+
+## Wallet and integration boundary
+
+BitcoinII Core wallet functionality now has meaningful bounded runtime evidence, but MoreBC2 does **not** infer compatibility for third-party wallets or hardware/external signers from that alone.
+
+Current wallet evidence includes separate observations for Genesis Wallet, a Google Play BC2 wallet, `Bitcoin-II/wallet-bc2`, and Tangem's current BitcoinII asset page. Their support, security, and official-status claims differ and should be read in the dedicated wallet sections.
+
+Tangem's current public BitcoinII asset page states that the BitcoinII network is temporarily unsupported, so it should not be presented as working native BC2 support today.
+
+## Explorer and public-service boundary
+
+Current public explorer/API/Electrum observations exist, but public-service reachability is not protocol authority or custody-grade verification.
+
+MoreBC2 distinguishes:
+
+- the Official BitcoinII Explorer;
+- the project-linked but independently operated `explorer.bitcoin-ii.org`;
+- supplemental Mempool-style services such as `bc2mempool.com` and `bc2.live`;
+- the current Electrum service at `infra1.bitcoin-ii.org`.
+
+A valid public transaction-broadcast path has not yet been established by MoreBC2.
+
+## Confirmation and finality boundary
+
+BitcoinII uses accumulated-work chain selection and remains reorganization-capable.
+
+A confirmation count is therefore an operational risk measure, not deterministic finality. MoreBC2's provisional 50-confirmation baseline for ordinary exchange deposits is service guidance informed by observed exchange settings, not a consensus parameter.
 
 ## What this page does not claim
 
 This page does not claim:
 
-- a recommended exchange confirmation count;
-- that every v31 wallet/RPC path has been locally re-tested;
-- that a specific future feature is guaranteed;
+- that every `v31.1.0` path has been runtime-tested;
+- that every third-party wallet/signing implementation is compatible;
+- that a public explorer/API is an independent or permanent source of truth;
+- that any finite confirmation count guarantees irreversibility;
+- that release binaries have reproducible-build proof or a maintainer-signed checksum manifest;
 - that market price or future value can be predicted.
 
 ## Where to go next
 
+- [Project overview](project-overview.md)
 - [Network specifications](network-specifications.md)
 - [Consensus overview](consensus-overview.md)
 - [Releases](releases.md)
-- [Difficulty adjustment](../encyclopedia/difficulty-adjustment.md)
-- [Exchange integration package](../exchange/integration-package.md)
-- [Verification queue](../verification/README.md)
-
-## Open items
-
-- Confirm strongest official source for ticker `BC2`.
-- Confirm official technical/security contact process.
-- Complete independent `v31.1.0` release-artifact authentication work.
-- Complete detailed source review of replay protection, data restrictions, and fork-aware header synchronization.
-
-## Sources
-
-- Current canonical repository: https://github.com/Bitcoin-II/BitcoinII-Core
-- Current release: https://github.com/Bitcoin-II/BitcoinII-Core/releases/tag/v31.1.0
-- `v31.1.0/src/kernel/chainparams.cpp`
-- `v31.1.0/src/pow.cpp`
-- `v31.1.0/src/primitives/block.cpp`
-- `v31.1.0/src/hash.h`
+- [Architecture](../architecture/README.md)
+- [Compatibility](../compatibility/README.md)
+- [Wallets](../wallets/README.md)
+- [Explorer resources](explorer-resources.md)
+- [Exchange integration](../exchange/README.md)
+- [Verification evidence](../verification/verification-index.md)
 
 ## Verification
 
-**Status:** Needs Review
-**Primary sources checked:** Partially
-**Notes:** Current-facing release and consensus summary is refreshed for `v31.1.0`. Detailed review and runtime testing remain version-scoped where stated.
+**Status:** Reviewed / Partial  
+**Primary sources checked:** BitcoinII Core `v31.1.0` release/source material, September 11 node/RPC and PSBT runtime evidence, current compatibility/architecture/wallet/public-infrastructure records  
+**Notes:** The principal current identity, network, consensus, wallet-runtime, and integration boundaries are synchronized. Activation-boundary runtime vectors, external-signer compatibility, full public broadcast, complete source-build reproduction, and long-term service reliability remain outside the current evidence.
