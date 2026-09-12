@@ -1,42 +1,41 @@
 # MoreBC2 Glossary
 
-**Status:** Draft
+**Status:** Reviewed
+**Last reviewed:** 2026-09-12
 
-This glossary defines common terms used across MoreBC2.
+This glossary defines common terms used across MoreBC2. General definitions are explanatory; BitcoinII-specific values should link to current source-backed documentation.
 
-Definitions should stay neutral and general unless a BitcoinII-specific detail has been verified against a primary source.
-
-For more technical architecture and Source Atlas terms, see the [Developer glossary](docs/encyclopedia/developer-glossary.md).
+For deeper implementation terminology, see the [Developer glossary](docs/encyclopedia/developer-glossary.md).
 
 ## Active chain
 
-The branch of the blockchain a node currently treats as its best valid chain.
-
-See also: [Life of a reorganization](docs/architecture/life-of-a-reorg.md).
+The branch a node currently treats as its best valid chain.
 
 ## Address
 
-A string used to receive funds. Address formats depend on the network and wallet type.
+A string used to receive funds. BitcoinII uses Bitcoin-like address encodings; current prefix values are documented in [Network specifications](docs/documentation/network-specifications.md).
 
 ## Base58
 
-An encoding format commonly used by Bitcoin-style addresses and keys. BitcoinII-specific prefix values should be documented in verified network specifications.
+An encoding format used by several Bitcoin-style address and key formats.
 
 ## Bech32
 
-An address encoding format commonly used for SegWit-style addresses. BitcoinII-specific human-readable prefix values should be documented in verified network specifications.
+An address encoding format used for SegWit-style addresses. BitcoinII mainnet currently uses the `bc` human-readable prefix.
+
+## Best-work chain
+
+The valid chain with the greatest accumulated chainwork according to the node's chain-selection rules. Block count alone is not the chain-selection rule.
+
+See also: [Reorganizations](docs/encyclopedia/reorganizations.md).
 
 ## Block
 
 A group of transactions committed to the blockchain by proof-of-work.
 
-See also: [Life of a block](docs/architecture/life-of-a-block.md).
-
 ## Block file
 
-A local disk file that stores serialized block data.
-
-See also: [Source atlas: block storage](docs/developers/source-atlas/block-storage.md).
+A local disk file containing serialized block data.
 
 ## Block height
 
@@ -44,7 +43,7 @@ The position of a block in the chain, starting from the genesis block.
 
 ## Block header
 
-The compact metadata section of a block. It includes fields such as the previous block hash, merkle root, timestamp, difficulty bits, and nonce.
+The compact metadata section of a block, including the previous-block hash, merkle root, timestamp, difficulty bits, and nonce.
 
 ## Block index
 
@@ -56,73 +55,85 @@ An ordered chain of blocks where each block commits to the previous block.
 
 ## Broadcast
 
-Sending a transaction or block from one node toward the peer-to-peer network.
-
-For transactions, distinguish live broadcast from dry-run mempool acceptance checks.
+Sending a transaction or block toward the peer-to-peer network. A dry-run mempool check is not the same as broadcast.
 
 ## Chainstate
 
-A node's current view of the active chain and spendable coin state.
+A node's current validated view of the active chain and spendable coin state.
+
+## Chainwork
+
+A cumulative measure of proof-of-work represented by a chain. Bitcoin-style chain selection compares accumulated work rather than simply choosing the chain with the most blocks.
+
+For exchange monitoring, cumulative chainwork after a deposit can provide useful context in addition to a raw confirmation count.
 
 ## Checkpoint
 
-A known block height and hash used by software as a reference point. Checkpoints must be documented from source code or official releases.
+A known block height/hash recorded by software as a reference point. Current BitcoinII checkpoint values should be taken from release-pinned source.
 
 ## Coinbase transaction
 
 The first transaction in a block. It creates the block subsidy and collects transaction fees.
 
+## Confirmation
+
+A transaction has one confirmation when it is included in a block on the active chain. Each later block built on top increases the count by one.
+
+Confirmation count is an operational settlement signal, not mathematical finality. Under Proof of Work, chain reorganizations remain possible, and equal confirmation counts can represent different accumulated work.
+
+See [Confirmations](docs/encyclopedia/confirmations.md).
+
 ## Consensus
 
 The rules that determine whether blocks and transactions are valid.
 
-See also: [Consensus model](docs/architecture/consensus-model.md).
-
-## Confirmation
-
-A transaction has one confirmation when it is included in a block. Each later block added on top increases the confirmation count by one.
+Policy, exchange rules, wallet behavior, and service-specific settings are not automatically consensus rules.
 
 ## Daemon
 
-A background process that runs node software without a graphical interface.
+A background node process without a graphical interface.
 
 ## Difficulty
 
-A measure of how hard it is to find a valid proof-of-work block.
+A measure related to how hard it is to find a block hash meeting the proof-of-work target.
 
 ## Difficulty adjustment
 
-The process that changes mining difficulty based on how quickly blocks were found over a defined period.
+The process that changes the proof-of-work target over time.
 
-See also: [Difficulty adjustment](docs/encyclopedia/difficulty-adjustment.md).
+For current BitcoinII mainnet after height `57750`, the active mechanism is ShockWave per-block difficulty adjustment rather than the historical Bitcoin-style 2016-block retarget interval.
 
 ## DNS seed
 
-A DNS service that helps new nodes discover peers on the network.
+A DNS service used to help new nodes discover peers.
 
 ## Dry-run acceptance check
 
-A local check that reports whether a transaction would be accepted without submitting it for relay.
-
-See also: [Source atlas: mempool and transaction broadcast RPC](docs/developers/source-atlas/rpc-mempool.md).
+A local check, such as `testmempoolaccept`, that reports whether a transaction would be accepted without actually submitting it for relay.
 
 ## Explorer
 
-A website or service that displays blockchain data such as blocks, transactions, addresses, and network status.
+A public service displaying blockchain information such as blocks, transactions, addresses, mempool state, or mining/network data.
+
+Explorer observations are time-sensitive and do not automatically establish custody-grade reliability.
 
 ## Fee
 
-The difference between transaction input value and output value.
+The difference between transaction input value and output value. Fees can be collected by the miner of the block that includes the transaction.
 
-In Bitcoin-style systems, fees can be collected by the miner of the block that includes the transaction.
+## Finality
+
+The degree of confidence that a transaction will remain in the active chain.
+
+BitcoinII uses Proof of Work and does not gain absolute cryptographic finality merely by reaching a particular confirmation count. Exchange labels such as CoinEx's `irreversible_confirmations` are service policy terminology, not a protocol guarantee.
 
 ## Fork
 
-A split or divergence in software or blockchain history. The term can refer to source-code forks, chain forks, or rule changes.
+A divergence in software, consensus rules, or blockchain history. The exact meaning should be clear from context.
 
 ## Full node
 
-Software that independently downloads and validates blocks and transactions according to consensus rules.
+Software that independently validates blocks and transactions according to consensus rules.
 
 ## Genesis block
 
@@ -130,37 +141,31 @@ The first block in a blockchain.
 
 ## Hash
 
-A fixed-size output produced by a hashing algorithm. Hashes are used throughout blockchains for identifiers, proof-of-work, and data commitments.
+A fixed-size output produced by a hashing algorithm. Hashes are used for identifiers, proof-of-work, and data commitments.
 
 ## Locktime
 
-A transaction field that can delay when a transaction is final for inclusion.
+A transaction field that can delay when a transaction is eligible for inclusion.
 
 ## Mempool
 
-A node's local collection of valid unconfirmed transactions waiting to be mined into a block.
-
-See also: [Mempool flow](docs/architecture/mempool-flow.md).
+A node's local collection of valid unconfirmed transactions waiting to be mined or otherwise removed.
 
 ## Merkle root
 
-A hash commitment to all transactions in a block.
+A hash commitment to the transactions in a block.
 
 ## Node
 
-A computer or process participating in the peer-to-peer network.
+A process participating in the peer-to-peer network and, for a full node, validating blockchain data.
 
 ## Nonce
 
-A value miners change while searching for a block header hash that satisfies proof-of-work.
+A block-header field miners vary while searching for a proof-of-work hash below the target.
 
-## Orphan block
+## Orphan / stale block
 
-A block that was validly found but did not become part of the active best chain.
-
-## Package
-
-A group of related transactions evaluated together, often because one unconfirmed transaction depends on another.
+Informal terms for a validly found block that does not remain in the active best-work chain. Bitcoin Core terminology often distinguishes stale/disconnected blocks from true orphan data; documentation should use the most precise term available for the context.
 
 ## P2P
 
@@ -168,31 +173,25 @@ Peer-to-peer networking between nodes.
 
 ## Policy
 
-Local node rules for accepting, keeping, relaying, or mining unconfirmed transactions.
+Local rules for accepting, keeping, relaying, or mining unconfirmed transactions. Policy is not consensus.
 
-Policy is not the same as consensus.
+## Proof of Work
 
-## Proof-of-work
+A consensus mechanism in which miners search for a block-header hash below a target value.
 
-A consensus mechanism where miners search for a block hash below a target value.
-
-See also: [Proof-of-work](docs/encyclopedia/proof-of-work.md).
+See [Proof of work](docs/encyclopedia/proof-of-work.md).
 
 ## Pruning
 
-Deleting old block data from local disk while preserving enough validated state for node operation.
+Deleting old block data from local disk while retaining enough validated state for supported node operation.
 
 ## PSBT
 
-Partially Signed Bitcoin Transaction. A format used to coordinate transaction construction across tools or participants before a final transaction is produced.
-
-See also: [Source atlas: raw transaction RPC](docs/developers/source-atlas/rpc-rawtransaction.md).
+Partially Signed Bitcoin Transaction. A format for coordinating transaction construction and signing before a final transaction is produced.
 
 ## Raw transaction
 
-A transaction represented in serialized form, usually as hex, outside the wallet's normal high-level send flow.
-
-See also: [Source atlas: raw transaction RPC](docs/developers/source-atlas/rpc-rawtransaction.md).
+A serialized transaction representation, typically hex, outside a wallet's high-level send workflow.
 
 ## Reindex
 
@@ -200,58 +199,72 @@ A process where node software rebuilds its block index from stored block data.
 
 ## Release verification
 
-The process of checking that a downloaded release artifact matches what the project intended to publish.
+The process of establishing what a release artifact is, who or what authenticated it, and whether it corresponds to reviewed source.
 
-See also: [Release verification guide](docs/developers/release-verification.md).
+GitHub-hosted digest metadata, signed source commits, maintainer-signed checksum manifests, detached binary signatures, independent hashing, and reproducible builds are related but distinct forms of evidence.
 
 ## Reorganization
 
-A change in the active chain when a node switches to a competing chain with more accumulated work.
+A change in the active chain when a node switches from one valid branch to a competing branch with greater accumulated work.
 
-See also: [Life of a reorganization](docs/architecture/life-of-a-reorg.md).
+## Replay protection
+
+A mechanism intended to prevent a transaction signature valid for one chain/domain from being validly replayed on another.
+
+BitcoinII Core `v31.1.0` source activates BC2 replay protection on mainnet at height `57750` using fork/domain ID `0x01324342`. MoreBC2 has source-traced this path; external-signer compatibility remains a separate integration concern.
+
+See [Replay protection v31](docs/developers/source-atlas/replay-protection-v31.md).
 
 ## RPC
 
-Remote Procedure Call. A way for tools, wallets, exchanges, and services to communicate with node software.
+Remote Procedure Call. An interface used by tools, wallets, exchanges, and services to communicate with node software.
 
-See also: [RPC overview](docs/developers/rpc-overview.md).
+## sat2
+
+The BitcoinII base-unit display term used by current source for one hundred-millionth of a BC2 (`1 BC2 = 100,000,000` base units).
 
 ## Sequence lock
 
-A relative locktime rule that can prevent a transaction from being valid until certain height or time conditions are met.
+A relative locktime rule that can delay transaction validity until specified height or time conditions are met.
+
+## ShockWave
+
+BitcoinII's current per-block difficulty-adjustment mechanism, active on mainnet from height `57750` in `v31.1.0` source.
+
+ShockWave changes required work block by block based on recent chain data and includes bounded adjustment/stall-recovery behavior. Current documentation should not describe the old 2016-block Bitcoin retarget as BitcoinII's active post-activation mechanism.
+
+See [ShockWave v31](docs/developers/source-atlas/shockwave-v31.md).
 
 ## Ticker
 
-The short market symbol commonly used for a cryptocurrency, such as BC2 for BitcoinII.
+The short market symbol for a cryptocurrency. BitcoinII uses `BC2`.
 
 ## Undo data
 
-Data stored so a node can return the UTXO view to an earlier state during a reorganization.
+Data stored so a node can reverse UTXO-state changes when disconnecting blocks during a reorganization.
 
 ## Unbroadcast transaction
 
-A locally accepted transaction that the node tracks for relay until it is believed to have been announced successfully.
+A locally accepted transaction that a node still tracks for relay because successful announcement has not yet been established.
 
 ## UTXO
 
-Unspent transaction output. Bitcoin-style chains track spendable balances as outputs that have not yet been spent.
+Unspent transaction output. Bitcoin-style systems represent spendable value as outputs that have not yet been spent.
 
 ## Validation interface
 
-A notification layer used by node software to tell interested components about validation-related events.
-
-See also: [Source atlas: validation interface](docs/developers/source-atlas/validation-interface.md).
+A notification layer used by node software to notify interested components of validation-related events.
 
 ## Wallet
 
-Software that manages addresses and helps users receive or send funds. Some wallets also include full-node functionality.
+Software that manages addresses/keys and helps users receive or send funds. Some wallets also include or connect to full-node functionality.
 
 ## Watch-only
 
-A wallet or wallet entry that can observe funds or transactions without holding the key material needed to authorize movement.
+A wallet or wallet entry that can observe addresses or transactions without holding the private key material required to authorize spending.
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This glossary is a general reference. BitcoinII-specific details should link to source-backed documentation or be marked Needs Review.
+**Status:** Reviewed
+**Primary sources checked:** Current MoreBC2 network/consensus/Source Atlas pages, v31.1.0 verification records, and current exchange-confirmation evidence
+**Notes:** Audited 2026-09-12. General definitions remain explanatory; BitcoinII-specific implementation details should defer to the linked release-pinned technical pages.
