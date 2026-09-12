@@ -62,7 +62,7 @@ assert.match(
 
 assert.match(currentCombined, /Do not expose BitcoinII Core RPC (?:directly )?to the public internet/i);
 assert.match(guide, /`28332` was chosen only because local default port `8332` was already occupied/i);
-assert.match(guide, /test overrides, not BitcoinII defaults/i);
+assert.match(guide, /Current v31 JSON-RPC defaults are/i);
 assert.match(guide, /mainnet.*P2P port.*8338/is);
 assert.match(guide, /generated example.*8333.*stale/is);
 assert.match(record, /P2P listeners.*8338/is);
