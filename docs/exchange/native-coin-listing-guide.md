@@ -2,139 +2,152 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-07-02
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
 This page explains how exchange listing work differs for a native blockchain coin such as BitcoinII (BC2), compared with a token issued on another chain.
 
-BC2 should be described as a native blockchain coin unless an official source says otherwise. A native coin normally requires the exchange or service provider to integrate and maintain blockchain-specific infrastructure, not only add a contract address.
+BC2 is a native Proof-of-Work blockchain coin. A native listing normally requires the exchange or service provider to integrate and maintain chain-specific infrastructure, not only add a contract address.
 
 ## Native coin versus token
 
-A token listing often depends on an existing supported network such as Ethereum, BNB Smart Chain, Solana, or another token platform. The exchange may already operate the base-chain wallet infrastructure.
+A token listing can reuse an exchange's existing wallet infrastructure for Ethereum, BNB Smart Chain, Solana, or another supported base chain.
 
 A native coin listing can require the exchange to:
 
-- Review the source repository and release history.
-- Build or deploy the coin daemon.
-- Run one or more full nodes.
-- Configure P2P networking, wallet, and RPC access.
-- Test deposits and withdrawals.
-- Choose and monitor confirmation requirements.
-- Monitor chain health, forks, wallet status, and node synchronization.
-- Apply wallet updates after upstream releases.
+- review the source repository and release history;
+- build or deploy the coin daemon;
+- run one or more full nodes;
+- configure P2P networking, wallet, and RPC access;
+- test deposits and withdrawals;
+- choose and monitor confirmation requirements;
+- monitor chain health, reorganizations, wallet status, node synchronization, and cumulative chainwork;
+- apply wallet updates after upstream releases.
 
-This makes native coin listings more technical and usually slower than token listings.
+For BC2, v31-era integration also needs awareness of ShockWave per-block difficulty behavior and replay protection.
 
-## Practical implication for BC2
+## BC2 already has native-exchange integration precedent
 
-When researching exchanges, do not treat every token listing page as a good BC2 target.
+BC2 is not starting from zero. Current-dated MoreBC2 evidence records existing listings on CoinEx, NonKYC, NestEx, and Biconomy.
 
-A stronger BC2 target is an exchange that already supports:
+Operational evidence differs by venue:
 
-- Independent blockchain coins.
-- Proof-of-work coins.
-- Full-node wallet integrations.
-- Coin daemon maintenance.
-- Block explorers and deposit confirmation policies.
+- CoinEx publicly exposed `2` safe / `6` exchange-defined `irreversible` confirmation settings.
+- NonKYC publicly exposed `confirmsRequired = 50`.
+- NestEx's backend explicitly exposed `conf = 50`.
+- Biconomy's listing is confirmed, but its current BC2 confirmation count and withdrawal status were not publicly verified.
 
-A weaker BC2 target is an exchange focused mostly on smart-contract tokens, launchpads, presales, or newly issued contract assets.
+See [Exchange confirmation evidence — 2026-09-12](../verification/exchange-confirmation-evidence-2026-09-12.md).
+
+These listings are useful as evidence that multiple exchanges have integrated BC2 as a native asset. They are not endorsements or proof of exchange safety, liquidity, or long-term wallet reliability.
+
+## Applicant authority matters
+
+MoreBC2 is an independent documentation project. It should not claim to be the BitcoinII team or submit an application as an official representative without authorization.
+
+This is not merely a wording preference:
+
+- XeggeX explicitly requires the applicant to be part of the official asset team or to have specific permission from that team.
+- KuCoin's current process requests project-owner details, legal-entity material, security/audit documentation, and KYC information for core project members.
+
+The correct role for MoreBC2 is to make the technical packet strong enough that an authorized BitcoinII representative can submit it, or to provide the packet to an exchange when the exchange accepts independent integration information.
 
 ## Minimum exchange-facing package
 
-Before submitting to exchanges, prepare one canonical package with:
+Before outreach, prepare one canonical package containing:
 
-- Project name and ticker.
-- Official website.
-- Official source repository.
-- Release page.
-- Current release version and release-verification status.
-- License.
-- Block explorer.
-- Wallet/daemon setup notes.
-- RPC integration notes.
-- Deposit and withdrawal testing notes.
-- Confirmation policy or clearly labeled draft risk model.
-- Seed nodes and network parameters.
-- Supply and emission summary.
-- Branding assets.
-- Technical contact process.
-- Security contact or responsible-disclosure process.
-- Community links.
+- project name and source-confirmed ticker;
+- official website and canonical source repository;
+- current release version and release-verification status;
+- licensing status and any important source-license caveats;
+- current explorer and infrastructure links;
+- source-backed network parameters;
+- wallet/daemon and RPC integration notes;
+- deposit and withdrawal workflow notes;
+- replay-protection and upgrade notes;
+- confirmation policy clearly labeled as operator guidance rather than protocol finality;
+- supply and emission summary;
+- branding assets;
+- technical/security contact process;
+- current community links;
+- explicit applicant relationship to the BitcoinII project.
 
-Use [BitcoinII Exchange Integration Package](integration-package.md) as the BC2-specific anchor.
+Use [BitcoinII Exchange Integration Package](integration-package.md), [Exchange operator guide](operator-guide.md), and [Deposit monitoring](deposit-monitoring.md) as the BC2 technical anchors.
+
+## Current confirmation-policy position
+
+MoreBC2 currently uses **50 confirmations as a provisional normal-deposit baseline**, grounded in direct 2026-09-12 exchange observations.
+
+That number is not a consensus rule and should not be presented as mathematical finality. Because BC2 selects the best-work chain and ShockWave changes required work per block, an operator should also monitor accumulated chainwork and current chain health. Large or unusual deposits may justify longer or manual holds.
+
+See [Exchange confirmation evidence — 2026-09-12](../verification/exchange-confirmation-evidence-2026-09-12.md).
 
 ## Listing research rules
 
-When adding an exchange to this repository:
+When adding or refreshing an exchange target:
 
-- Prefer official listing pages, helpdesk pages, or exchange documentation.
-- Mark public fees as `Public` only when the exchange states them directly.
-- Mark fee claims from agencies, blogs, social posts, or community reports as `Unconfirmed third-party report`.
-- Do not imply an exchange supports BC2 just because it supports tokens.
-- Do not list an exchange as active or safe without current direct checking.
-- Record the date checked.
-- Record whether the page specifically mentions native coins, mainnets, wallets, block explorers, or integration.
+- prefer official listing pages, helpdesks, and exchange documentation;
+- mark public fees as confirmed only when the exchange itself publishes them;
+- do not infer native support from token support;
+- record whether the exchange asks for daemon, explorer, source, mainnet, wallet, or security information;
+- record project-team authorization, legal-entity, and KYC requirements;
+- distinguish an existing BC2 venue from a prospective target;
+- check current deposit/withdrawal status separately from listing status;
+- record the check date;
+- do not describe an exchange as safe or recommended solely because it lists BC2.
 
-## Good first target profile
+## Current target categories
 
-A good early BC2 listing target likely has:
+### Native-focused prospective targets
 
-- Public listing instructions.
-- Clear support for native assets or coins.
-- Published technical requirements.
-- Realistic listing fee or no public fee.
-- Low enough barrier for community coins.
-- Visible wallet-support process.
-- Existing market data reporting to aggregators.
+Current public evidence makes these the most relevant first-pass research candidates:
 
-## Higher-risk target profile
+- **StakeCube** — publishes a native asset/coin listing option and a $1,000 fee.
+- **XeggeX** — explicitly supports native assets, publishes a $5,000 integration fee and liquidity requirement, and requires official-team status or team permission.
+- **FreiExchange / FreiXLite** — current Add Coin form remains live; its older FAQ says it supports coins rather than common contract-token formats and states no listing fee.
+- **SafeTrade** — current status/listing material demonstrates ongoing native/PoW chain integrations, though a public listing-fee/application path was not established in this review.
+- **XT.COM** — current listing page advertises integration with 240+ mainnets and a technical/compliance review process.
 
-Be more cautious when an exchange:
+See [Exchange Listing Target Matrix](exchange-listing-targets.md) for current details and caveats.
 
-- Has no public listing path.
-- Requires payment before review without clear refund terms.
-- Uses only Telegram sales contacts.
-- Lists mostly contract tokens and does not mention native integrations.
-- Has poor public security or withdrawal reputation.
-- Has stale or broken support pages.
-- Has recent seizure, shutdown, insolvency, or withdrawal-freeze reports.
+### Higher-barrier prospective targets
 
-## Initial exchange categories
-
-### Native-coin friendly / likely first-pass targets
-
-These exchanges should be researched first because public information suggests they may be more compatible with native coin projects:
-
-- XeggeX.
-- FreiExchange / FreiXLite.
-- NonKYC.io.
-- CoinEx.
-- XT.COM.
-
-### Broader mid-tier targets
-
-These may be useful but likely require stronger documentation, compliance review, community evidence, or negotiation:
+These have public listing paths but may require substantially more compliance, project-owner, legal, security, or business material:
 
 - BitMart.
 - LBank.
-- Gate.
-- KuCoin.
 - Bitget.
+- Gate / Gate US, depending on jurisdiction.
+- KuCoin.
 
-## Sources checked
+KuCoin is especially high-barrier for an independent community submission because its current process asks for legal-entity documents, legal opinion, third-party code/security review material, and KYC for core project members.
 
-- XeggeX listing page, checked 2026-07-02: https://xeggex.com/listing
-- FreiExchange add-coin FAQ, checked 2026-07-02: https://helpdesk.freiexchange.com/kb/faq.php?id=3
-- CoinEx listing application page, checked 2026-07-02: https://www.coinex.com/en/apply/create
-- XT.COM listing page, checked 2026-07-02: https://www.xt.com/en/listing
-- LBank listing page, checked 2026-07-02: https://www.lbank.com/listing
-- BitMart listing helpdesk page, checked 2026-07-02: https://bitmart.zendesk.com/hc/en-us/articles/360001865554-Get-Listed-on-BitMart
-- Bitget listing application page, checked 2026-07-02: https://www.bitget.com/events/application-for-listing
+### Do not target
+
+- **TradeOgre** — reported dismantled and seized by Canadian law enforcement in September 2025.
+- **Exbitron** — its own site states that the exchange is shutting down permanently.
+
+Other older candidate names should not be promoted without a current primary-source service and listing check.
+
+## Sources checked on 2026-09-12
+
+- XeggeX listing page: https://xeggex.com/listing
+- StakeCube listing page: https://stakecube.net/listing
+- FreiExchange current Add Coin form: https://helpdesk.freiexchange.com/open.php
+- FreiExchange older listing FAQ: https://helpdesk.freiexchange.com/kb/faq.php?id=3
+- SafeTrade status page: https://safetrade.com/status
+- SafeTrade recent native/PoW listing example: https://support.safetrade.com/hc/en-us/articles/48550294413581-Parano1d-NOID-has-been-listed-on-SafeTrade
+- XT.COM listing page: https://www.xt.com/en/listing
+- BitMart listing helpdesk: https://bitmart.zendesk.com/hc/en-us/articles/360001865554-Get-Listed-on-BitMart
+- LBank listing page: https://www.lbank.com/listing
+- Bitget listing page: https://www.bitget.com/events/application-for-listing
+- Gate US listing page: https://www.gate.com/en-us/listing
+- KuCoin listing help: https://www.kucoin.com/support/26125293810713
+- Exbitron shutdown notice: https://app.exbitron.com/
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Official exchange listing/helpdesk pages listed above.
-**Notes:** This page is a framework for native coin listing research. It does not verify that any exchange will list BC2, that any private fee quote is current, or that BC2 currently satisfies each exchange's requirements.
+**Primary sources checked:** Current official exchange listing/helpdesk/status pages plus current MoreBC2 BC2 exchange evidence
+**Notes:** Refreshed on 2026-09-12. The guide now distinguishes existing BC2 venues from prospective targets, records applicant-authority constraints, and links the provisional 50-confirmation baseline. It does not claim that any prospective exchange will accept BC2 or that a listed exchange is safe, liquid, or available in every jurisdiction.
