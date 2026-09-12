@@ -1,33 +1,16 @@
 # Wallet transaction history RPC
 
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-06-30
+**Category:** Developer / Source Atlas  
+**Status:** Reviewed / Source-only partial  
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page covers a first-pass review of:
+This page maps BitcoinII Core `v31.1.0` wallet transaction-history and rescan behavior centered on `src/wallet/rpc/transactions.cpp`.
 
-- `src/wallet/rpc/transactions.cpp`
-
-This file contains wallet RPC behavior for listing received amounts, listing wallet transaction history, reading one in-wallet transaction, marking eligible wallet transactions with a local abandoned state, rescanning wallet history, and requesting active rescans to stop.
-
-This is not a tested command guide. Examples should not be marked verified until they are run against BitcoinII Core with a temporary wallet.
-
-## Why this file matters
-
-Wallet transaction-history RPCs are important for:
-
-- Wallet transaction lists.
-- Deposit-history views.
-- Service reconciliation.
-- Reorg-aware wallet monitoring.
-- Troubleshooting missing wallet transactions.
-- Rescan and recovery workflows.
+The September disposable-wallet tests did not create a durable wallet-history/reorg/rescan fixture. These methods therefore remain source-reviewed even though adjacent wallet creation, balance, PSBT, and local mempool behavior now have current runtime evidence.
 
 ## Commands reviewed
-
-Reviewed commands include:
 
 - `listreceivedbyaddress`
 - `listreceivedbylabel`
@@ -38,158 +21,131 @@ Reviewed commands include:
 - `rescanblockchain`
 - `abortrescan`
 
-## Shared transaction JSON behavior
+## Shared wallet transaction state
 
-Reviewed helper behavior includes:
+Source-reviewed transaction JSON/history helpers can expose information such as:
 
-- Adding confirmation count.
-- Marking generated coinbase transactions.
-- Adding confirmed block hash, height, index, and block time when confirmed.
-- Adding trusted status when not confirmed.
-- Adding transaction id and witness transaction id.
-- Listing wallet conflicts and mempool conflicts.
-- Adding received time and wallet map-value metadata.
-- Adding BIP125 replaceability state.
+- confirmation count;
+- coinbase/generated state;
+- confirmed block hash/height/index/time;
+- trusted state for unconfirmed wallet transactions;
+- txid/wtxid;
+- wallet and mempool conflicts;
+- receive time and wallet metadata;
+- replaceability state;
+- sent/received effects and fee information.
 
-## Transaction listing behavior
+These are wallet interpretations of transactions, not a substitute for an exchange's own customer ledger.
 
-Reviewed `ListTransactions` behavior includes:
+## `listtransactions`
 
-- Splitting wallet transaction effects into sent and received entries.
-- Reporting sent outputs with negative amounts and fee when available.
-- Reporting received outputs with positive amounts.
-- Including labels from the address book where available.
-- Including watch-only involvement when applicable.
-- Categorizing coinbase wallet outputs as orphan, immature, or generate depending on chain state and maturity.
-- Categorizing ordinary received outputs as receive.
-- Supporting incoming label filtering.
-- Optionally including change outputs in selected flows.
+Reviewed behavior includes pagination/count/skip, optional incoming-label filtering, watch-only handling, wallet ordering, sent/received entries, and coinbase categories such as orphan/immature/generate according to wallet/chain state.
 
-## Received-by-address and received-by-label
+MoreBC2 has not yet published a current v31 runtime fixture showing these categories.
 
-Reviewed commands include:
+## `listsinceblock`
 
-- `listreceivedbyaddress`
-- `listreceivedbylabel`
+This method is especially relevant to service polling because source review includes:
 
-Observed behavior includes:
+- common-ancestor handling when the supplied block is no longer active;
+- target-confirmation context for the returned `lastblock`;
+- optional removed-transaction handling for reorg cases;
+- optional watch-only/change/label behavior;
+- pruning limitations for some removed-transaction reconstruction.
 
-- Minimum confirmation filtering.
-- Optional inclusion of empty addresses or labels.
-- Optional watch-only inclusion.
-- Optional immature coinbase inclusion.
-- Optional address filtering for the address-based command.
-- Excluding change addresses from received-by-address reporting.
+The current exchange/deposit guidance should not treat `listsinceblock` as a production-recommended polling strategy until it is tested against an intentional reorg/pruned-node fixture.
 
-## listtransactions
+## `gettransaction`
 
-`listtransactions` returns recent wallet transaction entries.
+Source review shows detailed in-wallet transaction reporting, including wallet effects, common transaction metadata, raw transaction data, and last-processed block context where applicable.
 
-Reviewed behavior includes:
+It is wallet-scoped; a transaction merely existing on chain does not mean `gettransaction` will treat it as a wallet transaction.
 
-- Optional label filter for incoming transactions.
-- `*` to disable label filtering.
-- Count and skip arguments.
-- Optional watch-only inclusion.
-- Negative count and skip rejection.
-- Ordering from the wallet transaction order index.
-- Returning oldest-to-newest within the requested page after walking recent transactions.
+## Rescan behavior
 
-## listsinceblock
+`rescanblockchain` / `abortrescan` operate on wallet history discovery using local chain data.
 
-`listsinceblock` returns wallet transactions after a given block reference, or all wallet transactions if no block is provided.
+Source-backed cautions include:
 
-Reviewed behavior includes:
+- start/stop height validation;
+- one active rescan reservation per wallet;
+- wallet access-state requirements where applicable;
+- failures when required historical blocks are unavailable;
+- pruned-node limitations;
+- background-chainstate/assumeutxo considerations;
+- potentially long execution for old timestamps or large ranges.
 
-- Using the common ancestor when the provided block is no longer in the active chain.
-- Optional target-confirmations value for the `lastblock` field.
-- Optional watch-only inclusion.
-- Optional removed-transaction reporting for reorg-related cases.
-- Optional change-output inclusion.
-- Optional label filtering.
-- Returning a `lastblock` hash suitable for later polling.
+The September v31 tests deliberately did **not** rescan an existing or disposable mainnet wallet.
 
-The source warns removed-transaction reporting is not guaranteed to work on pruned nodes.
+## `abandontransaction`
 
-## gettransaction
+This is a wallet-local state-changing operation for eligible transactions and descendants when they are not confirmed/in the mempool according to the reviewed path.
 
-`gettransaction` returns detailed information for a single in-wallet transaction.
+It should remain advanced documentation until tested with a fully disposable transaction fixture.
 
-Reviewed behavior includes:
+## Current runtime context
 
-- Requiring the txid to belong to the wallet.
-- Optional watch-only inclusion.
-- Optional verbose decoded transaction output.
-- Reporting net amount and fee when applicable.
-- Adding common wallet transaction metadata.
-- Adding detailed sent/received entries.
-- Adding raw transaction hex.
-- Appending last processed block information.
+Current v31 wallet evidence establishes:
 
-## Local transaction state and rescan behavior
+- fresh descriptor-wallet creation and explicit reload;
+- disposable address generation;
+- generated regtest funds;
+- `getbalances`;
+- PSBT funding/signing/finalization;
+- local mempool acceptance/submission.
 
-Reviewed commands include:
+It does **not** establish history pagination, reorg removed-entry semantics, rescan behavior, abandon behavior, or pruned-wallet recovery.
 
-- `abandontransaction`
-- `rescanblockchain`
-- `abortrescan`
+## Reorg and confirmation boundary
 
-`abandontransaction` marks eligible in-wallet transactions with abandoned state, including in-wallet descendants, when they are not in a block and not in the mempool.
+Wallet confirmation/history state can change after a reorganization. Service operators should combine wallet transaction state with an operator-controlled Core view of the active chain, accumulated chain work, and their own deposit policy.
 
-`rescanblockchain` scans local chain data for wallet-related transactions between requested heights. Reviewed behavior includes start/stop height validation, wallet unlock requirement, one-rescan-at-a-time reservation, unavailable-block checks, pruned-data errors, assumeutxo background-sync handling, and local-data fallback errors.
+No finite confirmation count is protocol finality, and a wallet's displayed confirmation count is not itself an exchange risk model.
 
-`abortrescan` requests cancellation of an active wallet rescan and returns whether the request was made.
+See [Life of a reorganization](../../architecture/life-of-a-reorg.md) and [Deposit monitoring](../../exchange/deposit-monitoring.md).
 
-## Documentation implications
+## Replay protection
 
-MoreBC2 should separate transaction-history documentation into:
+History/listing RPCs do not themselves create new signatures. If a workflow proceeds from a listed transaction/UTXO into spending, the signing path must use BC2's active replay-protection domain from mainnet height `57750`.
 
-- Basic wallet history commands.
-- Service polling commands.
-- Reorg-aware monitoring.
-- Rescan and recovery commands.
-- Advanced transaction-state commands.
+## Documentation rules
 
-Service docs should be especially careful with `listsinceblock` because `lastblock`, target confirmations, reorg handling, and pruned-node behavior matter for reliable deposit monitoring.
+- Keep wallet history distinct from customer accounting ledgers.
+- Label pruning/index/rescan prerequisites explicitly.
+- Do not recommend `listsinceblock` or rescan workflows as production patterns until the intended failure/reorg cases are tested.
+- Never use an existing user wallet for abandon/rescan experiments.
+- Use synthetic/regtest or otherwise disposable fixtures for reorg-history testing.
 
-## Relationship to other pages
+## Related pages
 
-Related pages:
-
-- [Source atlas: wallet RPC](wallet-rpc.md)
-- [Source atlas: wallet coins and balances RPC](wallet-coins-rpc.md)
+- [Wallet RPC](wallet-rpc.md)
+- [Wallet coins and balances](wallet-coins-rpc.md)
+- [Wallet backup/import RPC](wallet-backup-import-rpc.md)
 - [Wallet guide](../../wallets/wallet-guide.md)
-- [RPC overview](../rpc-overview.md)
 - [Deposit monitoring](../../exchange/deposit-monitoring.md)
 - [Life of a reorganization](../../architecture/life-of-a-reorg.md)
 
-## BitcoinII-specific notes
+## Open work
 
-This first-pass review saw BitcoinII naming and amount strings in wallet RPC help text.
+- Create a disposable v31 history fixture with confirmed and unconfirmed transactions.
+- Exercise `listtransactions` and `gettransaction` against that fixture.
+- Build an isolated reorg fixture before qualifying `listsinceblock` removed-entry semantics.
+- Test `rescanblockchain` on disposable descriptor-wallet state with explicit pruning/index conditions.
+- Keep `abandontransaction` advanced-only until its state transitions are directly observed.
 
-No upstream comparison has been completed, so this page does not claim whether transaction-history RPC behavior differs from upstream Bitcoin Core beyond naming and visible strings.
+## Primary sources
 
-## Open questions
+Pinned/current review scope includes:
 
-- Which transaction-history examples can be tested safely on a temporary wallet?
-- Should `listsinceblock` become the preferred service polling example after testing?
-- How should pruned-node limitations be documented for wallet rescans and service monitoring?
-- How should reorg-related removed transactions be explained for exchange/service operators?
-- Which GUI transaction-history paths map to these RPC helpers?
-- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for this file before upgrading status.
+- `v31.1.0/src/wallet/rpc/transactions.cpp`
+- `v31.1.0/src/wallet/wallet.*`
+- `v31.1.0/src/wallet/receive.*`
+- related wallet coins/backup source.
 
-## Sources
-
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
-
-- Current observed `main` `src/wallet/rpc/transactions.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/transactions.cpp
-- Current observed `main` `src/wallet/wallet.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/wallet.h
-- Current observed `main` `src/wallet/receive.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/receive.h
-- Current observed `main` `src/wallet/rpc/coins.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/coins.cpp
-- Current observed `main` `src/wallet/rpc/backup.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/backup.cpp
+Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This is a first-pass wallet transaction-history/rescan RPC review. Commands have not been run. Public examples, service recommendations, GUI mapping, upstream comparison, and release-versus-main comparison remain open.
+**Status:** Reviewed / Source-only partial  
+**Primary evidence:** BitcoinII Core `v31.1.0` wallet transaction/history source plus adjacent September wallet runtime records  
+**Notes:** History, reorg, rescan, abandon, and pruned-wallet behavior remain untested. The page now explicitly separates those gaps from the wallet/PSBT behavior MoreBC2 has actually exercised.
