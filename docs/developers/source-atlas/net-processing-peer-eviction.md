@@ -1,189 +1,79 @@
 # Net processing peer eviction and stale-tip checks
 
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-07-02
+**Category:** Developer / Source Atlas  
+**Status:** Reviewed / Source-confirmed structural  
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page covers a first-pass review of peer discouragement, outbound peer eviction, stale-tip checks, and ping timeout behavior in:
+This page maps BitcoinII Core `v31.1.0` peer discouragement, stale-tip checks, extra-outbound eviction, chain-sync usefulness checks, and ping timeout behavior in `src/net_processing.*`.
 
-- `src/net_processing.cpp`
-- `src/net_processing.h`
+These mechanisms manage local peer quality/connection slots. They do not define BitcoinII consensus and should not be simplified into “bad peers are always banned.”
 
-This is a focused slice of `net_processing`, not a complete review of network connection management, ban-list policy, address manager behavior, transaction relay, or block relay.
+## Discouragement / disconnect
 
-## Why this area matters
+Reviewed behavior distinguishes ordinary peers from selected manual, local, or `NoBan`-permission peers. Peers marked for misbehavior may be disconnected/discouraged, but exceptions and connection type matter.
 
-Peer eviction and stale-tip checks are part of how a node tries to stay connected to useful peers without letting bad or unhelpful peers consume connection slots forever.
+Discouragement is separate from the explicit BanMan ban list. See [BanMan](banman.md).
 
-For MoreBC2, this matters because operator docs should avoid oversimplified claims like “bad peers are banned” or “the node will always find a better peer.” The source shows multiple exceptions, permissions, timers, and connection-type rules.
+## Chain-sync usefulness
 
-## Scheduled task relationship observed
+Outbound/block-relay peers can be monitored for whether they demonstrate chain work comparable to the active tip. Source-reviewed timeout logic can give a lagging peer an additional `getheaders` opportunity before disconnecting it.
 
-`PeerManagerImpl::StartScheduledTasks` schedules `CheckForStaleTipAndEvictPeers` at the extra-peer check interval.
+This is chainwork-based peer usefulness logic, not a guarantee that the node always has the globally best peer set.
 
-Observed behavior includes:
+## Extra outbound eviction
 
-- stale-tip checking and peer eviction are combined into a scheduled function
-- the scheduled cadence uses the faster extra-peer check interval
-- the code asserts that the extra-peer check interval is less than the stale-tip interval
-- initial broadcast reattempt is scheduled separately
+Reviewed logic can remove extra block-relay/full-relay peers according to connection type, age, recent useful block announcements, protection status, network diversity, and blocks-in-flight state.
 
-## Discouragement and disconnect behavior observed
+Peer counts are therefore expected to change over time even during healthy operation.
 
-`MaybeDiscourageAndDisconnect` handles peers marked for discouragement.
+## Stale-tip behavior
 
-Observed behavior includes:
+Scheduled stale-tip checks can permit an extra outbound attempt when the local tip appears stale and ordinary network/import/addrman conditions allow it. The extra-peer attempt can later be cleared when conditions change.
 
-- if the peer is not marked for discouragement, nothing happens
-- peers with `NoBan` permission are not disconnected or discouraged for bad behavior by this path
-- manually connected peers are not disconnected or discouraged for bad behavior by this path
-- local peers can be disconnected without discouraging the whole local address
-- ordinary peers can be disconnected and the shared address can be discouraged through banman when available
-- connection manager can disconnect nodes by address in the ordinary case
+## Ping / timeout handling
 
-This page uses “discourage” because that is the source-level action name. It should not be presented as a permanent ban without checking banman behavior separately.
+Reviewed peer-health logic sends pings for keepalive/latency purposes and can disconnect peers when an outstanding ping exceeds timeout conditions.
 
-## Message-processing relationship observed
+Matching `pong` messages update ping state/latency; malformed/unsolicited/mismatched responses are handled separately.
 
-`ProcessMessages` sits around individual message handling.
+## Runtime boundary
 
-Observed behavior includes:
+The September `v31.1.0` mainnet test observed a healthy bounded session with multiple outbound peers, current header acquisition, and successful restart. It did not intentionally create stale-tip, ping-timeout, misbehavior, or extra-peer-eviction conditions.
 
-- outbound peers must have had the local version message sent before incoming messages are processed
-- pending getdata requests are processed before polling the next message
-- orphan transaction work can be processed before new message polling
-- processing stops early if the peer is already marked for disconnect
-- if the send buffer is paused, the node does not poll another message from that peer
-- message capture can record incoming messages when enabled
-- exceptions during message processing are caught and logged
-- extra work can be scheduled when getdata work remains or transaction download manager work remains
+These peer-health branches remain source-confirmed rather than directly runtime-qualified.
 
-This page does not fully document the message scheduler or lower-level networking loop.
+## BitcoinII-specific boundary
 
-## Chain-sync eviction checks observed
+The peer-health machinery is structurally Bitcoin-style in the current review. BitcoinII-specific current chain usefulness ultimately depends on BC2's valid accumulated work, including ShockWave-determined block targets.
 
-`ConsiderEviction` checks outbound or block-relay peers that are not protected from disconnection.
-
-Observed behavior includes:
-
-- outbound peers that have started sync can be watched for whether they announce a chain with enough work
-- if the peer's best-known block has at least as much work as the active tip, an existing timeout can be cleared
-- if the peer appears behind, a timeout can be set based on the current tip and `CHAIN_SYNC_TIMEOUT`
-- after a timeout, the node can send one `getheaders` request to give the peer a chance to show progress
-- after the extra response window, the peer can be disconnected if it still has not shown sufficient work
-
-This is chain-work based peer usefulness checking, not a user-facing guarantee that the node always picks the best possible peer.
-
-## Extra outbound peer eviction observed
-
-`EvictExtraOutboundPeers` handles extra block-relay-only and extra outbound full-relay peers.
-
-Observed block-relay-only behavior includes:
-
-- if extra block-relay-only peers exist, the node chooses among the youngest peers
-- recent block contribution can affect which peer is selected for disconnection
-- peers can be kept if they have not been connected long enough or have blocks in flight
-
-Observed full-outbound behavior includes:
-
-- if extra outbound full-relay peers exist, one can be chosen for disconnection
-- candidates are outbound full-relay peers not already marked for disconnect
-- protected peers are skipped
-- the code protects the only connection on a network when no other manual/full outbound connection exists on that network
-- among candidates, the peer least recently announcing a new block can be selected, with a tie-break using newer node id
-- selected peers can be kept if they have not been connected long enough or have blocks in flight
-- after disconnecting an extra peer, the node can stop trying new outbound peers until stale-tip logic asks again
-
-## Stale-tip check observed
-
-`CheckForStaleTipAndEvictPeers` performs the scheduled stale-tip and eviction pass.
-
-Observed behavior includes:
-
-- it first calls `EvictExtraOutboundPeers`
-- at stale-tip check time, the node can allow trying an extra outbound peer when:
-  - blocks are not being loaded/imported
-  - the network is active
-  - addrman outgoing connections are enabled
-  - the tip may be stale
-- if conditions no longer apply while an extra outbound peer is being tried, the extra-peer attempt flag can be cleared
-- once direct fetching is possible and initial sync is not marked finished, extra block-relay peers can be started and initial sync can be marked finished
-
-## Ping timeout and keepalive behavior observed
-
-`MaybeSendPing` handles ping sending and timeout checks.
-
-Observed behavior includes:
-
-- if inactivity checks are active and an outstanding ping exceeds the timeout interval, the peer can be disconnected
-- user-queued ping requests can trigger a ping
-- pings can also be sent automatically as latency probes and keepalives
-- ping nonces are generated nonzero for peers supporting nonce-bearing ping messages
-- older peers can receive ping without a nonce
-
-The message receive path also handles `ping` and `pong`:
-
-- nonce-bearing `ping` messages can receive a matching `pong`
-- matching `pong` responses can clear outstanding ping state and record latency
-- nonce mismatches, unsolicited pongs, zero nonce, and short payloads are logged as problems
-
-## Boundaries
-
-This page does not claim:
-
-- that all bad behavior leads to banning
-- that manual or NoBan peers are treated the same as ordinary peers
-- that peer eviction has been tested live
-- that banman behavior is fully documented here
-- that lower-level `net.cpp` connection management is fully reviewed
-- that BitcoinII differs from upstream Bitcoin Core here
-- that release behavior exactly matches current `main`
-
-This is source-observed documentation for the reviewed peer-eviction and stale-tip slice only.
-
-## Documentation implications
-
-MoreBC2 can use this page to support cautious explanations of:
-
-- why peer connection counts can change over time
-- why stale-tip detection can trigger extra outbound attempts
-- why bad-peer handling has exceptions
-- why block-relay-only peers can be temporary
-- why peer health is separate from wallet balance, confirmations, or exchange deposit status
-- why user-facing node docs should avoid strong guarantees about peer selection
+A peer advertising/serving an invalid post-v31 branch does not become useful merely because its protocol messages are well formed.
 
 ## Related pages
 
-- [Net processing handshake](net-processing-handshake.md)
-- [Net processing block and header relay](net-processing-block-relay.md)
-- [Net processing transaction relay](net-processing-transaction-relay.md)
+- [BanMan](banman.md)
 - [Network RPC](rpc-network.md)
-- [Network specifications](../../documentation/network-specifications.md)
-- [Node guide](../../nodes/node-guide.md)
+- [Net connection management](net-connection-management.md)
+- [Block/header relay](net-processing-block-relay.md)
+- [Peer communication model](../../architecture/peer-communication-model.md)
 
-## Open questions
+## Open work
 
-- Review banman behavior separately.
-- Review lower-level connection management in `src/net.cpp`.
-- Review send-loop behavior related to pings, inventory, and queued messages.
-- Compare this slice between the `v31.1.0` baseline and subsequent `main` changes.
-- Confirm which peer-health details belong in user-facing node docs.
-- Confirm whether any BitcoinII-specific behavior exists here beyond naming and visible comments.
+- Dedicated stale-tip/timeout/eviction runtime fixtures only if operator guidance needs them.
+- Keep manual/permissioned-peer behavior distinct from ordinary peer policy.
+- Map test coverage after a clean v31 source build.
 
-## Sources
+## Primary sources
 
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+- `v31.1.0/src/net_processing.cpp`
+- `v31.1.0/src/net_processing.h`
+- current BanMan/connection-management paths
 
-- Current observed `main` `src/net_processing.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/net_processing.cpp
-- Current observed `main` `src/net_processing.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/net_processing.h
-- [Net processing handshake](net-processing-handshake.md)
-- [Net processing block and header relay](net-processing-block-relay.md)
-- [Net processing transaction relay](net-processing-transaction-relay.md)
+Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This is a first-pass focused review of peer discouragement, outbound peer eviction, stale-tip checks, and ping timeout behavior in `net_processing`. Runtime tests, release comparison, upstream comparison, banman review, lower-level net connection review, and full send-loop behavior remain open.
+**Status:** Reviewed / Source-confirmed structural  
+**Primary evidence:** BitcoinII Core `v31.1.0` peer-health source plus bounded ordinary outbound runtime context  
+**Notes:** Peer-health/eviction structure is current; intentional stale-tip, timeout, misbehavior and eviction scenarios remain untested.
