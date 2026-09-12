@@ -1,28 +1,14 @@
 # Block validation flow
 
 **Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-09-02
+**Status:** Reviewed / Partial
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page maps the broad BitcoinII Core block-validation flow around header acceptance, block checks, UTXO connection/disconnection, best-chain activation, and reorganization handling.
+This page maps the BitcoinII Core block-validation flow around header acceptance, block checks, UTXO connection/disconnection, best-chain activation, and reorganization handling.
 
-The structural flow remains useful, but the earlier detailed review predates BitcoinII Core `v31.1.0`. Current release notes identify new or changed consensus/validation behavior, so this page now distinguishes the durable architecture from v31-specific paths that still need dedicated review.
-
-## Current v31.1.0 boundary
-
-BitcoinII Core `v31.1.0` adds or identifies:
-
-- ShockWave per-block difficulty adjustment;
-- consensus-level data restrictions;
-- BC2 replay protection;
-- fork-aware header synchronization;
-- associated validation, mempool, wallet, RPC, mining, and PSBT updates.
-
-Mainnet activates ShockWave, data restrictions, and replay protection at height `57750`.
-
-The broad validation pipeline below still shows where header/block/chainstate work occurs, but MoreBC2 has **not yet remapped every v31-specific check into this flow**.
+The current release baseline is BitcoinII Core `v31.1.0`. The broad Bitcoin-style validation pipeline remains useful, but current BitcoinII validation must include ShockWave difficulty, consensus data restrictions, replay-protection signature domains, and fork-aware header synchronization.
 
 ## Simplified validation flow
 
@@ -33,13 +19,10 @@ ProcessNewBlock
        -> AcceptBlockHeader
             -> CheckBlockHeader
             -> ContextualCheckBlockHeader
-                 -> next-work / difficulty check
+                 -> current next-work / difficulty check
                  -> timestamp / contextual checks
-                 -> v31 header-path behavior where applicable
        -> CheckBlock
        -> ContextualCheckBlock
-            -> context-dependent transaction/block rules
-            -> v31 data/replay-related checks where implemented
        -> SaveBlockToDisk
        -> ReceivedBlockTransactions
   -> NotifyHeaderTip
@@ -49,111 +32,121 @@ ProcessNewBlock
             -> DisconnectTip, if needed
             -> ConnectTip
                  -> ConnectBlock
+                      -> input / script / consensus checks
+                      -> v31 replay-domain checks where signatures are verified
+                      -> v31 consensus data restrictions after activation
+                      -> UTXO updates and undo-data handling
 ```
 
-## Difficulty check
+## Difficulty and ShockWave
 
-`ContextualCheckBlockHeader` checks the candidate header's difficulty bits against `GetNextWorkRequired`.
+`ContextualCheckBlockHeader` checks the candidate header's `nBits` against `GetNextWorkRequired`.
 
-For historical pre-57750 BitcoinII mainnet, that path used the inherited Bitcoin-style retarget behavior.
+For historical pre-`57750` BitcoinII mainnet, that path used the inherited Bitcoin-style retarget behavior. Beginning at mainnet height `57750`, the production next-work calculation uses **ShockWave**.
 
-Beginning at mainnet height `57750`, `GetNextWorkRequired` uses **ShockWave** for the next-block work requirement. Current documentation should therefore not interpret this validation step as a 2016-block-only difficulty check.
+Current source review establishes that ShockWave is per-block and candidate-time-aware. Mining/template code and header validation must derive work from the actual candidate context; current BitcoinII should not be described as reusing a fixed target until a 2016-block boundary.
 
-See:
+See [ShockWave v31](../developers/source-atlas/shockwave-v31.md).
 
-- [Difficulty adjustment](../encyclopedia/difficulty-adjustment.md)
-- [Source atlas: pow.cpp](../developers/source-atlas/pow-cpp.md)
+## Header acceptance and fork-aware synchronization
 
-## Header acceptance and synchronization
-
-The durable reviewed architecture includes:
+The durable header-validation architecture includes:
 
 - duplicate-header checks;
 - previous-header availability;
 - invalid-parent rejection;
 - proof-of-work checking;
-- contextual header checks;
-- adding accepted headers to the block index.
+- contextual difficulty/timestamp checks;
+- accepted-header insertion into the block index.
 
-`v31.1.0` additionally identifies **fork-aware header synchronization**. MoreBC2 still needs a dedicated v31 source/runtime review showing exactly how the new synchronization behavior interacts with competing branches and recovery scenarios.
+The dedicated v31 header-sync review establishes that ShockWave-era competing branches need their own recent target and median-time-past history when validating candidate difficulty. The synchronization path therefore maintains branch-specific synthetic history and calls production `GetNextWorkRequired()` against that branch context.
 
-## Block body checks
+Header synchronization does **not** choose the active chain. Normal validation and accumulated-work chain selection still perform that role.
 
-The existing review covers structural checks such as:
+See [Fork-aware header synchronization v31](../developers/source-atlas/headers-sync-v31.md).
 
-- merkle root;
+## Block body and consensus data restrictions
+
+`CheckBlock` and `ContextualCheckBlock` cover structural and contextual checks such as:
+
+- merkle-root consistency;
 - size/weight limits;
 - coinbase placement;
 - transaction structure;
-- contextual finality and witness-related checks.
+- finality and witness-related context.
 
-`v31.1.0` activates BitcoinII-specific consensus data restrictions at height `57750`. Their exact validation location and boundary behavior should be documented in a dedicated current-release source slice rather than inferred from this older broad flow map.
+From mainnet height `57750`, BitcoinII adds consensus-level data restrictions. The current v31 source review traces those rules through `src/consensus/bitcoinII_data.h` and validation paths.
 
-## Transaction and replay-protection checks
+The reviewed restrictions cover OP_RETURN count/size, actual `OP_13` opcodes in OP_RETURN scripts, bare multisig outputs, Taproot annex data, oversized script-path tapscripts, and semantic Ordinals inscription envelopes.
 
-Existing connection/transaction reviews cover UTXO input checks, sequence locks, script verification, fees, operation limits, and coins-view updates.
+These are consensus rules after activation, not merely relay-policy preferences. They should not be generalized into a claim that every conceivable data-embedding method is impossible.
 
-BC2 replay protection is now a current consensus consideration from height `57750`, with fork ID `0x01324342`.
+See [Consensus data restrictions v31](../developers/source-atlas/data-restrictions-v31.md).
 
-MoreBC2 has confirmed those activation anchors, but this page does not yet claim a complete replay-protection transaction-path map.
+## Replay-protection signature validation
+
+Mainnet replay protection activates at height `57750` with fork/domain id `0x01324342`.
+
+The fork id is a signature-hash domain, not a transaction field or address-format change. Current source review establishes that validation supplies the height-appropriate domain to signature checking and includes it in the script-validation cache key so a result from one domain cannot be reused under another.
+
+Block connection selects the domain using the block's own height. Mempool admission separately uses the domain for the **next block height**, which protects the activation boundary before a transaction is mined.
+
+See [Replay protection v31](../developers/source-atlas/replay-protection-v31.md).
 
 ## UTXO connection and disconnection
 
-The durable reviewed architecture includes:
+The reviewed architecture includes:
 
 - `ConnectBlock` applying validated block effects to the coins view;
-- undo data for non-coinbase inputs;
-- fee/subsidy checks;
+- input and fee checks;
+- script verification under the relevant consensus context;
+- undo data for spent non-coinbase inputs;
+- coins-view updates;
+- subsidy/coinbase-value checks;
 - `DisconnectBlock` reversing UTXO effects;
-- `DisconnectTip` moving the active chain backward;
-- reorg handling and reconsideration of eligible disconnected transactions.
+- `DisconnectTip` moving the active chain backward during a reorganization.
 
-These concepts remain part of current BitcoinII architecture, while v31-specific validation changes still need release-targeted spot checks.
+These mechanics remain central under v31. BitcoinII-specific activation rules add validation context; they do not replace the UTXO model.
 
-## Best-chain activation and reorganizations
+## Best-chain activation
 
-The existing flow covers:
+The node selects a usable chain with the greatest accumulated work, not simply the greatest height or the branch with the easiest recent blocks.
 
-- selecting a usable most-work candidate;
-- finding the fork point;
-- disconnecting the old branch;
-- connecting the replacement branch;
-- updating the mempool after reorgs;
+The reviewed path includes:
+
+- selecting a candidate through `FindMostWorkChain`;
+- locating the fork point;
+- disconnecting the old branch when required;
+- connecting replacement blocks;
+- repairing mempool state after reorganization;
 - updating the active tip.
 
-ShockWave changes how required work is calculated after height `57750`; it does not eliminate normal accumulated-work chain selection or the possibility of reorganizations.
+ShockWave changes how each post-activation block's required work is calculated. It does not replace accumulated-work chain selection and does not create deterministic finality.
 
-## Historical review note
+## Runtime boundary
 
-Earlier versions of this page contained detailed function-by-function notes based on a pre-v31 source snapshot. Those notes remain useful background in repository history, but the current-facing page now avoids presenting that older snapshot as a complete `v31.1.0` validation specification.
+The September 11 Windows `v31.1.0` mainnet test directly exercised startup, peer/header acquisition, partial block validation, RPC, restart, and shutdown. It did **not** complete initial block download or independently exercise a block at the `57750` activation boundary.
 
-## Current review priorities
+The September 11 isolated regtest PSBT test exercised ordinary transaction signing, `testmempoolaccept`, and local mempool submission, but regtest leaves the replay-protection domain disabled as shipped.
 
-1. Map the replay-protection transaction/validation path.
-2. Map the consensus data-restriction path.
-3. Map fork-aware header synchronization.
-4. Re-check validation/mempool caller paths changed in `v31.1.0`.
-5. Add safe current-release test records where practical.
+Accordingly, current v31 activation behavior on this page remains principally release-pinned source evidence rather than activation-boundary runtime proof.
 
 ## Related pages
 
-- [Consensus overview](../documentation/consensus-overview.md)
 - [Consensus model](consensus-model.md)
-- [Difficulty adjustment](../encyclopedia/difficulty-adjustment.md)
-- [Source atlas: pow.cpp](../developers/source-atlas/pow-cpp.md)
+- [Life of a block](life-of-a-block.md)
+- [Life of a reorganization](life-of-a-reorg.md)
+- [Mempool flow](mempool-flow.md)
+- [ShockWave v31](../developers/source-atlas/shockwave-v31.md)
+- [Replay protection v31](../developers/source-atlas/replay-protection-v31.md)
+- [Data restrictions v31](../developers/source-atlas/data-restrictions-v31.md)
+- [Header sync v31](../developers/source-atlas/headers-sync-v31.md)
 - [Source atlas: validation.cpp](../developers/source-atlas/validation-cpp.md)
-- [Reorganizations](../encyclopedia/reorganizations.md)
-- [v31 currentness audit](../verification/v31-currentness-audit-2026-09-02.md)
-
-## Sources
-
-- BitcoinII Core `v31.1.0` release: https://github.com/Bitcoin-II/BitcoinII-Core/releases/tag/v31.1.0
-- `v31.1.0/src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/src/pow.cpp
-- `v31.1.0/src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/src/kernel/chainparams.cpp
-- `src/validation.cpp` current-release review remains a follow-up item
+- [Windows v31.1.0 node and RPC validation](../verification/windows-v31-node-rpc-validation-2026-09-11.md)
+- [Windows v31.1.0 PSBT and replay validation](../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Current v31 release/activation/difficulty anchors plus existing MoreBC2 validation architecture review
-**Notes:** This page is a current architecture boundary, not a complete v31-specific function-by-function validation audit.
+**Status:** Reviewed / Partial  
+**Primary sources checked:** BitcoinII Core `v31.1.0` validation, ShockWave, replay-protection, data-restriction, and header-sync source reviews plus bounded September runtime evidence  
+**Notes:** The current architecture path and principal v31 consensus additions are mapped. Full activation-boundary runtime vectors, full-sync runtime validation, deep invalid-block test coverage, and exhaustive script-flag classification remain open.
