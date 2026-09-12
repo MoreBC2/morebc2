@@ -1,351 +1,147 @@
 # RPC overview
 
 **Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-07-13
+**Status:** Reviewed / Partial
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-BitcoinII Core includes JSON-RPC functionality for command-line tools, wallets, exchanges, explorers, and other services.
+BitcoinII Core exposes Bitcoin-style JSON-RPC for node, chain, network, mempool, wallet, mining, raw-transaction, and PSBT workflows.
 
-This page is a safe starting point only. Nine read-only RPC commands have a dated local Windows/mainnet test record, but other RPC command examples should not be marked tested or Verified until they are tested against a running BitcoinII Core node in a documented environment.
+MoreBC2 now has direct BitcoinII Core `v31.1.0` runtime evidence for a useful read-only node/RPC subset and an isolated disposable-wallet PSBT lifecycle. That supersedes the older posture that only the July `v29.1.0` read-only smoke test had been exercised.
 
-For test tracking, see [Command testing status](../verification/command-testing.md), the [Command smoke-test plan](../verification/command-smoke-test-plan.md), [Local BitcoinII node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md), and [Read-only RPC smoke test - 2026-07-10](../verification/read-only-rpc-smoke-test-2026-07-10.md).
+Canonical current runtime records:
 
-## What RPC is used for
+- [Windows v31.1.0 node and RPC validation — 2026-09-11](../verification/windows-v31-node-rpc-validation-2026-09-11.md)
+- [Windows v31.1.0 PSBT and replay-protection validation — 2026-09-11](../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
+- [API read-only examples](../api/read-only-examples.md)
 
-RPC can be used to:
+Historical v29 tests remain useful only as version-scoped evidence.
 
-- Query node status.
-- Query chain and block status.
-- Query network and peer status.
-- Query mining/template status.
-- Query wallet status.
-- Generate deposit addresses.
-- Inspect transactions.
-- Submit transactions.
-- Monitor blocks and confirmations.
-- Inspect UTXO state.
-- Manage pruning and block-data workflows.
-- Build, decode, and analyze raw transactions and PSBTs.
-- Inspect mempool state and test transaction acceptance.
+## RPC configuration and ports
 
-## Source-observed configuration notes
+Current chain-parameter RPC defaults are:
 
-The generated example configuration file includes RPC settings for:
+| Network | RPC port |
+|---|---:|
+| mainnet | `8332` |
+| testnet3 | `18332` |
+| signet | `38332` |
+| regtest | `18443` |
+| testnet4 | `48332` |
 
-- `rpcallowip`
-- `rpcauth`
-- `rpcbind`
-- `rpccookiefile`
-- `rpcpassword`
-- `rpcport`
-- `rpcthreads`
-- `rpcuser`
-- `rpcwhitelist`
-- `server`
+A historical MoreBC2 v29 mainnet test used configured loopback RPC on `8337`; that was not a universal BitcoinII mainnet default.
 
-MoreBC2 has two relevant RPC-port evidence types:
+The September 11 v31 tests intentionally selected alternate loopback-only ports because local port occupancy/isolation mattered to the test. Those test ports are not network defaults either.
 
-- BitcoinII Core `v29.1.0` mainnet local testing used localhost-only RPC on `127.0.0.1:8337`.
-- Older inherited/generated Bitcoin Core-style material may mention mainnet `8332`, testnet `18332`, signet `38332`, and regtest `18443`.
+BitcoinII Qt requires RPC/server mode to be enabled when used as an RPC server. Do not expose RPC to untrusted networks.
 
-Do not silently treat inherited/generated `8332` material as the BitcoinII v29.1.0 mainnet runtime value. Also do not assume every historical BitcoinII release used `8337` unless a version-specific source or test record supports it.
+## Current v31 runtime-tested node/RPC subset
 
-The same file warns not to expose the RPC server to untrusted networks such as the public internet.
+The September 11 Windows v31 node/RPC validation directly exercised harmless node/status calls including:
+
+- `getnetworkinfo`
+- `getblockchaininfo`
+- `getmempoolinfo`
+- `getpeerinfo`
+- `getnettotals`
+- `uptime`
+- `getchaintips`
+- `getindexinfo`
+
+The test used a fresh disposable data directory, loopback-only RPC with random-cookie authentication, and did not touch an existing wallet or data directory. It also confirmed clean shutdown behavior under the documented test conditions.
+
+This is platform- and environment-bounded evidence, not proof that every RPC behaves identically on every platform or node configuration.
+
+## Current v31 wallet and PSBT runtime subset
+
+A separate isolated regtest test exercised a newly created disposable descriptor wallet and the following transaction/PSBT path:
+
+- `listwallets`
+- `listwalletdir`
+- `createwallet`
+- `getwalletinfo`
+- `getnewaddress`
+- `generatetoaddress`
+- `getbalances`
+- `walletcreatefundedpsbt`
+- `decodepsbt`
+- `walletprocesspsbt`
+- `finalizepsbt`
+- `decoderawtransaction`
+- `testmempoolaccept`
+- `sendrawtransaction`
+- `getmempoolentry`
+- `getmempoolinfo`
+
+`sendrawtransaction` was used only against the zero-peer isolated regtest node and placed the transaction in the local mempool. It was **not** a public-network broadcast test.
+
+No existing user wallet was opened, copied, rescanned, imported, unlocked, inspected, or spent from.
+
+## v31 replay-protection boundary
+
+Mainnet `v31.1.0` activates BC2 replay protection at height `57750` with fork/domain id `0x01324342`.
+
+Release-pinned source shows that wallet, PSBT, raw-transaction signing/finalization, mempool validation, block validation, and signature-hash paths carry the BC2 replay domain. External signers that cannot represent this domain are not safely assumed compatible.
+
+The isolated regtest PSBT lifecycle did not runtime-exercise the mainnet activation switch because regtest leaves replay protection disabled as shipped. Treat replay-domain activation as source-confirmed, not regtest-runtime-confirmed.
+
+See [Replay protection source atlas](source-atlas/replay-protection-v31.md).
 
 ## Source-reviewed RPC groups
 
-MoreBC2 has reviewed first-pass source maps for these RPC files:
+MoreBC2 maintains source maps for:
 
-- [Mining RPC](source-atlas/rpc-mining.md): `src/rpc/mining.cpp`
-- [Blockchain RPC](source-atlas/rpc-blockchain.md): `src/rpc/blockchain.cpp`
-- [Network RPC](source-atlas/rpc-network.md): `src/rpc/net.cpp`
-- [Raw transaction RPC](source-atlas/rpc-rawtransaction.md): `src/rpc/rawtransaction.cpp`
-- [Mempool and transaction broadcast RPC](source-atlas/rpc-mempool.md): `src/rpc/mempool.cpp`
-- [Wallet RPC](source-atlas/wallet-rpc.md): wallet startup/address/backup/spend/encryption/coin/history RPC files
+- [Mining RPC](source-atlas/rpc-mining.md)
+- [Blockchain RPC](source-atlas/rpc-blockchain.md)
+- [Network RPC](source-atlas/rpc-network.md)
+- [Raw transaction RPC](source-atlas/rpc-rawtransaction.md)
+- [Mempool and broadcast RPC](source-atlas/rpc-mempool.md)
+- [Wallet RPC](source-atlas/wallet-rpc.md)
 
-These reviews document command groups and behavior from source, but do not mark command examples as tested unless a dated local record says so.
+These pages establish source-observed command surfaces and implementation structure. A source-reviewed command is not automatically a locally tested command.
 
-## Locally tested read-only subset
+## Important service-facing RPCs
 
-The 2026-07-10 smoke test locally tested these read-only commands against BitcoinII Core `v29.1.0` on Windows mainnet with localhost-only RPC at `127.0.0.1:8337`:
-
-- `getblockcount`
-- `getbestblockhash`
-- `getblockchaininfo`
-- `getnetworkinfo`
-- `getconnectioncount`
-- `getpeerinfo`
-- `getmempoolinfo`
-- `getdifficulty`
-- `uptime`
-
-This is not cross-platform proof and does not cover wallet, transaction, mining, peer-control, shutdown, import/export, or state-changing workflows. For publication-ready examples, use [API read-only examples](../api/read-only-examples.md) and the dated smoke-test record.
-
-## Mining RPC group
-
-Reviewed mining RPC commands include:
-
-- `getnetworkhashps`
-- `getmininginfo`
-- `getblocktemplate`
-- `submitblock`
-- `submitheader`
-- `prioritisetransaction`
-- `getprioritisedtransactions`
-
-Important note: the reviewed mining RPC file says mining RPCs follow GBT/BIP22 in using satoshi amounts, unlike wallet RPCs that use BC2 values.
-
-## Blockchain RPC group
-
-Reviewed blockchain RPC commands include:
-
-- `getblockchaininfo`
-- `getbestblockhash`
-- `getblockcount`
-- `getblock`
-- `getblockhash`
-- `getblockheader`
-- `getchaintips`
-- `getdifficulty`
-- `getdeploymentinfo`
-- `gettxout`
-- `gettxoutsetinfo`
-- `pruneblockchain`
-- `verifychain`
-- `scantxoutset`
-- `scanblocks`
-- `getdescriptoractivity`
-- `getblockfilter`
-- `dumptxoutset`
-- `loadtxoutset`
-- `getchainstates`
-
-Some commands are powerful, slow, experimental, or intended for advanced workflows. They should be documented carefully and tested before being recommended.
-
-## Network RPC group
-
-Reviewed network RPC commands include:
-
-- `getconnectioncount`
-- `ping`
-- `getpeerinfo`
-- `addnode`
-- `disconnectnode`
-- `getaddednodeinfo`
-- `getnettotals`
-- `getnetworkinfo`
-- `setban`
-- `listbanned`
-- `clearbanned`
-- `setnetworkactive`
-- `getnodeaddresses`
-- `getaddrmaninfo`
-
-Reviewed hidden/testing commands include:
-
-- `addconnection`
-- `addpeeraddress`
-- `sendmsgtopeer`
-- `getrawaddrman`
-
-Read-only network status commands are good smoke-test candidates. Peer-changing, ban-list, network-active, hidden, and testing-only commands should be documented carefully and should not be copied into beginner guides as normal examples.
-
-## Raw transaction RPC group
-
-Reviewed raw transaction RPC commands include:
+Current source review confirms the presence of integration-relevant methods including:
 
 - `getrawtransaction`
-- `createrawtransaction`
-- `decoderawtransaction`
-- `decodescript`
-- `combinerawtransaction`
-- `signrawtransactionwithkey`
-- `decodepsbt`
-- `combinepsbt`
-- `finalizepsbt`
-- `createpsbt`
-- `converttopsbt`
-- `utxoupdatepsbt`
-- `descriptorprocesspsbt`
-- `joinpsbts`
-- `analyzepsbt`
-
-Raw transaction commands are advanced tools for non-wallet transaction lookup, unsigned transaction construction, explicit-key signing, script decoding, and PSBT workflows. They need tested examples before appearing in service or user guides.
-
-## Mempool and broadcast RPC group
-
-Reviewed mempool/broadcast RPC commands include:
-
 - `sendrawtransaction`
 - `testmempoolaccept`
-- `submitpackage`
-- `getrawmempool`
-- `getmempoolentry`
-- `getmempoolancestors`
-- `getmempooldescendants`
-- `gettxspendingprevout`
-- `getmempoolinfo`
-- `savemempool`
-- `importmempool`
-- `getorphantxs` hidden/experimental
+- `signrawtransactionwithwallet`
+- `walletcreatefundedpsbt`
+- `walletprocesspsbt`
+- `finalizepsbt`
 
-`testmempoolaccept` is a dry-run acceptance check. `sendrawtransaction` submits a signed raw transaction toward local acceptance and relay. `submitpackage`, `getorphantxs`, and mempool persistence commands should be treated as advanced until tested and documented more carefully.
+Whether a service should use a particular method depends on its custody model, indexing configuration, pruning state, replay-protection handling, and operational controls.
 
-## Wallet RPC group
+## Index and pruning caveats
 
-Reviewed wallet RPC commands include:
+Current source/runtime evidence keeps these boundaries important:
 
-- `getwalletinfo`
-- `listwalletdir`
-- `listwallets`
-- `loadwallet`
-- `unloadwallet`
-- `createwallet`
-- `setwalletflag`
-- `sethdseed`
-- `upgradewallet`
-- `migratewallet`
-- `simulaterawtransaction`
-- `getnewaddress`
-- `getrawchangeaddress`
-- `setlabel`
-- `listaddressgroupings`
-- `addmultisigaddress`
-- `backupwallet`
-- `restorewallet`
-- `sendtoaddress`
-- `sendmany`
-- `send`
-- `sendall`
-- `walletpassphrase`
-- `walletlock`
-- `getbalance`
-- `getbalances`
-- `listunspent`
-- `listtransactions`
-- `listsinceblock`
-- `gettransaction`
-- `rescanblockchain`
+- `txindex` is not enabled by default;
+- pruning is not enabled by default;
+- pruning and transaction-index choices affect historical lookup/service workflows;
+- wallet rescans/imports can depend on local block availability;
+- service integrations should test the exact node/index/pruning configuration they intend to operate.
 
-The reviewed wallet registration and file-specific passes now cover major wallet command groups. Examples still need local testing before being recommended.
+## Safe interpretation
 
-## Untested command inventory
+Use this wording when summarizing current RPC evidence:
 
-The command forms below are not verified instructions. They are placeholders for future local testing and are tracked in [Command testing status](../verification/command-testing.md).
+> BitcoinII Core v31.1.0 has current MoreBC2 runtime coverage for a bounded node/status RPC subset and an isolated disposable-wallet PSBT lifecycle. Additional RPCs are source-observed unless a dated test record says otherwise. Public transaction broadcast, external-signer compatibility, full-index service behavior, and cross-platform parity remain separate verification tasks.
 
-### Read-only or status-style placeholders
+## Related pages
 
-Some of these commands now have a matching local Windows/mainnet test record. Commands without a matching dated record remain placeholders, not working instructions.
-
-```bash
-bitcoinII-cli getblockchaininfo
-bitcoinII-cli getnetworkinfo
-bitcoinII-cli getblockcount
-bitcoinII-cli getbestblockhash
-bitcoinII-cli getmininginfo
-bitcoinII-cli getdifficulty
-bitcoinII-cli getconnectioncount
-bitcoinII-cli getpeerinfo
-bitcoinII-cli getnettotals
-bitcoinII-cli getrawmempool true
-bitcoinII-cli getmempoolinfo
-bitcoinII-cli listwallets
-bitcoinII-cli listwalletdir
-```
-
-### Lookup and dry-run placeholders
-
-These need fixture values, node state, wallet context, or transaction examples before they can be used as instructions.
-
-```bash
-bitcoinII-cli gettransaction <txid>
-bitcoinII-cli getrawtransaction <txid> 1
-bitcoinII-cli decoderawtransaction <hex>
-bitcoinII-cli testmempoolaccept '["signedhex"]'
-bitcoinII-cli analyzepsbt <psbt>
-```
-
-### Wallet-state-changing or funds-moving placeholders
-
-These should not sit beside harmless status calls in beginner guidance.
-
-```bash
-bitcoinII-cli getwalletinfo
-bitcoinII-cli getnewaddress
-bitcoinII-cli listtransactions
-bitcoinII-cli sendtoaddress <address> <amount>
-```
-
-Notes:
-
-- `getwalletinfo` and `listtransactions` depend on wallet context.
-- `getnewaddress` can change wallet state by creating or reserving a new address.
-- `sendtoaddress` can move funds and should stay out of normal guides unless a disposable-wallet test record and strong warnings exist.
-
-### Mining and block-template placeholders
-
-```bash
-bitcoinII-cli getblocktemplate '{"rules":["segwit"]}'
-```
-
-Block/header submission examples are intentionally not included here as copyable command lines.
-
-Do not copy any of these into user guides as working examples until the command-testing page has matching test records. Even locally tested values should retain version, network, platform, datadir/RPC context, and redaction rules.
-
-## Exchange/service-provider caution
-
-Service providers should not expose RPC publicly. RPC access should be firewalled, authenticated, and restricted to trusted systems.
-
-For service docs, MoreBC2 should distinguish:
-
-- Read-only status commands.
-- Network and peer status commands.
-- Block and transaction lookup commands.
-- Address/deposit commands.
-- Wallet commands that can create addresses.
-- Wallet commands that expose keys, sign transactions, or move funds.
-- Raw transaction and PSBT commands for advanced construction workflows.
-- Dry-run mempool acceptance commands.
-- Live transaction submission commands.
-- Maintenance commands that can affect node state.
-- Peer-changing or network-state commands.
-- Hidden/testing commands that should not appear in normal operator guides.
-
-## Open items
-
-- Test additional common RPC commands against a synced BitcoinII Core node or documented disposable local environment.
-- Confirm binary names for each platform and release asset.
-- Confirm configuration file paths by operating system.
-- Confirm wallet loading behavior.
-- Review lower-level P2P files beyond network RPC.
-- Confirm whether any BitcoinII-specific RPC differences exist beyond naming and visible strings.
-
-## Sources
-
-- `share/examples/bitcoinII.conf`
-- `doc/JSON-RPC-interface.md`
-- `src/rpc/mining.cpp`
-- `src/rpc/blockchain.cpp`
-- `src/rpc/net.cpp`
-- `src/rpc/rawtransaction.cpp`
-- `src/rpc/mempool.cpp`
-- `src/wallet/rpc/wallet.cpp`
-- `src/wallet/rpc/addresses.cpp`
-- `src/wallet/rpc/backup.cpp`
-- `src/wallet/rpc/spend.cpp`
-- `src/wallet/rpc/encrypt.cpp`
-- `src/wallet/rpc/coins.cpp`
-- `src/wallet/rpc/transactions.cpp`
+- [API documentation](../api/README.md)
+- [Bitcoin Core RPC compatibility](../compatibility/bitcoin-core-rpc.md)
+- [Wallet compatibility](../compatibility/wallets.md)
+- [Wallet guide](../wallets/wallet-guide.md)
+- [Exchange integration](../exchange/README.md)
 - [Command testing status](../verification/command-testing.md)
-- [Command smoke-test plan](../verification/command-smoke-test-plan.md)
-- [Local BitcoinII node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md)
-- [Read-only RPC smoke test - 2026-07-10](../verification/read-only-rpc-smoke-test-2026-07-10.md)
-- [API read-only examples](../api/read-only-examples.md)
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** Config-option notes and inherited/generated port examples are source-observed from generated/example configuration material. BitcoinII Core v29.1.0 mainnet localhost-only RPC was locally tested on `127.0.0.1:8337`. Mining, blockchain, network, raw transaction, mempool, and wallet RPC groups have first-pass source review. Command examples remain placeholders unless matching local test records exist.
+**Status:** Reviewed / Partial  
+**Primary sources checked:** BitcoinII Core `v31.1.0` source plus September 11 Windows node/RPC and PSBT runtime records  
+**Notes:** Current runtime evidence now replaces the old v29-only testing posture. Source-only commands remain labeled as such, and public broadcast/mainnet replay activation/external signing are not overstated.
