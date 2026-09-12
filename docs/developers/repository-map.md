@@ -1,375 +1,134 @@
 # BitcoinII repository map
 
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-07-02
+**Category:** Developer guide  
+**Status:** Reviewed / Navigation  
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page maps the BitcoinII Core repository at a high level so new contributors can find important areas of the codebase.
+This page maps the parts of the BitcoinII Core repository that MoreBC2 currently uses for technical documentation and integration evidence.
 
-This is not a full source audit. It is a navigation aid that should be expanded as more files are reviewed.
+It is a navigation map, not a claim that the entire repository has been audited. Current claims should prefer release-pinned BitcoinII Core `v31.1.0` source and the corresponding [Source Atlas](source-atlas/README.md) entry.
 
-## Core files already referenced by MoreBC2
+## High-value current paths
 
-| File | Current MoreBC2 use | Evidence |
+| Area | Important reviewed paths | Current MoreBC2 use |
 |---|---|---|
-| `README.md` | Project description, license, wallet/node overview | E3 |
-| `src/init.cpp` | Startup orchestration, chainstate loading, RPC warmup, index/wallet loading, final startup handoff | E1 partial |
-| `src/kernel/chainparams.cpp` | Mainnet parameters, genesis block, DNS seeds, seed array assignment, address prefixes | E1 |
-| `src/chainparamsseeds.h` | Source-observed seed array context | E1 partial |
-| `src/pow.cpp` | Difficulty adjustment and proof-of-work target checks | E1 |
-| `src/consensus/tx_check.*` | Context-independent transaction checks | E1 |
-| `src/consensus/tx_verify.*` | Finality, sequence locks, operation-cost helpers, input checks | E1 |
-| `src/script/interpreter.*` | Script engine, script flags, witness/Taproot paths, script verification entry points | E1 partial |
-| `src/validation.cpp` | Block validation, block connection, reorgs, mempool acceptance paths | E1 partial |
-| `src/validation.h` | Validation declarations and public validation interfaces | E1 partial |
-| `src/validationinterface.*` | Validation and mempool notification interface | E1 partial |
-| `src/node/blockstorage.*` | Block index database, block and undo files, pruning, reindex, import | E1 partial |
-| `src/node/miner.*` | Candidate block-template assembly and mempool package selection | E1 partial |
-| `src/node/mini_miner.*` | Fee and ordering simulation helper | E1 partial |
-| `src/addrman.h` / `src/addrman.cpp` / `src/addrman_impl.h` | Address-manager tables, quality checks, selection, serialization, tried-collision behavior | E1 partial |
-| `src/banman.h` / `src/banman.cpp` | Peer-list and discouragement management | E1 partial |
-| `src/protocol.h` / `src/protocol.cpp` | Message names, message headers, service flags, address serialization, inventory helpers | E1 partial |
-| `src/net.h` / `src/net.cpp` | Lower-level connection management, local address helpers, transports, socket send/receive, seed-node/DNS-seed paths | E1 partial |
-| `src/net_processing.h` / `src/net_processing.cpp` | Peer handshake, address sharing, block/header sharing, transaction sharing, peer health checks, send-loop behavior | E1 partial |
-| `src/rpc/net.cpp` | Network RPC, peer status, peer-list commands, address-manager, manual peer commands | E1 partial |
-| `src/rpc/mining.cpp` | Mining RPC, candidate template, block/header submission, mining status | E1 partial |
-| `src/rpc/blockchain.cpp` | Blockchain RPC, block lookup, pruning, UTXO scans, chainstate status | E1 partial |
-| `src/rpc/rawtransaction.cpp` | Raw transaction lookup, decode, unsigned construction, explicit-key signing, and PSBT RPCs | E1 partial |
-| `src/rpc/mempool.cpp` | Transaction submission, mempool acceptance testing, mempool inspection, persistence, orphan, and package RPCs | E1 partial |
-| `src/wallet/init.cpp` | Wallet options, parameter interaction, wallet loader construction | E1 partial |
-| `src/wallet/load.*` | Wallet verification, loading, start, flush, stop, unload | E1 partial |
-| `src/wallet/context.*` | Shared wallet context and wallet list state | E1 partial |
-| `src/wallet/wallet.h` | Wallet declarations, startup-adjacent defaults, chain notification hooks | E1 partial |
-| `src/wallet/rpc/wallet.cpp` | Wallet RPC registration, management, creation, loading, migration, status | E1 partial |
-| `src/wallet/rpc/addresses.cpp` | Address, change-address, label, grouping, and multisig wallet RPCs | E1 partial |
-| `src/wallet/rpc/backup.cpp` | Wallet backup, restore, import, descriptor import, export, and rescan-related RPCs | E1 partial |
-| `src/wallet/rpc/spend.cpp` | Wallet send, funding, fee setting, fee bumping, signing, and PSBT RPCs | E1 partial |
-| `src/wallet/rpc/encrypt.cpp` | Wallet timed access, relock, access-phrase update, and first-time encryption RPCs | E1 partial |
-| `src/wallet/rpc/coins.cpp` | Received amount, balance, output-state, and available-output RPCs | E1 partial |
-| `src/wallet/rpc/transactions.cpp` | Wallet transaction listing, single-transaction lookup, polling, abandon, rescan, and abort-rescan RPCs | E1 partial |
-| `src/txmempool.cpp` | Mempool storage, removal, expiry, prioritization, checking | E1 partial |
-| `src/txmempool.h` | Mempool structure, indexes, ancestor/descendant tracking | E1 partial |
-| `src/kernel/mempool_entry.h` | Mempool entry metadata and lockpoint data | E1 |
-| `src/kernel/disconnected_transactions.*` | Temporary transaction holding during reorg processing | E1 |
-| `src/primitives/block.cpp` | Block header hash path | E1 |
-| `src/primitives/block.h` | Block header fields and block structure | E1 |
-| `src/hash.h` | Double-SHA256 hashing behavior | E1 |
-| `src/consensus/amount.h` | `COIN` and `MAX_MONEY` definitions | E1 |
-| `share/examples/bitcoinII.conf` | Configuration and RPC defaults | E1/E3 |
-| `doc/JSON-RPC-interface.md` | JSON-RPC background | E3 |
-| `doc/man/bitcoinIId.1` | Daemon manual page | E3 |
-| `doc/man/bitcoinII-cli.1` | CLI manual page | E3 |
-| `doc/man/bitcoinII-qt.1` | GUI manual page | E3 |
+| Chain identity / consensus parameters | `src/kernel/chainparams.cpp`, `src/consensus/params.h` | Genesis, network identity, ports, checkpoints, deployment heights, ShockWave/replay/data-restriction activations |
+| Proof of work | `src/pow.cpp`, `src/pow.h` | ShockWave, target validation, historical/current difficulty boundary |
+| Header sync | `src/headerssync.*`, `src/net_processing.cpp` | Fork-aware ShockWave history and header validation |
+| Block / chain validation | `src/validation.*` | Header/block acceptance, best-chain selection, reorgs, UTXO/script validation, v31 activation paths |
+| Transaction consensus | `src/consensus/tx_check.*`, `tx_verify.*`, `bitcoinII_data.h` | Structural transaction checks and BitcoinII-specific post-activation data rules |
+| Script/signing | `src/script/interpreter.*`, `src/script/sign.cpp` | Script verification, replay-domain signature hashing, witness/Taproot context |
+| Mining/templates | `src/node/miner.*`, `mini_miner.*`, `src/rpc/mining.cpp` | Template assembly, candidate-time/`nBits` coupling, mining RPC |
+| Mempool | `src/txmempool.*`, `src/kernel/mempool_entry.h`, validation mempool paths | Admission, local state, reorg handling, replay-domain activation boundary |
+| Networking | `src/protocol.*`, `src/net.*`, `src/net_processing.*`, `src/addrman*`, `src/banman*` | P2P identity, peer lifecycle, relay, address/ban state |
+| Blockchain/network RPC | `src/rpc/blockchain.cpp`, `src/rpc/net.cpp` | Operator/service status and control surfaces |
+| Raw transaction / PSBT RPC | `src/rpc/rawtransaction.cpp`, PSBT/node/wallet signing paths | Transaction decode/sign/finalize, replay-domain integration |
+| Wallet lifecycle | `src/wallet/init.cpp`, `load.*`, `context.*`, `wallet.*` | Wallet startup/load/persistence |
+| Wallet RPC | `src/wallet/rpc/*` reviewed groups | Creation/status, balance, spend/PSBT, backup/import, encryption, history/rescan |
+| Block storage | `src/node/blockstorage.*` | Block/undo storage, pruning/reindex context |
+| Build system | `CMakeLists.txt`, `src/CMakeLists.txt`, build docs | Source-backed build requirements/options; not yet a successful MoreBC2 source build |
 
-## Repository areas
+## Current v31-specific feature map
 
-### Startup and node lifecycle
+### ShockWave
 
-Reviewed or partially reviewed:
-
-- `src/init.cpp`
-- wallet loader interaction from `src/wallet/init.cpp`
-
-Related MoreBC2 pages:
-
-- [Node startup](../architecture/node-startup.md)
-- [Source atlas: startup initialization](source-atlas/init-cpp.md)
-- [Source atlas: wallet startup](source-atlas/wallet-startup.md)
-
-Open questions:
-
-- Which executable entry points call the reviewed startup helpers in daemon and GUI mode?
-- Which startup commands have been locally tested?
-- Which shutdown paths should be mapped next?
-- Which wallet GUI startup paths differ from daemon startup?
-
-### Consensus, validation, and script engine
-
-Reviewed or partially reviewed:
+Primary paths:
 
 - `src/kernel/chainparams.cpp`
 - `src/pow.cpp`
-- `src/consensus/tx_check.*`
-- `src/consensus/tx_verify.*`
-- `src/script/interpreter.*`
-- `src/validation.cpp`
-- `src/validation.h`
-- `src/validationinterface.*`
-- `src/node/blockstorage.*`
-- `src/consensus/amount.h`
-
-Related MoreBC2 pages:
-
-- [Consensus model](../architecture/consensus-model.md)
-- [Block validation flow](../architecture/block-validation-flow.md)
-- [Life of a block](../architecture/life-of-a-block.md)
-- [Life of a reorganization](../architecture/life-of-a-reorg.md)
-- [Source atlas: transaction consensus files](source-atlas/transaction-consensus.md)
-- [Source atlas: script engine](source-atlas/script-interpreter.md)
-- [Source atlas: validation interface](source-atlas/validation-interface.md)
-- [Source atlas: block storage](source-atlas/block-storage.md)
-
-Questions:
-
-- Which script flags are mandatory consensus vs policy in each caller context?
-- Which validation-interface subscribers are active in wallet, index, and UI paths?
-- Which storage failure paths matter most for operator troubleshooting?
-- Which consensus constants are BitcoinII-specific beyond already reviewed chain parameters?
-- Which tests cover transaction, script, storage, and notification behavior?
-
-### Peer and network behavior
-
-Reviewed or partially reviewed:
-
-- `src/addrman.h`
-- `src/addrman.cpp`
-- `src/addrman_impl.h`
-- `src/banman.h`
-- `src/banman.cpp`
-- `src/chainparamsseeds.h`
-- `src/protocol.h`
-- `src/protocol.cpp`
-- `src/net.h`
-- `src/net.cpp`
-- `src/net_processing.h`
-- `src/net_processing.cpp`
-- `src/rpc/net.cpp`
-
-Related MoreBC2 pages:
-
-- [Source atlas: address manager](source-atlas/addrman.md)
-- [Source atlas: peer list management](source-atlas/banman.md)
-- [Source atlas: protocol primitives](source-atlas/protocol.md)
-- [Source atlas: network RPC](source-atlas/rpc-network.md)
-- [Source atlas: connection management](source-atlas/net-connection-management.md)
-- [Source atlas: peer handshake](source-atlas/net-processing-handshake.md)
-- [Source atlas: address sharing](source-atlas/net-processing-address-relay.md)
-- [Source atlas: block and header sharing](source-atlas/net-processing-block-relay.md)
-- [Source atlas: transaction sharing](source-atlas/net-processing-transaction-relay.md)
-- [Source atlas: peer health and stale-tip checks](source-atlas/net-processing-peer-eviction.md)
-- [Source atlas: peer send loop](source-atlas/net-processing-send-loop.md)
-- [Architecture overview](../architecture/architecture-overview.md)
-- [Peer communication model](../architecture/peer-communication-model.md)
-- [Life of a transaction](../architecture/life-of-a-transaction.md)
-- [Life of a block](../architecture/life-of-a-block.md)
-- [Mempool flow](../architecture/mempool-flow.md)
-- [Network specifications](../documentation/network-specifications.md)
-
-Questions:
-
-- Which address-manager caller paths still need deeper review?
-- Which peer-list RPC details need a separate review?
-- Which P2P details differ, if any, between the `v31.1.0` release baseline and subsequent `main` changes?
-- Which network details should stay developer-only rather than appearing in service-provider guides?
-- Which connection-management and address-manager details belong in user-facing node troubleshooting docs?
-
-### Wallet startup and lifecycle
-
-Reviewed or partially reviewed:
-
-- `src/wallet/init.cpp`
-- `src/wallet/load.h`
-- `src/wallet/load.cpp`
-- `src/wallet/context.h`
-- `src/wallet/context.cpp`
-- startup-adjacent parts of `src/wallet/wallet.h`
-
-Related MoreBC2 pages:
-
-- [Source atlas: wallet startup](source-atlas/wallet-startup.md)
-- [Wallet guide](../wallets/wallet-guide.md)
-- [Node startup](../architecture/node-startup.md)
-
-Questions:
-
-- Which wallet database formats are enabled in current releases?
-- Which backup and restore workflows can be tested safely?
-- Which wallet notification paths should be mapped to validation-interface events?
-- Which GUI wallet flows differ from CLI/daemon behavior?
-
-### Wallet RPC
-
-Reviewed or partially reviewed:
-
-- `src/wallet/rpc/wallet.cpp`
-- `src/wallet/rpc/addresses.cpp`
-- `src/wallet/rpc/backup.cpp`
-- `src/wallet/rpc/spend.cpp`
-- `src/wallet/rpc/encrypt.cpp`
-- `src/wallet/rpc/coins.cpp`
-- `src/wallet/rpc/transactions.cpp`
-
-Related MoreBC2 pages:
-
-- [Source atlas: wallet RPC](source-atlas/wallet-rpc.md)
-- [Source atlas: wallet backup/import RPC](source-atlas/wallet-backup-import-rpc.md)
-- [Source atlas: wallet spend and PSBT RPC](source-atlas/wallet-spend-rpc.md)
-- [Source atlas: wallet encryption RPC](source-atlas/wallet-encryption-rpc.md)
-- [Source atlas: wallet coins and balances RPC](source-atlas/wallet-coins-rpc.md)
-- [Source atlas: wallet transaction history RPC](source-atlas/wallet-transactions-rpc.md)
-- [Source atlas: wallet startup](source-atlas/wallet-startup.md)
-- [Wallet guide](../wallets/wallet-guide.md)
-- [RPC overview](rpc-overview.md)
-- [Service integration checklist](../exchange/service-integration-checklist.md)
-
-Questions:
-
-- Which wallet RPC examples can be safely tested locally?
-- Which address, balance, history, and status commands belong in service docs?
-- Which recovery commands need separate advanced pages?
-- Which wallet send and PSBT workflows need separate advanced pages?
-- Which wallet access-state workflows need separate advanced pages?
-- Which descriptor-vs-legacy behaviors need user-facing explanation?
-- Which build flags affect wallet RPC availability?
-
-### Mempool and transaction policy
-
-Reviewed or partially reviewed:
-
-- `src/txmempool.cpp`
-- `src/txmempool.h`
-- `src/kernel/mempool_entry.h`
-- Mempool acceptance portions of `src/validation.cpp`
-- Transaction-sharing and send-loop portions of `src/net_processing.cpp`
-
-Related MoreBC2 pages:
-
-- [Mempool flow](../architecture/mempool-flow.md)
-- [Life of a transaction](../architecture/life-of-a-transaction.md)
-- [Source atlas: mempool accept](source-atlas/mempool-accept.md)
-- [Source atlas: mempool source](source-atlas/txmempool.md)
-- [Source atlas: mempool and transaction RPC](source-atlas/rpc-mempool.md)
-- [Source atlas: transaction sharing](source-atlas/net-processing-transaction-relay.md)
-- [Source atlas: peer send loop](source-atlas/net-processing-send-loop.md)
-
-Questions:
-
-- What replacement-policy details still need review?
-- Which mempool defaults should be documented for operators?
-- Which package acceptance behaviors need deeper explanation?
-- Which RPCs expose mempool/package acceptance state?
-- Which send-loop details should stay developer-only?
-
-### Block storage, pruning, and reindex
-
-Reviewed or partially reviewed:
-
-- `src/node/blockstorage.h`
-- `src/node/blockstorage.cpp`
-
-Related MoreBC2 pages:
-
-- [Source atlas: block storage](source-atlas/block-storage.md)
-- [Life of a block](../architecture/life-of-a-block.md)
-- [Life of a reorganization](../architecture/life-of-a-reorg.md)
-- [Node startup](../architecture/node-startup.md)
-
-Questions:
-
-- Which operator-facing pruning behavior should move into node docs?
-- Which undo-read paths should be documented with disconnect/reorg follow-up work?
-- Which reindex and import behavior should be included in user troubleshooting docs?
-
-### Candidate block templates
-
-Reviewed or partially reviewed:
-
-- `src/node/miner.h`
 - `src/node/miner.cpp`
-- `src/node/mini_miner.h`
-- `src/node/mini_miner.cpp`
+- `src/headerssync.*`
+- contextual header validation in `src/validation.cpp`
 
-Related MoreBC2 pages:
+Mainnet activation: height `57750`.
 
-- [Source atlas: block template assembly](source-atlas/miner.md)
-- [Mining overview](../mining/mining-overview.md)
-- [Mempool flow](../architecture/mempool-flow.md)
-- [Life of a block](../architecture/life-of-a-block.md)
+### Replay protection
 
-Questions:
+Primary paths:
 
-- Where exactly is the subsidy calculation implemented?
-- Which external operation docs can be verified from primary sources?
-- Which tests cover candidate block assembly and package selection?
-
-### RPC groups
-
-Reviewed or partially reviewed:
-
-- `src/rpc/mining.cpp`
-- `src/rpc/blockchain.cpp`
-- `src/rpc/net.cpp`
+- `src/consensus/params.h`
+- `src/script/interpreter.*`
+- `src/script/sign.cpp`
+- `src/validation.cpp`
+- `src/psbt.*`
+- `src/node/psbt.*`
 - `src/rpc/rawtransaction.cpp`
-- `src/rpc/mempool.cpp`
-- `src/wallet/rpc/*` reviewed groups
+- wallet signing/PSBT paths.
 
-Related MoreBC2 pages:
+Mainnet activation: height `57750`; domain `0x01324342`.
 
-- [RPC overview](rpc-overview.md)
-- [Source atlas: mining RPC](source-atlas/rpc-mining.md)
-- [Source atlas: blockchain RPC](source-atlas/rpc-blockchain.md)
-- [Source atlas: network RPC](source-atlas/rpc-network.md)
-- [Source atlas: raw transaction RPC](source-atlas/rpc-rawtransaction.md)
-- [Source atlas: mempool and transaction RPC](source-atlas/rpc-mempool.md)
-- [Deposit monitoring](../exchange/deposit-monitoring.md)
-- [Service integration checklist](../exchange/service-integration-checklist.md)
+### Consensus data restrictions
 
-Questions:
+Primary paths:
 
-- Which RPC examples can be safely tested locally?
-- Which commands should be included in exchange/service docs?
-- Which commands belong only in advanced or developer docs?
-- Which commands are affected by pruning, indexing, wallet availability, or network state?
+- `src/kernel/chainparams.cpp`
+- `src/consensus/bitcoinII_data.h`
+- `src/validation.cpp`
+- associated current tests.
 
-### Build, release, and tests
+Mainnet activation: height `57750`.
 
-Likely files/directories to continue reviewing:
+### Fork-aware header sync
 
-- `depends/`
-- `cmake/`
-- `contrib/`
-- `.github/workflows/`
-- `doc/`
-- `test/`
-- `src/test/`
-- `src/wallet/test/`
+Primary paths:
 
-Related MoreBC2 pages:
+- `src/headerssync.h`
+- `src/headerssync.cpp`
+- `src/net_processing.cpp`
+- `src/pow.cpp`
 
-- [Build system guide](build-system.md)
+The current implementation preserves bounded synthetic history so alternate branches can be validated with production ShockWave next-work logic.
+
+## Runtime-covered paths
+
+September `v31.1.0` release-binary testing now provides bounded evidence for:
+
+- startup/shutdown/restart;
+- mainnet P2P `8338`, protocol `70016`, outbound discovery, header acquisition;
+- loopback cookie RPC with server mode;
+- selected blockchain/network/mempool status RPCs;
+- fresh descriptor-wallet creation/reload;
+- disposable regtest address generation and `getbalances`;
+- PSBT funding/signing/finalization;
+- transaction decoding, `testmempoolaccept`, local-only `sendrawtransaction`, mempool entry inspection;
+- isolated `generatetoaddress` local block generation.
+
+That does not turn adjacent source paths into runtime verification. In particular, mainnet replay activation, controlled ShockWave vectors, data-restriction activation, external signing, public transaction broadcast, GBT mining, and pool Stratum shares remain separate tests.
+
+## Source-only / structural coverage
+
+The Source Atlas also retains detailed first-pass maps of:
+
+- addrman and ban/discouragement handling;
+- block storage and disconnected-transaction helpers;
+- mempool-entry and txmempool internals;
+- validation-interface callbacks;
+- peer handshake/relay/send-loop/eviction paths;
+- wallet backup/encryption/history paths.
+
+Those pages remain useful as implementation navigation even where MoreBC2 has no dedicated runtime fixture.
+
+## Release and build boundary
+
+The current release target is BitcoinII Core `v31.1.0` / tag target commit `8daaf7b12e71d3646eed787f040bf2899a69dc1c`.
+
+MoreBC2 has independently matched the Windows Qt archive hash used for runtime testing to the recorded GitHub release digest. That is artifact-integrity evidence, not reproducible-build proof.
+
+A successful BitcoinII source build/test-suite run has not yet been completed by MoreBC2.
+
+## Related pages
+
+- [Source tree guide](source-tree.md)
+- [Source Atlas](source-atlas/README.md)
+- [Developer reading order](reading-order.md)
+- [Build system](build-system.md)
 - [Testing guide](testing.md)
-- [Release process guide](release-process.md)
-- [Release verification guide](release-verification.md)
-- [Release source comparison](../verification/release-source-comparison.md)
-- [Release artifact checklist](../verification/release-artifact-checklist.md)
-
-Questions:
-
-- Which build systems are supported?
-- Which platforms have release assets?
-- What release verification material exists?
-- Are checksums, signatures, or signed tags published?
-- Which tests are inherited from Bitcoin Core?
-- Are there BitcoinII-specific tests?
-- Which tests can contributors run locally?
-
-## Rules for expanding this map
-
-- Do not assume a file's purpose from its name alone.
-- Confirm by reading file headers, function names, comments, or documentation.
-- Add source links and reviewed dates.
-- Mark uncertain areas as Needs Review.
-- Link new reviewed files to the Source Atlas and documentation coverage dashboard.
-
-## Sources
-
-- BitcoinII source repository currently reviewed through MoreBC2 source-atlas entries.
-- Files already cited in MoreBC2 core docs.
+- [Release verification](release-verification.md)
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This map was refreshed after adding network Source Atlas slices through address-manager review. Target lists are not claims of implementation details until reviewed.
+**Status:** Reviewed / Navigation  
+**Primary evidence:** BitcoinII Core `v31.1.0` release-pinned source reviews, current Source Atlas, and September 2026 runtime records  
+**Notes:** The map is current for documented v31 feature paths and evidence boundaries. Unlisted files/directories are not implied to have been audited.
