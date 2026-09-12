@@ -70,7 +70,7 @@ Do not commit:
 - unredacted private local paths when a neutral placeholder is sufficient;
 - exploit details that belong in a private security report.
 
-Use disposable test data and isolated environments where practical. If sensitive material is exposed, stop sharing it publicly and follow [`SECURITY.md`](SECURITY.md).
+Use disposable test data and isolated environments where practical. If sensitive material is exposed, stop sharing it publicly and follow [`SECURITY.md`](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md).
 
 ## Status labels
 
@@ -203,7 +203,7 @@ Use **BitcoinII** for the project, **BC2** for the ticker, and **BitcoinII Core*
 - [Documentation coverage](docs/documentation-coverage.md)
 - [Known unknowns](docs/verification/known-unknowns.md)
 - [Open questions](docs/verification/open-questions.md)
-- [Security policy](SECURITY.md)
+- [Security policy](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md)
 
 ## Verification
 
