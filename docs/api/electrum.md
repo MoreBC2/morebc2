@@ -2,81 +2,71 @@
 
 **Category:** Developer platform
 **Status:** Draft / Observed partial
-**Last reviewed:** 2026-07-12
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-MoreBC2 has dated read-only Electrum observations for BitcoinII infrastructure.
+MoreBC2 has current read-only Electrum observations for BitcoinII infrastructure from 2026-09-11.
 
-The canonical evidence is [Public API, WebSocket, and Electrum smoke test - 2026-07-12](../verification/public-api-electrum-smoke-test-2026-07-12.md).
+Canonical current evidence: [Public infrastructure smoke test — 2026-09-11](../verification/public-infrastructure-smoke-test-2026-09-11.md).
 
-## Observed endpoints
+The older July smoke test remains historical evidence but is no longer the primary current reference.
 
-| Endpoint | Status at check time | Evidence |
+## Current observed endpoints
+
+| Endpoint | Status at 2026-09-11 check | Evidence |
 |---|---|---|
-| `tcp://infra1.bitcoin-ii.org:50008` | Connected; read-only calls succeeded. | [Public API/Electrum smoke test](../verification/public-api-electrum-smoke-test-2026-07-12.md) |
-| `ssl://infra1.bitcoin-ii.org:50009` | Connected; TLS hostname validation passed; read-only calls succeeded. | [Public API/Electrum smoke test](../verification/public-api-electrum-smoke-test-2026-07-12.md) |
-| `tcp://explorer.bitcoin-ii.org:5008` | DNS resolved; TCP timed out. | [Public API/Electrum smoke test](../verification/public-api-electrum-smoke-test-2026-07-12.md) |
+| `tcp://infra1.bitcoin-ii.org:50008` | Connected; `server.version` succeeded. | [September infrastructure smoke test](../verification/public-infrastructure-smoke-test-2026-09-11.md) |
+| `ssl://infra1.bitcoin-ii.org:50009` | Connected over TLS 1.3; hostname validation succeeded; `server.version` succeeded. | [September infrastructure smoke test](../verification/public-infrastructure-smoke-test-2026-09-11.md) |
+| `tcp://explorer.bitcoin-ii.org:5008` | Timed out again. | [September infrastructure smoke test](../verification/public-infrastructure-smoke-test-2026-09-11.md) |
 
-## Read-only methods used
+## Observed protocol details
 
-Only these standard read-only Electrum methods were used in the smoke test:
-
-- `server.version`
-- `server.features`
-- `blockchain.headers.subscribe`
-
-No wallet-history, address-history, transaction-broadcast, private-key, seed, or account-gated methods were used.
-
-## Observed protocol and chain facts
-
-For the working `infra1.bitcoin-ii.org` TCP and SSL endpoints, the smoke test recorded:
+For the working `infra1.bitcoin-ii.org` endpoints, the September check observed:
 
 - server software: `ElectrumX 1.18.0`
 - protocol: `1.4`
-- maximum protocol: `1.4.3`
-- observed BitcoinII genesis hash:
+- TLS 1.3 on the SSL endpoint
+- certificate hostname validation succeeded for `infra1.bitcoin-ii.org`
+- certificate expiry observed by the client: 2026-11-20
+
+Earlier testing also observed the BitcoinII genesis hash through Electrum metadata:
 
 ```text
 0000000028f062b221c1a8a5cf0244b1627315f7aa5b775b931cfec46dc17ceb
 ```
 
-The returned header height and hash matched the local node and REST API tip during the check window. See [Public API, WebSocket, and Electrum smoke test - 2026-07-12](../verification/public-api-electrum-smoke-test-2026-07-12.md).
+## What was and was not exercised
 
-## Compatibility boundaries
+The current September recheck established protocol reachability through `server.version` and TLS behavior.
 
-Electrum connection success does not prove wallet compatibility.
+Earlier July testing additionally used:
 
-The current evidence does not establish:
+- `server.features`
+- `blockchain.headers.subscribe`
 
-- BlueWallet compatibility,
-- Cake Wallet compatibility,
-- Komodo Wallet compatibility,
+No MoreBC2 record currently establishes:
+
+- wallet-history correctness,
+- address/scripthash history correctness,
 - watch-only wallet behavior,
-- address-history behavior,
-- fee-display correctness inside wallets,
-- transaction construction safety,
-- transaction broadcast safety,
-- correct ticker or unit labeling inside third-party wallets.
+- fee behavior inside third-party wallets,
+- transaction construction,
+- successful Electrum transaction broadcast,
+- long-running subscriptions,
+- reconnect/load behavior,
+- BlueWallet, Cake Wallet, Komodo Wallet, or other third-party wallet compatibility.
 
-## Safe wording
+## Current endpoint guidance
 
-Use:
+Use `infra1.bitcoin-ii.org:50008` and `:50009` only as **dated observed Electrum service endpoints**.
 
-- "Electrum read-only calls succeeded"
-- "TLS hostname validation passed for the SSL endpoint"
-- "header matched local/REST tip at check time"
-- "wallet compatibility remains unverified"
+Do not publish `explorer.bitcoin-ii.org:5008` as a working current endpoint; it timed out in both the historical and current checks.
 
-Do not use:
-
-- "BC2 wallets are supported"
-- "Electrum wallet compatibility is proven"
-- "safe for spending"
-- "broadcast tested"
+Electrum connectivity should not be presented as proof that a specific wallet safely supports BC2.
 
 ## Verification
 
 **Status:** Draft / Observed partial  
-**Primary sources checked:** [Public API, WebSocket, and Electrum smoke test - 2026-07-12](../verification/public-api-electrum-smoke-test-2026-07-12.md)  
-**Notes:** This page summarizes read-only Electrum observations. It does not establish wallet compatibility.
+**Primary source checked:** [Public infrastructure smoke test — 2026-09-11](../verification/public-infrastructure-smoke-test-2026-09-11.md)  
+**Notes:** Current read-only TCP/TLS reachability is established. Wallet compatibility, history semantics, spending behavior, and Electrum broadcast remain unverified.
