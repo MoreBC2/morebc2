@@ -1,33 +1,43 @@
 # Developer reading order
 
 **Category:** Developer guide
-**Status:** Draft
-**Last reviewed:** 2026-07-02
+**Status:** Reviewed / Framework
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page gives new contributors a recommended path through MoreBC2.
+This is the recommended path for contributors who want to understand MoreBC2 without mistaking inherited Bitcoin structure for current BitcoinII `v31.1.0` behavior.
 
-It is meant to prevent the repository from feeling like a pile of disconnected pages.
+## 1. Understand MoreBC2 and its evidence rules
 
-## First pass: understand the project
-
-Read these first:
+Read:
 
 1. [MoreBC2 README](../../README.md)
 2. [Project status](../../PROJECT_STATUS.md)
-3. [Repository audit](../AUDIT.md)
-4. [Documentation coverage](../documentation-coverage.md)
-5. [Documentation philosophy](../../DOCUMENTATION_PHILOSOPHY.md)
-6. [Editorial style guide](../../STYLE_GUIDE.md)
+3. [Evidence Scale](../../EVIDENCE_SCALE.md)
+4. [Documentation philosophy](../../DOCUMENTATION_PHILOSOPHY.md)
+5. [Verification standards](verification-standards.md)
+6. [Source review guide](source-review-guide.md)
 
-Goal:
+Goal: understand what MoreBC2 can prove, what remains partial, and why claim-specific evidence matters.
 
-Understand what MoreBC2 is, what it is not, and why verification matters.
+## 2. Learn the current v31 BitcoinII-specific changes first
 
-## Second pass: understand the architecture
+Before relying on generic Bitcoin-style assumptions, read:
 
-Read these next:
+1. [Network specifications](../documentation/network-specifications.md)
+2. [Consensus overview](../documentation/consensus-overview.md)
+3. [ShockWave difficulty adjustment](source-atlas/shockwave-v31.md)
+4. [Replay protection](source-atlas/replay-protection-v31.md)
+5. [Consensus data restrictions](source-atlas/data-restrictions-v31.md)
+6. [Fork-aware header synchronization](source-atlas/headers-sync-v31.md)
+7. [v31 wallet/PSBT/RPC/mempool/mining regression audit](../verification/v31-wallet-mempool-mining-regression-2026-09-02.md)
+
+Goal: know where current BitcoinII materially diverges from inherited Bitcoin assumptions before reading broad structural pages.
+
+## 3. Understand architecture
+
+Read:
 
 1. [Architecture overview](../architecture/architecture-overview.md)
 2. [Node startup](../architecture/node-startup.md)
@@ -39,150 +49,67 @@ Read these next:
 8. [Mempool flow](../architecture/mempool-flow.md)
 9. [Peer communication model](../architecture/peer-communication-model.md)
 
-Goal:
+Goal: understand major flows before diving into file-by-file implementation notes.
 
-Understand the major BitcoinII Core flows before reading source-atlas implementation notes.
+## 4. Use the Source Atlas by subsystem
 
-## Third pass: read the technical documentation
+Start with [Source atlas index](source-atlas/README.md), then use the entries relevant to the task.
 
-Read:
+For consensus/validation, prioritize `chainparams.cpp`, `pow.cpp`, transaction consensus, script interpreter, validation, block acceptance/storage, mempool acceptance, and the v31-specific entries above.
 
-1. [What is BitcoinII?](../documentation/what-is-bitcoinii.md)
-2. [Project overview](../documentation/project-overview.md)
-3. [Network specifications](../documentation/network-specifications.md)
-4. [Consensus overview](../documentation/consensus-overview.md)
-5. [Checkpoints](../documentation/checkpoints.md)
-6. [Difficulty adjustment](../encyclopedia/difficulty-adjustment.md)
-7. [Proof-of-work](../encyclopedia/proof-of-work.md)
-8. [Confirmations](../encyclopedia/confirmations.md)
-9. [Reorganizations](../encyclopedia/reorganizations.md)
+For networking, use protocol, connection management, addrman/banman, handshake, address relay, block/header relay, transaction relay, peer eviction, and send-loop pages.
 
-Goal:
+For wallets/services, use wallet startup/RPC/spend/backup/encryption/coins/history plus raw-transaction, mempool, blockchain, network, and mining RPC pages.
 
-Understand the verified or partially verified claims MoreBC2 currently makes about BitcoinII.
+Goal: trace implementation paths without treating every first-pass atlas page as exhaustive current-release verification.
 
-## Fourth pass: source atlas
+## 5. Read the runtime evidence
 
-Read:
+Current high-value records are:
 
-1. [Source atlas index](source-atlas/README.md)
-2. [chainparams.cpp](source-atlas/chainparams-cpp.md)
-3. [startup initialization](source-atlas/init-cpp.md)
-4. [pow.cpp](source-atlas/pow-cpp.md)
-5. [transaction consensus files](source-atlas/transaction-consensus.md)
-6. [script engine](source-atlas/script-interpreter.md)
-7. [block lifecycle](source-atlas/block-acceptance.md)
-8. [block storage](source-atlas/block-storage.md)
-9. [validation.cpp](source-atlas/validation-cpp.md)
-10. [validation interface](source-atlas/validation-interface.md)
-11. [mempool accept](source-atlas/mempool-accept.md)
-12. [mempool source](source-atlas/txmempool.md)
-13. [mempool entry](source-atlas/mempool-entry.md)
-14. [disconnected transactions](source-atlas/disconnected-transactions.md)
-15. [block primitives](source-atlas/block-primitives.md)
-16. [hash.h](source-atlas/hash-h.md)
+1. [Windows v31.1.0 node and RPC validation — 2026-09-11](../verification/windows-v31-node-rpc-validation-2026-09-11.md)
+2. [Windows v31.1.0 PSBT and replay-protection validation — 2026-09-11](../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
+3. [Public infrastructure smoke test — 2026-09-11](../verification/public-infrastructure-smoke-test-2026-09-11.md)
 
-Then read the current network group:
+Goal: distinguish what was actually executed from what is only source-reviewed.
 
-17. [protocol primitives](source-atlas/protocol.md)
-18. [network RPC](source-atlas/rpc-network.md)
-19. [connection management](source-atlas/net-connection-management.md)
-20. [address manager](source-atlas/addrman.md)
-21. [peer list management](source-atlas/banman.md)
-22. [peer handshake](source-atlas/net-processing-handshake.md)
-23. [address sharing](source-atlas/net-processing-address-relay.md)
-24. [block and header sharing](source-atlas/net-processing-block-relay.md)
-25. [transaction sharing](source-atlas/net-processing-transaction-relay.md)
-26. [peer health and stale-tip checks](source-atlas/net-processing-peer-eviction.md)
-27. [peer send loop](source-atlas/net-processing-send-loop.md)
-
-Goal:
-
-Move from conceptual understanding to implementation details.
-
-## Fifth pass: developer workflow
+## 6. Developer workflow
 
 Read:
 
-1. [Source review guide](source-review-guide.md)
-2. [Verification standards workflow](verification-standards.md)
-3. [Local development environment](local-development.md)
-4. [Build system guide](build-system.md)
-5. [Testing guide](testing.md)
-6. [Release process guide](release-process.md)
-7. [Release verification guide](release-verification.md)
+1. [Local development environment](local-development.md)
+2. [Build system guide](build-system.md)
+3. [Testing guide](testing.md)
+4. [Release process guide](release-process.md)
+5. [Release verification guide](release-verification.md)
 
-Goal:
+Goal: contribute without turning source-documented build/test commands into claims that MoreBC2 has already executed them.
 
-Understand how to add or verify work without turning guesses into documentation.
+## 7. Integration and operations
 
-## Sixth pass: integration and operations
+Choose the relevant maintained section:
 
-Read based on what you are trying to do:
-
-### Exchanges and service providers
-
-- [Exchange integration](../exchange/README.md)
-- [Exchange integration package](../exchange/integration-package.md)
-- [Service integration checklist](../exchange/service-integration-checklist.md)
-- [Deposit monitoring](../exchange/deposit-monitoring.md)
-- [Native coin exchange listing guide](../exchange/native-coin-listing-guide.md)
-- [Exchange listing target matrix](../exchange/exchange-listing-targets.md)
-- [Exchange readiness checklist](../exchange/exchange-readiness-checklist.md)
-- [Exchange listing packet template](../exchange/listing-packet-template.md)
-- [Release verification guide](release-verification.md)
-
-### Node operators
-
+- [API](../api/README.md)
+- [Compatibility](../compatibility/README.md)
+- [Infrastructure](../infrastructure/README.md)
+- [Wallets](../wallets/README.md)
+- [Exchange Integration](../exchange/README.md)
+- [Ecosystem](../ecosystem/README.md)
+- [Releases](../releases/README.md)
 - [Nodes](../nodes/README.md)
 - [Configuration](../configuration/README.md)
-- [Node configuration](../configuration/node-configuration.md)
-- [RPC configuration](../configuration/rpc-configuration.md)
-- [Network RPC source review](source-atlas/rpc-network.md)
-- [Connection management source review](source-atlas/net-connection-management.md)
-- [Address manager source review](source-atlas/addrman.md)
-- [Peer list management source review](source-atlas/banman.md)
-- [Source atlas index](source-atlas/README.md)
-
-### Wallet users and maintainers
-
-- [Wallets](../wallets/README.md)
-- [Wallet guide](../wallets/wallet-guide.md)
-
-### Miners and pool operators
-
 - [Mining](../mining/README.md)
-- [Mining overview](../mining/mining-overview.md)
-- [Ecosystem mining pools](../ecosystem/mining-pools.md)
 
-## Seventh pass: open work
+For exchange/service work, current confirmation, chainwork, release-authentication, RPC/indexing, replay-protection, and public-infrastructure evidence should be read together rather than independently.
 
-Read:
+## 8. Historical material
 
-1. [Verification queue](../verification/README.md)
-2. [Known unknowns](../verification/known-unknowns.md)
-3. [Documentation coverage](../documentation-coverage.md)
-4. [Roadmap](../../ROADMAP.md)
+Older v29 records remain useful for history and regression comparison, but they do not override v31 release-pinned source or September 2026 runtime evidence.
 
-Goal:
-
-Find useful work without guessing where help is needed.
-
-## Contributor rule
-
-Do not start by adding big new claims.
-
-Start by improving one of these:
-
-- A source link.
-- A missing citation.
-- A wording issue.
-- A broken navigation path.
-- An open question.
-- A Draft page that needs clearer caveats.
+When a historical page and a current page disagree, first determine whether the difference is a real release change, a configuration difference, or stale documentation.
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Repository navigation and current documentation structure
-**Notes:** This reading order was refreshed after the network Source Atlas slices through address-manager review and the exchange-listing documentation batch were added. It should be updated whenever major sections are added, renamed, or reorganized.
+**Status:** Reviewed / Framework  
+**Primary sources checked:** Current developer index, v31 source-atlas entries, September runtime records, and maintained integration sections  
+**Notes:** Refreshed on 2026-09-12 to put v31-specific consensus/signing behavior and current runtime evidence ahead of inherited structural assumptions.
