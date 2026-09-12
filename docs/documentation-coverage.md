@@ -1,53 +1,86 @@
 # Documentation coverage
 
-**Category:** Project maintenance
-**Status:** Draft
-**Last reviewed:** 2026-09-08
+**Category:** Project maintenance  
+**Status:** Reviewed / Partial  
+**Last reviewed:** 2026-09-12
 
-This dashboard summarizes coverage. It does not turn source review, plans, or dated observations into runtime verification.
+This dashboard summarizes MoreBC2 coverage and evidence maturity. It does not turn source review, a plan, a public-service observation, or a successful site deployment into universal runtime verification.
 
 ## Status legend
 
 | Status | Meaning |
 |---|---|
-| Framework | Structure or checklist material exists. |
-| Partial | Useful evidence exists, but important review or testing remains. |
-| Source Reviewed | The cited source path was reviewed; runtime behavior is not implied. |
-| Locally Tested | A dated, version- and environment-scoped runtime record exists. |
-| Needs Recheck | Date, release, link, or service freshness requires another check. |
-| Verified | The page's stated verification requirements and evidence are complete. |
+| Framework | Structure/process guidance exists. |
+| Reviewed / Partial | The page/section was audited, but genuine evidence gaps remain. |
+| Source Reviewed | Current release-pinned source path was reviewed; runtime behavior is not implied. |
+| Locally Tested | A dated, release/environment-scoped runtime record exists. |
+| Directly Observed | A dated external/public-service observation exists. |
+| Historical | Preserved evidence for an older release/date/context. |
+| Verified | The page's stated verification requirements are complete for its defined scope. |
 
 ## Current coverage
 
-| Area | Status | Boundary |
+| Area | Current state | Evidence boundary |
 |---|---|---|
-| Current release identity | Source Reviewed / observed | `v31.1.0` is the current documentation baseline; independent binary authentication remains open. |
-| Consensus and difficulty | Strong partial | ShockWave and height-`57750` activation material is current-facing; runtime and deeper path review remain incomplete. |
-| Architecture and Source Atlas | Strong partial | Broad source coverage exists, including dedicated v31 pages; source review is not runtime testing. |
-| Node and RPC | Historical locally tested / current needs test | `v29.1.0` Windows evidence is preserved; a fresh `v31.1.0` record is needed. |
-| Wallet, mempool, mining, RPC, validation, PSBT | Partial | Structural and targeted v31 source review exists; current regression and runtime coverage is incomplete. |
-| Releases | Partial | Historical v29 integrity work and current v31 metadata exist; authentication and reproducibility remain open. |
-| API and infrastructure | Needs Recheck | Dated public-service observations exist; permanence, ownership, reliability, and complete schemas are not established. |
-| Exchange integration | Partial | Operator guidance is v31-aware; confirmation policy and account-level behavior remain unresolved. |
-| Ecosystem | Needs Recheck | Dated observations must be refreshed before recommendations. |
-| Contribution and governance | Draft | Licensing guidance exists; final contribution workflow and team/enforcement details need owner confirmation. |
-| Site tooling | Automated checks | Astro/Starlight generation, adapter tests, rendered output, and Windows evidence guards exist. Passing them does not verify protocol claims. |
-| Security reporting | Partial / owner action | `SECURITY.md` routes ordinary issues publicly and defines sensitive/upstream boundaries; no verified private intake route is available yet. |
-| Independent technical review | Important quality task | Strongly encouraged for consequential current-facing claims; absence alone is not a visibility blocker. |
-| Public-release readiness | Blocked | The licensing package, current-tree personal-path cleanup, and public security policy are complete; residual rights/attribution review, a verified private security intake route, and owner approval remain open. |
+| Current release identity | Reviewed / directly observed | `v31.1.0` baseline, six assets, tag target and GitHub digest metadata recorded; stronger binary authentication/reproducibility remain open. |
+| Documentation core | Reviewed / Partial | Network specs, consensus, checkpoints, releases, explorers, project overview, and identity pages audited against v31/current evidence. |
+| Consensus / difficulty | Strong source coverage | ShockWave, replay protection, data restrictions, fork-aware header sync, chainwork selection, and activation anchors mapped. Controlled runtime vectors remain incomplete. |
+| Architecture | Reviewed / Partial | Full architecture set synchronized to current v31 source/runtime boundaries. Controlled reorg and some edge-case runtime scenarios remain open. |
+| Developers / Source Atlas | Reviewed / Partial | Full 55-page developer surface audited; current source paths and command-specific runtime boundaries synchronized. Clean source build/full upstream test execution remain open. |
+| Configuration | Reviewed / Partial | Current P2P/RPC defaults, server mode, pruning/index defaults, and generated-config discrepancy documented. Production deployment patterns remain environment-specific. |
+| Nodes / RPC | Current locally tested | Bounded Windows v31 mainnet node/RPC startup, sync progress, peer discovery, cookie RPC, shutdown/restart, and disposable wallet evidence exist. Full sync/long-duration/index-pruning matrix remain open. |
+| Wallet / PSBT | Current locally tested + source reviewed | Disposable v31 wallet and zero-peer regtest PSBT lifecycle tested. Backup/restore, encryption, external signing, third-party wallet compatibility remain open. |
+| Mining | Reviewed / Partial | ShockWave-aware mining/template path plus pool/Stratum/payout observations documented; end-to-end public Stratum qualification remains open. |
+| Releases | Reviewed / Partial | Six current assets documented; Windows Qt archive independently hash-matched; verified target commit distinguished from binary authentication. Signed manifest/reproducibility remain open. |
+| API / Explorer / Electrum | Directly observed / Reviewed | 2026-09-11 REST/WebSocket/Electrum checks plus current hierarchy/boundaries documented. Independence, uptime and valid public broadcast remain open. |
+| Infrastructure | Reviewed / Partial | Service roles and current point-in-time behavior documented without claiming SLA/independence. |
+| Compatibility | Reviewed / Partial | RPC, REST, Electrum, wallet, replay-domain, and service breakpoints synchronized to current evidence. Third-party workflow qualification remains partial. |
+| Exchange integration | Reviewed / Partial | v31-aware integration/operator docs, current service evidence, and provisional 50-confirmation baseline documented. Production custody/runbooks/chainwork thresholds remain open. |
+| Ecosystem | Reviewed / time-sensitive | Current wallets/explorers/APIs/exchanges/pools/resources audited; live services require periodic recheck. |
+| Encyclopedia | Reviewed / Partial | Confirmation/finality, reorg, PoW, difficulty and developer glossary synchronized to current v31 evidence. |
+| Research | Reviewed / Partial | Resolved source facts removed from research uncertainty; remaining questions are empirical/comparative. |
+| History | Reviewed / Partial | Recorded timeline milestones now distinguish current Core releases from legacy repository history; comprehensive ecosystem chronology remains incomplete. |
+| Discussion | Reviewed framework | No current proposal pages; placement/status semantics updated. |
+| News | Reviewed framework | No standalone news entries; evidence/placement rules updated. |
+| Verification | Reviewed / Partial | Current evidence index, known unknowns, open questions and command-testing status synchronized to the audit sequence. Remaining gaps are real runtime/operational work. |
+| Contribution / governance | Reviewed project framework | Root contribution/status/evidence/source/glossary/roadmap documents audited; governance/framework docs remain appropriate. |
+| Site tooling | Repeatedly tested | Astro/Starlight checks, link/output validation, Windows-doc guard, private-path scan, Cloudflare production deploy, and live indexing verification pass on current changes. |
+| Security reporting | Current | Repository is public and GitHub Private Vulnerability Reporting is enabled/verified; `SECURITY.md` remains the MoreBC2 route, distinct from upstream BitcoinII security authority. |
+| Public site/repository state | Public / deployed | Repository and production documentation site are live. Publication status does not imply technical completeness or universal verification. |
 
-## Current routes
+## Current evidence anchors
 
 - [Project status](../PROJECT_STATUS.md)
-- [Repository audit](AUDIT.md)
-- [Roadmap](../ROADMAP.md)
 - [Verification evidence index](verification/verification-index.md)
 - [Known unknowns](verification/known-unknowns.md)
-- [v31 currentness audit](verification/v31-currentness-audit-2026-09-02.md)
-- [Legal and reuse posture](LEGAL_REUSE.md)
+- [Open questions](verification/open-questions.md)
+- [Windows v31 node/RPC validation](verification/windows-v31-node-rpc-validation-2026-09-11.md)
+- [Windows v31 PSBT/replay validation](verification/windows-v31-psbt-replay-validation-2026-09-11.md)
+- [Public infrastructure smoke test](verification/public-infrastructure-smoke-test-2026-09-11.md)
+- [Exchange confirmation evidence](verification/exchange-confirmation-evidence-2026-09-12.md)
+- [Current v31 release assets](releases/v31.1.0-assets.md)
+
+## Remaining high-value evidence gaps
+
+The broad documentation-structure/currentness phase is largely complete. Remaining work is narrower:
+
+- stronger current-release binary authentication/reproducibility;
+- full/long-duration node operation and optional index/pruning qualification;
+- controlled ShockWave/reorg/activation-boundary vectors;
+- external/hardware/third-party signer compatibility;
+- wallet backup/restore/encryption/recovery tests;
+- production exchange custody/deposit/withdrawal/reorg runbooks;
+- chainwork-aware settlement examples and risk thresholds;
+- end-to-end pool Stratum/share/payout qualification;
+- periodic rechecks of time-sensitive services/releases;
+- independent technical review of consequential claims.
+
+## Audit rule
+
+A section can be fully **audited** and still remain **Partial**. “Partial” now means the documentation accurately describes an evidence boundary that still requires real-world testing or external confirmation—not that the section was skipped.
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Current repository status, verification index, v31 audit, release records, historical runtime records, scripts, and workflows
-**Notes:** This dashboard reports documentation coverage and explicit gaps; it is not a BitcoinII verification certificate.
+**Status:** Reviewed / Partial  
+**Primary evidence checked:** Completed 2026-09-12 section audits, current project status, verification records, v31 source reviews, runtime/service/exchange evidence, and deployment workflow results  
+**Notes:** This dashboard summarizes documentation/evidence coverage. It is not a BitcoinII certification or production-readiness guarantee.
