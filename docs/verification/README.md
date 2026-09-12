@@ -35,8 +35,9 @@ Local runtime and RPC:
 - [Read-only RPC smoke test - 2026-07-10](read-only-rpc-smoke-test-2026-07-10.md)
 - [Local RPC enablement plan](local-rpc-enablement-plan.md)
 
-Developer platform and public infrastructure:
+Developer platform, public infrastructure, and exchange evidence:
 
+- [Exchange confirmation evidence - 2026-09-12](exchange-confirmation-evidence-2026-09-12.md)
 - [Public infrastructure smoke test - 2026-09-11](public-infrastructure-smoke-test-2026-09-11.md)
 - [Public API, WebSocket, and Electrum smoke test - 2026-07-12](public-api-electrum-smoke-test-2026-07-12.md)
 
@@ -84,6 +85,7 @@ Narrow reviewer packets for release wording are intentionally kept outside the n
 
 Ecosystem records and plans should distinguish reachable services from reliable, official, synced, or recommended services.
 
+- [Exchange confirmation evidence - 2026-09-12](exchange-confirmation-evidence-2026-09-12.md)
 - [Ecosystem direct check plan](ecosystem-direct-check-plan.md)
 - [Public infrastructure smoke test - 2026-09-11](public-infrastructure-smoke-test-2026-09-11.md)
 - [Public API, WebSocket, and Electrum smoke test - 2026-07-12](public-api-electrum-smoke-test-2026-07-12.md)
@@ -124,11 +126,12 @@ Use these pages to keep canonical-source, naming, contact, and status claims sco
 - Record the source type used: source code, release artifact, official website, archive, maintainer statement, local test, or current direct check.
 - Command examples should remain unverified until run locally with environment details.
 - Release artifact claims should remain unverified until assets and hashes are checked directly.
-- Ecosystem claims should remain unverified until checked directly and dated.
+- Ecosystem claims should remain direct, dated, and narrowly scoped.
+- Exchange confirmation counts are operational service policy, not protocol constants; preserve dated evidence and recheck them periodically.
 - Developer test-suite plans should remain separate from user-facing command smoke tests.
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current verification section structure, verification evidence index, dated records, open-question queues, test plans, release records, ecosystem records, and private-review coordination pages
+**Primary sources checked:** Current verification section structure, verification evidence index, dated records, open-question queues, test plans, release records, ecosystem records, current exchange evidence, and private-review coordination pages
 **Notes:** This page is a router for verification material. It does not independently verify BitcoinII protocol behavior, service reliability, release binaries, or ecosystem claims.
