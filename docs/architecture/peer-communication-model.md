@@ -1,278 +1,171 @@
 # Peer communication model
 
 **Category:** Architecture
-**Status:** Draft
-**Last reviewed:** 2026-07-02
+**Status:** Reviewed / Partial
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page gives a high-level model of BitcoinII Core peer communication as currently understood from first-pass Source Atlas reviews.
+This page gives a high-level model of BitcoinII Core peer communication using current Source Atlas coverage plus the September 11 BitcoinII Core `v31.1.0` Windows runtime evidence.
 
-It is not a final protocol specification and it is not based on live-network testing. It should be read as a cautious architecture map that points back to source-review pages.
+It is not a complete wire-protocol specification and does not claim packet-level coverage of every peer-message edge case.
 
 ## Simplified model
 
 ```text
-Local node startup
-  -> network component setup
-  -> seed and address-manager state
+Node startup
+  -> address / seed / connection state prepared
   -> listening sockets, if enabled
   -> outbound connection attempts, if enabled
-  -> peer object creation
-  -> transport setup
+  -> peer object / transport setup
   -> version / feature negotiation
   -> address sharing
-  -> block/header sharing
+  -> header / block sharing
   -> transaction sharing
   -> periodic send loop
-  -> peer health / peer-list checks / cleanup
+  -> peer health / stale-tip / cleanup logic
 ```
 
-## Layer 1: lower-level connection management
+## Connection management
 
-Lower-level connection management is handled in `src/net.h` and `src/net.cpp`.
-
-Reviewed behavior includes:
-
-- local address discovery and advertisement helpers
-- listen-port selection
-- outbound connection creation
-- inbound connection admission
-- node cleanup after disconnect
-- inactivity and handshake timeout checks
-- socket wait and service loops
-- raw byte receive handling
-- V1 and V2 transport handling
-- socket send handling
-- DNS seed and seed-node connection paths
-- connection-count helper functions
-
-Important boundary:
-
-This layer moves bytes, manages connections, and creates node objects. It does not itself decide every high-level peer-message rule.
-
-Related:
-
-- [Source atlas: net connection management](../developers/source-atlas/net-connection-management.md)
-- [Source atlas: network RPC](../developers/source-atlas/rpc-network.md)
-
-## Layer 2: address manager and seed state
-
-Address-manager state is handled mainly in `src/addrman.h`, `src/addrman.cpp`, and `src/addrman_impl.h`.
+Lower-level connection management is handled in the network layer.
 
 Reviewed behavior includes:
 
-- new and tried address tables
-- randomized bucket placement
-- address quality checks
-- probabilistic peer selection
-- service-bit updates
-- connection attempt tracking
-- successful-address handling
-- tried-table collision handling
-- `peers.dat` serialization and deserialization
-- selected seed-array and DNS-seed context
+- local address and listen-port handling;
+- inbound/outbound connection setup;
+- V1/V2 transport support;
+- socket send/receive loops;
+- inactivity and handshake timeouts;
+- DNS seed / seed-node paths;
+- peer cleanup and reconnection behavior.
 
-Important boundary:
+Current mainnet source parameters use P2P port `8338`.
 
-Addrman stores and selects candidate peer addresses. It does not prove those addresses are currently reachable. Source-observed DNS seeds and seed arrays are also not live reachability checks.
+## Address manager and seeds
 
-Related:
+Address-manager state stores and scores candidate peer addresses and persists peer knowledge across restarts.
 
-- [Source atlas: address manager](../developers/source-atlas/addrman.md)
-- [Source atlas: net connection management](../developers/source-atlas/net-connection-management.md)
-- [Network specifications](../documentation/network-specifications.md)
+A configured DNS seed or stored address is discovery input, not proof that a peer is currently reachable.
 
-## Layer 3: P2P protocol primitives
+Current v31 mainnet source explicitly includes `dnsseed.bitcoin-ii.org.` as a DNS seed. Older seed observations should remain version-labeled if retained elsewhere.
 
-Protocol primitives define the shape and names of peer messages and related identifiers.
+## Protocol and handshake
 
-Reviewed behavior includes:
+Reviewed protocol/handshake behavior includes:
 
-- message headers
-- message names
-- service flags
-- address serialization
-- inventory helpers
-- transaction inventory id handling
+- `version` / `verack` negotiation;
+- common protocol-version selection;
+- service flags;
+- wtxid-relay negotiation;
+- `sendaddrv2` handling;
+- compact-block signaling;
+- transaction-reconciliation signaling;
+- early unsupported-message handling;
+- peer permission and capability state.
 
-Important boundary:
+Handshake success does not guarantee that a peer is useful for every purpose. Service flags, permissions, download state, chain knowledge, and later health checks still matter.
 
-Protocol primitives define what can be represented. They do not by themselves explain when a node chooses to send or request something.
+## Current v31 runtime observation
 
-Related:
+The September 11 isolated Windows mainnet test directly established current outbound peer operation:
 
-- [Source atlas: P2P protocol primitives](../developers/source-atlas/protocol.md)
+- BitcoinII runtime protocol version `70016`;
+- local service names included `NETWORK`, `WITNESS`, `NETWORK_LIMITED`, and `P2P_V2`;
+- P2P listener on `0.0.0.0:8338`;
+- first run: four outbound full-relay IPv4 peers;
+- restart: six outbound full-relay IPv4 peers;
+- observed peer subversion `/BitcoinII:31.1.0/`;
+- current header chain acquired to height `58970` during the bounded test window;
+- no inbound peers were observed in that test.
 
-## Layer 4: handshake and feature negotiation
+Peer addresses were intentionally omitted from the public record.
 
-The peer handshake and early feature negotiation are handled in `src/net_processing.cpp`.
+This is real runtime evidence that current v31 peer discovery/connection/header acquisition worked in that environment. It is not an uptime guarantee, an inbound-connectivity test, or packet-level protocol certification.
 
-Reviewed behavior includes:
+## Header and block sharing
 
-- version handling
-- duplicate version handling
-- peer protocol minimum checks
-- service flag handling
-- self-connection nonce checks
-- inbound version response
-- common version selection
-- wtxid-relay negotiation
-- sendaddrv2 negotiation
-- transaction reconciliation signaling
-- verack handling
-- compact-block signaling
-- pre-verack unsupported-message handling
+Source review covers received-header processing, header/block requests, full-block receive paths, compact-block structure, block announcements, and send-loop download logic.
 
-Important boundary:
+Current v31 adds an important BitcoinII-specific constraint: ShockWave-era competing branches need branch-specific recent target and median-time-past history when checking candidate difficulty.
 
-Handshake success does not mean a peer is useful for every purpose. Later peer state, service flags, permissions, and download logic still matter.
+The fork-aware header-sync path therefore maintains synthetic branch history and evaluates candidate `nBits` using production `GetNextWorkRequired()`.
 
-Related:
+Header synchronization remains separate from active-chain selection. The node still uses validation and accumulated-work rules to decide which usable branch becomes active.
 
-- [Source atlas: net processing handshake](../developers/source-atlas/net-processing-handshake.md)
+See [Fork-aware header synchronization v31](../developers/source-atlas/headers-sync-v31.md).
 
-## Layer 5: address sharing and peer discovery
+## Transaction sharing
 
-Address sharing is one way nodes learn about other peers.
+Transaction relay is connected to, but distinct from, local mempool acceptance.
 
 Reviewed behavior includes:
 
-- address relay setup
-- known-address filtering
-- address compatibility checks
-- `addr` / `addrv2` handling
-- rate limiting
-- reachable-network checks
-- address-manager insertion
-- address-fetch connection behavior
-
-Important boundary:
-
-MoreBC2 should not claim that a configured seed, stored address, or discovered address is currently live without a direct check.
-
-Related:
-
-- [Source atlas: address manager](../developers/source-atlas/addrman.md)
-- [Source atlas: net connection management](../developers/source-atlas/net-connection-management.md)
-- [Source atlas: net processing address relay](../developers/source-atlas/net-processing-address-relay.md)
-- [Network specifications](../documentation/network-specifications.md)
-
-## Layer 6: block and header sharing
-
-Block and header peer behavior is reviewed in `net_processing` slices.
-
-Reviewed behavior includes:
-
-- received header processing
-- `getheaders` handling
-- `getblocks` handling
-- full block receive path
-- compact-block receive structure
-- `getblocktxn` handling
-- block announcement by headers, compact-block message, or inventory fallback
-- block getdata request creation in the send loop
-- block-download stalling and timeout checks
-
-Important boundary:
-
-Network sharing is not validation itself. Header and block validity are handled through validation and chainstate code.
-
-Related:
-
-- [Life of a block](life-of-a-block.md)
-- [Block validation flow](block-validation-flow.md)
-- [Source atlas: net processing block and header relay](../developers/source-atlas/net-processing-block-relay.md)
-- [Source atlas: net processing send loop](../developers/source-atlas/net-processing-send-loop.md)
-
-## Layer 7: transaction sharing
-
-Transaction sharing is related to mempool state, but they are not the same thing.
-
-Reviewed behavior includes:
-
-- transaction relay setup from handshake
-- txid versus wtxid inventory behavior
-- incoming transaction inventory handling
-- full transaction message handling
-- transaction download-manager interaction
-- valid and invalid transaction post-processing
-- orphan transaction reconsideration
-- mempool request response behavior
-- fee-filter and bloom-filter effects
-- transaction inventory selection in the send loop
-- transaction getdata request creation in the send loop
+- transaction inventory announcements;
+- txid/wtxid relay behavior;
+- full transaction-message handling;
+- transaction download-manager interaction;
+- orphan/package reconsideration;
+- fee-filter and mempool request behavior;
+- transaction request/announcement work in the send loop.
 
 Important boundaries:
 
-- Local mempool acceptance does not guarantee broad network propagation.
-- Peer sharing does not guarantee block inclusion.
-- Block inclusion and confirmations are separate lifecycle stages.
+- local mempool acceptance does not guarantee network propagation;
+- peer relay does not guarantee block inclusion;
+- a transaction can be valid locally yet rejected by a remote peer's policy;
+- MoreBC2's successful September `sendrawtransaction` test used a zero-peer regtest node and therefore did not test public relay.
 
-Related:
+## Address sharing and peer discovery
 
-- [Life of a transaction](life-of-a-transaction.md)
-- [Mempool flow](mempool-flow.md)
-- [Source atlas: net processing transaction relay](../developers/source-atlas/net-processing-transaction-relay.md)
-- [Source atlas: net processing send loop](../developers/source-atlas/net-processing-send-loop.md)
+Reviewed address-sharing behavior includes known-address filtering, `addr` / `addrv2`, rate limits, reachability checks, and insertion into address-manager state.
 
-## Layer 8: peer health, peer-list state, and cleanup
+MoreBC2 should not convert any discovered or configured address into a current reachability claim without a dated direct check.
 
-Reviewed behavior includes:
+## Peer health and cleanup
 
-- explicit peer-list entries versus probabilistic discouragement
-- peer-list load/dump behavior
-- selected misbehavior trigger paths
-- manual-peer and permission exceptions
-- outbound peer usefulness checks
-- extra outbound peer behavior
-- stale-tip checks
-- ping timeout and keepalive behavior
-- connection cleanup after disconnect
-- V2-to-V1 reconnect handling in limited early-failure cases
+Reviewed peer-management behavior includes:
 
-Important boundary:
+- explicit peer-list and discouragement state;
+- selected misbehavior paths;
+- stale-tip checks;
+- extra outbound peer handling;
+- ping timeout / keepalive behavior;
+- disconnect cleanup;
+- limited early-failure V2-to-V1 reconnect behavior.
 
-Peer health logic is not a guarantee that the node always selects the best possible peers. It is a set of source-observed rules and heuristics. Peer-list and discouragement behavior is also not a complete denial-of-service defense.
+These are heuristics and safety mechanisms, not proof that the node always chooses the globally best peers or that all denial-of-service risks are eliminated.
 
-Related:
+## Runtime boundary
 
-- [Source atlas: peer list management](../developers/source-atlas/banman.md)
-- [Source atlas: net processing peer eviction and stale-tip checks](../developers/source-atlas/net-processing-peer-eviction.md)
-- [Source atlas: net connection management](../developers/source-atlas/net-connection-management.md)
+Current evidence does **not** yet establish:
 
-## What remains open
-
-Still needing deeper review:
-
-- Address-manager caller paths.
-- Peer-list RPC command implementation details.
-- Release-versus-main comparison.
-- Live-network command testing.
-- Live seed reachability checks, if needed.
-- Which details belong in beginner node docs versus developer-only docs.
-
-## What this page does not claim
-
-This page does not claim:
-
-- that peer behavior has been live tested by MoreBC2
-- that current `main` exactly matches the latest release branch
-- that every network edge case has been reviewed
-- that DNS seeds, seed arrays, explorers, or services are currently live
-- that transaction sharing guarantees confirmation
-- that peer count or propagation behavior is guaranteed
+- inbound reachability from the public internet;
+- long-duration peer stability;
+- packet capture of handshake/message sequences;
+- live competing-branch/header-sync behavior;
+- broad transaction propagation from a current v31 wallet;
+- geographic/backend diversity of the observed peer set;
+- every P2P transport edge case.
 
 ## Related pages
 
 - [Architecture overview](architecture-overview.md)
-- [Network specifications](../documentation/network-specifications.md)
-- [Node guide](../nodes/node-guide.md)
-- [Source atlas index](../developers/source-atlas/README.md)
-- [Documentation coverage](../documentation-coverage.md)
+- [Node startup](node-startup.md)
+- [Life of a block](life-of-a-block.md)
+- [Life of a transaction](life-of-a-transaction.md)
+- [Mempool flow](mempool-flow.md)
+- [P2P protocol primitives](../developers/source-atlas/protocol.md)
+- [Net connection management](../developers/source-atlas/net-connection-management.md)
+- [Net processing handshake](../developers/source-atlas/net-processing-handshake.md)
+- [Net processing block/header relay](../developers/source-atlas/net-processing-block-relay.md)
+- [Net processing transaction relay](../developers/source-atlas/net-processing-transaction-relay.md)
+- [Net processing send loop](../developers/source-atlas/net-processing-send-loop.md)
+- [Header sync v31](../developers/source-atlas/headers-sync-v31.md)
+- [Windows v31.1.0 node and RPC validation](../verification/windows-v31-node-rpc-validation-2026-09-11.md)
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This page summarizes first-pass Source Atlas network slices. It should be updated after address-manager caller details, peer-list RPC details, release-versus-main comparison, and live-network command testing are completed.
+**Status:** Reviewed / Partial  
+**Primary sources checked:** Current v31 P2P/network/header-sync source reviews plus the September 11 Windows mainnet peer/header acquisition runtime record  
+**Notes:** Outbound peer discovery/connection and current header acquisition have bounded v31 runtime evidence. Inbound connectivity, long-duration stability, packet-level coverage, live fork scenarios, and public transaction propagation remain unverified.
