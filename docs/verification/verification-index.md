@@ -28,7 +28,8 @@ Evidence is version-scoped. A dated `v29.1.0` test remains valid evidence for th
 | Explorer/API/WebSocket | Directly observed / current-dated | 2026-09-11 checks verified the Official BitcoinII Explorer API plus Mempool-style REST/WebSocket surfaces on `bc2mempool.com`, `explorer.bitcoin-ii.org`, and `bc2.live`; compared explorers agreed on the same tip. | Long-term uptime, custody-grade reliability, and backend/operator independence remain unverified. |
 | Electrum | Directly observed / current-dated | `infra1.bitcoin-ii.org:50008` TCP and `:50009` TLS answered `server.version` as ElectrumX `1.18.0`, protocol `1.4`; TLS hostname validation succeeded. | Wallet compatibility, spending, and Electrum broadcast behavior remain unverified. |
 | Public transaction submission | Route presence observed | `/api/tx` on three Mempool-style services accepted POST and rejected deliberately invalid transaction payloads with HTTP 400. | Successful valid-BC2 transaction broadcast has not been tested. |
-| Exchange integration docs | Current-facing source review | v31.1.0 integration/operator docs include ShockWave, replay protection, data restrictions, current release assets, current explorer hierarchy, and explicit unresolved confirmation policy. | Current node/wallet runtime testing and confirmation policy remain open. |
+| Exchange confirmation policy | Directly observed / provisional guidance | 2026-09-12 direct API evidence: CoinEx `2/6`, NonKYC `50`, NestEx explicit BC2 `50`; Biconomy count remains unverified. MoreBC2 now uses 50 as a provisional normal-deposit baseline. | Community/maintainer review, cumulative-chainwork examples, large-deposit thresholds, and periodic exchange rechecks remain open. |
+| Exchange integration docs | Current-facing source review | v31.1.0 integration/operator docs include ShockWave, replay protection, data restrictions, current release assets, current explorer hierarchy, current exchange evidence, and a provisional 50-confirmation baseline. | Production custody design, chainwork thresholds, technical contact process, and production deposit/withdrawal procedures remain open. |
 | Third-party wallet/service compatibility | Partial / unresolved | Source review and current Electrum reachability evidence exist. | Current v31 wallet/service workflow testing remains needed. |
 
 ## Current release evidence
@@ -56,6 +57,7 @@ Do not rewrite those files to substitute `v31.1.0`; create new evidence records 
 
 ## Ecosystem evidence
 
+- [Exchange confirmation evidence — 2026-09-12](exchange-confirmation-evidence-2026-09-12.md)
 - [Public infrastructure smoke test — 2026-09-11](public-infrastructure-smoke-test-2026-09-11.md)
 - [Public API, WebSocket, and Electrum smoke test — 2026-07-12](public-api-electrum-smoke-test-2026-07-12.md)
 - [Public endpoints](../api/public-endpoints.md)
@@ -71,10 +73,11 @@ These are dated observations, not permanent reliability claims.
 1. Independently authenticate the current `v31.1.0` assets beyond the repeat-byte Windows Qt hash recorded in the new runtime test.
 2. Complete a fresh `v31.1.0` initial sync and exercise optional index/pruning configurations where needed.
 3. Produce independent replay-protection transaction vectors and test external/third-party signer compatibility.
-4. Map data-restriction validation behavior in detail.
-5. Review fork-aware header synchronization internals/runtime behavior.
-6. Establish backend/operator independence where infrastructure redundancy is claimed.
-7. Test valid-transaction behavior only in a deliberately isolated, safe integration workflow if that evidence becomes necessary.
+4. Add a cumulative-chainwork monitoring example and operational risk thresholds around the provisional 50-confirmation exchange baseline.
+5. Map data-restriction validation behavior in detail.
+6. Review fork-aware header synchronization internals/runtime behavior.
+7. Establish backend/operator independence where infrastructure redundancy is claimed.
+8. Test valid-transaction behavior only in a deliberately isolated, safe integration workflow if that evidence becomes necessary.
 
 ## Update rule
 
@@ -89,5 +92,5 @@ When new evidence is added:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current `v31.1.0` release/source anchors plus MoreBC2 dated historical evidence, the 2026-09-11 public-infrastructure probe, and the 2026-09-11 isolated Windows v31 node/RPC runtime record
-**Notes:** This is an evidence navigation page; it does not independently reproduce every linked check.
+**Primary sources checked:** Current `v31.1.0` release/source anchors plus MoreBC2 dated historical evidence, 2026-09-11 public-infrastructure and isolated Windows runtime records, and 2026-09-12 direct exchange API observations
+**Notes:** This is an evidence navigation page; it does not independently reproduce every linked check. The exchange baseline is explicitly provisional and should not be presented as protocol finality.
