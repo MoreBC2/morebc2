@@ -1,115 +1,151 @@
 # Mining pools
 
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-07-06
+**Category:** Ecosystem
+**Status:** Reviewed / Partial
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page tracks BitcoinII (BC2) mining pool resources.
+This page tracks currently observable BitcoinII (BC2) mining-pool resources.
 
-Pool links, fee models, payout rules, and activity should be checked directly before a pool is listed as active.
+A public pool page, API, or stratum configuration does not prove payout reliability, solvency, block-template correctness, share accounting, DDoS resilience, or long-term uptime. Current entries are dated observations, not endorsements.
 
-Use [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md) before adding or promoting pool listings.
+## 1Miner.Net
 
-## Listing format
+**Status:** Active public BC2 pool pages / Partial regional service status  
+**Official:** No BitcoinII-project designation established  
+**Modes observed:** PPLNS and SOLO  
+**Algorithm:** `Sha256D`  
+**Fee:** `1%` shown on both BC2 connect pages  
+**Minimum payout:** `0.01 BC2` shown  
+**Last checked:** 2026-09-12
 
-```md
-### Pool name
+Observed BC2 PPLNS connection family:
 
-**Status:** Needs Review / Observed / Partially checked / Active, dated check / Unreachable / Historical / Do not recommend
-**Official:** Yes / No / Unknown
-**URL:**
-**Coin listed as:** BitcoinII / BC2 / Other / Unknown
-**Algorithm:** Unknown unless verified
-**Fee model:** Unknown unless verified
-**Payout model:** Unknown unless verified
-**Minimum payout:** Unknown unless verified
-**Stratum host/port:** Unknown unless verified
-**Last checked:** YYYY-MM-DD
-**Evidence level:** E4/E8
-**What was checked:**
-**What was not checked:**
-**Notes:**
-```
+- `1miner.net:4331` through `:4334`
+- `eu1.1miner.net:4331` through `:4334`
+- `sgp.1miner.net:4331` through `:4334`
 
-## Observed mining/stat resources
+Observed BC2 SOLO connection family:
 
-### MiningPoolStats BitcoinII page
+- `1miner.net:4431` through `:4434`
+- `eu1.1miner.net:4431` through `:4434`
+- `sgp.1miner.net:4431` through `:4434`
 
-**Status:** Observed / Related / Needs comparison  
+The public status/connect pages showed the US-TX endpoint operational while EU-FR and SGP were reported unreachable during the dated check window. Treat regional availability as time-sensitive.
+
+The pool pages also advertise NiceHash/MiningRigRentals compatibility. MoreBC2 did not test rental-service connectivity, share acceptance, payouts, or block attribution in this audit.
+
+Sources:
+
+- https://1miner.net/pool/bc21/connect
+- https://1miner.net/pool/bc22/connect
+- https://1miner.net/status
+
+## CapsPool.io
+
+**Status:** Active public BC2 pool page / Configuration observed  
+**Official:** No BitcoinII-project designation established  
+**Modes observed:** SOLO and PPS  
+**Algorithm:** SHA-256 / SHA-256d  
+**Last checked:** 2026-09-12
+
+The public CapsPool page currently exposes BC2 mining configuration including:
+
+- SOLO pool, `1%` fee;
+- PPS pool, `1%` fee with hourly payout language;
+- general ASIC stratum `stratum.capspool.io:3333`;
+- rental/high-difficulty endpoint `:4334`;
+- Bitaxe endpoint `:3337`;
+- PPS endpoint `:3335`;
+- EU hostname with the same documented port family.
+
+The page also displays BC2 network/pool statistics and recent-block areas.
+
+MoreBC2 did not independently connect a miner, submit shares, verify PPS accounting, verify payout timing, or validate every advertised stratum endpoint in this audit.
+
+Source:
+
+- https://capspool.io/
+
+## BCMonster
+
+**Status:** Active public API/documentation with explicit BC2 support  
+**Official:** No BitcoinII-project designation established  
+**Algorithm:** `sha256` / BC2 supported by name and ticker  
+**Last checked:** 2026-09-12
+
+BCMonster's public API documentation explicitly lists:
+
+- Bitcoin II
+- coin name `bitcoinii`
+- ticker `bc2`
+
+The API documentation exposes pool-level statistics endpoints such as `/api/mps/{coin}` and `/api/v1/pool_info/{coin}`, including documented fields for hashrate, workers, fee, minimum payout, network difficulty, height, last block, and stratum host/port.
+
+This establishes current public BC2 support in BCMonster's service/API documentation. It does not establish payout reliability, share accounting, or current miner connectivity without a direct mining test.
+
+Source:
+
+- https://bcmonster.com/api.html
+
+## MiningPoolStats
+
+**Status:** Active aggregator / Discovery and cross-check resource  
 **Official:** No  
-**URL:** `https://miningpoolstats.stream/bitcoinii`  
-**Coin listed as:** `Bitcoin II (BC2)`  
-**Algorithm:** `SHA-256` observed in page title  
-**Fee model:** Not checked  
-**Payout model:** Not checked  
-**Minimum payout:** Not checked  
-**Stratum host/port:** Not checked  
-**Last checked:** 2026-07-06  
-**Evidence level:** E4 public page/data endpoint observation; not E8 pool reliability/sync evidence
+**URL:** https://miningpoolstats.stream/bitcoinii  
+**Coin:** Bitcoin II (BC2) / SHA-256  
+**Last checked:** 2026-09-12
 
-**What was checked:**
+The BitcoinII project website currently links MiningPoolStats as the place to view available BC2 pools. MiningPoolStats is useful for discovering pool candidates and comparing public statistics.
 
-- Main MiningPoolStats BitcoinII page loaded.
-- Page title identified `Bitcoin II (BC2) SHA-256 | Mining Pools`.
-- Public data endpoint for `bitcoinii` was observed.
-- Public price endpoint for `bitcoinii` was observed.
-- Visible/data endpoint height was `57,398` during the check.
-- Page linked to `https://bitcoinii.ddns.net/explorer`.
+It is an aggregator, not evidence that every listed pool is reachable, synced, paying correctly, or independently operated. Pool-specific claims should be checked against the pool itself.
 
-**What was not checked:**
+## Other historical/current candidates
 
-- Pool payout correctness.
-- Pool sync status.
-- Pool fee and payout-rule details.
-- Mining account or payout behavior.
-- Stratum host/port details.
-- Whether data endpoints are documented or stable.
-- Whether the reported height is reliable enough to call any explorer synced.
+Older BitcoinII announcements and public ecosystem material mention additional pools, including MinorPool, Coin-Miners, Zpool, Crypto-Éire, AxeHub, and others. The current official explorer has also attributed recent blocks to multiple pool labels.
 
-**Notes:**
+Those references are useful discovery evidence but are not enough by themselves for MoreBC2 to publish full connection/payout details. Add detailed entries only after a direct current pool check.
 
-MiningPoolStats is a related mining/network stats resource, not a general block explorer. Do not treat it as proof of pool payout reliability or explorer sync.
+## What this audit establishes
 
-## Current status
+As of 2026-09-12, MoreBC2 can support these narrow statements:
 
-MoreBC2 has observed one related public BitcoinII mining/statistics page, but has not yet verified active BitcoinII mining pools, fee models, payout rules, stratum details, or payout reliability.
+- 1Miner.Net publishes current BC2 PPLNS and SOLO configuration pages.
+- CapsPool publishes current BC2 SOLO and PPS configuration.
+- BCMonster's current API documentation explicitly supports BC2.
+- MiningPoolStats remains a project-linked pool-discovery aggregator.
 
-## What to check
+This audit does **not** establish which pool is safest, most profitable, most reliable, most decentralized, or best for any miner.
 
-For each pool, verify:
+## Recheck checklist
 
-- Site loads.
-- BC2 or BitcoinII is listed directly by the pool.
-- Algorithm is shown, if visible.
-- Pool appears synced, if status is visible.
-- Recent activity is visible, if the pool displays it.
-- Fee model is documented.
-- Payout model is documented.
-- Payout threshold is documented.
-- Connection information is documented.
-- Last checked date is recorded.
+For a future active-pool recheck, capture:
 
-Do not claim profitability, safety, or payout reliability without direct dated evidence.
+- site/API reachability;
+- explicit BC2 listing;
+- algorithm;
+- payout model;
+- fee;
+- minimum payout;
+- stratum hostname/port;
+- region status;
+- visible recent activity/block history;
+- whether a direct stratum handshake/share test was actually performed;
+- what payout behavior remains untested.
 
-## Open items
-
-- Verify current pool list beyond MiningPoolStats aggregation.
-- Add active dated-check entries only after direct checks.
-- Add configuration examples only after testing.
-- Add mining software compatibility notes only after verification.
-- Compare pool-reported height/status against explorer and/or local node data before any sync claim.
+Do not infer payout reliability from a dashboard or marketing statement.
 
 ## Related pages
 
-- [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md)
 - [Mining overview](../mining/mining-overview.md)
 - [Difficulty adjustment](../encyclopedia/difficulty-adjustment.md)
-- [Verification queue](../verification/README.md)
+- [Public infrastructure smoke test — 2026-09-11](../verification/public-infrastructure-smoke-test-2026-09-11.md)
+- [Ecosystem index](README.md)
+- [Known unknowns](../verification/known-unknowns.md)
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Ecosystem direct check plan, existing mining-pool framework, and Codex explorer/API recon report from 2026-07-06
-**Notes:** One related mining/statistics resource is observed. No pool is listed as active or reliable because fee, payout, stratum, sync, and payout behavior checks have not been completed.
+**Status:** Reviewed / Partial
+**Primary sources checked:** Current 1Miner.Net BC2 PPLNS/SOLO and status pages; current CapsPool BC2 page; current BCMonster API documentation; current BitcoinII project website/MiningPoolStats linkage; preserved historical pool references
+**Notes:** Pool existence/configuration is directly observed where stated. Miner connectivity, share accounting, payout correctness, and long-term reliability remain unverified unless a future dated test explicitly covers them.
