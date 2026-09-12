@@ -1,77 +1,88 @@
 # BitcoinII v31 fork-aware header synchronization
 
-**Category:** Developer / Source Atlas
-**Status:** Source-reviewed partial
-**Last reviewed:** 2026-09-02
+**Category:** Developer / Source Atlas  
+**Status:** Reviewed / Source-confirmed partial  
+**Last reviewed:** 2026-09-12
 
 ## Purpose
 
-This page documents the `v31.1.0` header-sync path relevant to the release-note phrase "fork-aware header synchronization."
+This page documents the BitcoinII Core `v31.1.0` header-sync path behind the release-note phrase **fork-aware header synchronization**.
+
+The principal BitcoinII-specific v31 addition reviewed here is exact ShockWave next-work validation for alternate header branches inside the existing two-phase anti-DoS headers-sync framework.
 
 ## Existing two-phase model
 
-BitcoinII inherits the DoS-resistant headers-sync design that downloads a peer's candidate header chain in two phases when sufficient work is not yet established:
+BitcoinII inherits a two-phase headers-sync design for peer-supplied candidate chains whose work has not yet been fully established:
 
-1. **PRESYNC** — validate proof-of-work/chainwork while storing compact commitments rather than permanently retaining an untrusted low-work chain.
-2. **REDOWNLOAD** — once sufficient work is demonstrated, download the chain again, verify commitments, and release headers for normal acceptance.
+1. **PRESYNC** — validate proof of work / chainwork while retaining compact commitments instead of permanently accepting an untrusted low-work header chain.
+2. **REDOWNLOAD** — once sufficient work is demonstrated, download the chain again, verify commitments, and release headers into normal processing.
 
-The design is intended to resist memory exhaustion from low-work header spam without preventing reorganization to a legitimate higher-work branch.
+This limits memory exposure to low-work header spam while preserving the ability to consider a legitimate higher-work branch.
 
 ## v31 ShockWave requirement
 
-The important BitcoinII-specific problem is that ShockWave-era `nBits` cannot be validated from only the previous target. Exact required work depends on a rolling historical window and MedianTimePast.
+Post-activation `nBits` cannot be validated from only the previous target. ShockWave needs rolling target/timing history and MedianTimePast context.
 
-`v31.1.0` therefore gives `HeadersSyncState` private rolling `CBlockIndex` histories for both PRESYNC and REDOWNLOAD.
+`v31.1.0` therefore gives `HeadersSyncState` private rolling `CBlockIndex` histories for PRESYNC and REDOWNLOAD.
 
-The implementation keeps:
+The reviewed implementation retains:
 
-- 25 prior targets used by the ShockWave rolling baseline;
-- 10 additional predecessor blocks needed to reproduce the oldest sample's MedianTimePast;
+- 25 prior targets for the rolling ShockWave baseline;
+- 10 additional predecessors needed to reproduce the oldest sample's MedianTimePast;
 - 35 temporary indexes total.
 
-These indexes remain private to the peer sync state and are never inserted into the global block index simply because a peer supplied them.
+These temporary indexes are peer-sync state. They are not inserted into the global block index merely because a peer supplied them.
 
 ## Exact difficulty validation
 
-`ValidateShockWaveHeader()` checks that:
+`ValidateShockWaveHeader()` checks the required temporary history/context and requires the candidate's `nBits` to equal production `GetNextWorkRequired()` output for that candidate header.
 
-- temporary history exists;
-- synthetic history height matches the expected next height;
-- candidate time is greater than the previous MedianTimePast;
-- candidate `nBits` exactly equals the result of production `GetNextWorkRequired()`.
+The peer branch is therefore validated against the same ShockWave work calculation used by normal contextual header validation, rather than an approximation based only on the active tip's prior target.
 
-This means PRESYNC and REDOWNLOAD reproduce the same ShockWave difficulty calculation used during ordinary contextual header validation rather than using an approximation.
+## Fork-point anchoring
 
-## Branch handling
+The sync object is rooted at its known chain start/fork point. Temporary ShockWave history is built from that branch context and the necessary predecessors.
 
-The sync object is rooted at `m_chain_start`, documented as the best-known fork point from which the peer's supplied branch builds.
+This is the source-backed meaning of fork-aware in the v31 change: competing branches can be evaluated using their own rolling difficulty history rather than incorrectly borrowing the active branch's ShockWave state.
 
-Temporary ShockWave history is initialized from that real fork point and enough of its ancestors to reproduce the rolling/MTP state. As peer headers advance, validated headers are appended to the bounded synthetic history.
+## Failure/finalization behavior
 
-This is the source-backed sense in which the v31 header-sync path is fork-aware: candidate branches are evaluated from their actual known fork point with branch-specific rolling difficulty history instead of assuming the active-chain tip's ShockWave history applies to every competing branch.
+The sync state can fail/finalize when required history is unavailable, synthetic height/context diverges, timestamp ordering is invalid, required work does not match, or other headers-sync validation fails.
 
-## Failure/recovery behavior
+Finalization clears the temporary commitments/buffers/history so stale per-peer state is not reused.
 
-The header sync aborts/finalizes its per-peer state when required history is missing, the synthetic height diverges, MTP ordering fails, a header's required work is wrong, or other sync validation fails.
+## Relationship to active-chain selection
 
-`Finalize()` clears commitments, redownload buffers, and both temporary ShockWave histories so stale state is not reused.
+Headers sync validates and releases acceptable header candidates; it does **not** independently choose protocol finality or replace normal best-chain activation.
 
-The normal headers-sync two-phase commitment/redownload mechanism remains responsible for deciding when a sufficiently high-work branch can be released for full processing.
+The active chain is still selected by the ordinary validation/chainstate path according to accumulated valid chain work.
 
-## Upstream tests found
+## Runtime evidence — 2026-09-11
 
-The `v31.1.0` source tree includes:
+The isolated Windows `v31.1.0` mainnet node successfully acquired current headers from automatically discovered outbound peers and advanced block validation during bounded IBD.
 
-- `src/test/headers_sync_chainwork_tests.cpp`;
-- `src/test/fuzz/headerssync.cpp`.
+That is useful runtime corroboration that the current release's ordinary header-sync path functions in the documented environment.
 
-These exercise `HeadersSyncState` and its chainwork/header processing surfaces. MoreBC2 has located them but has not yet executed the current release test suite or mapped every ShockWave-specific branch to an individual assertion.
+It is **not** a controlled proof of the fork-aware alternate-branch logic specifically: MoreBC2 did not create a competing ShockWave branch, force PRESYNC/REDOWNLOAD transitions, or verify the 35-entry synthetic history by instrumentation.
 
-## What this page does not claim
+## Tests present upstream
 
-- It does not claim header sync itself chooses the active chain; normal block-index/chainstate validation and most-work selection still do that.
-- It does not claim every reorg scenario has been locally tested by MoreBC2.
-- It does not claim the release-note phrase represents a wholly new header-sync subsystem; the major BitcoinII-specific v31 addition reviewed here is exact ShockWave validation for alternate header branches within the existing anti-DoS sync framework.
+The `v31.1.0` source tree includes headers-sync chainwork tests and a headers-sync fuzz target. MoreBC2 has located those tests but has not yet run the clean current-release test suite or mapped every ShockWave-specific path to an assertion.
+
+## Related pages
+
+- [ShockWave v31](shockwave-v31.md)
+- [pow.cpp](pow-cpp.md)
+- [Block acceptance pipeline](block-acceptance.md)
+- [Peer communication model](../../architecture/peer-communication-model.md)
+- [Windows v31 node/RPC validation](../../verification/windows-v31-node-rpc-validation-2026-09-11.md)
+
+## Open work
+
+- Execute current headers-sync tests against a clean `v31.1.0` source build.
+- Map each ShockWave-specific headers-sync branch to test coverage.
+- Build an isolated competing-branch fixture if deeper runtime qualification becomes worthwhile.
+- Keep ordinary successful header acquisition distinct from proof of every fork-aware branch.
 
 ## Primary sources
 
@@ -88,6 +99,6 @@ Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Source-reviewed partial
-**Primary sources checked:** Yes, `v31.1.0`
-**Notes:** The two-phase sync model, fork-point anchoring, bounded ShockWave history and exact nBits validation are source-backed. Detailed test-to-helper mapping and live competing-branch scenarios remain open.
+**Status:** Reviewed / Source-confirmed partial  
+**Primary evidence:** BitcoinII Core `v31.1.0` headers-sync/PoW source plus bounded September 11 v31 mainnet header-acquisition runtime evidence  
+**Notes:** Fork-point anchoring, bounded ShockWave history, and exact required-work validation are source-backed. Ordinary header synchronization is runtime-corroborated; controlled alternate-branch ShockWave scenarios remain untested.
