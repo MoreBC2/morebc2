@@ -1,79 +1,121 @@
 # Explorer resources
 
 **Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-07-13
+**Status:** Reviewed / Time-sensitive
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-Block explorers help users inspect BitcoinII (BC2) blocks, transactions, addresses, and network status.
+Block explorers help users inspect BitcoinII (BC2) blocks, transactions, addresses, mempool state, and network statistics.
 
-This page is an overview. Dated explorer and public API observations now exist, including same-time local-node comparisons, but they do not establish permanent sync, reliability, official operation, or service-provider suitability.
+This page records the current explorer hierarchy and the evidence boundary around those services. It does not treat a public explorer as a substitute for an operator's own BitcoinII Core node in custody-critical workflows.
 
-For current service status, see [Infrastructure](../infrastructure/README.md). For API-specific summaries, see [API documentation](../api/README.md). For compatibility limits, see [Compatibility](../compatibility/README.md). For canonical evidence, see the [verification evidence index](../verification/verification-index.md).
+For route-level API behavior, see [API documentation](../api/README.md). For service role/status wording, see [Infrastructure](../infrastructure/README.md). For dated evidence, see [Public infrastructure smoke test — 2026-09-11](../verification/public-infrastructure-smoke-test-2026-09-11.md).
+
+## Current explorer hierarchy
+
+### Official BitcoinII Explorer
+
+**URL:** https://bitcoinii.ddns.net/explorer/  
+**Role:** Official BitcoinII Explorer  
+**Last directly checked:** 2026-09-11
+
+The service exposes a distinct public API shape from the Mempool-style services and reported API version `2.0.0` during the September smoke test.
+
+Observed working areas included tip/block lookups, supply/UTXO statistics, mempool summary/fees, mining statistics, next-block information, and block/header lookups.
+
+Important qualifications from the same test:
+
+- `/api/mempool/count` returned 404;
+- `/api/price` existed but reported exchange-rate functionality disabled in the server configuration;
+- `/api/price/marketcap` returned 500;
+- the UTXO statistics snapshot was 10 blocks behind the live tip at the observation point;
+- tested broadcast-route candidates returned 403, so MoreBC2 did **not** establish a working public valid-transaction submission endpoint there.
+
+### `explorer.bitcoin-ii.org`
+
+**URL:** https://explorer.bitcoin-ii.org  
+**Role:** Project-linked hostname; independently run/community-funded according to the service presentation; CapsPool.io infrastructure identified in the footer  
+**Last directly checked:** 2026-09-11
+
+The service exposed Mempool-style REST and WebSocket behavior during the September test.
+
+Project linkage by domain should not be rewritten as project operation unless stronger operator evidence exists.
+
+### `bc2mempool.com`
+
+**URL:** https://bc2mempool.com  
+**Role:** Supplemental public explorer/API service  
+**Last directly checked:** 2026-09-11
+
+The service exposed current-looking Mempool-style REST responses and a working WebSocket endpoint during the September test.
+
+`POST /api/tx` with deliberately invalid payload `00` returned HTTP 400. That proves route existence/rejection behavior, **not** successful valid BC2 broadcast.
+
+### `bc2.live`
+
+**URL:** https://bc2.live  
+**Role:** Supplemental public explorer/frontend  
+**Last directly checked:** 2026-09-11
+
+The service showed closely aligned Mempool-style REST/WebSocket behavior with `bc2mempool.com` and `explorer.bitcoin-ii.org` during the same comparison window.
+
+## Same-tip comparison
+
+At the September 11 comparison point, the Official BitcoinII Explorer, `explorer.bitcoin-ii.org`, and `bc2.live` all reported:
+
+- height `58968`;
+- best-block hash `0000000000000000fb4d304134d055212b16595626526fce3bce6637aff882cd`.
+
+This is useful point-in-time agreement. It is not proof of permanent synchronization, long-term availability, or independent backends.
+
+## Independence caution
+
+`bc2mempool.com`, `explorer.bitcoin-ii.org`, and `bc2.live` showed closely aligned Mempool-style routes, schemas, fee/mempool values, block data, WebSocket behavior, and malformed-broadcast rejection behavior.
+
+MoreBC2 therefore should **not** count those three hostnames automatically as three independent redundancy providers.
+
+The evidence also does **not** prove they share one literal server, node, database, network, or operator. Backend/operator independence remains unverified.
+
+## Electrum relationship
+
+Fresh read-only Electrum checks on 2026-09-11 succeeded at:
+
+- `infra1.bitcoin-ii.org:50008` — TCP;
+- `infra1.bitcoin-ii.org:50009` — TLS 1.3 with hostname validation.
+
+The older `explorer.bitcoin-ii.org:5008` candidate timed out again.
+
+Electrum reachability is useful infrastructure evidence but does not establish wallet compatibility, signing safety, spending behavior, or transaction-broadcast compatibility.
 
 ## What explorers are useful for
 
-Explorers can help verify:
+Explorers are appropriate for:
 
-- Current block height.
-- Block hashes.
-- Transaction IDs.
-- Address activity.
-- Confirmation counts.
-- Mempool state, if supported.
-- Network difficulty, if supported.
-- Public API availability, if supported.
+- checking current tip height/hash;
+- looking up known blocks and transactions;
+- inspecting address activity where supported;
+- checking confirmation depth;
+- observing public mempool/fee/mining statistics;
+- cross-checking a service operator's own node observations.
 
-## Explorer data caution
+They are weaker evidence for:
 
-Explorer data is useful, but it should not override source code for consensus rules.
+- consensus rules;
+- release-specific signing semantics;
+- long-term service reliability;
+- operator independence;
+- custody safety;
+- protocol finality.
 
-Use explorer data for live observations. Use source code for implementation details.
+## Service-provider guidance
 
-For exchanges and services, a public explorer should not replace a service's own BitcoinII Core node for critical deposit, withdrawal, or custody workflows.
+For exchanges and custody services:
 
-A page that is reachable is not necessarily reliable. A same-time local-node/API match is a dated point-in-time result, not proof of permanent sync. A public official-status claim should stay separate from independent confirmation of ownership or operation.
-
-## Explorer listing format
-
-Each explorer should be listed like this:
-
-```md
-### Explorer name
-
-**Status:** Active / Needs Review / Offline / Historical
-**URL:** 
-**Official:** Yes / No / Unknown
-**Last checked:** YYYY-MM-DD
-**Supports:** Blocks / transactions / addresses / API / mempool
-**API documentation:** URL or Unknown
-**Evidence level:** E1-E8
-**Notes:** 
-```
-
-## API check format
-
-If an explorer exposes a public API, summarize current API behavior in [API documentation](../api/README.md), summarize service status in [Infrastructure](../infrastructure/README.md), and keep dated evidence in Verification records.
-
-At minimum, check whether the API can provide:
-
-- Latest height.
-- Block lookup by height or hash.
-- Transaction lookup by txid.
-- Address lookup, if supported.
-- Mempool lookup, if supported.
-- Sync or health status, if supported.
-
-## Current evidence and open items
-
-Observed evidence now includes dated explorer/API checks and same-time node/API comparisons. Remaining open items include:
-
-- Recheck current explorers on a deliberate schedule before publication.
-- Confirm official ownership/operator status where relevant.
-- Check explorer uptime and long-term sync behavior.
-- Keep example block, transaction, and address lookups linked to dated records.
-- Avoid recommending any public explorer as a sole source of truth for service-provider workflows.
+- use a service-controlled BitcoinII Core node as the critical source of deposit/withdrawal state;
+- use public explorers as supplemental cross-checks;
+- monitor cumulative chainwork and reorg conditions rather than treating a public confirmation count as irreversible finality;
+- do not rely on one public explorer/API as the sole operational dependency.
 
 ## Related pages
 
@@ -82,16 +124,12 @@ Observed evidence now includes dated explorer/API checks and same-time node/API 
 - [API documentation](../api/README.md)
 - [Infrastructure directory](../infrastructure/README.md)
 - [Compatibility](../compatibility/README.md)
-- [Verification evidence index](../verification/verification-index.md)
-- [Local BitcoinII node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md)
-- [Public API, WebSocket, and Electrum smoke test - 2026-07-12](../verification/public-api-electrum-smoke-test-2026-07-12.md)
-- [Exchange integration](../exchange/README.md)
 - [Deposit monitoring](../exchange/deposit-monitoring.md)
-- [RPC overview](../developers/rpc-overview.md)
-- [Open questions backlog](../verification/open-questions.md)
+- [Public infrastructure smoke test — 2026-09-11](../verification/public-infrastructure-smoke-test-2026-09-11.md)
+- [Verification evidence index](../verification/verification-index.md)
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Verification evidence index, local node inspection, public API/Electrum smoke test, Infrastructure section, API section, and ecosystem explorer/API pages
-**Notes:** Dated explorer and API observations exist, but this page does not verify permanent sync, reliability, official status, wallet compatibility, broadcast behavior, or service-provider suitability.
+**Status:** Reviewed / Time-sensitive  
+**Primary sources checked:** September 11 direct explorer/REST/WebSocket/Electrum test, current Infrastructure/API/Ecosystem pages, and current Source Registry  
+**Notes:** Current service roles and dated behavior are documented. Permanent uptime, backend/operator independence, wallet compatibility, custody suitability, and successful valid public transaction broadcast remain unverified.
