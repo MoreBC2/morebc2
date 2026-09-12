@@ -14,18 +14,18 @@ Current service classification:
 - **Project-linked, independently operated explorer:** `https://explorer.bitcoin-ii.org`
 - **Supplemental public services:** `https://bc2mempool.com` and `https://bc2.live`
 
-Dated verification records remain canonical for specific protocol tests. A current reachability observation does not establish permanent uptime, backend independence, or suitability as the sole source of truth for custody infrastructure.
+The newest protocol-level evidence is [Public infrastructure smoke test — 2026-09-11](../verification/public-infrastructure-smoke-test-2026-09-11.md).
+
+A dated successful check does not establish permanent uptime, backend independence, or suitability as the sole source of truth for custody infrastructure.
 
 ## Explorer and REST
 
 | Endpoint | Classification | Purpose | Current status | Last checked | Known limitations |
 |---|---|---|---|---|---|
-| `https://bitcoinii.ddns.net/explorer/` | **Official BitcoinII Explorer** | Primary designated explorer for blocks, transactions, addresses, mempool, mining, UTXO data, and public API access | Reachable; current chain data observed | 2026-09-12 | Official designation does not imply an SLA or make a public explorer sufficient as a sole custody backend. |
-| `https://explorer.bitcoin-ii.org` | **Project-linked, independently operated explorer** | Mempool-style explorer hosted under the BitcoinII domain | Reachable; active explorer pages observed | 2026-09-12 | Footer identifies it as independently run/community-funded, with infrastructure by CapsPool.io. |
-| `https://bc2mempool.com` | **Supplemental public service** | Alternate explorer and public API surface | Reachable | 2026-09-12 | Ownership, backend independence, long-term uptime, and permanent synchronization are not established. |
-| `https://bc2.live` | **Supplemental public service** | Alternate explorer/frontend | Reachable | 2026-09-12 | Backend independence from other services has not been established. |
-| `https://bc2mempool.com/api/v1` | Supplemental REST namespace | Public API namespace | Base path returned 404 in the 2026-07-12 test; concrete endpoints worked | 2026-07-12 | Concrete JSON paths require a fresh direct re-test before current production claims. |
-| `https://bc2mempool.com/docs/api/rest` | Supplemental API documentation | REST documentation frontend | Reachable | 2026-09-12 | Earlier static fetch returned the SPA shell rather than a captured readable documentation body. |
+| `https://bitcoinii.ddns.net/explorer/` | **Official BitcoinII Explorer** | Primary designated explorer with its own public API surface | Reachable; tip/API/blockchain/mining/mempool/block routes directly observed | 2026-09-11 | No SLA implied. Some documented/likely routes are disabled or unavailable; see dated record. |
+| `https://explorer.bitcoin-ii.org` | **Project-linked, independently operated explorer** | Mempool-style explorer/API hosted under the BitcoinII domain | Reachable; REST, WebSocket, and invalid-broadcast rejection directly observed | 2026-09-11 | Service identifies itself as independently run/community-funded with CapsPool.io infrastructure. Backend independence from other Mempool-style hosts is not established. |
+| `https://bc2mempool.com` | **Supplemental public service** | Mempool-style explorer/API | Reachable; REST, WebSocket, and invalid-broadcast rejection directly observed | 2026-09-11 | Ownership/backend independence/long-term availability not established. |
+| `https://bc2.live` | **Supplemental public service** | Mempool-style explorer/API | Reachable; REST, WebSocket, and invalid-broadcast rejection directly observed | 2026-09-11 | Backend independence from other Mempool-style hosts is not established. |
 
 ### Infrastructure interpretation
 
@@ -35,30 +35,98 @@ Dated verification records remain canonical for specific protocol tests. A curre
 
 `bc2mempool.com` and `bc2.live` are supplemental services.
 
-A distinct hostname must not be treated as evidence of an independent backend. Backend/operator independence should be separately established before a service is counted toward infrastructure redundancy.
+The 2026-09-11 comparison found the Official BitcoinII Explorer, `explorer.bitcoin-ii.org`, and `bc2.live` at height `58968` with the same best-block hash. Separately, `bc2mempool.com` reported the same tip during the immediately preceding focused probe.
 
-The protocol-specific records below remain dated observations until directly re-tested. They should not be silently promoted to current verification merely because the corresponding web frontend is reachable.
+The Official BitcoinII Explorer exposes a materially different API shape from the Mempool-style services. By contrast, `explorer.bitcoin-ii.org`, `bc2mempool.com`, and `bc2.live` showed closely aligned Mempool-style routes, response schemas, mempool/fee values, block data, WebSocket behavior, and invalid-broadcast rejection behavior.
+
+Those similarities do **not** prove that the three Mempool-style hostnames share one literal backend, but they also do not establish independent redundancy. Do not count them as three independent node/API providers without separate operator/backend evidence.
+
+## Official BitcoinII Explorer API
+
+Base:
+
+`https://bitcoinii.ddns.net/explorer`
+
+Directly observed on 2026-09-11:
+
+| Route | Result | Notes |
+|---|---|---|
+| `/api/blocks/tip` | Working | Returned height `58968` and matching best-block hash during the test. |
+| `/api/version` | Working | Returned API version `2.0.0`. |
+| `/api/blockchain/coins` | Working | Supply response observed. |
+| `/api/blockchain/utxo-set` | Working with qualification | Returned a statistics snapshot at height `58958` while live tip was `58968`; may lag/cached. |
+| `/api/blockchain/next-halving` | Working | Next-halving response observed. |
+| `/api/mempool/summary` | Working | Mempool state returned. |
+| `/api/mempool/fees` | Working | Fee estimates returned. |
+| `/api/mempool/count` | Unavailable in test | HTTP 404. |
+| `/api/mining/hashrate` | Working | Multi-window hashrate response observed. |
+| `/api/mining/diff-adj-estimate` | Working | Difficulty estimate returned. |
+| `/api/mining/next-block` | Working | Estimated next-block data returned. |
+| `/api/mining/miner-summary` | Route present | Bare request returned an application-level error requiring `since` or start/end heights. |
+| `/api/price` | Route present but functionality disabled | HTTP 200 with `success:false`; server configuration reported exchange-rate requests disabled. |
+| `/api/price/marketcap` | Failed in test | HTTP 500. |
+| `/api/block/{hash}` | Working | Current block by hash returned. |
+| `/api/block/header/{hash}` | Working | Current block/header data returned. |
+| `/api/block/{height}` | Working | Current block by height returned. |
+| `/api/block/header/{height}` | Working | Current block/header data returned. |
+
+### Official explorer broadcast candidates
+
+Deliberately invalid POST probes to these candidate routes returned HTTP 403:
+
+- `/api/tx`
+- `/api/tx/send`
+- `/api/broadcast`
+
+No tested route established a public transaction-submission endpoint on the Official BitcoinII Explorer.
+
+## Mempool-style REST services
+
+The following route family was directly observed working on `bc2mempool.com`, `explorer.bitcoin-ii.org`, and `bc2.live` during the 2026-09-11 checks:
+
+- `/api/v1/blocks/tip/height`
+- `/api/v1/blocks/tip/hash`
+- `/api/v1/blocks`
+- `/api/mempool`
+- `/api/mempool/recent`
+- `/api/v1/fees/recommended`
+- `/api/v1/difficulty-adjustment`
+- `/api/v1/mining/hashrate/3d`
+- `/api/v1/prices`
+- `/bc2-price.json`
+- `/richlist.json`
+- `/api/block/{hash}`
+- `/api/block/{hash}/txids`
+- `/api/block/{hash}/txs`
+- `/api/block-height/{height}`
+
+`/api/v1/services` returned HTTP 404 on the tested Mempool-style services and should not be treated as an active route.
 
 ## WebSocket
 
-| Endpoint | Purpose | Current status | Last checked | Evidence source | Known limitations |
-|---|---|---|---|---|---|
-| `wss://bc2mempool.com/api/v1/ws` | Supplemental explorer/WebSocket updates | Handshake observed; initial explorer-state event received | 2026-07-12 | [Public API/Electrum smoke test](../verification/public-api-electrum-smoke-test-2026-07-12.md) | Full schema, reconnect behavior, and long sessions not verified. |
+| Endpoint | Current status | Last checked | Evidence source | Known limitations |
+|---|---|---|---|---|
+| `wss://bc2mempool.com/api/v1/ws` | Connected; `init` request returned explorer-state data | 2026-09-11 | [Public infrastructure smoke test](../verification/public-infrastructure-smoke-test-2026-09-11.md) | Full schema, reconnect behavior, and long sessions not verified. |
+| `wss://explorer.bitcoin-ii.org/api/v1/ws` | Connected; `init` request returned explorer-state data | 2026-09-11 | [Public infrastructure smoke test](../verification/public-infrastructure-smoke-test-2026-09-11.md) | Backend independence from other Mempool-style services not established. |
+| `wss://bc2.live/api/v1/ws` | Connected; `init` request returned explorer-state data | 2026-09-11 | [Public infrastructure smoke test](../verification/public-infrastructure-smoke-test-2026-09-11.md) | Backend independence from other Mempool-style services not established. |
+
+## Public transaction-submission routes
+
+The following endpoints accepted POST requests and returned HTTP 400 when sent deliberately invalid transaction payload `00`:
+
+- `https://bc2mempool.com/api/tx`
+- `https://explorer.bitcoin-ii.org/api/tx`
+- `https://bc2.live/api/tx`
+
+This proves route existence/rejection behavior only. MoreBC2 has **not** tested successful broadcast of a valid BC2 transaction through these public services.
 
 ## Electrum
 
-| Endpoint | Purpose | Current status | Last checked | Evidence source | Known limitations |
-|---|---|---|---|---|---|
-| `tcp://infra1.bitcoin-ii.org:50008` | Electrum TCP | Read-only calls succeeded | 2026-07-12 | [Public API/Electrum smoke test](../verification/public-api-electrum-smoke-test-2026-07-12.md) | Wallet compatibility not established. |
-| `ssl://infra1.bitcoin-ii.org:50009` | Electrum SSL | Read-only calls succeeded; TLS hostname validation passed | 2026-07-12 | [Public API/Electrum smoke test](../verification/public-api-electrum-smoke-test-2026-07-12.md) | Wallet compatibility and spending/broadcast behavior not established. |
-| `tcp://explorer.bitcoin-ii.org:5008` | Electrum TCP candidate | Timed out | 2026-07-12 | [Public API/Electrum smoke test](../verification/public-api-electrum-smoke-test-2026-07-12.md) | No protocol result from the check. |
-
-## Public JSON feeds
-
-| Endpoint | Purpose | Current status | Last checked | Evidence source | Known limitations |
-|---|---|---|---|---|---|
-| `https://bc2mempool.com/bc2-price.json` | Supplemental BC2 price data | Observed JSON response | 2026-07-12 | [Public API/Electrum smoke test](../verification/public-api-electrum-smoke-test-2026-07-12.md) | Price source and update behavior should be checked before reuse. |
-| `https://bc2mempool.com/richlist.json` | Supplemental rich-list/supply data | Observed JSON response | 2026-07-12 | [Public API/Electrum smoke test](../verification/public-api-electrum-smoke-test-2026-07-12.md) | Full rich list should not be copied into normal docs; schema stability not established. |
+| Endpoint | Current status | Last checked | Evidence source | Known limitations |
+|---|---|---|---|---|
+| `tcp://infra1.bitcoin-ii.org:50008` | Read-only `server.version` succeeded; ElectrumX `1.18.0`, protocol `1.4` | 2026-09-11 | [Public infrastructure smoke test](../verification/public-infrastructure-smoke-test-2026-09-11.md) | Wallet compatibility and spending behavior not established. |
+| `ssl://infra1.bitcoin-ii.org:50009` | TLS 1.3 connection and hostname validation succeeded; `server.version` returned ElectrumX `1.18.0`, protocol `1.4` | 2026-09-11 | [Public infrastructure smoke test](../verification/public-infrastructure-smoke-test-2026-09-11.md) | Wallet compatibility and Electrum broadcast behavior not established. |
+| `tcp://explorer.bitcoin-ii.org:5008` | Timed out again | 2026-09-11 | [Public infrastructure smoke test](../verification/public-infrastructure-smoke-test-2026-09-11.md) | Should not be represented as a currently working Electrum service. |
 
 ## Local RPC historical reference
 
@@ -71,5 +139,5 @@ Local RPC is not a public endpoint. The entry below is retained as historical Mo
 ## Verification
 
 **Status:** Draft / Evidence-linked directory  
-**Primary sources checked:** Existing MoreBC2 verification records plus public reachability and operator-label checks from 2026-09-12  
-**Notes:** `bitcoinii.ddns.net/explorer/` is classified as the Official BitcoinII Explorer. `explorer.bitcoin-ii.org` is classified as project-linked but independently operated. `bc2mempool.com` and `bc2.live` are classified as supplemental services. Historical protocol checks remain dated; backend independence, uptime guarantees, and custody-grade reliability remain unverified unless explicitly supported by a dated verification record.
+**Primary evidence:** [Public infrastructure smoke test — 2026-09-11](../verification/public-infrastructure-smoke-test-2026-09-11.md), plus preserved historical records  
+**Notes:** Current REST, WebSocket, Electrum, and invalid-broadcast rejection behavior was directly re-tested on 2026-09-11. Successful valid-transaction broadcast, long-term uptime, custody-grade reliability, wallet compatibility, and independent backend/operator redundancy remain unverified.
