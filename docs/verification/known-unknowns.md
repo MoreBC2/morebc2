@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-09-02
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
@@ -18,13 +18,19 @@ For the full working list, use the [open questions backlog](open-questions.md) a
 
 The current BitcoinII Core release is `v31.1.0`, published on 2026-08-29.
 
-MoreBC2 has observed the current release metadata, four uploaded Linux/Windows CLI/Qt assets, and GitHub-reported SHA-256 digests.
+MoreBC2 has now observed:
 
-The deeper 2026-08-27 artifact audit applies to historical `v29.1.0`, not automatically to `v31.1.0`.
+- six current Linux, Windows, and macOS release assets;
+- GitHub-reported SHA-256 digest metadata for all six;
+- lightweight tag `v31.1.0`;
+- tag target commit `8daaf7b12e71d3646eed787f040bf2899a69dc1c`;
+- GitHub verification state reporting that target commit as cryptographically verified with a valid signature.
 
-**Needed:** Independent `v31.1.0` downloads/hashes, current tag/commit signature review, publisher checksum/signature discovery, trusted BitcoinII release-key guidance, and reproducible-build evidence if available.
+This resolves the earlier question of whether current commit-signature evidence exists.
 
-**Blocks:** Strong public release-authentication claims.
+**Still needed:** independent downloads/hashes, publisher checksum/signature material if any, a documented BitcoinII release-key process if one exists, and reproducible-build evidence.
+
+**Blocks:** claims that the distributed binaries themselves have been independently authenticated or reproducibly matched to source.
 
 ### v31.1.0 runtime regression coverage
 
@@ -35,6 +41,14 @@ MoreBC2's existing local command/node evidence is largely `v29.1.0`-scoped.
 **Needed:** Current-release runtime records for core read-only node/RPC behavior and selected safe workflows.
 
 **Blocks:** Claims that earlier local tests prove current-release behavior.
+
+### v31.1.0 RPC runtime behavior
+
+The documented mainnet RPC default is now source-confirmed as `8332`. The historical MoreBC2 `8337` observation belongs to a configured v29.1.0 environment.
+
+**Needed:** fresh v31.1.0 startup, authentication, and RPC command records in an isolated test environment.
+
+**Blocks:** claims that MoreBC2 has directly exercised current-release runtime behavior.
 
 ### ShockWave detailed validation and live behavior
 
@@ -48,7 +62,7 @@ MoreBC2 has source-backed current documentation for ShockWave activation and its
 
 MoreBC2 has confirmed mainnet replay protection activation at height `57750` and fork ID `0x01324342`.
 
-**Needed:** Detailed source review of transaction serialization/signing/validation behavior and wallet/service integration implications.
+**Needed:** Detailed source review of transaction serialization/signing/validation behavior and wallet/service integration implications, plus reproducible transaction test vectors.
 
 **Blocks:** Detailed integration guidance beyond the activation/fork-domain facts.
 
@@ -68,11 +82,11 @@ The `v31.1.0` release explicitly identifies fork-aware header synchronization.
 
 **Blocks:** Strong operational claims about all synchronization edge cases.
 
-### Official ticker source
+### Ticker status — resolved
 
-BC2 is used throughout the ecosystem, but MoreBC2 still needs the strongest project-controlled source confirming ticker usage.
+`BC2` is source-confirmed in BitcoinII Core v31.1.0, including the formatted currency unit in `src/policy/feerate.h` and related BitcoinII UI/source references.
 
-**Needed:** Official website, README, release note, source UI/help text, or maintainer statement.
+This is no longer treated as a highest-priority known unknown.
 
 ### Exchange confirmation recommendation
 
@@ -94,9 +108,16 @@ MoreBC2 has source-reviewed BitcoinII Core wallet behavior and dated public Elec
 
 ### Active ecosystem resources
 
-Explorer, API, exchange, pool, and market-service observations can become stale.
+The primary explorer hierarchy was refreshed on 2026-09-12:
 
-**Needed:** Dated direct rechecks before publication/recommendation and a clear stale-service policy.
+- `bitcoinii.ddns.net/explorer/` — Official BitcoinII Explorer
+- `explorer.bitcoin-ii.org` — project-linked but independently operated/community-funded
+- `bc2mempool.com` — supplemental public explorer/API service
+- `bc2.live` — supplemental public frontend/service
+
+Current web reachability does not establish long-term uptime or backend independence.
+
+**Needed:** fresh direct protocol checks for documented REST paths, WebSocket, Electrum TCP/TLS, transaction broadcast, and any claimed redundant backend operators.
 
 ### Architecture and Source Atlas release drift
 
@@ -117,5 +138,5 @@ Instead:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current `v31.1.0` release/source anchors plus existing MoreBC2 evidence records
-**Notes:** This page is an executive list. The detailed backlog remains in `open-questions.md`.
+**Primary sources checked:** Current `v31.1.0` release/source anchors, GitHub release/tag verification metadata, current public explorer observations, plus existing MoreBC2 evidence records
+**Notes:** This page is an executive list. Ticker identity, documented v31.1.0 RPC default, six-asset release inventory, verified target-commit state, and explorer hierarchy were refreshed on 2026-09-12. Runtime validation, binary authentication, confirmation policy, technical contact process, and current protocol-level service testing remain open.
