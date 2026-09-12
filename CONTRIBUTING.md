@@ -11,7 +11,7 @@ MoreBC2 is not the official BitcoinII project, release channel, or reference imp
 
 ## Licensing of contributions
 
-The repository uses the path-scoped licensing model described in [`LICENSE`](LICENSE):
+The repository uses the path-scoped licensing model described in [`LICENSE`](https://github.com/MoreBC2/morebc2/blob/main/LICENSE):
 
 - original MoreBC2 documentation: CC BY 4.0;
 - original MoreBC2 software, site tooling, configuration, tests, and rights-cleared project assets: MIT;
