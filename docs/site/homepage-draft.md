@@ -1,63 +1,39 @@
-# MoreBC2 homepage draft
+# Homepage draft — archived
 
-**Category:** Project maintenance
-**Status:** Draft
-**Last reviewed:** 2026-06-29
+**Category:** Project maintenance  
+**Status:** Historical planning artifact  
+**Last reviewed:** 2026-09-12
 
-## Hero
+> This was an early homepage copy draft from before the current Astro/Starlight site was implemented. It is preserved for history and is not the current homepage specification.
 
-# MoreBC2
+## Historical intent
 
-Community documentation and resources for the BitcoinII (BC2) ecosystem.
+The draft centered MoreBC2 around:
 
-MoreBC2 preserves, organizes, and explains publicly verifiable information about BitcoinII.
+- independent community documentation for BitcoinII (BC2);
+- source-backed technical claims;
+- clear newcomer/developer/operator entry points;
+- visible verification status;
+- separation of Documentation, Research, Discussion, History, and News;
+- contribution/correction paths.
 
-> MoreBC2 is not the source of truth. It is a map to the source of truth.
+Those principles remain broadly consistent with the current site, but the old statement that MoreBC2 was in “early foundation-building mode” is no longer current.
 
-## Primary actions
+## Current source of truth
 
-- Start learning about BitcoinII
-- View network specifications
-- Read the consensus overview
-- Open the exchange integration package
-- Browse the verification dashboard
-- Contribute corrections or sources
+Use the deployed site's actual homepage configuration/content plus:
 
-## New here?
+- [Root README](../../README.md)
+- [Project status](../../PROJECT_STATUS.md)
+- [Documentation index](../README.md)
+- [Documentation coverage](../documentation-coverage.md)
 
-Start with:
+## Historical note
 
-- What is BitcoinII?
-- Wallet guide
-- Node guide
-- Mining overview
+Git history retains the original homepage copy if the early design language is needed for provenance or comparison.
 
-## Developers
+## Verification
 
-For builders and service operators:
-
-- RPC overview
-- Network specifications
-- Consensus overview
-- Exchange integration package
-- Source registry
-
-## Verification-first documentation
-
-MoreBC2 separates:
-
-- Documentation — what is currently verified.
-- Research — technical analysis and comparisons.
-- Discussion — community ideas and proposals.
-- History — past events and context.
-- News — dated factual updates.
-
-## Current project status
-
-MoreBC2 is in early foundation-building mode.
-
-Many pages are Draft or Needs Review. Technical claims should be checked against primary sources before being treated as verified.
-
-## Footer line
-
-Preserving the knowledge. Strengthening the ecosystem.
+**Status:** Historical planning artifact  
+**Primary evidence checked:** Current public/deployed project state  
+**Notes:** Not current homepage copy.
