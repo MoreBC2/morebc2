@@ -1,8 +1,8 @@
 # BitcoinII Network Specifications
 
 **Category:** Documentation
-**Status:** Needs Review
-**Last reviewed:** 2026-09-02
+**Status:** Source-reviewed / Operational verification incomplete
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
@@ -19,6 +19,7 @@ Values should not be copied from community chat, explorer pages, or third-party 
 
 ## Supply and units
 
+- Ticker / formatted currency unit: `BC2`
 - `COIN = 100000000`
 - `MAX_MONEY = 21000000 * COIN`
 - Subsidy halving interval: `210000` blocks
@@ -71,16 +72,29 @@ Earlier deployment parameters remain:
 - Assumed blockchain size hint: `10`
 - Assumed chain-state size hint: `10`
 
+### Generated configuration caution
+
+The release-generated example configuration contains inherited Bitcoin wording that describes the default P2P `-port` as `8333`.
+
+BitcoinII's release-pinned mainnet chain parameters set `nDefaultPort = 8338`.
+
+For BC2 network documentation, `8338` is the authoritative v31.1.0 mainnet P2P default. The `8333` example-config comment should be treated as inherited documentation drift.
+
 ### RPC ports
 
-Inherited/generated example configuration shows:
+BitcoinII Core v31.1.0 consistently documents the following JSON-RPC defaults:
 
 - Mainnet: `8332`
 - Testnet: `18332`
+- Testnet4: `48332`
 - Signet: `38332`
 - Regtest: `18443`
 
-A dated local `v29.1.0` Windows/mainnet test configured and observed `127.0.0.1:8337`. That historical test does not establish a universal `v31.1.0` default. Verify the exact release and active node configuration before operational use.
+The RPC port is operator-configurable.
+
+A dated MoreBC2 v29.1.0 Windows/mainnet test used `127.0.0.1:8337`. That value is preserved as historical configured-runtime evidence and is not the documented v31.1.0 mainnet default.
+
+**Evidence status:** default values are **Source-confirmed**; fresh MoreBC2 v31.1.0 runtime behavior remains **Runtime-unverified**.
 
 ## Genesis block
 
@@ -129,7 +143,7 @@ The safest current wording is:
 
 ## Open items
 
-- Release-specific RPC-default behavior.
+- Fresh v31.1.0 runtime confirmation of documented RPC behavior.
 - Recommended exchange deposit/withdrawal confirmation policy.
 - Detailed replay-protection transaction-path review.
 - Detailed consensus data-restriction review.
@@ -144,10 +158,12 @@ The safest current wording is:
 - `v31.1.0/src/primitives/block.cpp`
 - `v31.1.0/src/hash.h`
 - `v31.1.0/src/consensus/amount.h`
+- `v31.1.0/src/policy/feerate.h`
 - `v31.1.0/share/examples/bitcoinII.conf`
+- `v31.1.0/doc/JSON-RPC-interface.md`
 
 ## Verification
 
-**Status:** Needs Review
-**Primary sources checked:** Partially
-**Notes:** Current-facing release, network, activation, and difficulty wording has been refreshed for `v31.1.0`. RPC defaults, live deployment state, and several operational recommendations remain intentionally unresolved.
+**Status:** Source-reviewed / Operational verification incomplete
+**Primary sources checked:** BitcoinII Core v31.1.0 release-pinned chain parameters, consensus/difficulty source, amount/fee unit definitions, generated configuration, and RPC documentation.
+**Notes:** Current-facing release, ticker, network, activation, difficulty, RPC-default, and P2P-port wording has been refreshed for `v31.1.0`. Fresh runtime behavior, live deployment state, and several operational recommendations remain intentionally unresolved.
