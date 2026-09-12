@@ -1,99 +1,94 @@
 # Bitcoin Core RPC compatibility
 
 **Category:** Compatibility
-**Status:** Draft / Locally tested partial
-**Last reviewed:** 2026-07-13
+**Status:** Reviewed / Locally tested partial
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-BitcoinII Core exposes Bitcoin Core-style JSON-RPC behavior, but MoreBC2 has not established full Bitcoin Core RPC compatibility.
+BitcoinII Core exposes a substantial Bitcoin Core-style JSON-RPC interface, but MoreBC2 has not established complete Bitcoin Core RPC compatibility.
+
+Current compatibility evidence is stronger than the earlier v29 read-only record because BitcoinII Core `v31.1.0` has now been exercised in isolated Windows mainnet and regtest environments.
 
 Canonical evidence:
 
-- [Read-only RPC smoke test - 2026-07-10](../verification/read-only-rpc-smoke-test-2026-07-10.md)
-- [Local BitcoinII node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md)
+- [Windows v31.1.0 node and RPC validation — 2026-09-11](../verification/windows-v31-node-rpc-validation-2026-09-11.md)
+- [Windows v31.1.0 PSBT and replay-protection validation — 2026-09-11](../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
 - [RPC overview](../developers/rpc-overview.md)
 - [Read-only examples](../api/read-only-examples.md)
 - [RPC configuration](../configuration/rpc-configuration.md)
 
-## Observed and locally tested
+## Current v31.1.0 node/RPC coverage
 
-The 2026-07-10 local smoke test used BitcoinII Core `v29.1.0` on Windows mainnet with local-only RPC at `127.0.0.1:8337`.
+The 2026-09-11 Windows mainnet validation exercised BitcoinII Core `v31.1.0` with random-cookie authentication over loopback RPC and a newly created disposable data directory.
 
-These read-only commands were locally tested:
+Observed calls included:
 
-- `getblockcount`
-- `getbestblockhash`
-- `getblockchaininfo`
 - `getnetworkinfo`
-- `getconnectioncount`
-- `getpeerinfo`
+- `getblockchaininfo`
 - `getmempoolinfo`
-- `getdifficulty`
+- `getpeerinfo`
+- `getnettotals`
 - `uptime`
+- `getchaintips`
+- `getindexinfo`
+- `listwallets`
+- `listwalletdir`
+- `createwallet`
+- `getwalletinfo`
+- `loadwallet`
+- `stop`
 
-The node reported:
+The runtime reported version `310100`, subversion `/BitcoinII:31.1.0/`, and protocol version `70016`.
 
-- RPC-reported version: `290100`
-- subversion: `/Satoshi:29.1.0/`
-- protocol version: `70016`
-- chain: `main`
-- `initialblockdownload=false`
-- `pruned=true`
+The test intentionally used `127.0.0.1:28332` because local port `8332` was already occupied by unrelated software. That test port is not a BitcoinII network default.
 
-## Local-only RPC configuration
+## Current v31.1.0 PSBT/raw-transaction coverage
 
-The local node inspection recorded this configuration:
+A separate isolated regtest validation exercised a deeper wallet and raw-transaction workflow with zero peers:
 
-```ini
-server=1
-rpcbind=127.0.0.1
-rpcallowip=127.0.0.1
-rpcport=8337
-```
+- `getnewaddress`
+- `generatetoaddress`
+- `getbalances`
+- `walletcreatefundedpsbt`
+- `decodepsbt`
+- `walletprocesspsbt`
+- `finalizepsbt`
+- `decoderawtransaction`
+- `testmempoolaccept`
+- `sendrawtransaction`
+- `getmempoolentry`
 
-The check observed RPC bound to `127.0.0.1:8337`, with no public or LAN-address RPC bind.
+The PSBT was funded, signed, finalized, accepted by `testmempoolaccept`, and submitted only to the isolated local regtest mempool. No public-network transaction broadcast was performed.
 
-See [Local BitcoinII node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md).
+## Historical v29 evidence
 
-## Source reviewed
+The earlier 2026-07-10 Windows `v29.1.0` record remains valid as historical evidence for the nine read-only commands it tested. It should not be used as the primary current compatibility statement when v31 coverage exists.
 
-MoreBC2 has first-pass source review for mining, blockchain, network, raw transaction, mempool/broadcast, and wallet RPC groups. See [RPC overview](../developers/rpc-overview.md).
+## Source-reviewed scope
 
-Source-reviewed does not mean locally tested.
+MoreBC2 also has release-pinned source review covering blockchain, network, mining, raw-transaction, mempool, wallet, PSBT, and related RPC paths.
 
-## Intentionally not tested
-
-The local smoke test did not run:
-
-- wallet commands,
-- private-key commands,
-- seed or descriptor commands,
-- address-generation commands,
-- transaction creation or broadcast commands,
-- mining commands,
-- import/export commands,
-- peer-control commands,
-- shutdown,
-- state-changing RPC.
+Source review does not prove runtime equivalence with Bitcoin Core and does not replace workflow testing.
 
 ## Compatibility boundaries
 
 Do not claim:
 
-- full Bitcoin Core RPC compatibility,
-- cross-platform RPC behavior,
-- wallet-command safety,
-- transaction-broadcast compatibility,
-- mining-command compatibility,
-- byte-for-byte equivalence between the locally built CLI and official release assets.
+- complete Bitcoin Core RPC compatibility;
+- identical argument validation, error codes, response schemas, or defaults for every method;
+- cross-platform equivalence;
+- production-wallet or custody safety from isolated tests;
+- successful public-network transaction broadcast;
+- external-signer compatibility after replay-protection activation;
+- that an operator should use the historical `8337` RPC port or the test-only `28332` port as a default.
 
 Safe wording:
 
-> Nine read-only Bitcoin Core-style RPC commands were locally tested against BitcoinII Core v29.1.0 on Windows mainnet.
+> BitcoinII Core v31.1.0 exposes Bitcoin Core-style JSON-RPC, with current MoreBC2 runtime coverage spanning node, network, blockchain, mempool, wallet, PSBT, raw-transaction, and shutdown workflows in bounded isolated tests. Full Bitcoin Core RPC equivalence has not been established.
 
 ## Verification
 
-**Status:** Draft / Locally tested partial  
-**Primary sources checked:** Existing RPC smoke-test and source-review records linked above  
-**Notes:** This page summarizes current RPC compatibility evidence. It does not broaden the tested command scope.
+**Status:** Reviewed / Locally tested partial  
+**Primary sources checked:** 2026-09-11 v31.1.0 Windows node/RPC and PSBT validation records plus release-pinned RPC source review  
+**Notes:** Compatibility is established only for the documented calls and test conditions, not the entire Bitcoin Core RPC surface.
