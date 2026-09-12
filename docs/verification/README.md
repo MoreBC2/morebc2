@@ -27,6 +27,7 @@ Older navigation/status pages:
 
 Local runtime and RPC:
 
+- [Windows v31.1.0 PSBT and replay-protection validation - 2026-09-11](windows-v31-psbt-replay-validation-2026-09-11.md)
 - [Windows v31.1.0 node and RPC validation - 2026-09-11](windows-v31-node-rpc-validation-2026-09-11.md)
 - [Windows fresh-node peer discovery test - 2026-08-28](windows-peer-discovery-test-2026-08-28.md)
 - [Windows node-operator test - 2026-08-27](windows-node-operator-test-2026-08-27.md)

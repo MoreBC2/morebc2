@@ -20,10 +20,11 @@ Evidence is version-scoped. A dated `v29.1.0` test remains valid evidence for th
 | Current release binary signatures | Partially resolved | Verified target-commit evidence exists, but no maintainer-signed binary checksum/signature path has been established by MoreBC2. | Commit verification is not binary authentication or reproducible-build proof. |
 | Current consensus identity | Source-reviewed partial | `v31.1.0` documents ShockWave, data restrictions, replay protection, and fork-aware header synchronization; mainnet activation anchors at height `57750` are recorded. | Detailed new validation/synchronization caller paths remain open. |
 | Current difficulty model | Source-reviewed | ShockWave per-block difficulty after height `57750`; 10-minute target spacing remains. | Empirical network-performance analysis remains open. |
-| Replay protection | Source-reviewed partial | Activation height `57750`; fork ID `0x01324342`. | Detailed transaction/wallet/service path review remains open. |
+| Replay protection | Source-confirmed / runtime-boundary limited | `v31.1.0` mainnet activates at height `57750` with fork ID `0x01324342`; signing, PSBT, mempool, block-validation, cache, and activation-boundary paths are traced. Regtest leaves replay activation disabled, so the domain switch was not runtime-exercised. | Mainnet vectors, external signers, and third-party implementations remain runtime-unverified. |
 | Data restrictions | Source-reviewed partial | Activation height `57750`; release describes Ordinals/inscriptions/Runes mitigation. | Detailed rule boundary/testing remains open. |
 | Local BitcoinII node | Locally tested / current-dated | Isolated Windows `v31.1.0` Qt-server startup, mainnet peer discovery, initial sync, cookie RPC, shutdown, and restart passed on 2026-09-11. | Full sync, long-duration operation, optional indexes/pruning, and a v31 headless-daemon path remain unverified. |
-| Read-only RPC commands | Locally tested / current-dated | The requested v31.1.0 node/network RPC set passed through direct cookie-authenticated loopback JSON-RPC; one newly created zero-transaction disposable wallet was isolated and inspected. | Transaction, signing, PSBT, broadcast, fee-estimation, wallet security, and production workflows remain untested. |
+| Read-only RPC commands | Locally tested / current-dated | The requested v31.1.0 node/network RPC set passed through direct cookie-authenticated loopback JSON-RPC; one newly created zero-transaction disposable wallet was isolated and inspected. | Fee estimation, wallet security, public-network transaction behavior, and production workflows remain untested. |
+| PSBT and local transaction flow | Locally tested / current-dated | A fresh isolated v31.1.0 regtest wallet funded, signed, finalized, decoded, mempool-tested, and locally submitted a one-input/two-output PSBT transaction on 2026-09-11. | Public-network broadcast, replay-domain activation, external signers, and third-party signing remain untested. |
 | Explorer/API/WebSocket | Directly observed / current-dated | 2026-09-11 checks verified the Official BitcoinII Explorer API plus Mempool-style REST/WebSocket surfaces on `bc2mempool.com`, `explorer.bitcoin-ii.org`, and `bc2.live`; compared explorers agreed on the same tip. | Long-term uptime, custody-grade reliability, and backend/operator independence remain unverified. |
 | Electrum | Directly observed / current-dated | `infra1.bitcoin-ii.org:50008` TCP and `:50009` TLS answered `server.version` as ElectrumX `1.18.0`, protocol `1.4`; TLS hostname validation succeeded. | Wallet compatibility, spending, and Electrum broadcast behavior remain unverified. |
 | Public transaction submission | Route presence observed | `/api/tx` on three Mempool-style services accepted POST and rejected deliberately invalid transaction payloads with HTTP 400. | Successful valid-BC2 transaction broadcast has not been tested. |
@@ -33,6 +34,7 @@ Evidence is version-scoped. A dated `v29.1.0` test remains valid evidence for th
 ## Current release evidence
 
 - [Windows v31.1.0 node and RPC validation — 2026-09-11](windows-v31-node-rpc-validation-2026-09-11.md)
+- [Windows v31.1.0 PSBT and replay-protection validation — 2026-09-11](windows-v31-psbt-replay-validation-2026-09-11.md)
 - [v31.1.0 release asset record](../releases/v31.1.0-assets.md)
 - [BitcoinII release documentation](../documentation/releases.md)
 - [Network specifications](../documentation/network-specifications.md)
@@ -68,7 +70,7 @@ These are dated observations, not permanent reliability claims.
 
 1. Independently authenticate the current `v31.1.0` assets beyond the repeat-byte Windows Qt hash recorded in the new runtime test.
 2. Complete a fresh `v31.1.0` initial sync and exercise optional index/pruning configurations where needed.
-3. Map replay-protection transaction behavior in detail.
+3. Produce independent replay-protection transaction vectors and test external/third-party signer compatibility.
 4. Map data-restriction validation behavior in detail.
 5. Review fork-aware header synchronization internals/runtime behavior.
 6. Establish backend/operator independence where infrastructure redundancy is claimed.

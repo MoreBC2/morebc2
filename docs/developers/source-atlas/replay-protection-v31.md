@@ -1,8 +1,8 @@
 # BitcoinII v31 replay protection
 
 **Category:** Developer / Source Atlas
-**Status:** Source-reviewed partial
-**Last reviewed:** 2026-09-02
+**Status:** Source-confirmed / Runtime PSBT coverage
+**Last reviewed:** 2026-09-11
 
 ## Purpose
 
@@ -57,6 +57,12 @@ Reviewed v31 paths include:
 - node PSBT analysis accepting a fork-id argument;
 - external-signer code refusing to treat a post-fork signing flow as safe unless replay-protection sighash support is available.
 
+## Runtime boundary
+
+The [2026-09-11 Windows v31.1.0 PSBT validation](../../verification/windows-v31-psbt-replay-validation-2026-09-11.md) directly exercised funding, wallet signing, PSBT finalization/decoding, raw-transaction decoding, local mempool admission, and local regtest submission.
+
+That runtime test does **not** directly exercise the replay-domain switch. In `v31.1.0`, regtest does not override the consensus defaults of disabled activation and fork id zero. Testnet4 contains a height-`119` setting, but it is a public test network and was deliberately not used for transaction submission. Mainnet replay behavior therefore remains source-confirmed rather than runtime-confirmed.
+
 ## Exchange/integration implication
 
 An integrator must use the current BitcoinII Core signing/validation stack or otherwise reproduce the post-activation sighash domain correctly. Bitcoin-compatible address formats alone are not sufficient for transaction-signing compatibility.
@@ -66,7 +72,7 @@ The important boundary is **signature digest compatibility**, not address encodi
 ## What this review does not yet prove
 
 - No independent MoreBC2 transaction vector has yet been generated showing the pre/post-fork digest difference.
-- MoreBC2 has not yet run a disposable-wallet transaction signing test against `v31.1.0`.
+- The disposable-wallet v31.1.0 signing test covered the ordinary regtest domain, not the mainnet replay domain.
 - Hardware/external signer compatibility has not been tested.
 - Third-party libraries have not been audited for BC2 fork-id support.
 
@@ -96,6 +102,6 @@ Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Source-reviewed partial
-**Primary sources checked:** Yes, `v31.1.0`
-**Notes:** The activation, domain-selection, validation, wallet, RPC, and PSBT paths are source-backed. Runtime vectors and third-party compatibility remain open.
+**Status:** Source-confirmed / Runtime PSBT coverage
+**Primary sources checked:** Yes, `v31.1.0` at commit `8daaf7b12e71d3646eed787f040bf2899a69dc1c`
+**Notes:** The activation, domain-selection, validation, wallet, RPC, and PSBT paths are source-backed. Ordinary regtest PSBT behavior is runtime-observed; replay-domain vectors and third-party compatibility remain open.
