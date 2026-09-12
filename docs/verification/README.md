@@ -2,7 +2,7 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-08-28
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
@@ -35,6 +35,7 @@ Local runtime and RPC:
 
 Developer platform and public infrastructure:
 
+- [Public infrastructure smoke test - 2026-09-11](public-infrastructure-smoke-test-2026-09-11.md)
 - [Public API, WebSocket, and Electrum smoke test - 2026-07-12](public-api-electrum-smoke-test-2026-07-12.md)
 
 Project identity:
@@ -82,6 +83,7 @@ Narrow reviewer packets for release wording are intentionally kept outside the n
 Ecosystem records and plans should distinguish reachable services from reliable, official, synced, or recommended services.
 
 - [Ecosystem direct check plan](ecosystem-direct-check-plan.md)
+- [Public infrastructure smoke test - 2026-09-11](public-infrastructure-smoke-test-2026-09-11.md)
 - [Public API, WebSocket, and Electrum smoke test - 2026-07-12](public-api-electrum-smoke-test-2026-07-12.md)
 - [Explorers](../ecosystem/explorers.md)
 - [APIs](../ecosystem/apis.md)
@@ -127,4 +129,4 @@ Use these pages to keep canonical-source, naming, contact, and status claims sco
 
 **Status:** Draft
 **Primary sources checked:** Current verification section structure, verification evidence index, dated records, open-question queues, test plans, release records, ecosystem records, and private-review coordination pages
-**Notes:** This page is a router for verification material. It does not verify BitcoinII protocol behavior, service reliability, release binaries, or ecosystem claims.
+**Notes:** This page is a router for verification material. It does not independently verify BitcoinII protocol behavior, service reliability, release binaries, or ecosystem claims.
