@@ -1,220 +1,140 @@
 # Source review guide
 
 **Category:** Developer guide
-**Status:** Draft
-**Last reviewed:** 2026-06-29
+**Status:** Reviewed / Framework
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This guide explains how to review a BitcoinII Core source file for MoreBC2.
+This guide explains how to review BitcoinII Core source for MoreBC2 without turning a partial code reading into an overbroad protocol or compatibility claim.
 
-The goal is not to rewrite the source code in prose. The goal is to help readers understand what the file does, why it matters, and which claims are verified.
+A careful partial review is better than a complete-sounding unsupported explanation.
 
-## Review principle
+## 1. Pin the source first
 
-Move slowly.
+Before reviewing, record:
 
-A careful partial review is better than a confident but unsupported complete-sounding page.
+- canonical repository;
+- release tag/commit or explicitly mutable branch;
+- file path;
+- review date;
+- subsystem: consensus, policy, wallet, networking, RPC, build, test, or UI.
 
-## Before reviewing
+For current technical claims, prefer release-pinned `v31.1.0` source. Do not silently mix older v29 observations, current `main`, and v31 release behavior.
 
-Start by checking:
+## 2. Identify purpose and important symbols
 
-- Which repository and branch are being reviewed.
-- Whether the source path is official, mirrored, or redirected.
-- Whether the file exists in current source.
-- Whether MoreBC2 already has a related page.
-- Whether the file affects consensus, policy, wallet behavior, networking, UI, or build tooling.
+Explain what the file or tightly related path does, why it matters, and the important functions/classes/constants/public entry points. Do not inventory every helper unless it improves understanding.
 
-If the canonical source path is uncertain, mark it as an open question.
+## 3. Trace the call path
 
-## Step 1: Identify the file purpose
+Ask who calls the important symbol, what it calls, which subsystem boundaries it crosses, and whether it runs during startup, validation, RPC, wallet operation, relay, mining, or shutdown.
 
-Answer:
+For consensus-sensitive behavior, trace far enough to show where parameters enter validation rather than relying on a nearby comment or helper name.
 
-- What subsystem does this file belong to?
-- What problem does it solve?
-- Is it core protocol, wallet, node, networking, RPC, build, test, or UI code?
-- Is it inherited Bitcoin Core behavior, BitcoinII-specific behavior, or not yet clear?
+## 4. Separate consensus, policy, runtime, and compatibility
 
-Write this in plain language first.
+Keep these distinct:
 
-## Step 2: List major symbols
+- **Consensus:** what blocks/transactions are valid.
+- **Policy:** what a node accepts/relays/mines locally before confirmation.
+- **Runtime evidence:** what happened in a specific executed environment.
+- **Compatibility:** whether another wallet/service/library correctly implements the required behavior.
 
-Record the important:
+Source review can establish implementation behavior without proving a third-party system is compatible or a public service is operational.
 
-- Functions.
-- Classes.
-- Constants.
-- Structs.
-- Enums.
-- Global objects.
-- Public entry points.
+## 5. Look for BitcoinII-specific differences
 
-Do not list every helper if it does not help readers.
+Do not assume inherited Bitcoin Core structure means identical current behavior. Check for BitcoinII-specific changes in:
 
-## Step 3: Identify call paths
+- chain/network parameters;
+- activation heights;
+- address/key encodings;
+- difficulty/work selection;
+- signature hashing;
+- transaction/mempool/block validation;
+- header synchronization;
+- wallet/PSBT paths;
+- mining/template behavior;
+- consensus data restrictions;
+- ports/seeds/configuration;
+- branding and user-facing units.
 
-For each important symbol, ask:
+For `v31.1.0`, the minimum high-risk review set includes ShockWave, replay protection, consensus data restrictions, and fork-aware header synchronization.
 
-- Who calls it?
-- What does it call?
-- Is it an entry point or helper?
-- Does it cross subsystem boundaries?
-- Does it run during startup, validation, RPC, wallet operation, relay, mining, or shutdown?
+## 6. Treat v31 signing paths as cross-subsystem behavior
 
-Use small flow diagrams when helpful.
+Replay protection is not only a wallet feature. Current source review shows the fork/domain id flowing through wallet/PSBT/raw-transaction signing, signature hashing, mempool validation, block validation, and validation-cache separation.
 
-## Step 4: Separate consensus from policy
+A source page about one of those areas should cross-link [Replay protection](source-atlas/replay-protection-v31.md) when the domain affects the claim.
 
-This is critical.
+Likewise, mining/template pages should cross-link [ShockWave](source-atlas/shockwave-v31.md) when candidate time or required `nBits` matters.
 
-Consensus rules determine whether blocks or transactions are valid.
+## 7. Separate source fact from explanation
 
-Policy rules determine what a node accepts, relays, mines, or keeps locally before confirmation.
+Example source fact:
 
-Never blur the two.
-
-Examples:
-
-- Block proof-of-work checks are consensus-relevant.
-- Mempool standardness checks are usually policy.
-- Script flags can include mandatory consensus flags and optional policy flags.
-
-When unsure, mark it as Needs Review.
-
-## Step 5: Separate source facts from explanation
-
-Source fact:
-
-> `chainparams.cpp` sets the mainnet P2P port to `8338`.
+> `src/kernel/chainparams.cpp` sets mainnet P2P port `8338` in the reviewed v31 release.
 
 Explanation:
 
-> This is the default port a mainnet node uses for peer-to-peer connections unless configured otherwise.
+> A default mainnet node listens for peer traffic on that port unless configuration changes it.
 
-Both are useful, but they are not the same kind of statement.
+Keep the source-backed fact retraceable and avoid turning explanation into a stronger claim than the code supports.
 
-## Step 6: Check BitcoinII-specific differences
+## 8. Record unknowns immediately
 
-When a file appears inherited from Bitcoin Core, identify whether BitcoinII changed:
+Good unknowns are actionable, such as:
 
-- Constants.
-- Chain parameters.
-- Activation heights.
-- Address prefixes.
-- Ports.
-- Seeds.
-- Proof-of-work parameters.
-- Genesis block values.
-- Branding/UI strings.
-- RPC names or wallet defaults.
+> Which test exercises replay-domain activation at the exact mainnet-style boundary?
 
-Do not assume a difference exists just because the project is BitcoinII.
+Avoid vague placeholders like “check this more.” Move unresolved material to the verification backlog when appropriate.
 
-## Step 7: Record unknowns immediately
+## 9. Cross-check runtime evidence
 
-If something is not clear, write it down.
+After source review, check whether MoreBC2 has a dated runtime record for the behavior. If it does, link it and preserve its scope. If it does not, say **source-confirmed; runtime-unverified** rather than implying execution.
 
-Good open question:
+The September 11 v31 node/RPC and PSBT records are examples of bounded runtime evidence. They do not prove every source-reviewed path or platform.
 
-> Which caller path submits locally mined blocks into `ProcessNewBlock`?
+## 10. Source Atlas entry standard
 
-Weak open question:
+A useful atlas page should contain:
 
-> Need to check this file more.
-
-Open questions should be actionable.
-
-## Step 8: Create or update Source Atlas page
-
-Use this structure:
-
-```md
-# source/file/path
-
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** YYYY-MM-DD
-
-## Summary
-
-## Why this file matters
-
-## Key symbols
-
-## Reviewed behavior
-
-## BitcoinII-specific notes
-
-## Related pages
-
-## Open questions
-
-## Sources
-
-## Verification
-```
-
-Keep implementation notes specific. Link architecture pages for conceptual explanation.
-
-## Step 9: Update navigation
-
-After adding a Source Atlas page, update:
-
-- [Source atlas README](source-atlas/README.md)
-- [Documentation coverage](../documentation-coverage.md)
-- Any related architecture page.
-- Any relevant documentation page.
-- [Open questions backlog](../verification/open-questions.md), if the review resolves or creates major questions.
-
-## Step 10: Choose status honestly
-
-Use:
-
-- **Draft** for first-pass notes.
-- **Needs Review** for nearly complete but unchecked pages.
-- **Reviewed** only in coverage tables when a meaningful first-pass review exists.
-- **Verified** only when claims are backed by strong primary sources and the page is ready to rely on.
-
-Most Source Atlas pages should start as Draft or Needs Review.
+- purpose and why it matters;
+- release/ref reviewed;
+- key symbols/call path;
+- BitcoinII-specific behavior;
+- consensus/policy/runtime boundary where relevant;
+- related MoreBC2 pages;
+- open questions;
+- primary sources;
+- verification block.
 
 ## Review checklist
 
-Before committing a source review, ask:
+Before finishing a source page, verify that:
 
-- Did I identify the file path clearly?
-- Did I avoid overclaiming?
-- Did I separate consensus from policy?
-- Did I mark unreviewed caller paths?
-- Did I distinguish source facts from interpretation?
-- Did I add related MoreBC2 links?
-- Did I add open questions?
-- Did I update coverage tracking?
-- Did I avoid copying large blocks of code?
+- current claims are pinned to the intended release/ref;
+- historical claims are labeled historical;
+- inherited behavior is not automatically called BitcoinII-specific;
+- BitcoinII-specific changes are not hidden behind generic Bitcoin wording;
+- consensus and policy are separated;
+- source review is not described as runtime testing;
+- runtime tests are not generalized beyond their environment;
+- third-party compatibility is not inferred from similar formats/APIs;
+- mutable service state is not inferred from source code;
+- open questions are explicit.
 
-## Common mistakes
+## Related pages
 
-### Mistake: treating community discussion as source
-
-Community discussion may explain why a question matters, but it does not verify source behavior.
-
-### Mistake: calling something BitcoinII-specific too early
-
-If a file is inherited from Bitcoin Core and only lightly changed, say that review has not yet identified BitcoinII-specific behavior.
-
-### Mistake: making architecture pages too implementation-heavy
-
-Architecture pages should explain flows.
-
-Source Atlas pages should anchor implementation.
-
-### Mistake: hiding uncertainty
-
-Uncertainty is useful if it is clearly recorded.
+- [Source atlas](source-atlas/README.md)
+- [Verification standards](verification-standards.md)
+- [Evidence Scale](../../EVIDENCE_SCALE.md)
+- [Known unknowns](../verification/known-unknowns.md)
+- [Open questions](../verification/open-questions.md)
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** MoreBC2 Source Atlas structure and contributor standards
-**Notes:** This guide defines the preferred review process. It should be refined after additional source files are reviewed.
+**Status:** Reviewed / Framework  
+**Primary sources checked:** Current MoreBC2 evidence rules, v31 source-atlas work, v31 regression audit, and September runtime records  
+**Notes:** Refreshed for release-pinned v31 review, current-vs-historical separation, cross-subsystem replay/ ShockWave behavior, and bounded runtime evidence.
