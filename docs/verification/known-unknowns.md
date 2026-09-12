@@ -36,19 +36,19 @@ This resolves the earlier question of whether current commit-signature evidence 
 
 Release notes identify wallet, mining, mempool, RPC, validation, and PSBT updates in addition to the headline consensus changes.
 
-MoreBC2's existing local command/node evidence is largely `v29.1.0`-scoped.
+Fresh MoreBC2 Windows records now cover isolated v31.1.0 node/RPC startup and a disposable regtest PSBT lifecycle, but they do not cover every production path.
 
-**Needed:** Current-release runtime records for core read-only node/RPC behavior and selected safe workflows.
+**Needed:** longer-duration/current-release coverage for production-relevant daemon, indexing, fee, wallet, and broadcast behaviors.
 
-**Blocks:** Claims that earlier local tests prove current-release behavior.
+**Blocks:** claims that the bounded current tests prove all production behavior.
 
 ### v31.1.0 RPC runtime behavior
 
-The documented mainnet RPC default is now source-confirmed as `8332`. The historical MoreBC2 `8337` observation belongs to a configured v29.1.0 environment.
+The documented mainnet RPC default is source-confirmed as `8332`. The historical MoreBC2 `8337` observation belongs to a configured v29.1.0 environment.
 
-**Needed:** fresh v31.1.0 startup, authentication, and RPC command records in an isolated test environment.
+Fresh isolated v31.1.0 Windows testing has exercised cookie-authenticated loopback JSON-RPC, peer discovery, initial sync, selected read-only node/network commands, shutdown, and restart.
 
-**Blocks:** claims that MoreBC2 has directly exercised current-release runtime behavior.
+**Still needed:** production-oriented daemon deployment, long-duration behavior, optional index/pruning combinations, fee estimation, and custody workflows.
 
 ### ShockWave detailed validation and live behavior
 
@@ -62,9 +62,11 @@ MoreBC2 has source-backed current documentation for ShockWave activation and its
 
 MoreBC2 has confirmed mainnet replay protection activation at height `57750` and fork ID `0x01324342`.
 
-**Needed:** Detailed source review of transaction serialization/signing/validation behavior and wallet/service integration implications, plus reproducible transaction test vectors.
+A fresh isolated regtest PSBT workflow exercised normal v31.1.0 signing/finalization/mempool paths, and source review traced replay-protection use through signing, PSBT, mempool, block validation, cache, and activation logic. Regtest leaves the mainnet replay activation disabled as shipped.
 
-**Blocks:** Detailed integration guidance beyond the activation/fork-domain facts.
+**Still needed:** mainnet/external-signer vectors and third-party implementation compatibility.
+
+**Blocks:** claims that every signer/service has been runtime-validated against the BC2 replay domain.
 
 ### Consensus data restrictions
 
@@ -88,11 +90,22 @@ The `v31.1.0` release explicitly identifies fork-aware header synchronization.
 
 This is no longer treated as a highest-priority known unknown.
 
-### Exchange confirmation recommendation
+### Exchange confirmation recommendation — partially resolved
 
-MoreBC2 has not established a recommended deposit/withdrawal confirmation policy for current v31 network conditions.
+Current direct exchange evidence recorded on 2026-09-12 establishes:
 
-**Needed:** Maintainer recommendation or community-reviewed risk model informed by current ShockWave/reorg behavior.
+- CoinEx: `safe_confirmations = 2`, `irreversible_confirmations = 6`;
+- NonKYC: `confirmsRequired = 50`;
+- NestEx: explicit BC2 backend `conf = 50`;
+- Biconomy: BC2 listing confirmed, but current BC2 confirmation count and withdrawal availability not publicly verified.
+
+MoreBC2 now uses **50 confirmations as a provisional normal-deposit baseline** because two independently queried BC2 venues explicitly use 50. This is operational guidance, not a BitcoinII consensus rule or maintainer mandate.
+
+**Still needed:** community/maintainer review, a concrete cumulative-chainwork monitoring example, empirical reorganization history, and operational thresholds for large/unusual deposits.
+
+**Blocks:** presenting 50 as mathematical finality or as a universal mandatory exchange rule.
+
+See [Exchange confirmation evidence — 2026-09-12](exchange-confirmation-evidence-2026-09-12.md).
 
 ### Technical/security contact process
 
@@ -143,5 +156,5 @@ Instead:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current `v31.1.0` release/source anchors, GitHub release/tag verification metadata, current public infrastructure checks, plus existing MoreBC2 evidence records
-**Notes:** Ticker identity, documented v31.1.0 RPC default, six-asset release inventory, verified target-commit state, explorer hierarchy, current public REST/WebSocket reachability, read-only Electrum TCP/TLS reachability, and invalid public-broadcast rejection behavior have been refreshed. Runtime node/wallet validation, binary authentication, confirmation policy, technical contact process, successful valid-transaction broadcast, and backend/operator independence remain open.
+**Primary sources checked:** Current `v31.1.0` release/source anchors, GitHub release/tag verification metadata, current MoreBC2 v31 runtime records, current public infrastructure checks, and current-dated exchange API evidence
+**Notes:** Ticker identity, documented v31.1.0 RPC default, six-asset release inventory, verified target-commit state, current bounded node/RPC and PSBT runtime evidence, explorer hierarchy, public REST/WebSocket/Electrum reachability, invalid public-broadcast rejection behavior, and a provisional evidence-based exchange confirmation baseline have been refreshed. Binary authentication, production custody workflows, chainwork thresholds, technical contact process, successful valid public transaction broadcast, and backend/operator independence remain open.
