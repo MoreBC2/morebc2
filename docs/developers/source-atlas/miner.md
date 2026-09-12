@@ -1,14 +1,14 @@
 # Block template assembly
 
-**Category:** Documentation
-**Status:** Source-reviewed partial
-**Last reviewed:** 2026-09-02
+**Category:** Developer / Source Atlas  
+**Status:** Reviewed / Source-confirmed partial  
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page covers candidate block assembly centered on `src/node/miner.cpp` / `miner.h` and related MiniMiner helpers.
+This page covers candidate block assembly centered on BitcoinII Core `v31.1.0` `src/node/miner.cpp` / `miner.h` and MiniMiner helpers.
 
-The broad Bitcoin-style `BlockAssembler` and package-selection structure remains useful in BitcoinII Core `v31.1.0`. The important BitcoinII-specific change is that **candidate block time can now affect required work under ShockWave**, so template code must recalculate `nBits` when time changes.
+The broad Bitcoin-style `BlockAssembler` package-selection structure remains useful, but current BC2 has an important v31-specific rule: **candidate block time can affect required work under ShockWave**, so template code must recalculate `nBits` when time changes.
 
 ## Main template flow
 
@@ -16,98 +16,89 @@ The reviewed `CreateNewBlock` structure remains:
 
 1. reset block-assembly counters;
 2. create a template and dummy coinbase;
-3. lock/read chain state and choose next height;
-4. compute block version and time/locktime context;
-5. select mempool transactions;
-6. construct the real coinbase and reward;
+3. choose next height/chain context;
+4. compute version and time/locktime context;
+5. select eligible mempool transactions;
+6. construct the real coinbase/reward;
 7. generate commitments;
-8. fill previous hash, candidate time, difficulty bits and nonce;
+8. fill previous hash, candidate time, required work and nonce;
 9. optionally run block-validity checks;
-10. return the template.
+10. return the candidate template.
 
-`BlockAssembler` still tracks block weight, operation cost, fee totals, selected transactions and target height. Ancestor-aware package selection remains the core transaction-selection model.
+`BlockAssembler` tracks weight, operation cost, fees, selected transactions, and target height. Ancestor-aware package selection remains the reviewed transaction-selection model.
 
 ## v31 candidate-time / difficulty coupling
 
-Before ShockWave, Bitcoin-style mainnet logic normally allowed code to think of difficulty as fixed between long retarget boundaries.
+`UpdateTime` can change a candidate header timestamp. Under ShockWave, that can change required work.
 
-That assumption is unsafe under current BitcoinII.
-
-`UpdateTime` can change a candidate header's timestamp. In v31, `src/node/miner.cpp` explicitly notes that updating candidate time can change required work under ShockWave and recalculates:
+Current mining code therefore recalculates:
 
 ```text
 pblock->nBits = GetNextWorkRequired(pindexPrev, pblock, consensusParams)
 ```
 
-when the candidate time changes (and in the existing min-difficulty cases).
+when candidate time changes in the relevant path.
 
-`CreateNewBlock` likewise obtains the candidate difficulty through the production `GetNextWorkRequired()` path.
+`CreateNewBlock` likewise obtains candidate difficulty through the production `GetNextWorkRequired()` path.
 
-## Why candidate time matters
-
-ShockWave includes timestamp-aware behavior and emergency stall recovery. As a result, the candidate header itself can participate in determining the required next target.
-
-Mining/template software that changes `nTime` while retaining stale `nBits` can therefore construct an invalid candidate.
-
-This is also why MoreBC2 should not describe current BitcoinII mining as simply "reuse the tip difficulty until a retarget block."
-
-## RPC/server context
-
-The v31 RPC server helper path similarly constructs next-block context by:
-
-1. creating a candidate next header;
-2. calling `UpdateTime`;
-3. calling `GetNextWorkRequired` using that actual candidate header;
-4. building synthetic next-block context from the result.
-
-The same rule applies broadly: code that needs next-block consensus context should derive work from the candidate header, not assume the previous block's compact target remains correct.
+A miner, pool, proxy, or template implementation that rewrites `nTime` while retaining stale `nBits` can construct an invalid candidate.
 
 ## Transaction/package selection
 
-This pass did not identify a BitcoinII-specific rewrite of the normal template-selection machinery around:
+The v31 regression pass did not identify a BC2-specific rewrite of the surrounding package-selection machinery for:
 
 - ancestor-aware feerate ordering;
 - package assembly;
-- weight and operation-cost limits;
+- block weight / operation-cost limits;
 - fee minimums;
 - ancestor-before-descendant ordering;
 - MiniMiner fee/ordering simulation.
 
-Those earlier MoreBC2 descriptions remain structurally useful.
+That structural review should not be interpreted as proof of byte-for-byte upstream equivalence.
 
 ## MiniMiner
 
-`MiniMiner` remains a local simulation/helper for fee and transaction ordering calculations, not a proof-of-work miner or block producer.
+`MiniMiner` is a local simulation/helper for fee and transaction ordering calculations. It is not a proof-of-work miner or a block producer.
 
-No ShockWave-specific rewrite of MiniMiner's fee-selection role was identified in this regression pass.
+No ShockWave-specific change to its fee-selection role was identified in the current regression review.
 
-## Operational implication
+## Core RPC / Stratum boundary
 
-External miners/pools consuming block templates should use current BitcoinII Core template/RPC output or independently reproduce v31 candidate-time and difficulty behavior exactly.
+Core block-template assembly is exposed to mining infrastructure through RPC surfaces such as `getblocktemplate`. Public mining pools separately expose Stratum endpoints to miners.
 
-A Bitcoin-derived template implementation that assumes time and difficulty are decoupled between 2016-block retargets is not a safe model for post-activation BitcoinII.
+MoreBC2 has current public configuration evidence for BC2 pool endpoints, but no current end-to-end Stratum subscribe/authorize/share-submission qualification. Pool software therefore should not be considered BC2-compatible merely because it supports Bitcoin-style SHA-256d work.
+
+See [Mining RPC](rpc-mining.md) and [Mining overview](../../mining/mining-overview.md).
 
 ## Runtime status
 
-MoreBC2 has not yet executed a controlled template test showing candidate-time changes and resulting ShockWave `nBits` changes.
+The September 11 isolated `v31.1.0` regtest test successfully used `generatetoaddress` to create disposable test funds, establishing one local generation path.
 
-Useful follow-up work:
+That test did **not** run `getblocktemplate`, did not vary candidate time to observe ShockWave `nBits` changes, and did not submit mining work to a public pool or mainnet.
+
+Useful future vectors remain:
 
 - generate templates across normal and stall-recovery candidate times;
-- confirm template/RPC `bits` matches direct `GetNextWorkRequired` calculation;
-- test stale-time refresh behavior;
-- inspect pool/miner software assumptions where Bitcoin-compatible template handling is claimed.
+- compare template `bits` with direct production next-work calculation;
+- exercise stale-time refresh behavior;
+- qualify pool/proxy software that mutates candidate time.
+
+## Operational implication
+
+External mining infrastructure should consume current BitcoinII Core template output or reproduce v31 candidate-time/difficulty behavior exactly.
+
+The old model “reuse tip difficulty until a 2016-block retarget boundary” is not valid for post-`57750` BitcoinII mainnet.
 
 ## Related pages
 
 - [ShockWave v31](shockwave-v31.md)
-- [v31 wallet/mempool/mining regression audit](../../verification/v31-wallet-mempool-mining-regression-2026-09-02.md)
-- [Mining overview](../../mining/mining-overview.md)
-- [Proof-of-work](../../encyclopedia/proof-of-work.md)
-- [Difficulty adjustment](../../encyclopedia/difficulty-adjustment.md)
+- [pow.cpp](pow-cpp.md)
 - [Mining RPC](rpc-mining.md)
+- [Mining overview](../../mining/mining-overview.md)
+- [v31 mining regression audit](../../verification/v31-wallet-mempool-mining-regression-2026-09-02.md)
+- [Windows v31 PSBT/regtest validation](../../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
 
-## Sources
+## Primary sources
 
 Pinned to BitcoinII Core `v31.1.0`:
 
@@ -123,6 +114,6 @@ Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Source-reviewed partial
-**Primary sources checked:** BitcoinII Core `v31.1.0`
-**Notes:** Candidate-time-triggered work recalculation and the template's use of production `GetNextWorkRequired()` are source-backed. Controlled runtime template vectors remain open.
+**Status:** Reviewed / Source-confirmed partial  
+**Primary evidence:** BitcoinII Core `v31.1.0` template/mining source plus September 11 isolated local-generation runtime evidence  
+**Notes:** Candidate-time-triggered work recalculation is source-backed and local regtest generation is runtime-observed. Controlled GBT/ShockWave vectors and public Stratum mining remain open.
