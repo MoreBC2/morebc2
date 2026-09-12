@@ -1,68 +1,82 @@
 # Discussion
 
-**Category:** Discussion
-**Status:** Draft
-**Last reviewed:** 2026-06-30
+**Category:** Discussion  
+**Status:** Reviewed framework  
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This section is for community ideas, opinions, proposals, and open questions.
+Discussion is the place for community ideas, opinions, proposals, and questions that are **not established BitcoinII behavior**.
 
-Discussion pages should be clearly labeled so readers do not confuse them with current BitcoinII implementation, verified documentation, or accepted roadmap items.
+The section currently contains only this index. No proposal is made official, accepted, scheduled, or implemented merely by being placed here.
 
-## Good discussion topics
+## What belongs here
 
-- Possible future features.
-- Open technical questions.
-- Community proposals.
-- Ecosystem ideas.
-- Governance and documentation standards.
-- Draft RFC-style proposals.
-- Questions that need developer, maintainer, or community review.
+Appropriate material includes:
 
-## Current pages
+- possible future features;
+- community proposals;
+- ecosystem ideas;
+- draft RFC-style proposals;
+- governance/documentation proposals;
+- integration questions that require maintainer/community input;
+- policy choices where source code cannot answer the question.
 
-Add discussion pages here only when they are clearly labeled with their status and evidence level.
-
-## Planned pages
-
-- Proposal template.
-- Open ecosystem ideas.
-- Documentation governance discussions.
-- Integration questions that need community review.
-- Resolved discussion archive.
+Questions that can be settled by source review, runtime testing, or a direct service check should generally move to Research or Verification instead of remaining a Discussion item forever.
 
 ## Status labels
 
-Use one of these near the top of discussion pages:
+Use a clear status near the top of each discussion page:
 
-- **Open discussion** — an idea being discussed.
-- **Draft proposal** — a more structured idea, but not accepted.
-- **Needs developer review** — requires confirmation from BitcoinII developers.
-- **Accepted** — accepted by the relevant maintainers or community process.
-- **Rejected** — considered and not adopted.
-- **Superseded** — replaced by a newer discussion or proposal.
+- **Open discussion** — an idea or question being discussed;
+- **Draft proposal** — structured proposal, not accepted;
+- **Needs developer review** — requires upstream technical/maintainer input;
+- **Accepted** — accepted through an identified relevant process;
+- **Rejected** — considered and not adopted;
+- **Superseded** — replaced by a newer discussion/proposal.
+
+If `Accepted` is used, the page must identify who/what accepted it and link the supporting record. MoreBC2 should not infer acceptance from silence, implementation similarity, or community chatter.
+
+## Evidence boundary
+
+Discussion may cite current technical documentation for context, but it does not override it.
+
+For current `v31.1.0` behavior, use:
+
+- [Documentation](../documentation/README.md)
+- [Architecture](../architecture/README.md)
+- [Developers / Source Atlas](../developers/README.md)
+- [Verification evidence index](../verification/verification-index.md)
+
+If a proposal depends on a current protocol fact, that fact should be sourced from those sections rather than restated here as opinion.
 
 ## Rules
 
 - Discussion is not implementation.
-- Do not place current technical claims here if they belong in Documentation.
-- Do not present proposals as planned protocol changes.
-- Link related source-backed pages when a proposal touches current behavior.
-- Move resolved factual questions into Documentation, Architecture, or Verification as appropriate.
-- Do not let discussion pages override source-backed pages.
+- Do not present a proposal as a planned BitcoinII change unless an identifiable upstream source says so.
+- Keep MoreBC2's independent project proposals distinct from BitcoinII maintainer decisions.
+- Do not use Discussion to weaken evidence standards applied elsewhere.
+- Move resolved factual questions into Documentation, Architecture, Source Atlas, or Verification.
+- Preserve rejected/superseded proposals as history when they remain useful, but label them clearly.
+- Avoid price predictions, promotion, or unsupported claims of community consensus.
+
+## 2026-09-12 audit result
+
+This section was reviewed after the v31 Documentation, Architecture, Research, Encyclopedia, and Developers audits.
+
+No current proposal pages exist, so no technical-content repair was required. The index was updated to make acceptance/implementation boundaries explicit and to route factual questions toward the evidence sections instead of leaving them as discussion indefinitely.
 
 ## Related pages
 
 - [Research](../research/README.md)
-- [Verification queue](../verification/README.md)
-- [Open questions backlog](../verification/open-questions.md)
+- [Verification](../verification/README.md)
+- [Open questions](../verification/open-questions.md)
 - [Documentation taxonomy](../../DOCUMENTATION_TAXONOMY.md)
-- [Editorial style guide](../../STYLE_GUIDE.md)
-- [Documentation polish plan](../POLISH_PLAN.md)
+- [Evidence scale](../../EVIDENCE_SCALE.md)
+- [History](../history/README.md)
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Not applicable for this section index
-**Notes:** This section README defines placement rules for discussion content. Individual discussion pages should identify their evidence level, status, and whether they have been reviewed by maintainers or community members.
+**Status:** Reviewed framework  
+**Primary evidence checked:** Current MoreBC2 documentation taxonomy, evidence policy, and audited technical-section boundaries  
+**Notes:** This page defines content placement and status semantics. It does not make independent BitcoinII technical claims.
