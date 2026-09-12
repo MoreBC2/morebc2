@@ -1,36 +1,16 @@
 # Mempool and transaction broadcast RPC
 
 **Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-06-30
+**Status:** Source-reviewed / Runtime-tested partial
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page covers a first-pass review of:
+This page covers mempool and transaction RPC behavior centered on `src/rpc/mempool.cpp`.
 
-- `src/rpc/mempool.cpp`
+Current `v31.1.0` evidence now includes a bounded local runtime test of `testmempoolaccept`, `sendrawtransaction`, `getmempoolentry`, and `getmempoolinfo`. Public-network broadcast remains unverified.
 
-This file contains RPC behavior for raw transaction broadcast, mempool acceptance testing, mempool inspection, mempool persistence, orphan-transaction inspection, and package submission.
-
-This is not a tested command guide. Examples should not be marked verified until they are run against BitcoinII Core in a safe local environment.
-
-## Why this file matters
-
-Mempool RPCs are important for:
-
-- Broadcasting signed transactions.
-- Testing whether a transaction would be accepted before broadcast.
-- Inspecting mempool entries and fee state.
-- Understanding unconfirmed parent/child relationships.
-- Monitoring local mempool health.
-- Saving or importing mempool state.
-- Package submission and package acceptance diagnostics.
-
-These commands are especially important for exchanges, explorers, wallets, and services that need predictable transaction-handling behavior.
-
-## Registered commands reviewed
-
-`RegisterMempoolRPCCommands()` registers these commands:
+## Source-reviewed command groups
 
 Raw-transaction category:
 
@@ -38,7 +18,7 @@ Raw-transaction category:
 - `testmempoolaccept`
 - `submitpackage`
 
-Blockchain category:
+Blockchain/mempool category:
 
 - `getmempoolancestors`
 - `getmempooldescendants`
@@ -49,154 +29,65 @@ Blockchain category:
 - `importmempool`
 - `savemempool`
 
-Hidden category:
+Hidden/experimental source also includes orphan-transaction inspection.
 
-- `getorphantxs`
+## `testmempoolaccept`
 
-## Transaction broadcast
+Source review shows this as a dry-run acceptance path that applies transaction/package checks without inserting the transaction into the mempool.
 
-Reviewed command:
+In the September 11 isolated v31 regtest test, `testmempoolaccept` returned `allowed = true` for the fully signed disposable transaction, with the expected vsize and fee information.
 
-- `sendrawtransaction`
+## `sendrawtransaction`
 
-Observed behavior includes:
+Source review shows `sendrawtransaction` as a live local-submission/relay RPC, not a dry run.
 
-- Decoding a signed raw transaction from hex.
-- Checking fee-rate sanity through the `maxfeerate` argument.
-- Checking provably unspendable outputs against `maxburnamount`.
-- Calling `BroadcastTransaction` with relay enabled and callback waiting enabled.
-- Returning the transaction hash on success.
-- Warning in help text that manual rebroadcast can degrade privacy by leaking transaction origin.
+In the September 11 test, it was called only against a zero-peer local regtest node. It inserted the disposable transaction into that node's local mempool and returned the expected txid. Because the node had no peers, this was **not** a public-network relay/broadcast test.
 
-Public docs should be careful with `sendrawtransaction`: it is a live broadcast command, not a dry-run command.
+Do not cite this test as proof that a public BC2 broadcast endpoint or public peer relay path works.
 
-## Acceptance testing
+## Mempool inspection runtime evidence
 
-Reviewed command:
+The same isolated test used:
 
-- `testmempoolaccept`
+- `getmempoolentry` to confirm the submitted transaction was present;
+- `getmempoolinfo` to confirm the resulting local mempool state.
 
-Observed behavior includes:
+The earlier September v31 node/RPC validation also exercised `getmempoolinfo` in its bounded mainnet-node environment.
 
-- Accepting one or more raw transactions.
-- Enforcing package-count bounds.
-- Requiring parent transactions to come before children for multi-transaction inputs.
-- Running consensus and mempool policy checks without submitting transactions.
-- Returning txid, wtxid, allowed status, virtual size, fees, effective feerate, included wtxids for effective-feerate calculations, and rejection fields where applicable.
-- Leaving later results blank when an earlier fee sanity failure makes the remaining package context inappropriate.
+## v31 replay-protection boundary
 
-This is a strong candidate for future service/testing documentation after examples are run locally.
+Mempool acceptance is replay-domain-sensitive in v31. Release-pinned source validates signatures using the domain required for the next block and separates validation-cache results by fork id.
 
-## Mempool inspection
+The regtest runtime test did not exercise the mainnet activation switch because regtest leaves replay protection disabled as shipped.
 
-Reviewed commands include:
+See [MemPoolAccept](mempool-accept.md) and [Replay protection](replay-protection-v31.md).
 
-- `getrawmempool`
-- `getmempoolentry`
-- `getmempoolancestors`
-- `getmempooldescendants`
-- `gettxspendingprevout`
-- `getmempoolinfo`
+## Still source-only or unverified
 
-Observed behavior includes:
+MoreBC2 has not yet published direct runtime coverage for:
 
-- Listing all transaction ids in the mempool.
-- Optional verbose entry data for mempool transactions.
-- Optional mempool sequence values in non-verbose `getrawmempool` output.
-- Entry fields for virtual size, weight, entry time, entry height, ancestor/descendant counts and sizes, witness transaction id, fee views, dependencies, child transactions, BIP125 replaceability, and unbroadcast status.
-- Ancestor and descendant lookup for transactions already in the mempool.
-- Prevout-spend lookup for supplied transaction outputs.
-- Mempool summary information including loaded state, count, total virtual bytes, memory usage, total fee, maximum mempool size, minimum mempool fee, minimum relay fee, incremental relay fee, unbroadcast count, and full-RBF reporting.
+- `submitpackage`;
+- ancestor/descendant RPC edge cases;
+- `gettxspendingprevout`;
+- mempool import/save workflows;
+- orphan inspection;
+- activation-boundary mempool clearing;
+- public-network transaction relay/broadcast.
 
-## Mempool persistence
+## Related pages
 
-Reviewed commands include:
-
-- `savemempool`
-- `importmempool`
-
-Observed behavior includes:
-
-- `savemempool` writes the current mempool to the configured mempool file path after the mempool load attempt has completed.
-- `importmempool` loads a mempool file after initial block download is complete.
-- Import options include current-time handling, fee-delta metadata, and unbroadcast-set metadata.
-- The reviewed help text warns that importing untrusted files or metadata can be dangerous or undesirable.
-
-These commands should be documented as advanced operator tools, not normal wallet/user commands.
-
-## Orphan and package behavior
-
-Reviewed commands include:
-
-- `getorphantxs`
-- `submitpackage`
-
-`getorphantxs` is hidden and experimental. It reports orphanage transaction ids or verbose orphan details, with optional raw hex at higher verbosity.
-
-`submitpackage` is experimental. Observed behavior includes:
-
-- Accepting a package of raw transactions.
-- Requiring package topology shaped as a child with its unconfirmed parents and the child last.
-- Rejecting package sizes outside source-defined bounds.
-- Applying fee-rate and burn-output sanity checks.
-- Calling package acceptance with submission enabled.
-- Broadcasting transactions that are accepted or already present in the mempool.
-- Returning package-level messages, per-transaction results keyed by wtxid, fee details, errors, and replaced transaction ids.
-
-## Relationship to other pages
-
-Related pages:
-
-- [Source atlas: raw transaction RPC](rpc-rawtransaction.md)
-- [Source atlas: mempool source](txmempool.md)
-- [Source atlas: mempool accept](mempool-accept.md)
-- [Mempool flow](../../architecture/mempool-flow.md)
-- [Life of a transaction](../../architecture/life-of-a-transaction.md)
+- [MemPoolAccept](mempool-accept.md)
+- [Replay protection v31](replay-protection-v31.md)
 - [RPC overview](../rpc-overview.md)
-- [Deposit monitoring](../../exchange/deposit-monitoring.md)
-
-## Documentation implications
-
-MoreBC2 should separate future mempool RPC documentation into:
-
-- Dry-run acceptance checks.
-- Live broadcast commands.
-- Read-only mempool inspection.
-- Mempool persistence/import tools.
-- Experimental orphan/package commands.
-- Service-safe examples after local testing.
-
-Exchange and service docs should prefer tested dry-run and read-only workflows before documenting live broadcast workflows.
-
-## BitcoinII-specific notes
-
-This first-pass review saw BitcoinII naming and amount strings in RPC help text.
-
-No upstream comparison has been completed, so this page does not claim whether mempool RPC behavior differs from upstream Bitcoin Core beyond naming and visible strings.
-
-## Open questions
-
-- Which `testmempoolaccept` examples can be tested safely on regtest?
-- Which `sendrawtransaction` examples can be tested without risking mainnet funds?
-- Which mempool inspection commands belong in exchange/service documentation?
-- How should package submission be described while it is marked experimental?
-- How should mempool persistence warnings be worded for operators?
-- Which policy defaults should be linked from the mempool RPC docs?
-- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for this file before upgrading status.
+- [API documentation](../../api/README.md)
+- [v31 PSBT runtime record](../../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
 
 ## Sources
 
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
-
-- Current observed `main` `src/rpc/mempool.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/mempool.cpp
-- Current observed `main` `src/txmempool.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/txmempool.h
-- Current observed `main` `src/txmempool.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/txmempool.cpp
-- Current observed `main` `src/kernel/mempool_entry.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/mempool_entry.h
-- Current observed `main` `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.cpp
-- Current observed `main` `src/rpc/rawtransaction.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/rawtransaction.cpp
+Current source baseline: BitcoinII Core `v31.1.0`, including `src/rpc/mempool.cpp` and related validation/mempool paths.
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This is a first-pass mempool and transaction-broadcast RPC review. Commands have not been run. Public examples, service recommendations, package policy details, upstream comparison, and release-versus-main comparison remain open.
+**Status:** Source-reviewed / Runtime-tested partial  
+**Primary sources checked:** BitcoinII Core `v31.1.0` plus September 11 node/RPC and isolated PSBT/mempool runtime records  
+**Notes:** Local acceptance/submission and selected inspection RPCs are runtime-tested in bounded environments. Public broadcast, package behavior, and replay activation-boundary behavior remain unverified.
