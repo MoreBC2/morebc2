@@ -1,14 +1,14 @@
 # Life of a block
 
 **Category:** Architecture
-**Status:** Draft
-**Last reviewed:** 2026-07-02
+**Status:** Reviewed / Partial
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page explains the reviewed BitcoinII block lifecycle at a high level.
+This page explains the current BitcoinII block lifecycle at a high level: candidate construction, header and block validation, storage, best-chain activation, UTXO connection, undo data, notifications, confirmations, and possible later disconnection during a reorganization.
 
-It connects candidate block creation, block submission/arrival, block header validation, full block checks, disk storage, block-index updates, best-chain activation, UTXO connection, undo-data creation, and validation notifications.
+The current release baseline is BitcoinII Core `v31.1.0`.
 
 ## Simplified lifecycle
 
@@ -16,189 +16,127 @@ It connects candidate block creation, block submission/arrival, block header val
 Candidate block / peer / disk import
   -> block arrives at node
   -> header is checked
-  -> full block is checked
-  -> contextual checks run
-  -> block data is stored in blk files
-  -> block index and file metadata are updated
-  -> best-chain candidate is selected
-  -> block is connected if it belongs on best chain
-  -> undo data is written for disconnect safety
-  -> UTXO set is updated
+       -> proof of work
+       -> ShockWave next-work requirement where active
+       -> contextual header checks
+  -> full block checks run
+  -> contextual and BitcoinII-specific consensus checks run
+  -> block data is stored
+  -> block index metadata is updated
+  -> candidate chain is evaluated by accumulated work
+  -> block is connected if it belongs on the active best-work chain
+  -> UTXO state changes and undo data is recorded
   -> active tip changes
   -> validation notifications are emitted
 ```
 
 ## Step 1: Candidate block creation
 
-A candidate block is assembled from chain state, mempool contents, fee/priority data, and coinbase output information.
+A candidate block is assembled from chain state, mempool contents, fee/package information, and coinbase output information.
 
-MoreBC2 has reviewed first-pass candidate-template assembly and mining RPC paths. Reviewed behavior includes mempool package selection, coinbase construction for candidate blocks, and `getblocktemplate`/block submission RPC surfaces.
+Current v31 mining review establishes an important BitcoinII-specific rule: **candidate time can affect required work under ShockWave**. If candidate `nTime` changes, mining/template code must obtain the corresponding `nBits` through the production next-work calculation rather than assume difficulty stays fixed between long retarget intervals.
 
-Live mining software, pools, payout rules, and external operation details remain ecosystem questions, not verified architecture claims.
+See [Source atlas: block template assembly](../developers/source-atlas/miner.md) and [ShockWave v31](../developers/source-atlas/shockwave-v31.md).
 
 ## Step 2: Block arrival
 
 A block may arrive from:
 
-- Network peers.
-- Disk import.
-- Reindex.
-- Local block submission.
+- network peers;
+- disk import;
+- reindex;
+- local block submission.
 
-The reviewed general full-block entry point is `ProcessNewBlock`. Reviewed mining RPC paths also include block/header submission commands.
-
-The first-pass P2P block/header relay slice now documents network-facing block and header paths, including `headers`, `getheaders`, `getblocks`, full-block receive behavior, compact-block receive structure, and `getblocktxn` behavior.
+The general full-block entry path remains centered on `ProcessNewBlock`. P2P block/header relay is a separate transport path from validation itself.
 
 ## Step 3: Header checks
 
-Headers are handled through `AcceptBlockHeader`.
+Headers are accepted through the validation/header-index path.
 
-Reviewed header checks include:
+Current checks include proof of work, previous-header context, difficulty, timestamps, and other contextual rules.
 
-- Proof-of-work check through `CheckProofOfWork`.
-- Previous-header lookup.
-- Invalid-parent checks.
-- Difficulty check through `GetNextWorkRequired`.
-- Timestamp checks.
-- Checkpoint restrictions when checkpoints are enabled.
-- Version checks after relevant deployments are active.
+For post-`57750` mainnet blocks, the difficulty requirement comes from ShockWave. Competing ShockWave-era header branches must carry their own recent timing/target history so candidate difficulty can be evaluated against the correct branch context.
 
-The P2P header-relay slice documents how received headers can reach `ProcessNewBlockHeaders`, but validation rules remain tied to the block validation pages and source files.
+See [Fork-aware header synchronization v31](../developers/source-atlas/headers-sync-v31.md).
 
-## Step 4: Context-free block checks
+## Step 4: Context-free and contextual block checks
 
-`CheckBlock` runs checks that do not require UTXO state.
+The block-validation path checks structural and contextual properties such as:
 
-Reviewed checks include:
+- merkle-root consistency;
+- size/weight limits;
+- coinbase placement;
+- transaction structure;
+- finality and witness-related rules;
+- other release-specific consensus conditions.
 
-- Header proof-of-work path.
-- Merkle root check.
-- Duplicate-transaction merkle malleability check.
-- Block size and weight limits.
-- First transaction must be coinbase.
-- Later transactions must not be coinbase.
-- Per-transaction context-free checks.
-- Operation-count limit checks.
+From mainnet height `57750`, BitcoinII adds consensus-level data restrictions. The current source review covers OP_RETURN count/size, actual `OP_13` opcodes in OP_RETURN scripts, bare multisig, Taproot annex data, oversized script-path tapscripts, and semantic Ordinals inscription envelopes.
 
-## Step 5: Contextual block checks
+See [Consensus data restrictions v31](../developers/source-atlas/data-restrictions-v31.md).
 
-`ContextualCheckBlock` runs checks that depend on chain context but not the UTXO set.
+## Step 5: Signature and input validation
 
-Reviewed checks include:
+During full block connection, transaction inputs are checked against the UTXO set and scripts/signatures are verified under the consensus context for that block.
 
-- Transaction finality against the next block.
-- Coinbase height commitment after activation.
-- Witness commitment validation when SegWit is active.
-- Final block weight check after witness commitment validation.
+From height `57750`, BC2 replay protection supplies the configured signature-hash domain `0x01324342` to the relevant signing/verification path. The domain is contextual; it is not serialized as a normal transaction field.
 
-## Step 6: Storage and block index update
+See [Replay protection v31](../developers/source-atlas/replay-protection-v31.md).
 
-`AcceptBlock` handles full-block acceptance for storage.
+## Step 6: Storage and block-index update
 
-Reviewed behavior includes:
+Accepted block data is written to block storage and associated with block-index metadata. The storage layer records file positions and availability state so validation can later retrieve blocks and undo data.
 
-- Calling `AcceptBlockHeader` first.
-- Avoiding duplicate block-data processing.
-- Running `CheckBlock` and `ContextualCheckBlock`.
-- Saving valid block data to disk.
-- Calling `ReceivedBlockTransactions`.
+Storage is not itself consensus validation. It persists data used by validation and chainstate.
 
-`ReceivedBlockTransactions` records block-data status, file position, and transaction count, then makes eligible blocks candidates for chain connection.
+## Step 7: Best-chain selection
 
-## Step 7: Block storage details
+`ActivateBestChain` and related logic evaluate usable candidates by **accumulated work**.
 
-The reviewed block-storage layer writes serialized blocks to `blk` files and tracks their positions through block-index metadata.
+ShockWave determines required work for each post-activation block, but it does not replace best-work chain selection. Height alone is not the deciding rule, and a branch is not selected merely because its recent difficulty is lower or because it has more headers.
 
-Reviewed storage behavior includes:
+## Step 8: UTXO connection
 
-- `BlockManager::WriteBlock` choosing a flat-file position.
-- Writing message-start bytes and serialized block size before the block payload.
-- Writing the block with witness data.
-- Updating block-file statistics and dirty-file metadata.
-- Maintaining block-file cursors.
-- Supporting reindex and imported block files through `ImportBlocks`.
+When a block becomes part of the active chain, the connection path:
 
-The block-storage layer is not the same as validation. It gives validation durable data to read later.
+- checks referenced inputs and spendability;
+- verifies scripts/signatures under current consensus rules;
+- accumulates fees;
+- applies sequence/finality constraints where relevant;
+- updates the coins view;
+- checks the coinbase amount against subsidy plus fees;
+- advances the coins-view best block.
 
-## Step 8: Best-chain selection
+## Step 9: Undo data
 
-`ActivateBestChain` and related functions choose the best usable chain.
+When spent outputs are removed from the active UTXO set, the node stores enough undo information to restore them if the block is later disconnected.
 
-Reviewed behavior includes:
+Undo data is fundamental to safe chain reorganization. It lets the node reverse previously connected state rather than reconstructing old UTXO contents by guesswork.
 
-- Selecting a most-work candidate through `FindMostWorkChain`.
-- Finding the fork point between active chain and candidate chain.
-- Disconnecting old active blocks if needed.
-- Connecting candidate blocks with `ConnectTip`.
+## Step 10: Tip update and notifications
 
-## Step 9: UTXO connection
+After successful connection, validation and chainstate paths update the active tip and emit notifications consumed by wallets, indexes, UI components, and other subscribers.
 
-`ConnectTip` calls `ConnectBlock`.
+Subscriber callbacks should not be treated as a universal total ordering across all consumers.
 
-Reviewed `ConnectBlock` behavior includes:
+## Step 11: Confirmations
 
-- Checking the coins-view best block.
-- Checking transaction inputs with `Consensus::CheckTxInputs`.
-- Building undo data.
-- Accumulating fees.
-- Checking sequence locks.
-- Counting operation cost.
-- Running input verification checks when enabled.
-- Updating the coins view.
-- Checking that coinbase output value does not exceed fees plus subsidy.
-- Setting the coins view best block to the connected block.
+A transaction becomes confirmed when its containing block is on the active best-work chain. Additional active-chain blocks increase its confirmation depth.
 
-## Step 10: Undo data
+A confirmation count is an operational measure, not cryptographic finality. A later competing chain with more accumulated work can still disconnect previously confirmed blocks.
 
-When a block is connected, the node records undo data so the block can later be disconnected if a reorganization happens.
+For exchange/deposit operations, MoreBC2 therefore treats confirmation count together with chainwork, value, and network health rather than describing any finite count as irreversible.
 
-Reviewed storage behavior includes:
+## Step 12: Reorganization possibility
 
-- Writing undo data to `rev` files.
-- Writing message-start bytes and undo-data size.
-- Writing a checksum based on the previous block hash and undo data.
-- Updating the block index with undo position and undo-availability status.
+A connected block can later be disconnected if a competing valid branch becomes the best-work chain.
 
-Undo data is what lets the node return the UTXO view to an earlier state without guessing how it used to look.
+That lifecycle is covered in [Life of a reorganization](life-of-a-reorg.md).
 
-## Step 11: Tip update and notifications
+## Runtime evidence boundary
 
-When a block is connected as the active tip, reviewed paths call or emit:
+The September 11 Windows `v31.1.0` mainnet test directly observed current header acquisition and partial block validation during initial synchronization, then a clean restart against retained chain state. It did not complete initial block download or independently exercise a post-activation mainnet block lifecycle from candidate creation through connection.
 
-- `UpdateTip`
-- `BlockConnected`
-- `UpdatedBlockTip`
-- Header-tip notifications
-
-The validation-interface layer delivers block, chain, and mempool events to subscribers such as wallets, indexes, and other observers.
-
-Important ordering caveat:
-
-A single subscriber receives callbacks in generated order, but no ordering should be assumed across different subscribers.
-
-## Step 12: Confirmations
-
-A block on the active best chain confirms its included transactions.
-
-Every later block built on top of that block increases the confirmation depth of the earlier block and its transactions.
-
-Wallet transaction-history RPCs can surface wallet-specific confirmation data, but wallet/index subscriber behavior after notifications still needs deeper review.
-
-## Reorg note
-
-A block can later be disconnected if a competing higher-work chain becomes active.
-
-That is covered in [Life of a reorganization](life-of-a-reorg.md).
-
-## What is not fully reviewed yet
-
-- Block/header send-loop behavior.
-- Compact-block reconstruction branches in full detail.
-- Block download timeout and stalling behavior.
-- Full undo-read behavior.
-- Full pruning failure and recovery behavior.
-- Wallet/index subscriber behavior after notifications.
-- Live external mining software and pool behavior.
+Accordingly, the complete lifecycle remains primarily source-backed, with bounded runtime support for startup/synchronization behavior.
 
 ## Related pages
 
@@ -207,17 +145,16 @@ That is covered in [Life of a reorganization](life-of-a-reorg.md).
 - [Life of a reorganization](life-of-a-reorg.md)
 - [Source atlas: block lifecycle](../developers/source-atlas/block-acceptance.md)
 - [Source atlas: block storage](../developers/source-atlas/block-storage.md)
-- [Source atlas: validation interface](../developers/source-atlas/validation-interface.md)
 - [Source atlas: validation.cpp](../developers/source-atlas/validation-cpp.md)
 - [Source atlas: block template assembly](../developers/source-atlas/miner.md)
-- [Source atlas: mining RPC](../developers/source-atlas/rpc-mining.md)
-- [Source atlas: blockchain RPC](../developers/source-atlas/rpc-blockchain.md)
-- [Source atlas: net processing block and header relay](../developers/source-atlas/net-processing-block-relay.md)
-- [Consensus overview](../documentation/consensus-overview.md)
-- [Proof-of-work](../encyclopedia/proof-of-work.md)
+- [ShockWave v31](../developers/source-atlas/shockwave-v31.md)
+- [Replay protection v31](../developers/source-atlas/replay-protection-v31.md)
+- [Data restrictions v31](../developers/source-atlas/data-restrictions-v31.md)
+- [Header sync v31](../developers/source-atlas/headers-sync-v31.md)
+- [Windows v31.1.0 node and RPC validation](../verification/windows-v31-node-rpc-validation-2026-09-11.md)
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This explainer is based on reviewed block acceptance, validation, best-chain activation, UTXO connection, block-storage, undo-writing, validation-interface, candidate-template, mining RPC, blockchain RPC, and first-pass P2P block/header relay notes. Send-loop behavior, compact-block reconstruction details, full undo-read behavior, pruning recovery, and wallet/index subscriber behavior need deeper review.
+**Status:** Reviewed / Partial  
+**Primary sources checked:** Current v31 block-validation, mining, storage, chain-selection, ShockWave, replay-protection, data-restriction, and header-sync reviews plus bounded September mainnet runtime evidence  
+**Notes:** The lifecycle is current at the architecture level. Full-sync runtime coverage, controlled post-activation block vectors, deep compact-block behavior, pruning failure recovery, and exhaustive subscriber behavior remain open.
