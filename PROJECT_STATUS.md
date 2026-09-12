@@ -89,7 +89,7 @@ The principal open areas are now narrower than the previous project-status page 
 
 ## Security reporting
 
-GitHub Private Vulnerability Reporting is enabled and the external private-reporting route has been verified. See [SECURITY.md](SECURITY.md). Ordinary non-sensitive documentation problems may use public GitHub issues; sensitive material should not be posted publicly.
+GitHub Private Vulnerability Reporting is enabled and the external private-reporting route has been verified. See [SECURITY.md](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md). Ordinary non-sensitive documentation problems may use public GitHub issues; sensitive material should not be posted publicly.
 
 ## Navigation
 
