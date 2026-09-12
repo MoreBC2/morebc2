@@ -2,7 +2,7 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-07-02
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
@@ -86,20 +86,22 @@ It is intentionally conservative. A checked item should mean the information is 
 | Backup guidance | Draft | Safety-critical; should be reviewed. |
 | RPC authentication guidance | Draft | Must warn against public RPC exposure. |
 | Firewall guidance | Missing | Useful for operators. |
-| Monitoring guidance | Missing | Include height, peers, status, and errors. |
+| Monitoring guidance | Draft | Current exchange docs now include height, peers, tip age, difficulty/work, and chainwork as monitoring considerations. |
 
 ## 6. Deposit and transaction operations
 
 | Item | Status | Notes |
 |---|---|---|
-| Address-generation notes | Draft | Needs tested RPC examples before production use. |
-| Deposit monitoring method | Draft | Needs tested RPC examples before production use. |
-| Confirmation recommendation | Missing | Must be source-backed or clearly draft risk model. |
-| Reorg handling guidance | Draft | Should link to reorg documentation. |
-| Transaction creation notes | Draft | Needs tested RPC examples before production use. |
-| Broadcast notes | Draft | Needs tested RPC examples before production use. |
+| Address-generation notes | Draft | Needs final exchange architecture and tested operator examples. |
+| Deposit monitoring method | Draft | Current guide covers wallet/non-wallet considerations but still needs chainwork examples. |
+| Confirmation recommendation | Draft / provisional | MoreBC2 currently uses 50 confirmations as a provisional normal-deposit baseline, grounded in 2026-09-12 direct exchange evidence. Not a protocol rule or finality guarantee. |
+| Reorg handling guidance | Draft | Current deposit guide includes rollback/hold behavior; concrete alert thresholds remain open. |
+| Transaction creation notes | Draft | Current v31.1.0 PSBT workflow has isolated runtime evidence; production exchange flow remains separate. |
+| Broadcast notes | Draft | Invalid public broadcast rejection and local submission are tested; valid public BC2 broadcast remains untested. |
 | Failed transaction recovery notes | Missing | Helpful for support. |
-| Custody architecture notes | Missing | Keep high-level unless reviewed by maintainers. |
+| Custody architecture notes | Missing | Keep high-level unless reviewed by maintainers/operators. |
+
+See [Exchange confirmation evidence — 2026-09-12](../verification/exchange-confirmation-evidence-2026-09-12.md) and [Deposit monitoring](deposit-monitoring.md).
 
 ## 7. RPC documentation package
 
@@ -110,7 +112,7 @@ It is intentionally conservative. A checked item should mean the information is 
 | Blockchain RPC list | Draft | Useful for monitoring. |
 | Raw transaction RPC list | Draft | Useful for transaction flow. |
 | Mempool/broadcast RPC list | Draft | Useful for transaction flow. |
-| Tested command examples | Missing | Do not imply examples are production-ready until run. |
+| Tested command examples | Draft | Current v31.1.0 node/RPC evidence exists; exchange-facing command packaging remains incomplete. |
 | Error examples | Missing | Helpful for integration teams. |
 
 ## 8. Security and trust package
@@ -134,7 +136,7 @@ It is intentionally conservative. A checked item should mean the information is 
 | Reddit | Needs verification | Optional but useful. |
 | YouTube/media links | Needs verification | Optional; avoid influencer-only framing. |
 | Community size snapshot | Missing | Record date and source. |
-| Existing exchanges/services | Needs verification | Directly verify before listing. |
+| Existing exchanges/services | Draft | Direct current observations now exist for CoinEx, NonKYC, NestEx, and Biconomy; recheck before submission. |
 | Market data pages | Needs verification | CoinGecko/CMC/etc., if applicable. |
 
 ## 10. Submission workflow
@@ -157,12 +159,12 @@ Do not send a final BC2 listing packet until these are resolved or explicitly la
 - Canonical technical contact process.
 - Current official website and repository links.
 - Safe, tested or clearly labeled node setup notes.
-- Confirmation policy or draft risk model.
+- Provisional confirmation baseline plus chainwork/risk caveats.
 - Current community links.
 - Logo/branding package.
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current MoreBC2 exchange documentation structure and first-pass exchange listing source review.
-**Notes:** This checklist is not a claim that BC2 is exchange-ready. It is a working readiness framework.
+**Primary sources checked:** Current MoreBC2 exchange documentation structure, current v31.1.0 runtime/source evidence, and 2026-09-12 direct exchange confirmation observations
+**Notes:** This checklist is not a claim that BC2 is exchange-ready. The confirmation-policy item has advanced from Missing to Draft/provisional, while custody architecture, contact process, and several submission assets remain unresolved.
