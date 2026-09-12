@@ -1,16 +1,14 @@
 # Raw transaction RPC
 
 **Category:** Documentation
-**Status:** Source-reviewed partial
-**Last reviewed:** 2026-09-02
+**Status:** Source-reviewed / Runtime-tested partial
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
 This page covers node-level raw transaction and PSBT RPC behavior centered on `src/rpc/rawtransaction.cpp`.
 
-The command inventory remains broadly Bitcoin-style, but BitcoinII Core `v31.1.0` adds a material BitcoinII-specific signing rule: transaction signing/finalization paths derive the replay-protection signature-hash domain for the **next block**.
-
-This is not a tested command guide.
+The command inventory remains broadly Bitcoin-style, but BitcoinII Core `v31.1.0` adds a material signing rule: transaction signing/finalization paths derive the replay-protection signature-hash domain for the **next block**.
 
 ## Command surface
 
@@ -36,94 +34,66 @@ Read-only lookup/decoding behavior remains structurally consistent with the earl
 
 ## v31 next-block sighash domain
 
-`src/rpc/rawtransaction.cpp` defines `NextBlockSighashForkId`.
-
-The helper locks chain state, reads the active-chain height, and asks consensus for:
+`src/rpc/rawtransaction.cpp` defines a next-block fork-id helper that derives:
 
 ```text
 SighashForkId(active_height + 1)
 ```
 
-That choice matters at the activation boundary. A transaction signed while the current tip is immediately below replay-protection activation must already use the domain required by the block in which it could next be mined.
+That matters at the activation boundary: a transaction intended for block `57750` must use the post-activation BC2 domain even when the current tip is still one block below activation.
 
-Mainnet uses fork id `0x01324342` from height `57750`.
+Mainnet uses fork/domain id `0x01324342` from height `57750`.
 
-## Signing and PSBT implications
+The domain propagates through relevant raw-transaction signing and PSBT precompute/finalization/analysis paths. A third-party service can therefore understand Bitcoin transaction/PSBT serialization while still being signing-incompatible with post-activation BitcoinII.
 
-The selected fork id is passed into relevant signing/PSBT helpers rather than relying on generic Bitcoin sighashes.
+## Read-only versus signing-sensitive behavior
 
-Reviewed v31 propagation includes:
+Replay protection does not make ordinary decoding or lookup inherently signing-sensitive. The material compatibility boundary is in workflows that create or verify signatures, finalize/extract signed PSBTs, or analyze signing completeness using BC2 signature semantics.
 
-- explicit-key raw transaction signing;
-- raw-transaction signing helpers in `rpc/rawtransaction_util.cpp`;
-- PSBT precomputation and finalization;
-- PSBT analysis paths that accept the replay domain;
-- signature creation/checking through the common signing/interpreter stack.
+## Runtime evidence — 2026-09-11
 
-A third-party service can therefore support Bitcoin raw-transaction/PSBT formats while still being incompatible with post-activation BitcoinII if it does not implement the BC2 signature domain.
+MoreBC2's isolated v31 regtest PSBT test directly exercised raw/PSBT helpers including:
 
-## Read-only versus signing-sensitive commands
+- `decodepsbt`;
+- `finalizepsbt`;
+- `decoderawtransaction`;
+- `testmempoolaccept`;
+- local-only `sendrawtransaction`.
 
-The replay-domain change does not make ordinary transaction decoding or lookup inherently BC2-specific.
+The PSBT was created and signed by a fresh disposable BitcoinII Core wallet, finalized successfully, decoded successfully, accepted by `testmempoolaccept`, and submitted only to a zero-peer local regtest mempool.
 
-The material compatibility boundary is in commands/workflows that:
+This establishes a working ordinary v31 raw-transaction/PSBT extraction and local-acceptance path under the documented environment. It is not a public broadcast test and does not runtime-exercise mainnet replay activation.
 
-- create signatures;
-- verify signatures;
-- finalize/extract signed PSBTs;
-- analyze signing completeness using BC2 signature semantics.
+See [Windows v31.1.0 PSBT and replay-protection validation — 2026-09-11](../../verification/windows-v31-psbt-replay-validation-2026-09-11.md).
 
-## Existing behavior that remains useful
+## Remaining verification work
 
-The earlier MoreBC2 descriptions remain structurally useful for:
-
-- raw transaction construction;
-- transaction/script decoding;
-- transaction lookup and txindex limitations;
-- combining partially signed raw transactions;
-- PSBT create/decode/combine/join/update workflows;
-- descriptor-assisted PSBT processing.
+- deterministic pre/post-fork signature vectors;
+- explicit-key raw signing across the replay boundary;
+- raw-RPC versus wallet-signing digest equivalence tests;
+- third-party raw transaction/PSBT library compatibility;
+- public-network valid transaction broadcast.
 
 ## Service guidance
 
-Do not assume Bitcoin library compatibility from address/script compatibility alone.
-
-Services that sign withdrawals should either use current BitcoinII Core RPC/wallet paths or independently implement and test BC2's replay-domain rules.
-
-## Runtime status
-
-MoreBC2 has not yet executed v31 raw-transaction signing vectors.
-
-Still needed:
-
-- deterministic pre/post-fork signature vectors;
-- raw-RPC versus wallet-signing equivalence tests;
-- PSBT finalization tests on a disposable environment;
-- third-party raw transaction library compatibility review.
+Do not infer signing compatibility from address/script/PSBT format compatibility alone. Services that sign withdrawals should use current BitcoinII Core signing paths or independently implement and test the BC2 replay-domain rules.
 
 ## Related pages
 
 - [Replay protection v31](replay-protection-v31.md)
 - [Wallet spend and PSBT RPC](wallet-spend-rpc.md)
-- [v31 wallet/mempool/mining regression audit](../../verification/v31-wallet-mempool-mining-regression-2026-09-02.md)
 - [RPC overview](../rpc-overview.md)
+- [Wallet compatibility](../../compatibility/wallets.md)
+- [v31 PSBT runtime record](../../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
 
 ## Sources
 
-Pinned to BitcoinII Core `v31.1.0`:
-
-- `src/rpc/rawtransaction.cpp`
-- `src/rpc/rawtransaction_util.cpp`
-- `src/psbt.cpp`
-- `src/node/psbt.cpp`
-- `src/script/sign.cpp`
-- `src/script/interpreter.cpp`
-- `src/consensus/params.h`
+Pinned BitcoinII Core `v31.1.0` paths include `src/rpc/rawtransaction.cpp`, `src/rpc/rawtransaction_util.cpp`, `src/psbt.cpp`, `src/node/psbt.cpp`, `src/script/sign.cpp`, and `src/script/interpreter.cpp`.
 
 Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Source-reviewed partial
-**Primary sources checked:** BitcoinII Core `v31.1.0`
-**Notes:** Next-block replay-domain selection and propagation are source-backed. Runtime signing examples remain unverified by MoreBC2.
+**Status:** Source-reviewed / Runtime-tested partial  
+**Primary sources checked:** BitcoinII Core `v31.1.0` plus the 2026-09-11 isolated PSBT/raw-transaction runtime record  
+**Notes:** Next-block replay-domain propagation is source-backed. Ordinary PSBT finalization/decoding/local acceptance was runtime-tested; activation-boundary signing, third-party signing, and public broadcast remain open.
