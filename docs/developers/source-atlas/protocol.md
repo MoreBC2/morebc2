@@ -1,103 +1,59 @@
 # P2P protocol primitives
 
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-07-01
+**Category:** Developer / Source Atlas  
+**Status:** Reviewed / Source-confirmed structural  
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page covers a first-pass review of:
+This page maps low-level BitcoinII Core P2P protocol primitives centered on `src/protocol.h` / `src/protocol.cpp` for the current `v31.1.0` documentation baseline.
 
-- `src/protocol.h`
-- `src/protocol.cpp`
+These files define message names/header shape, service flags, address serialization, and inventory types. They are protocol building blocks rather than a full peer-behavior specification.
 
-These files define low-level P2P protocol message names, message-header shape, service flags, address serialization helpers, inventory types, and inventory-string behavior.
+MoreBC2 now also has bounded `v31.1.0` runtime evidence for the surrounding network stack: protocol version `70016`, mainnet P2P listener `8338`, automatic outbound peer discovery, current header acquisition, and clean restart. That runtime evidence does not prove every message type or transport branch listed here was exercised.
 
-This page is not a full P2P behavior review. It maps protocol primitives that are used by networking, peer processing, RPC output, and diagnostics.
-
-## Why these files matter
-
-Protocol primitives affect:
-
-- How P2P messages are named and identified.
-- How message headers are shaped.
-- How node service capabilities are represented.
-- How addresses are serialized in v1/v2 formats.
-- How inventory announcements identify transactions, blocks, compact blocks, witness data, and wtxid relay items.
-- How RPC output turns service flags and inventory types into human-readable strings.
-
-## Message header reviewed
+## Message header
 
 `CMessageHeader` contains:
 
-- message-start characters
-- message type
-- payload size
-- checksum
+- message-start bytes;
+- fixed-size message type;
+- payload size;
+- checksum.
 
-Reviewed constants include:
+Reviewed constants include a 12-byte message-type field and the ordinary payload-size/checksum fields. Message-type validation checks printable command bytes and zero padding after the first null.
 
-- `MESSAGE_TYPE_SIZE = 12`
-- `MESSAGE_SIZE_SIZE = 4`
-- `CHECKSUM_SIZE = 4`
-- computed offsets for size and checksum
-- computed header size
+Current mainnet message-start bytes are defined in chain parameters as:
 
-Reviewed behavior includes:
+```text
+42 49 49 21
+```
 
-- Constructing a header from message-start characters, message type, and payload size.
-- Copying the message type into the fixed-size message-type field.
-- Asserting if the supplied message type is longer than the fixed field.
-- Returning the message type as a string up to the first null byte.
-- Checking that message type bytes are printable ASCII and that bytes after the first null are zero.
+See [chainparams.cpp](chainparams-cpp.md).
 
-## P2P message names reviewed
+## Message names
 
-Reviewed `NetMsgType` names include:
+Reviewed protocol message names include the ordinary version/handshake, address, inventory, block/header, transaction, compact-block, compact-filter, ping/pong, fee-filter, wtxid-relay, and transaction-reconciliation families.
 
-- `version`
-- `verack`
-- `addr`
-- `addrv2`
-- `sendaddrv2`
-- `inv`
-- `getdata`
-- `merkleblock`
-- `getblocks`
-- `getheaders`
-- `tx`
-- `headers`
-- `block`
-- `getaddr`
-- `mempool`
-- `ping`
-- `pong`
-- `notfound`
-- `filterload`
-- `filteradd`
-- `filterclear`
-- `sendheaders`
-- `feefilter`
-- `sendcmpct`
-- `cmpctblock`
-- `getblocktxn`
-- `blocktxn`
-- `getcfilters`
-- `cfilter`
-- `getcfheaders`
-- `cfheaders`
-- `getcfcheckpt`
-- `cfcheckpt`
-- `wtxidrelay`
-- `sendtxrcncl`
+Examples include:
 
-`ALL_NET_MESSAGE_TYPES` records the known message types in the same order as the declarations.
+- `version`, `verack`;
+- `addr`, `addrv2`, `sendaddrv2`;
+- `inv`, `getdata`, `notfound`;
+- `getblocks`, `getheaders`, `headers`, `block`;
+- `tx`, `wtxidrelay`;
+- `ping`, `pong`;
+- `sendheaders`, `feefilter`;
+- `sendcmpct`, `cmpctblock`, `getblocktxn`, `blocktxn`;
+- compact-filter request/response messages;
+- `sendtxrcncl`.
 
-## Service flags reviewed
+Presence in the protocol constants does not establish that every message is negotiated, enabled, or used by every current peer.
+
+## Service flags
 
 Reviewed service flags include:
 
-- `NODE_NONE`
 - `NODE_NETWORK`
 - `NODE_BLOOM`
 - `NODE_WITNESS`
@@ -105,109 +61,83 @@ Reviewed service flags include:
 - `NODE_NETWORK_LIMITED`
 - `NODE_P2P_V2`
 
-Observed notes include:
+Service flags describe advertised capabilities. Runtime interpretation depends on node configuration/state; for example, pruning and enabled indexes can affect what a node can serve.
 
-- `NODE_NETWORK` indicates a node can serve the complete block chain and is unset by pruned/light clients.
-- `NODE_WITNESS` indicates witness-capable block and transaction serving.
-- `NODE_COMPACT_FILTERS` is tied to basic block filter serving.
-- `NODE_NETWORK_LIMITED` indicates serving only a recent block window.
-- `NODE_P2P_V2` indicates BIP324 transport support.
-- `SeedsServiceFlags()` returns `NODE_NETWORK | NODE_WITNESS`.
-- `MayHaveUsefulAddressDB()` returns true for `NODE_NETWORK` or `NODE_NETWORK_LIMITED`.
-- `serviceFlagsToStr()` returns human-readable service names and preserves unknown flags as `UNKNOWN[...]` strings.
+The September v31 node test observed ordinary outbound mainnet operation, but MoreBC2 did not publish a full service-flag census for every peer or node mode.
 
-## Address serialization reviewed
+## Address serialization
 
-`CAddress` extends `CService` with peer metadata.
+`CAddress` extends service/network-address data with time and service flags and supports the reviewed v1/v2 network/disk serialization forms.
 
-Reviewed behavior includes:
+This page does not document address-manager selection/tried/new-table behavior. See [Addrman](addrman.md).
 
-- Address time.
-- Service flags.
-- V1 and V2 network serialization modes.
-- V1 and V2 disk serialization modes.
-- Disk format version handling for v2 address serialization.
-- V2 CompactSize service-flag serialization.
-- V1 fixed-width service-flag serialization.
+## Inventory types
 
-This page does not fully document address-manager behavior; see future `addrman` and network-processing reviews for that.
+Reviewed inventory types cover transactions, blocks, witness forms, filtered blocks, compact blocks, and wtxid-aware transaction inventory.
 
-## Inventory types reviewed
+The inventory helpers map type/hash pairs to protocol message concepts and distinguish txid/wtxid forms where applicable.
 
-Reviewed inventory and getdata types include:
+## Current v31 runtime identity
 
-- `MSG_TX`
-- `MSG_BLOCK`
-- `MSG_WTX`
-- `MSG_FILTERED_BLOCK`
-- `MSG_CMPCT_BLOCK`
-- `MSG_WITNESS_BLOCK`
-- `MSG_WITNESS_TX`
+The September 11 Windows mainnet record directly observed:
 
-Reviewed constants include:
+- runtime `/BitcoinII:31.1.0/`;
+- protocol version `70016`;
+- mainnet P2P listener `0.0.0.0:8338`;
+- automatic outbound peers without manual peer injection;
+- current header acquisition and advancing IBD.
 
-- `MSG_WITNESS_FLAG`
-- `MSG_TYPE_MASK`
+Those observations establish current P2P interoperability for the bounded node environment. They do not show that every listed message, inventory type, service flag, or transport mode was exercised.
 
-Reviewed `CInv` behavior includes:
+## Transport boundary
 
-- storing an inventory type and hash
-- ordering inventory entries by type and hash
-- converting inventory type to message type string
-- using `witness-` prefix for witness-flagged inventory types
-- representing unknown inventory types as hex type plus hash in `ToString()`
-- converting transaction inventory to `GenTxid` as txid or wtxid depending on type
+The source contains BIP324/v2 transport capability concepts and the network stack can report transport state through peer/network diagnostics.
 
-## Documentation implications
+Older MoreBC2 v29 observations included v2 transport on observed peers. The September v31 runtime test was not designed as an exhaustive transport census, so this page does not claim all current BC2 peers use v2 or that every v2 path has been runtime-qualified on v31.
 
-MoreBC2 should use this page as a low-level anchor for:
+## BitcoinII-specific boundaries
 
-- protocol message names
-- service flag explanations
-- address relay terminology
-- inventory terminology
-- network RPC field explanations
-- future peer-processing review
+The broad protocol primitive structure remains Bitcoin-like, but current BC2 behavior differs materially elsewhere:
 
-This page should not be used to claim that a feature is enabled or reachable on the live network unless another source confirms runtime behavior.
+- mainnet network identity/port are BitcoinII-specific;
+- ShockWave changes contextual header required-work validation;
+- fork-aware header sync carries additional history for post-activation difficulty validation;
+- replay protection changes transaction signature-domain semantics;
+- consensus data restrictions change valid post-activation transaction/block constructions.
 
-## Relationship to other pages
+Therefore low-level message compatibility must not be mistaken for full Bitcoin network/transaction compatibility.
 
-Related pages:
+## Related pages
 
 - [Network RPC](rpc-network.md)
-- [Node startup](../../architecture/node-startup.md)
+- [Net connection management](net-connection-management.md)
+- [Peer handshake](net-processing-handshake.md)
+- [Fork-aware header synchronization](headers-sync-v31.md)
 - [Network specifications](../../documentation/network-specifications.md)
-- [RPC overview](../rpc-overview.md)
-- [Command smoke-test plan](../../verification/command-smoke-test-plan.md)
+- [Peer communication model](../../architecture/peer-communication-model.md)
+- [Windows v31 node/RPC validation](../../verification/windows-v31-node-rpc-validation-2026-09-11.md)
 
-## BitcoinII-specific notes
+## Open work
 
-The reviewed files show BitcoinII naming, header guards, and comments.
+- Produce a dedicated current v31 transport observation only if it can be done without exposing peer-identifying data.
+- Map message families to the current `net_processing` paths where deeper operator/integration guidance needs it.
+- Keep service-flag behavior configuration-specific rather than universal.
 
-The protocol structure appears Bitcoin-style, but no upstream comparison has been completed. This page does not claim whether BitcoinII-specific P2P behavior differs from upstream Bitcoin Core beyond naming and visible strings.
+## Primary sources
 
-## Open questions
+Pinned/current review scope:
 
-- Which protocol message types are actually reachable under current BitcoinII startup defaults?
-- Which service flags are advertised by default on full, pruned, and wallet-only setups?
-- How should BIP324/v2 transport be explained in user-facing docs?
-- Which address relay and address-manager files should be reviewed next?
-- Which `net_processing` paths use each protocol message type?
-- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for these files before upgrading status.
+- `v31.1.0/src/protocol.h`
+- `v31.1.0/src/protocol.cpp`
+- `v31.1.0/src/net_processing.cpp`
+- `v31.1.0/src/net.*`
+- `v31.1.0/src/netaddress.h`
+- `v31.1.0/src/kernel/chainparams.cpp`
 
-## Sources
-
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
-
-- Current observed `main` `src/protocol.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/protocol.h
-- Current observed `main` `src/protocol.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/protocol.cpp
-- Current observed `main` `src/net_processing.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/net_processing.cpp
-- Current observed `main` `src/net.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/net.h
-- Current observed `main` `src/netaddress.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/netaddress.h
+Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This is a first-pass protocol primitive review. Runtime defaults, live-network behavior, lower-level peer-processing paths, upstream comparison, and release-versus-main comparison remain open.
+**Status:** Reviewed / Source-confirmed structural  
+**Primary evidence:** BitcoinII Core `v31.1.0` protocol/network source plus September 11 bounded P2P runtime evidence  
+**Notes:** Protocol primitives and current network identity are synchronized. Ordinary outbound P2P is runtime-observed; exhaustive message/transport/service-flag behavior remains intentionally unclaimed.
