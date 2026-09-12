@@ -1,211 +1,84 @@
 # Wallet guide
 
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-06-30
+**Category:** Documentation  
+**Status:** Reviewed / Partial  
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
 This page is the starting point for BitcoinII (BC2) wallet documentation.
 
-It does not yet provide step-by-step installation instructions because those should be tested on each supported platform before being marked verified.
+MoreBC2 now has direct BitcoinII Core `v31.1.0` wallet runtime evidence in addition to source review. The current evidence is strong enough to document several disposable-wallet and PSBT workflows as tested under controlled conditions, but not strong enough to treat every wallet workflow, platform, or third-party wallet as verified.
 
-Wallet command examples are not verified until local test records exist.
+Current canonical runtime evidence:
 
-## What is source-reviewed today
+- [Windows v31.1.0 node and RPC validation — 2026-09-11](../verification/windows-v31-node-rpc-validation-2026-09-11.md)
+- [Windows v31.1.0 PSBT and replay-protection validation — 2026-09-11](../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
+- [Wallet compatibility](../compatibility/wallets.md)
 
-MoreBC2 has reviewed a first pass of wallet startup and lifecycle files:
+## BitcoinII Core wallet — current tested scope
 
-- `src/wallet/init.cpp`
-- `src/wallet/load.h`
-- `src/wallet/load.cpp`
-- `src/wallet/context.h`
-- `src/wallet/context.cpp`
-- startup-adjacent parts of `src/wallet/wallet.h`
+### Windows v31.1.0 disposable mainnet wallet
 
-MoreBC2 has also reviewed a first pass of wallet RPC registration and address-management files:
+A fresh BitcoinII Core `v31.1.0` Qt node was launched on Windows against a newly created disposable mainnet data directory. No existing BitcoinII wallet or data directory was opened, copied, rescanned, imported, unlocked, inspected, or spent from.
 
-- `src/wallet/rpc/wallet.cpp`
-- `src/wallet/rpc/addresses.cpp`
-- `src/wallet/rpc/backup.cpp`
-- `src/wallet/rpc/spend.cpp`
-- `src/wallet/rpc/encrypt.cpp`
-- `src/wallet/rpc/coins.cpp`
-- `src/wallet/rpc/transactions.cpp`
+Observed wallet behavior included:
 
-Reviewed startup behavior includes:
+- no wallet present before test creation;
+- `createwallet` created a new wallet named `morebc2-disposable-v31`;
+- `getwalletinfo` reported a SQLite descriptor wallet with zero transactions;
+- the wallet was not automatically loaded after restart;
+- `listwalletdir` showed the disposable wallet after restart;
+- explicit `loadwallet` succeeded;
+- the wallet remained zero-transaction and not scanning after reload.
 
-- Wallet support can be compiled into the node.
-- `-disablewallet` disables wallet loading and wallet RPC calls.
-- `-wallet=<path>` can be used multiple times to load existing wallets at startup.
-- `-walletdir=<dir>` sets the wallet directory.
-- Wallet directory validation requires an existing absolute directory when explicitly provided.
-- Configured wallet databases are verified before loading.
-- Missing configured wallet paths are warned and skipped.
-- Wallet loading creates `CWallet` objects, notifies load listeners, and adds wallets to wallet context.
-- Wallet startup calls post-initialization processing and schedules periodic flush/compaction and transaction resend behavior.
-- Wallet shutdown helpers flush, close, remove, and wait for wallet deletion.
+This established basic create/inspect/persist/reload behavior for a fresh Core wallet under the documented Windows test conditions.
 
-## Wallet RPC behavior observed from source
+### Windows v31.1.0 isolated regtest PSBT lifecycle
 
-Reviewed wallet RPC behavior includes:
+A separate fresh regtest environment used a new wallet named `morebc2-v31-psbt-disposable`, zero peers, disabled automatic networking, and loopback-only RPC.
 
-- `getwalletinfo` returns wallet state including name, version, database format, balances, transaction count, keypool data, fee setting, scanning status, descriptor status, external-signer status, blank-wallet status, birth time, and last processed block.
-- `listwalletdir` lists wallets in the wallet directory.
-- `listwallets` lists currently loaded wallets.
-- `loadwallet` loads an existing wallet and can update persistent startup loading behavior.
-- `unloadwallet` unloads a wallet after checking endpoint/argument consistency and active rescan state.
-- `createwallet` creates and loads a new wallet.
-- `setwalletflag` can change mutable wallet flags such as `avoid_reuse`.
-- `getnewaddress` creates a new receiving address and can attach a label.
-- `getrawchangeaddress` creates a new change address for raw-transaction workflows, not normal receiving use.
-- `setlabel` updates the wallet address book.
-- `listaddressgroupings` reports address groupings tied together by transaction history.
-- `addmultisigaddress` is legacy-wallet-only and requires a new wallet backup.
+The test exercised:
 
-Wallet backup/import RPC behavior reviewed so far includes:
+- `createwallet`;
+- `getwalletinfo`;
+- `getnewaddress`;
+- local-only `generatetoaddress` funding;
+- `getbalances`;
+- `walletcreatefundedpsbt`;
+- `decodepsbt`;
+- `walletprocesspsbt`;
+- `finalizepsbt`;
+- `decoderawtransaction`;
+- `testmempoolaccept`;
+- local-only `sendrawtransaction`;
+- `getmempoolentry` and `getmempoolinfo`.
 
-- `backupwallet` backs up the loaded wallet to a requested destination.
-- `restorewallet` restores and loads a wallet from a backup file under a requested wallet name.
-- Legacy import commands can trigger rescans and can be limited by pruned block data.
-- Descriptor import commands require timestamps and can scan from those timestamps.
-- `dumpwallet` and `dumpprivkey` are legacy-wallet-only and should be treated as advanced/sensitive commands.
+The disposable wallet created a funded PSBT, signed it completely, finalized it into a valid transaction, passed local mempool acceptance, and submitted it only to the isolated regtest mempool.
 
-Wallet spend and PSBT behavior reviewed so far includes:
+No public BC2 network received the transaction.
 
-- Wallet send commands require careful treatment because they can move wallet funds.
-- Funding commands can add wallet inputs, choose change handling, and apply fee options.
-- PSBT commands can create, update, sign, and finalize partially signed transactions.
-- Fee-bump commands target eligible replaceable wallet transactions.
-- Some reviewed fee-rate options use atom-per-vbyte units while older options used BC2-per-kvB units.
+## Replay protection and wallet signing
 
-Wallet encryption behavior reviewed so far includes:
+BitcoinII Core `v31.1.0` activates replay protection on mainnet at height `57750` with fork/domain id:
 
-- The temporary wallet unlock command supports a timeout for signing-related commands.
-- The wallet credential update command changes the access phrase for an encrypted wallet.
-- The wallet relock command clears decrypted key material from memory.
-- The first-time encryption command returns a warning that a new backup should be made with `backupwallet`.
+```text
+0x01324342
+```
 
-Wallet coin and balance behavior reviewed so far includes:
+Release-pinned source shows this domain flowing through wallet, PSBT, raw-transaction, mempool, block-validation, and signature-hash paths.
 
-- `getreceivedbyaddress` and `getreceivedbylabel` total received outputs with confirmation and coinbase-maturity controls.
-- `getbalance` returns spendable wallet balance according to wallet spendability rules.
-- `getbalances` separates trusted, untrusted pending, immature, and watch-only balance categories when applicable.
-- `lockunspent` and `listlockunspent` manage manual output selection state.
-- `listunspent` lists wallet outputs with confirmation, address, safety, amount, descriptor, and reuse-related fields.
+This has an important practical implication: **Bitcoin compatibility alone is not enough to prove BC2 wallet compatibility.**
 
-Wallet transaction-history behavior reviewed so far includes:
+A third-party wallet or external signer can understand BC2's Bitcoin-like address formats and still fail to produce valid post-activation signatures if it does not implement BC2's replay-domain-aware signing behavior.
 
-- `listtransactions` lists recent wallet transaction entries with paging and optional label/watch-only filters.
-- `listsinceblock` supports service-style polling from a block reference and can include reorg-removed wallet transactions when available.
-- `gettransaction` returns details for a single in-wallet transaction and can include decoded transaction data.
-- `abandontransaction` marks eligible in-wallet transactions as abandoned when they are not included in a block and not in the mempool.
-- `rescanblockchain` scans local chain data for wallet-related transactions and has limits around pruned or unavailable block data.
-- `abortrescan` requests cancellation of an active wallet rescan.
+The current source also explicitly rejects post-fork external-signer use where the signer cannot be given replay-domain-aware sighash semantics.
 
-Wallet RPC examples remain untested until run against a local BitcoinII Core node.
+MoreBC2 has not yet runtime-tested a hardware wallet or other external signer against this behavior.
 
-## Wallet command testing status
+## Source-reviewed wallet behavior
 
-Track command tests in [Command testing status](../verification/command-testing.md).
-
-Wallet commands that need local disposable-wallet or regtest records include:
-
-- `bitcoinII-cli getwalletinfo`
-- `bitcoinII-cli listwallets`
-- `bitcoinII-cli listwalletdir`
-- `bitcoinII-cli getnewaddress`
-- `bitcoinII-cli listtransactions`
-- `bitcoinII-cli gettransaction <txid>`
-- `bitcoinII-cli backupwallet <destination>`
-- `bitcoinII-cli restorewallet <wallet_name> <backup_file>`
-- `bitcoinII-cli walletpassphrase ...`
-- `bitcoinII-cli walletlock`
-- `bitcoinII-cli rescanblockchain`
-
-Commands that can move funds, expose sensitive material, or change wallet state should stay out of beginner docs until tested on disposable wallets and heavily caveated.
-
-## Wallet options observed from source
-
-Reviewed wallet options include:
-
-- address type and change type options
-- wallet path and wallet directory options
-- fee-related options
-- keypool option
-- transaction confirmation target option
-- wallet broadcast option
-- wallet notification command option
-- RBF option
-- partial-spend-avoidance option
-- zero-confirmation change spending option
-- database/debug options depending on build configuration
-
-These options are source-observed but not locally tested by MoreBC2 yet.
-
-## Defaults observed from source
-
-Reviewed startup-adjacent wallet defaults include:
-
-- Default address type: `BECH32`.
-- Default transaction confirmation target: 6 blocks.
-- Default wallet RBF: true.
-- Default wallet broadcast: true.
-- Default wallet disabled: false.
-- Default fallback fee: zero.
-- Default pay transaction fee: zero.
-
-Reviewed wallet RPC behavior also shows `createwallet` defaults to descriptor wallets when the `descriptors` argument is not overridden.
-
-These defaults should still be checked against a running release before being used in user-facing examples.
-
-## Safe wallet principles
-
-These are general cryptocurrency wallet safety principles:
-
-- Download wallet software from official project release sources.
-- Verify downloads when checksums or signatures are available.
-- Back up wallet data before sending funds.
-- Do not expose private keys or wallet files.
-- Do not run unknown wallet binaries from unofficial links.
-- Keep a small test balance when trying a new wallet setup.
-- Test wallet command workflows with temporary/regtest wallets before documenting them for users.
-
-## Release verification note
-
-MoreBC2 has not yet confirmed the complete BitcoinII release verification model.
-
-Before this guide is marked Verified, MoreBC2 needs to document whether releases provide:
-
-- SHA256 checksums.
-- Checksum manifest files.
-- Detached signatures.
-- Signed tags.
-- Reproducible builds.
-
-## Platform guides to create
-
-- Windows wallet guide.
-- Linux wallet guide.
-- macOS wallet guide.
-- CLI-only wallet guide.
-- Backup and restore guide.
-- Troubleshooting sync issues.
-- Tested wallet RPC examples.
-
-## Open items
-
-- Confirm official download path.
-- Confirm release-verification workflow.
-- Confirm wallet data directory by operating system.
-- Confirm backup file names and restore process.
-- Test wallet encryption workflow on a temporary wallet.
-- Test transaction-history and rescan examples on a temporary wallet.
-- Review wallet database format behavior.
-- Confirm whether GUI and CLI wallets differ in user-facing behavior.
-- Test safe wallet RPC examples locally before publishing them as verified.
-
-## Sources
+MoreBC2 has reviewed wallet startup/lifecycle and major wallet RPC groups in the current codebase, including:
 
 - `src/wallet/init.cpp`
 - `src/wallet/load.h`
@@ -220,6 +93,197 @@ Before this guide is marked Verified, MoreBC2 needs to document whether releases
 - `src/wallet/rpc/encrypt.cpp`
 - `src/wallet/rpc/coins.cpp`
 - `src/wallet/rpc/transactions.cpp`
+
+Source review supports documentation of available behavior, but source-observed commands remain distinct from runtime-tested workflows.
+
+### Startup and lifecycle behavior observed from source
+
+- Wallet support can be compiled into the node.
+- `-disablewallet` disables wallet loading and wallet RPC calls.
+- `-wallet=<path>` can be used multiple times to load existing wallets at startup.
+- `-walletdir=<dir>` sets the wallet directory.
+- Explicit wallet directories are validated.
+- Configured wallet databases are verified before loading.
+- Missing configured wallet paths are warned and skipped.
+- Wallet startup schedules normal post-initialization processing, periodic flush/compaction, and transaction resend behavior.
+- Wallet shutdown helpers flush, close, remove, and wait for wallet deletion.
+
+### Wallet RPC behavior observed from source
+
+Reviewed RPC behavior includes:
+
+- `getwalletinfo`
+- `listwalletdir`
+- `listwallets`
+- `loadwallet`
+- `unloadwallet`
+- `createwallet`
+- `setwalletflag`
+- `getnewaddress`
+- `getrawchangeaddress`
+- `setlabel`
+- `listaddressgroupings`
+- `addmultisigaddress`
+
+Some of these now also have runtime coverage as noted above; others remain source-reviewed only.
+
+## Backup, restore, import, and recovery
+
+Source review establishes that BitcoinII Core includes wallet backup/import/restore RPCs such as:
+
+- `backupwallet`;
+- `restorewallet`;
+- descriptor import commands;
+- legacy import commands;
+- `dumpwallet` and `dumpprivkey` for legacy-wallet contexts.
+
+Important boundaries:
+
+- legacy import and rescan behavior can be constrained by pruning or unavailable historical blocks;
+- descriptor import behavior depends on timestamps and scan ranges;
+- sensitive key-dump/import commands are not appropriate for beginner guidance;
+- MoreBC2 has **not yet completed a direct v31 backup-and-restore test** with disposable wallets.
+
+Until that test exists, backup/restore behavior should be described as source-supported, not locally verified end-to-end.
+
+## Encryption and unlock behavior
+
+Source review establishes wallet encryption, temporary unlock, credential change, and relock behavior.
+
+MoreBC2 has not yet completed an isolated `v31.1.0` runtime test of:
+
+- first-time wallet encryption;
+- temporary signing unlock;
+- wallet relock;
+- credential update;
+- backup-after-encryption workflow.
+
+Do not publish these as verified procedures yet.
+
+## Coin, balance, and transaction-history behavior
+
+Source review includes:
+
+- `getreceivedbyaddress`;
+- `getreceivedbylabel`;
+- `getbalance`;
+- `getbalances`;
+- `lockunspent`;
+- `listlockunspent`;
+- `listunspent`;
+- `listtransactions`;
+- `listsinceblock`;
+- `gettransaction`;
+- `abandontransaction`;
+- `rescanblockchain`;
+- `abortrescan`.
+
+`getbalances` now has bounded runtime coverage in the isolated regtest PSBT test. The broader transaction-history, rescan, abandon, and UTXO-management workflows remain mostly source-reviewed rather than runtime-tested.
+
+## Spend and PSBT behavior
+
+Current evidence is strongest here.
+
+The September regtest record demonstrates a complete Core-wallet PSBT flow with:
+
+- wallet-selected input;
+- change handling;
+- explicit fee rate;
+- wallet signing;
+- PSBT finalization;
+- raw transaction decoding;
+- mempool acceptance testing;
+- local-only transaction submission.
+
+That supports documenting BitcoinII Core's PSBT lifecycle as **locally tested partial** under the recorded environment.
+
+It does **not** establish:
+
+- public-mainnet broadcast testing;
+- every script/address type;
+- fee estimation under live network conditions;
+- multisig or external signer behavior;
+- hardware-wallet behavior;
+- third-party PSBT interoperability.
+
+## Defaults and options
+
+Source-reviewed startup-adjacent wallet defaults include:
+
+- default address type: `BECH32`;
+- default transaction confirmation target: `6` blocks;
+- default wallet RBF: `true`;
+- default wallet broadcast: `true`;
+- default wallet disabled: `false`;
+- default fallback fee: `0`;
+- default pay transaction fee: `0`;
+- descriptor-wallet default for `createwallet` unless overridden.
+
+These are source-derived defaults. Runtime testing should remain the basis for user-facing procedural examples where behavior matters operationally.
+
+## Third-party wallet status
+
+Current third-party wallet observations belong in [Ecosystem wallets](../ecosystem/wallets.md), while compatibility interpretation belongs in [Wallet compatibility](../compatibility/wallets.md).
+
+Current MoreBC2 evidence does not establish safe transaction/recovery compatibility for:
+
+- Genesis Wallet;
+- the Google Play `Bitcoin ii (BC2) Wallet` listing;
+- `Bitcoin-II/wallet-bc2`;
+- BlueWallet;
+- Cake Wallet;
+- Komodo Wallet;
+- general-purpose Bitcoin hardware wallets;
+- external-signing workflows.
+
+Tangem currently exposes BC2 asset information but states that native BitcoinII network support is temporarily unsupported. MoreBC2 therefore does not present Tangem as a currently working native BC2 wallet.
+
+Read-only Electrum server reachability also does not prove wallet compatibility, fee correctness, history correctness, signing correctness, replay-protection support, or broadcast compatibility.
+
+## Safe wallet principles
+
+General wallet-safety guidance remains:
+
+- obtain software from project-controlled or otherwise clearly identified sources;
+- verify downloads when a trustworthy checksum/signature path exists;
+- make backups before exposing meaningful funds to a new setup;
+- never publish private keys, seed phrases, wallet files, RPC cookies, or credentials;
+- use small disposable/test balances for unfamiliar workflows;
+- distinguish source review from runtime-tested behavior;
+- do not assume Bitcoin-wallet compatibility after v31 replay protection;
+- test recovery, not just backup creation, before treating a backup process as proven.
+
+## Release verification boundary
+
+MoreBC2 has recorded the current `v31.1.0` release assets and GitHub-reported digests, and the Windows artifact hash used in the September tests matched the recorded release archive digest.
+
+However, the current release-authentication path still lacks a maintainer-authenticated checksum manifest/trusted signing-key path and reproducible-build proof. The Windows executable observed in testing was not Authenticode-signed.
+
+This means MoreBC2 can document byte-integrity observations without claiming complete publisher authentication.
+
+See [BitcoinII Core v31.1.0 release assets](../releases/v31.1.0-assets.md) and [Release verification guide](../developers/release-verification.md).
+
+## Next wallet tests worth doing
+
+The highest-value remaining wallet validation work is:
+
+1. disposable-wallet backup + restore;
+2. encryption + unlock + relock;
+3. transaction-history and rescan workflows;
+4. Windows GUI receive/send workflow using only disposable/regtest funds;
+5. platform-specific data/wallet directory documentation;
+6. external-signer/hardware-wallet replay-protection testing;
+7. third-party wallet transaction/recovery tests where practical.
+
+No existing user wallet should be used for these tests.
+
+## Sources
+
+- [Windows v31.1.0 node and RPC validation — 2026-09-11](../verification/windows-v31-node-rpc-validation-2026-09-11.md)
+- [Windows v31.1.0 PSBT and replay-protection validation — 2026-09-11](../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
+- [Wallet compatibility](../compatibility/wallets.md)
+- [Ecosystem wallets](../ecosystem/wallets.md)
+- [Replay protection source trace](../developers/source-atlas/replay-protection-v31.md)
 - [Command testing status](../verification/command-testing.md)
 - [Source atlas: wallet startup](../developers/source-atlas/wallet-startup.md)
 - [Source atlas: wallet RPC](../developers/source-atlas/wallet-rpc.md)
@@ -231,6 +295,6 @@ Before this guide is marked Verified, MoreBC2 needs to document whether releases
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This page now includes first-pass source-reviewed wallet startup, wallet RPC, backup/import, spend/PSBT, encryption, coin/balance, transaction-history, and command-testing-status notes. Platform-specific wallet instructions, release verification, and local command testing remain open.
+**Status:** Reviewed / Partial  
+**Primary sources checked:** BitcoinII Core `v31.1.0` source plus the 2026-09-11 Windows node/wallet and isolated PSBT validation records  
+**Notes:** BitcoinII Core now has meaningful bounded runtime wallet evidence. Backup/recovery, encryption, broad transaction-history workflows, public-mainnet spending, hardware/external signing, and third-party wallet compatibility remain unverified or incomplete.
