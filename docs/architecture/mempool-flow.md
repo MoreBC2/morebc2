@@ -1,253 +1,162 @@
 # Mempool flow
 
 **Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-07-02
+**Status:** Reviewed / Partial
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page maps the reviewed BitcoinII Core mempool architecture from `src/txmempool.h`, `src/txmempool.cpp`, reviewed validation flow, reviewed mempool RPC behavior, and the first-pass P2P transaction-relay slice.
+This page maps the BitcoinII Core mempool architecture from transaction acceptance through storage, relay, package handling, reorg repair, and inspection.
 
-It is intentionally partial. It focuses on mempool structure, ancestor and descendant tracking, transaction acceptance, reorg repair behavior, reviewed mempool functions, RPC surfaces that expose or affect mempool state, and the source-observed boundary between local mempool acceptance and peer relay.
+The current release baseline is BitcoinII Core `v31.1.0`. The main BitcoinII-specific change relevant here is replay-protection context: mempool signature validation uses the signature-hash domain for the **next block height**.
 
 ## What the mempool stores
 
-`CTxMemPool` stores transactions that are valid according to the current best chain and may be included in a future block.
+`CTxMemPool` stores unconfirmed transactions accepted under the node's current chain and policy context.
 
-Transactions seen by the node are not automatically added. The source comments list examples of transactions that are not added, including low-fee transactions, non-standard transactions, and transactions that conflict with existing mempool entries without satisfying replacement rules.
+Transactions are not added merely because they are structurally valid. Policy, fees, conflicts, dependency limits, script checks, and consensus context can all affect admission.
 
 ## Main indexed structure
 
-`mapTx` is a Boost multi-index container with indexes for:
+The mempool tracks transactions and relationships needed for:
 
-```text
-txid
-wtxid
-descendant feerate
-entry time
-ancestor feerate
-```
+- txid/wtxid lookup;
+- parent/child dependency tracking;
+- ancestor/descendant accounting;
+- fee/package ordering;
+- entry time and eviction;
+- relay and mining selection;
+- replacement/conflict handling;
+- unbroadcast state and inspection.
 
-This lets BitcoinII Core query and sort mempool transactions for different purposes, including relay, mining, eviction, and dependency tracking.
+## Single-transaction acceptance
 
-## Parent and child tracking
-
-The mempool tracks:
-
-- Direct parents: in-mempool transactions spent by a transaction.
-- Direct children: in-mempool transactions that spend a transaction.
-- Ancestor size, fee, count, and sigop totals.
-- Descendant size, fee, and count totals.
-
-These cached values allow the node to enforce limits without repeatedly walking the full mempool graph.
-
-Reviewed mempool RPC behavior can expose parts of this relationship through ancestor, descendant, entry, and raw-mempool commands.
-
-## Transaction acceptance flow
-
-A simplified single-transaction acceptance path is:
+A simplified path remains:
 
 ```text
 AcceptSingleTransaction
   -> PreChecks
-       -> CheckTransaction
-       -> standardness and finality checks
-       -> duplicate and conflict checks
-       -> input lookup
-       -> sequence lock checks
-       -> CheckTxInputs
-       -> fee and ancestor/descendant policy checks
-  -> ReplacementChecks, if replacement applies
+  -> ReplacementChecks, when applicable
   -> PolicyScriptChecks
   -> ConsensusScriptChecks
   -> Finalize
-       -> remove conflicts
+       -> remove conflicts when appropriate
        -> addUnchecked
-       -> LimitMempoolSize, unless bypassed/package submission
+       -> size/eviction handling
   -> TransactionAddedToMempool notification
 ```
 
-## Dry-run acceptance and live submission
+## v31 replay-protection context
 
-Reviewed mempool RPC behavior adds two important user/service-facing surfaces:
-
-- `testmempoolaccept` can test whether raw transactions would pass local mempool checks without submitting them.
-- `sendrawtransaction` submits a signed raw transaction toward local acceptance and relay.
-
-This distinction matters for documentation safety. Dry-run examples and live submission examples should stay separate until both are tested locally.
-
-## Normal add flow
-
-A simplified normal add path is:
+Current `v31.1.0` source review establishes that mempool signature checks use:
 
 ```text
-AcceptToMemoryPool / MemPoolAccept
-  -> validation and policy checks
-  -> CTxMemPool::addUnchecked
-       -> insert into mapTx
-       -> update mapNextTx spends
-       -> update parent links
-       -> update ancestor state
-       -> update descendant state
-       -> update counters and randomized storage
+SighashForkId(active_chain_height + 1)
 ```
 
-`addUnchecked` is named that way because validation is expected to happen before it is called.
+That matters at the activation boundary. If the current tip is immediately below replay-protection activation, a transaction being admitted must already be valid for the block in which it could next be mined.
 
-## Normal remove flow
+The script-validation cache also includes the fork/domain id so a signature result verified under one domain cannot be reused under another.
 
-A simplified remove path is:
+Immediately before the replay-protection boundary, BitcoinII clears the mempool so legacy-domain transactions are not carried across activation.
 
-```text
-removeRecursive / removeForBlock / removeForReorg
-  -> determine entries to remove
-  -> UpdateForRemoveFromMempool
-       -> update ancestor and descendant state
-       -> sever parent and child links
-  -> removeUnchecked
-       -> remove spends from mapNextTx
-       -> update size, fee, memory, counters
-       -> emit removal notifications when appropriate
-```
+See [Mempool acceptance](../developers/source-atlas/mempool-accept.md) and [Replay protection v31](../developers/source-atlas/replay-protection-v31.md).
 
-## Package acceptance flow
+## Dry-run acceptance and live local submission
 
-Package acceptance has a separate reviewed path:
+The two important RPC surfaces are:
 
-```text
-AcceptPackage
-  -> package shape checks
-  -> require one child with all unconfirmed parents
-  -> verify child inputs are package parents or confirmed UTXOs
-  -> de-duplicate package transactions already in mempool
-  -> AcceptSubPackage
-       -> AcceptSingleTransaction, for one transaction
-       -> AcceptMultipleTransactions, for more than one transaction
-            -> package v3 checks
-            -> package feerate checks when enabled
-            -> PackageMempoolChecks
-            -> PolicyScriptChecks for each transaction
-            -> SubmitPackage
-                 -> ConsensusScriptChecks
-                 -> Finalize each transaction
-```
+- `testmempoolaccept` — dry-run acceptance without insertion;
+- `sendrawtransaction` — local submission, which may then be relayed if networking and relay conditions permit.
 
-Reviewed mempool RPC behavior also includes experimental package submission. Package policy needs deeper review before MoreBC2 makes service-provider recommendations.
+The September 11 isolated `v31.1.0` regtest test directly exercised both:
+
+- `testmempoolaccept` returned `allowed = true` for the finalized disposable transaction;
+- `sendrawtransaction` inserted the same transaction into the local zero-peer regtest mempool;
+- `getmempoolentry` confirmed the entry;
+- `getmempoolinfo` reported one transaction and one unbroadcast transaction.
+
+This is current local runtime evidence. Because the node had zero peers, it is not public-broadcast evidence.
+
+## Mainnet runtime observation
+
+The separate September 11 isolated mainnet node test called `getmempoolinfo` during initial block download.
+
+Observed values included:
+
+- `loaded = true`;
+- `size = 0` at that moment;
+- `fullrbf = true`;
+- `permitbaremultisig = false`;
+- `maxdatacarriersize = 83`;
+- `maxtapscriptsize = 3600`;
+- current relay/minimum-fee fields.
+
+Those values describe that exact runtime observation. They are not long-term mempool statistics or universal service guarantees.
+
+## Normal add/remove relationships
+
+Accepted transactions are inserted only after validation/policy checks. The mempool then updates spend relationships, parent/child links, ancestor/descendant accounting, fees, and memory counters.
+
+Removal paths update those relationships before entries are discarded for reasons such as block inclusion, conflict replacement, eviction, expiry, reorg cleanup, or explicit state changes.
+
+## Package handling
+
+Package acceptance builds on the same transaction acceptance machinery while applying package-shape, dependency, ancestor/descendant, and feerate rules.
+
+Current MoreBC2 source review treats package behavior as structurally understood but not fully runtime-qualified. Package RPCs and edge cases remain advanced integration topics.
 
 ## P2P relay relationship
 
 The mempool and P2P relay paths overlap but are not the same thing.
 
-The first-pass P2P transaction relay slice shows:
+Important boundaries:
 
-- peer transaction-relay state is shaped by handshake behavior
-- txid versus wtxid relay affects which inventory messages are accepted
-- transaction inventory announcements can be ignored during initial block download
-- full `tx` messages are passed through the transaction download manager before mempool validation
-- accepted transactions can be relayed onward through peer manager
-- invalid transactions can interact with orphan/package reconsideration logic
-- `mempool`, bloom filter, `feefilter`, and `notfound` messages affect transaction-relay behavior around the mempool
+- local mempool acceptance does not guarantee broad network propagation;
+- peer relay does not guarantee block inclusion;
+- public REST route handling does not prove successful valid transaction broadcast;
+- block inclusion and confirmations are separate lifecycle stages.
 
-Important boundary:
+The September local regtest transaction never left the loopback node.
 
-- Local mempool acceptance does not guarantee broad network propagation.
-- P2P relay does not guarantee block inclusion.
-- Block inclusion and confirmations remain separate lifecycle stages.
+## Reorg repair
 
-## Reorg repair flow
+During a reorganization, transactions from disconnected blocks can be reconsidered for mempool admission.
 
-Reorg handling is special because transactions from disconnected blocks may be re-added while descendants are already present in the mempool.
+The reviewed repair path stages disconnected transactions, connects replacement blocks, re-adds eligible old-branch transactions through normal acceptance, repairs parent/child accounting, removes newly invalid entries, and reapplies mempool limits.
 
-The reviewed flow is:
-
-```text
-DisconnectTip
-  -> disconnected transaction pool receives old-chain block transactions
-
-ConnectTip
-  -> remove transactions confirmed by new-chain blocks
-  -> remove matching entries from disconnected transaction pool
-
-MaybeUpdateMempoolForReorg
-  -> drain disconnected transaction pool
-  -> re-add eligible non-coinbase transactions
-  -> UpdateTransactionsFromBlock
-  -> removeForReorg
-  -> LimitMempoolSize
-```
-
-## Why `UpdateTransactionsFromBlock` matters
-
-During reorg processing, normal mempool assumptions can be temporarily false.
-
-A re-added transaction may already have children in the mempool. Until parent and child links are repaired, some mempool graph-walking functions are not generally safe to use.
-
-`UpdateTransactionsFromBlock` repairs this state by:
-
-- Finding in-mempool children through `mapNextTx`.
-- Updating parent and child links.
-- Updating descendant and ancestor accounting.
-- Removing descendants that exceed ancestor limits.
-
-## Mempool inspection and persistence RPCs
-
-Reviewed mempool RPC behavior includes commands for:
-
-- Listing raw mempool entries.
-- Reading a single mempool entry.
-- Reading ancestors or descendants.
-- Checking whether supplied prevouts are spent by mempool transactions.
-- Reading mempool summary state.
-- Saving or importing mempool state.
-- Hidden orphan-transaction inspection.
-
-Mempool persistence and orphan/package commands should remain advanced documentation topics until tested and reviewed more deeply.
+Under v31, re-added transactions are evaluated against the new active-chain context, including the next-block replay-protection domain.
 
 ## Consistency and locking
 
-The source comments document two major guarantees:
+The source documents stronger consistency when chainstate and mempool locks are held together. Chain-tip changes and transaction additions require coordinated state until mempool/chain consistency is restored.
 
-- Locking both `cs_main` and `mempool.cs` gives a mempool view consistent with the current chain tip and fully populated after reorg processing.
-- Locking only `mempool.cs` gives a mempool view consistent with some chain active since `cs_main` was last locked.
+This architecture detail matters most to internal code and service developers working close to node state; ordinary RPC consumers should rely on supported RPC snapshots rather than infer lock state.
 
-Adding transactions and changing the chain tip require both locks until consistency is restored.
+## What remains open
 
-## What is not fully reviewed yet
-
-- Public `AcceptToMemoryPool` wrappers and caller paths.
-- Replacement-policy helper functions.
-- Full package policy behavior.
-- Fee estimation interaction.
-- Transaction request scheduling and send-loop behavior.
-- Functional tests for mempool acceptance.
-- Tested RPC examples for dry-run acceptance, live submission, and mempool inspection.
+- Controlled replay-protection activation-boundary mempool vectors.
+- Full package-policy runtime testing.
+- Replacement-policy edge cases.
+- Fee-estimation behavior.
+- Public-network transaction propagation testing.
+- Reorg-driven mempool repair in a controlled current-release scenario.
 
 ## Related pages
 
-- [Source atlas: mempool accept](../developers/source-atlas/mempool-accept.md)
-- [Source atlas: txmempool](../developers/source-atlas/txmempool.md)
-- [Mempool entry](../developers/source-atlas/mempool-entry.md)
-- [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
-- [Source atlas: raw transaction RPC](../developers/source-atlas/rpc-rawtransaction.md)
-- [Source atlas: net processing transaction relay](../developers/source-atlas/net-processing-transaction-relay.md)
-- [Source atlas: validation.cpp](../developers/source-atlas/validation-cpp.md)
-- [Disconnected transactions](../developers/source-atlas/disconnected-transactions.md)
-- [Block validation flow](block-validation-flow.md)
 - [Life of a transaction](life-of-a-transaction.md)
 - [Life of a reorganization](life-of-a-reorg.md)
-- [Reorganizations](../encyclopedia/reorganizations.md)
-
-## Sources
-
-- `src/validation.cpp`
-- `src/txmempool.h`
-- `src/txmempool.cpp`
-- `src/kernel/mempool_entry.h`
-- `src/rpc/mempool.cpp`
-- `src/net_processing.cpp`
+- [Block validation flow](block-validation-flow.md)
+- [Mempool acceptance](../developers/source-atlas/mempool-accept.md)
+- [Mempool source](../developers/source-atlas/txmempool.md)
+- [Mempool entry](../developers/source-atlas/mempool-entry.md)
+- [Mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
+- [Replay protection v31](../developers/source-atlas/replay-protection-v31.md)
+- [Windows v31.1.0 node and RPC validation](../verification/windows-v31-node-rpc-validation-2026-09-11.md)
+- [Windows v31.1.0 PSBT and replay validation](../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This is a first-pass mempool architecture, transaction-acceptance, mempool-RPC, and P2P transaction-relay map. It should be expanded after deeper review of public caller paths, replacement policy, transaction send-loop behavior, tests, and local RPC examples.
+**Status:** Reviewed / Partial  
+**Primary sources checked:** BitcoinII Core `v31.1.0` mempool/validation/replay-protection source reviews plus September 11 mainnet mempool inspection and isolated regtest acceptance/submission evidence  
+**Notes:** Ordinary local v31 mempool acceptance now has bounded runtime coverage. Activation-boundary behavior, package/replacement edge cases, reorg repair, fee estimation, and public propagation remain partial or untested.
