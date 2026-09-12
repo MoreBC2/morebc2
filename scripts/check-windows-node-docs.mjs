@@ -4,110 +4,144 @@ import path from 'node:path';
 
 const repoRoot = process.cwd();
 const guidePath = path.join(repoRoot, 'docs', 'nodes', 'node-guide.md');
-const recordPath = path.join(repoRoot, 'docs', 'verification', 'windows-node-operator-test-2026-08-27.md');
-const discoveryRecordPath = path.join(
+const recordPath = path.join(
+  repoRoot,
+  'docs',
+  'verification',
+  'windows-v31-node-rpc-validation-2026-09-11.md',
+);
+const psbtRecordPath = path.join(
+  repoRoot,
+  'docs',
+  'verification',
+  'windows-v31-psbt-replay-validation-2026-09-11.md',
+);
+const historicalRecordPath = path.join(
+  repoRoot,
+  'docs',
+  'verification',
+  'windows-node-operator-test-2026-08-27.md',
+);
+const historicalDiscoveryPath = path.join(
   repoRoot,
   'docs',
   'verification',
   'windows-peer-discovery-test-2026-08-28.md',
 );
+
 const guide = await fs.readFile(guidePath, 'utf8');
 const record = await fs.readFile(recordPath, 'utf8');
-const discoveryRecord = await fs.readFile(discoveryRecordPath, 'utf8');
-const combined = `${guide}\n${record}\n${discoveryRecord}`;
+const psbtRecord = await fs.readFile(psbtRecordPath, 'utf8');
+const historicalRecord = await fs.readFile(historicalRecordPath, 'utf8');
+const historicalDiscovery = await fs.readFile(historicalDiscoveryPath, 'utf8');
+const currentCombined = `${guide}\n${record}\n${psbtRecord}`;
+const historicalCombined = `${historicalRecord}\n${historicalDiscovery}`;
 
 const expected = {
-  version: 'v29.1.0',
-  artifact: 'BitcoinII-29.1.0-x86_64-win64-CLI.zip',
-  bytes: '7,987,528',
-  sha256: '94985c39c2e99406b50b3a318442677ffa3df6f9d471c03cb30f1fb0c4b8fa3a',
-  daemon: 'bitcoinIId.exe',
-  cli: 'bitcoinII-cli.exe',
-  testPort: '28337',
+  version: 'v31.1.0',
+  artifact: 'BitcoinII-v31.1-Win64-Qt.zip',
+  bytes: '20,557,870',
+  sha256: 'f7b1d16423859bd2392b1bd4f62c16ba855a034c6ffb6693af667f2ec97b375d',
+  executable: 'bitcoinII-qt.exe',
+  protocol: '70016',
+  p2pPort: '8338',
+  testPort: '28332',
 };
 
 for (const [name, value] of Object.entries(expected)) {
   assert.ok(guide.includes(value), `Guide is missing expected ${name}: ${value}`);
-  assert.ok(record.includes(value), `Evidence record is missing expected ${name}: ${value}`);
+  assert.ok(record.includes(value), `Current v31 evidence record is missing expected ${name}: ${value}`);
 }
 
-assert.match(guide, /^\*\*Status:\*\* Draft$/m);
-assert.match(record, /^\*\*Status:\*\* Draft \/ Dated local test$/m);
-assert.match(discoveryRecord, /^\*\*Status:\*\* Draft \/ Dated local test$/m);
-assert.ok(combined.includes('INTEGRITY RECORDED, AUTHENTICITY UNVERIFIED'));
-assert.match(combined, /do not authenticate the publisher|repeat-byte integrity evidence only/i);
-assert.match(combined, /Do not expose BitcoinII Core RPC to the public internet/i);
-assert.match(guide, /`28337` is an explicit operator-selected port used by this isolated test/i);
-assert.match(guide, /does not generalize `8337` or `28337` as a universal default/i);
-assert.match(guide, /evidence that contains `8332` is also a separate evidence type/i);
-assert.match(record, /explicit loopback override `28337`/i);
-assert.match(record, /Neither port is asserted here as universal/i);
-assert.match(guide, /three redacted one-shot peer addresses borrowed from a separate local node/i);
-assert.match(guide, /on 2026-08-27, one fresh isolated Windows `v29\.1\.0` node did not automatically obtain persistent peers/i);
-assert.match(guide, /two additional fresh isolated Windows nodes.*successfully bootstrapped through the two configured DNS seeds/is);
-assert.match(guide, /Independent review reproduced successful default DNS bootstrap again/i);
-assert.ok(
-  guide.includes('../verification/windows-peer-discovery-test-2026-08-28.md'),
-  'Guide does not link to the later peer-discovery evidence record',
+assert.match(guide, /^\*\*Status:\*\* Reviewed \/ Partial$/m);
+assert.match(record, /^\*\*Status:\*\* Directly observed \/ Dated local test$/m);
+assert.match(
+  psbtRecord,
+  /^\*\*Status:\*\* Directly observed PSBT runtime \/ Source-confirmed replay protection$/m,
 );
-assert.match(guide, /do not guarantee that every fresh node will obtain peers immediately/i);
-assert.match(guide, /DNS seed availability can change over time/i);
-assert.match(guide, /may still temporarily remain at zero peers/i);
-assert.match(guide, /three compiled fixed seeds did not establish usable fallback peers/i);
-assert.match(guide, /are not recommended as a recovery path/i);
-assert.match(record, /three outbound peer addresses were obtained from the separate local node/i);
-assert.match(record, /No public peer list or generalized repair is established here/i);
-assert.match(discoveryRecord, /Default discovery succeeded twice without borrowed peers, manual peer addresses/i);
-assert.match(discoveryRecord, /earlier 2026-08-27 zero-peer observation was therefore not reproduced/i);
-assert.match(discoveryRecord, /does not prove that the DNS seeds will always answer/i);
-assert.match(discoveryRecord, /does not prove that the endpoints are permanently offline/i);
-assert.match(guide, /initialblockdownload.*true/is);
+
+assert.match(currentCombined, /Do not expose BitcoinII Core RPC (?:directly )?to the public internet/i);
+assert.match(guide, /`28332` was chosen only because local default port `8332` was already occupied/i);
+assert.match(guide, /test overrides, not BitcoinII defaults/i);
+assert.match(guide, /mainnet.*P2P port.*8338/is);
+assert.match(guide, /generated example.*8333.*stale/is);
+assert.match(record, /P2P listeners.*8338/is);
+assert.match(guide, /automatic outbound peer discovery/i);
+assert.match(guide, /4 outbound full-relay IPv4 peers/i);
+assert.match(guide, /6 outbound full-relay peers/i);
+assert.match(guide, /initialblockdownload = true/i);
 assert.match(record, /initialblockdownload.*true/is);
-assert.match(guide, /did not establish full synchronization/i);
-assert.match(record, /test stopped before full synchronization/i);
-assert.match(guide, /not an exhaustive filesystem-integrity or corruption test/i);
-assert.match(guide, /Shutdown: done/);
-assert.match(record, /Shutdown: done/);
+assert.match(guide, /did not.*wait for full synchronization/i);
+assert.match(record, /did not wait for initial block download to complete/i);
+assert.match(guide, /pruned = false/i);
+assert.match(guide, /getindexinfo = \{\}/i);
+assert.match(record, /getindexinfo.*\{\}/is);
+assert.match(guide, /pruning and `txindex` are incompatible/i);
+assert.match(guide, /fresh disposable/i);
+assert.match(record, /No existing BitcoinII data directory or wallet was opened/i);
+assert.match(guide, /random-cookie authentication/i);
+assert.match(record, /Random-cookie authentication/i);
+assert.match(guide, /Shutdown done/);
+assert.match(record, /Shutdown done/);
+assert.match(guide, /not an exhaustive corruption\/recovery test/i);
 
 for (const line of [
   'server=1',
-  'disablewallet=1',
-  'listen=0',
   'rpcbind=127.0.0.1',
   'rpcallowip=127.0.0.1',
-  'rpcport=28337',
+  'rpcport=28332',
 ]) {
   assert.ok(guide.includes(line), `Guide is missing tested config line: ${line}`);
-  assert.ok(record.includes(line), `Evidence record is missing tested config line: ${line}`);
+  assert.ok(record.includes(line), `Current v31 record is missing tested config line: ${line}`);
 }
 
 for (const command of [
   'getblockchaininfo',
   'getnetworkinfo',
-  'getconnectioncount',
-  'getblockcount',
-  'getbestblockhash',
+  'getmempoolinfo',
+  'getpeerinfo',
+  'getchaintips',
+  'getindexinfo',
+  'uptime',
   'stop',
 ]) {
   assert.ok(guide.includes(command), `Guide is missing tested command: ${command}`);
-  assert.ok(record.includes(command), `Evidence record is missing tested command: ${command}`);
+  assert.ok(record.includes(command), `Current v31 record is missing tested command: ${command}`);
 }
 
-for (const unsafe of ['createwallet', 'getnewaddress', 'sendtoaddress', 'dumpprivkey', 'generatetoaddress']) {
-  assert.ok(!combined.includes(unsafe), `Node documentation unexpectedly contains wallet/mining command: ${unsafe}`);
-}
+assert.ok(
+  guide.includes('../verification/windows-v31-node-rpc-validation-2026-09-11.md'),
+  'Guide does not link to the current v31 node/RPC evidence record',
+);
+assert.ok(
+  guide.includes('../verification/windows-v31-psbt-replay-validation-2026-09-11.md'),
+  'Guide does not link to the current v31 PSBT evidence record',
+);
+assert.ok(
+  guide.includes('../verification/windows-node-operator-test-2026-08-27.md'),
+  'Guide does not preserve the historical v29 operator record link',
+);
+assert.ok(
+  guide.includes('../verification/windows-peer-discovery-test-2026-08-28.md'),
+  'Guide does not preserve the historical v29 peer-discovery record link',
+);
+
+assert.match(historicalRecord, /^\*\*Status:\*\* Draft \/ Dated local test$/m);
+assert.match(historicalDiscovery, /^\*\*Status:\*\* Draft \/ Dated local test$/m);
+assert.ok(historicalCombined.includes('v29.1.0'));
+assert.ok(historicalCombined.includes('BitcoinII-29.1.0-x86_64-win64-CLI.zip'));
 
 assert.doesNotMatch(
-  combined,
+  currentCombined,
   /C:\\Users\\(?!<user>\\)[^\\\r\n]+\\/i,
-  'Node documentation contains an unredacted personal filesystem path',
+  'Current node documentation contains an unredacted personal filesystem path',
 );
-assert.ok(!combined.includes('rpcbind=0.0.0.0'), 'Node documentation contains a public RPC bind');
+assert.ok(!currentCombined.includes('rpcbind=0.0.0.0'), 'Current node documentation contains a public RPC bind');
 
-const guideIpv4Literals = [...new Set(guide.match(/\b(?:\d{1,3}\.){3}\d{1,3}\b/g) ?? [])];
+const guideIpv4Literals = [...new Set(guide.match(/\b(?:\d{1,3}\.){3}\d{1,3}\b/g) ?? [])].sort();
 assert.deepEqual(
   guideIpv4Literals,
-  ['127.0.0.1'],
+  ['0.0.0.0', '127.0.0.1'],
   'Guide contains an unexpected IPv4 literal that could publish or recommend a peer address',
 );
 
@@ -121,6 +155,13 @@ assert.doesNotMatch(
   'Guide contains a manual peer or bootstrap-address command',
 );
 
+for (const unsafe of [
+  'dumpprivkey',
+  'sendtoaddress',
+]) {
+  assert.ok(!guideCommandText.includes(unsafe), `Guide contains unsafe wallet command example: ${unsafe}`);
+}
+
 async function verifyRelativeLinks(markdown, sourcePath) {
   const links = [...markdown.matchAll(/\[[^\]]+\]\(([^)]+\.md)(?:#[^)]+)?\)/g)].map((match) => match[1]);
   for (const link of links) {
@@ -132,8 +173,12 @@ async function verifyRelativeLinks(markdown, sourcePath) {
 
 const guideLinks = await verifyRelativeLinks(guide, guidePath);
 const recordLinks = await verifyRelativeLinks(record, recordPath);
-const discoveryRecordLinks = await verifyRelativeLinks(discoveryRecord, discoveryRecordPath);
+const psbtLinks = await verifyRelativeLinks(psbtRecord, psbtRecordPath);
+const historicalRecordLinks = await verifyRelativeLinks(historicalRecord, historicalRecordPath);
+const historicalDiscoveryLinks = await verifyRelativeLinks(historicalDiscovery, historicalDiscoveryPath);
 
 console.log(
-  `Windows node documentation assumptions verified: 3 files, ${guideLinks + recordLinks + discoveryRecordLinks} local links.`,
+  `Windows node documentation assumptions verified: 5 files, ${
+    guideLinks + recordLinks + psbtLinks + historicalRecordLinks + historicalDiscoveryLinks
+  } local links.`,
 );
