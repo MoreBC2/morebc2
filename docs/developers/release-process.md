@@ -1,101 +1,109 @@
 # Release process guide
 
 **Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-09-07
+**Status:** Reviewed / Partial
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page documents what MoreBC2 has observed about public BitcoinII Core release information.
-
-It does not claim to know internal maintainer procedures.
-
-It also does not prove any release download. Download checks are tracked separately in [Release verification guide](release-verification.md), [Release source comparison notes](../verification/release-source-comparison.md), and [Release artifact checklist](../verification/release-artifact-checklist.md).
+This page documents what MoreBC2 can establish about the public BitcoinII Core release process. It does not claim knowledge of private maintainer procedures and does not treat GitHub hosting metadata as a complete binary-authentication chain.
 
 ## Current observed release path
 
-Current observed public release path:
+Current canonical public release path:
 
 - `https://github.com/Bitcoin-II/BitcoinII-Core/releases`
 
-Older release links such as `https://github.com/BitcoinII-Dev/BitcoinII/releases` may redirect elsewhere and are retained only as legacy observations. Current operational release citations use the canonical `Bitcoin-II/BitcoinII-Core` path.
+Older release locations are historical only unless re-established by current project-controlled evidence.
 
-## What is known from current review
+## Current v31.1.0 release evidence
 
-The current observed release page and MoreBC2 release record show:
+MoreBC2 currently records:
 
-- `BitcoinII Core v31.1.0`
-- tag `v31.1.0`
-- publication timestamp `2026-08-29T02:39:30Z`
-- four uploaded Linux/Windows CLI/Qt assets recorded from GitHub release metadata
-- GitHub-reported SHA-256 asset digests, which are hosting-provider metadata rather than publisher-signed authentication
+- release `BitcoinII Core v31.1.0`;
+- tag `v31.1.0`;
+- publication timestamp `2026-08-29T02:39:30Z`;
+- **six** uploaded release assets: Linux CLI, Linux Qt, Windows CLI, Windows Qt, macOS x86_64, and macOS arm64;
+- GitHub-reported SHA-256 digest metadata for all six assets;
+- lightweight tag `v31.1.0` resolving directly to commit `8daaf7b12e71d3646eed787f040bf2899a69dc1c`;
+- GitHub verification of that target commit as a valid signed commit.
 
-MoreBC2 also observed legacy release-page entries for:
+The tag itself is not a separate annotated/signed tag object. The verified source commit does not prove that the six release binaries were reproducibly built from that commit or individually authenticated by the same signer.
 
-- `v0.27.1`
-- `v0.27.0`
+See [BitcoinII Core v31.1.0 release assets](../releases/v31.1.0-assets.md).
 
-Those legacy observations are historical evidence and must not be treated as the current canonical release path.
+## Runtime artifact evidence
 
-## Source-tree process documents observed
+The September 11 Windows runtime validations independently recorded the SHA-256 of the extracted `bitcoinII-qt.exe` used for testing and repeated the same executable hash across the node/RPC and PSBT test work.
 
-Current source-tree review found:
+That is useful byte-integrity evidence for the exact executable tested. It is **not** an independent hash of the release ZIP archive, a publisher-authenticated expected hash, or reproducible-build proof.
+
+## Source-tree process documents
+
+Current source-tree review found inherited release-process material including:
 
 - `doc/release-process.md`
 - `contrib/verify-binaries/README.md`
 
-These files describe a release-checking workflow with tags, build attestations, checksum files, and key-based authenticity checks.
+Those files describe intended/helper workflows involving tags, attestations, checksums, and key-based verification. Their presence does not prove that BitcoinII `v31.1.0` published or followed every artifact/process described there.
 
-Important caveat:
+## Authentication boundary
 
-Source-tree process documents are useful evidence about intended or inherited process shape, but they do not prove that the current BitcoinII `v31.1.0` release published all related release-check materials.
+Current public evidence does not yet establish:
 
-## Release information still to document
+- a BitcoinII maintainer-signed checksum manifest for `v31.1.0`;
+- detached signatures over the six release assets;
+- a documented trusted BitcoinII release-signing-key path;
+- independent local hashing of all six release archives;
+- binary-to-source provenance;
+- reproducible-build proof.
 
-This page should eventually answer:
+These are separate questions from whether GitHub reports an asset digest or a source commit is verified.
 
-- How should a future canonical-repository or release-path move be detected and recorded?
-- Which assets are published for each platform?
-- Are checksum files provided?
-- Are release authenticity files provided?
-- Are release tags independently checkable?
-- Are builds reproducible?
-- How should users verify downloads?
-- How should exchanges verify daemon binaries?
+## Per-release record
+
+For each release, record:
+
+- version and publication date;
+- canonical release URL and tag/ref;
+- source commit and tag type;
+- commit/tag verification state;
+- asset names, sizes, and hosting-provider digests;
+- independently calculated hashes, when performed;
+- checksum/signature files, when present;
+- trusted signing-key source;
+- reproducible-build evidence, when present;
+- exact reviewer/date and commands for local verification.
 
 ## What this page does not claim
 
-This page does not claim:
+Do not claim that:
 
-- That current release assets have completed independent download checks.
-- That checksum manifests exist for the current release.
-- That builds are reproducible.
-- That GitHub release metadata alone is sufficient for exchange-grade verification.
-- That workflow artifacts are attached to the public release page.
-- That the current canonical path can never change ownership or location.
+- GitHub hosting alone authenticates a binary;
+- a GitHub asset digest is equivalent to a maintainer-signed checksum;
+- a verified source commit authenticates the release binaries;
+- an independently repeated executable hash authenticates the release archive or publisher;
+- historical v29 verification automatically applies to v31;
+- inherited release-process documentation proves the current release followed that process.
 
-Those claims need direct review.
+## Current priorities
 
-## Open items
-
-- Monitor the canonical repository and release path for future changes.
-- Independently hash the recorded `v31.1.0` asset set.
-- Check whether checksum files are published.
-- Check whether release authenticity files are published.
-- Check whether release tags are independently checkable.
-- Check for reproducible build documentation.
-- Ask maintainers for preferred release checking process if public sources are incomplete.
+1. Independently download and hash all six `v31.1.0` release archives.
+2. Check current project-controlled locations for checksum/signature/key guidance.
+3. Determine whether maintainers publish a preferred release-authentication procedure.
+4. Attempt or document reproducible-build verification if feasible.
+5. Keep source-commit authentication, archive integrity, extracted-binary integrity, and reproducibility as separate claims.
 
 ## Sources
 
-- Current observed BitcoinII Core releases: https://github.com/Bitcoin-II/BitcoinII-Core/releases
+- Current BitcoinII Core releases: https://github.com/Bitcoin-II/BitcoinII-Core/releases
 - [Current v31.1.0 asset record](../releases/v31.1.0-assets.md)
 - [Release verification guide](release-verification.md)
-- [Release source comparison notes](../verification/release-source-comparison.md)
-- [Release artifact checklist](../verification/release-artifact-checklist.md)
+- [Windows v31.1.0 node and RPC validation](../verification/windows-v31-node-rpc-validation-2026-09-11.md)
+- [Windows v31.1.0 PSBT and replay-protection validation](../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** Current release metadata is synchronized to `v31.1.0`. Independent asset hashing, publisher checksums/signatures, reproducibility evidence, and trusted keys remain unresolved.
+**Status:** Reviewed / Partial  
+**Primary sources checked:** Current `v31.1.0` release metadata, tag/commit verification metadata, and September 11 runtime artifact records  
+**Notes:** Current public release inventory and source-commit provenance are recorded. Publisher-signed artifact authentication and reproducible-build evidence remain unresolved.
