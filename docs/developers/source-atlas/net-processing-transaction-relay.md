@@ -1,183 +1,123 @@
 # Net processing transaction relay
 
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-07-02
+**Category:** Developer / Source Atlas  
+**Status:** Reviewed / Source-confirmed partial  
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page covers a first-pass review of transaction relay behavior in:
+This page maps BitcoinII Core `v31.1.0` P2P transaction-relay behavior in `src/net_processing.*`.
 
-- `src/net_processing.cpp`
-- `src/net_processing.h`
+Transaction relay is separate from wallet construction, raw/PSBT signing, local mempool admission, RPC submission, and eventual block confirmation. Current BC2 also adds a material v31 boundary: post-height-`57750` signatures must validate under the BC2 replay-protection domain before ordinary mempool/P2P relay can treat the transaction as acceptable.
 
-This is a focused slice of `net_processing`, not a complete review of mempool policy, wallet sending, raw transaction RPC, package relay, peer eviction, or block relay.
+## Relay setup
 
-## Why this area matters
+Transaction relay is not enabled identically for every peer class. Reviewed handshake/peer state distinguishes block-relay-only, feeler, normal relay, bloom/filter permissions, and txid/wtxid announcement behavior.
 
-Transaction relay is the P2P-facing path where peers announce, request, send, accept, reject, and re-announce transactions.
+`wtxidrelay` negotiation affects which transaction identifier form is expected/announced for a peer.
 
-For MoreBC2, this matters because wallet, exchange, and service documentation should keep a clear boundary between:
+## Transaction inventory (`inv`)
 
-- wallet commands that create or submit transactions
-- RPC dry-run checks
-- local mempool acceptance
-- P2P transaction relay
-- final confirmation in blocks
+Reviewed transaction-inventory handling includes:
 
-## Transaction-relay setup from handshake
+- message-size limits;
+- relay-permission / peer-mode checks;
+- txid vs wtxid inventory handling;
+- recording inventory known by the peer;
+- suppressing ordinary transaction-download work during IBD;
+- handing eligible announcements to the transaction download manager outside IBD.
 
-The handshake review showed that transaction relay state is not automatically enabled for every peer.
+An inventory announcement means a peer says it has a transaction; it is not proof of validity or confirmation.
 
-Observed setup rules include:
+## Full `tx` messages
 
-- transaction relay state is not initialized for outbound block-relay-only connections
-- transaction relay state is not initialized for outbound feeler connections
-- transaction relay state depends on the peer's relay preference or local `NODE_BLOOM` offering
-- peers can use txid or wtxid announcement behavior depending on `wtxidrelay` negotiation
-- transaction reconciliation signaling is only considered when enabled and when transaction-relay conditions allow it
+Reviewed transaction receive behavior includes:
 
-## INV handling for transaction announcements
+- relay-mode/IBD gates;
+- witness-aware deserialization;
+- txid/wtxid calculation;
+- transaction download-manager decisions;
+- chainstate/mempool validation;
+- accepted transaction relay;
+- invalid/orphan/package handling;
+- selected peer-punishment paths for appropriate consensus failures.
 
-The reviewed `inv` path handles both block inventory and transaction inventory.
+Current BC2's replay-domain signature checks are applied in the validation/script layer reached by this path.
 
-Observed transaction behavior includes:
+## Valid / invalid / orphan handling
 
-- inventory messages larger than `MAX_INV_SZ` trigger misbehavior handling
-- if incoming transaction announcements should be rejected, a peer sending transaction inventory can be disconnected
-- `wtxidrelay` setting controls whether txid or wtxid inventory is accepted from a peer
-- accepted transaction inventory is converted into a generic transaction identifier
-- the transaction is marked known for that peer
-- during initial block download, transaction announcements are not added to the transaction download manager
-- outside initial block download, transaction announcements are added through the transaction download manager
-- unknown inventory types are logged rather than treated as known behavior
+Accepted transactions are recorded with the transaction download manager, logged, and made eligible for relay through `RelayTransaction`.
 
-This page does not fully review transaction request scheduling or the send-loop logic that decides when to fetch announced transactions.
+Rejected transactions are tracked with their validation result and can feed compact-block extra-transaction/orphan/package paths. Not every policy rejection is peer misbehavior.
 
-## TX message handling
+Orphan reconsideration re-enters transaction processing when dependencies become available.
 
-The reviewed `tx` path handles full transactions sent by peers.
+## v31 replay-protection boundary
 
-Observed behavior includes:
+Mempool admission validates signatures for the **next block height**. From mainnet height `57750`, that means the BC2 fork/domain id `0x01324342` is part of signing/verification context.
 
-- transactions received when incoming transactions are rejected can disconnect the peer
-- transactions received during initial block download are ignored early because the node may not have enough context to validate them
-- the transaction is read with witness-aware serialization
-- both txid and wtxid are calculated
-- the hash recorded as known for the peer depends on the peer's `wtxidrelay` setting
-- the transaction download manager decides whether the transaction should be validated immediately, deferred, or linked to a package path
-- force-relay permission can trigger additional relay behavior for transactions already in the mempool
-- ordinary transaction validation is passed to chainstate transaction processing
-- valid results go through `ProcessValidTx`
-- invalid results go through `ProcessInvalidTx`, which can return a package to evaluate
-- package results are processed with `ProcessPackageResult`
+A transaction can be Bitcoin-shaped and parse correctly yet still fail current BC2 validation if signed using legacy Bitcoin digest semantics.
 
-## Valid transaction handling observed
+See [Replay protection v31](replay-protection-v31.md), [Mempool accept](mempool-accept.md), and [Script interpreter](script-interpreter.md).
 
-`ProcessValidTx` performs post-acceptance handling after a transaction is accepted by mempool processing.
+## Runtime / broadcast boundary
 
-Observed behavior includes:
+The September 11 isolated `v31.1.0` regtest PSBT test established:
 
-- notifying the transaction download manager that a transaction was accepted
-- logging accepted transaction details
-- relaying the accepted transaction through `RelayTransaction`
-- adding replaced transactions to the extra transaction buffer used for compact block reconstruction
+- successful wallet signing/finalization;
+- `testmempoolaccept` allowed;
+- local `sendrawtransaction` inserted the transaction into a **zero-peer local mempool**;
+- `getmempoolentry` confirmed local insertion.
 
-This page does not document every mempool policy rule. It only records the net-processing side after mempool acceptance.
+That is **not** a P2P relay test and not evidence of public-mainnet broadcast/propagation.
 
-## Invalid transaction handling observed
+Likewise, public explorer endpoints that reject malformed transaction payloads only establish route presence/rejection behavior, not successful valid propagation.
 
-`ProcessInvalidTx` records the rejected transaction result and interacts with the transaction download manager.
+## IBD boundary
 
-Observed behavior includes:
+Reviewed net-processing logic suppresses ordinary transaction-announcement processing during initial block download because the node may not yet have sufficient current chain context.
 
-- logging rejection details
-- asking the transaction download manager to record the mempool-rejected transaction
-- optionally adding small rejected/replaced/orphan-adjacent transactions to compact-block extra transaction storage
-- marking unique parents as known for the peer when appropriate
-- calling transaction-related peer punishment logic for validation results that warrant it
-- returning a package candidate when the transaction download manager indicates one should be evaluated
+This is one reason a newly syncing node should not be treated as a production transaction-relay oracle merely because RPC/P2P is running.
 
-## Orphan transaction reconsideration observed
+## Relay versus confirmation
 
-`ProcessOrphanTx` reviews orphan transactions selected by the transaction download manager for reconsideration.
+A transaction may be:
 
-Observed behavior includes:
+1. constructed/signed;
+2. accepted by one local mempool;
+3. relayed to peers;
+4. accepted by additional peer mempools;
+5. mined into a valid block;
+6. gain confirmations as more work accumulates.
 
-- processing reconsidered orphan transactions through chainstate transaction processing
-- routing valid orphan transactions through `ProcessValidTx`
-- routing invalid non-missing-input orphan results through `ProcessInvalidTx`
-- leaving missing-input cases for later reconsideration paths
-
-This is only a first-pass description. MoreBC2 should keep deeper orphan/package behavior tied to existing mempool pages until a fuller review exists.
-
-## Related transaction messages observed
-
-The reviewed section also includes related transaction-relay controls:
-
-- `mempool` requests are only processed when the node advertises bloom support or the peer has mempool permission.
-- `mempool` requests can be rejected when outbound bandwidth limits are reached.
-- `filterload`, `filteradd`, and `filterclear` are tied to bloom-service behavior and can disconnect peers when bloom services were not offered.
-- `feefilter` updates the peer's received fee filter when the amount is within money range.
-- `notfound` messages can inform the transaction download manager about transaction inventory that a peer could not provide.
-
-## Boundaries
-
-This page does not claim:
-
-- that wallet-created transactions will relay successfully
-- that any specific fee level is sufficient
-- that mempool policy is fully documented here
-- that package relay is fully reviewed
-- that P2P relay equals confirmation
-- that transaction relay has been tested live
-- that BitcoinII differs from upstream Bitcoin Core here
-- that release behavior exactly matches current `main`
-
-This is source-observed documentation for the reviewed transaction-relay slice only.
-
-## Documentation implications
-
-MoreBC2 can use this page to support cautious explanations of:
-
-- transaction announcement versus transaction validation
-- txid versus wtxid relay distinction
-- why transaction relay is skipped during initial block download
-- why a transaction can be accepted locally but still need block confirmation
-- why wallet/RPC sending docs should not imply guaranteed network propagation
-- why transaction relay behavior belongs in developer/service docs, not beginner command recipes
+These are distinct states. P2P propagation is not confirmation, and confirmation count is not protocol finality.
 
 ## Related pages
 
-- [Mempool and transaction broadcast RPC](rpc-mempool.md)
+- [Mempool accept](mempool-accept.md)
+- [Mempool RPC / broadcast](rpc-mempool.md)
 - [Raw transaction RPC](rpc-rawtransaction.md)
-- [Mempool accept](mempool-accept.md)
-- [Mempool source](txmempool.md)
+- [Replay protection v31](replay-protection-v31.md)
 - [Life of a transaction](../../architecture/life-of-a-transaction.md)
-- [Net processing handshake](net-processing-handshake.md)
-- [Net processing block and header relay](net-processing-block-relay.md)
+- [Public endpoint evidence](../../api/public-endpoints.md)
 
-## Open questions
+## Open work
 
-- Review transaction request scheduling and send-loop behavior.
-- Review transaction reconciliation behavior more deeply.
-- Review package/orphan transaction relay paths more deeply.
-- Compare this slice between the `v31.1.0` baseline and subsequent `main` changes.
-- Confirm which transaction-relay details belong in service-provider docs.
-- Confirm whether any BitcoinII-specific behavior exists here beyond naming and visible comments.
+- Perform a dedicated valid public BC2 broadcast/propagation test only with fully disposable funds and explicit scope if needed.
+- Review transaction reconciliation/package relay in greater depth.
+- Keep local mempool submission distinct from network relay evidence.
 
-## Sources
+## Primary sources
 
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+- `v31.1.0/src/net_processing.cpp`
+- `v31.1.0/src/net_processing.h`
+- `v31.1.0/src/validation.cpp`
+- `v31.1.0/src/script/interpreter.cpp`
 
-- Current observed `main` `src/net_processing.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/net_processing.cpp
-- Current observed `main` `src/net_processing.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/net_processing.h
-- [Mempool and transaction broadcast RPC](rpc-mempool.md)
-- [Mempool accept](mempool-accept.md)
-- [Life of a transaction](../../architecture/life-of-a-transaction.md)
+Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This is a first-pass focused review of transaction relay paths in `net_processing`. Runtime tests, release comparison, upstream comparison, send-loop behavior, transaction reconciliation, package relay, and deeper mempool policy remain open.
+**Status:** Reviewed / Source-confirmed partial  
+**Primary evidence:** BitcoinII Core `v31.1.0` relay/validation source plus September 11 local-only zero-peer transaction runtime record  
+**Notes:** P2P relay structure and replay-domain boundary are source-backed. Successful public propagation remains unverified.
