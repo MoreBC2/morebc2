@@ -1,248 +1,150 @@
 # Verification standards workflow
 
 **Category:** Developer guide
-**Status:** Draft
-**Last reviewed:** 2026-06-29
+**Status:** Reviewed / Framework
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page explains how MoreBC2 contributors should verify claims before treating them as reliable documentation.
+This page turns the root [Evidence Scale](../../EVIDENCE_SCALE.md) into a practical workflow for MoreBC2 contributors.
 
-It turns the root [Evidence Scale](../../EVIDENCE_SCALE.md) into a practical workflow.
+The central rule is simple: document what can be checked, identify what the evidence actually has authority to prove, and keep the boundary around the test or source.
 
-## Core rule
+## Current evidence levels
 
-Do not document what seems likely.
+MoreBC2 uses the current root evidence scale:
 
-Document what can be checked.
+- **E1 — Source-code evidence**
+- **E2 — Release and provenance evidence**
+- **E3 — Official-document evidence**
+- **E4 — Direct live-network or public-service observation**
+- **E5 — Local-test evidence**
+- **E6 — Service-owner evidence**
+- **E7 — Developer or maintainer statement**
+- **E8 — Community or third-party evidence**
 
-If something cannot be checked yet, mark it clearly and move it to the verification queue.
+A page may contain claims at several levels. Do not average them into one confidence label.
 
-## Evidence levels
+Examples:
 
-MoreBC2 uses the root evidence scale:
+- `src/kernel/chainparams.cpp` can be E1 evidence for a consensus/network parameter.
+- A GitHub release page can be E2 evidence that an asset was published, without proving reproducible binary provenance.
+- A dated local v31 node test can be E5 evidence for the exact runtime behavior exercised.
+- CoinEx's API can be E6 primary evidence for CoinEx's own confirmation setting, but not for BitcoinII consensus finality.
+- A community report can be E8 evidence that an incident was reported, not proof of its cause.
 
-- **E1 — Source Code Verified**
-- **E2 — Release Verified**
-- **E3 — Official Documentation Verified**
-- **E4 — Live Network / Explorer Verified**
-- **E5 — Tested Locally**
-- **E6 — Developer Statement**
-- **E7 — Community Discussion**
-- **E8 — Third-Party Summary**
+## Claim-specific authority
 
-A page may contain claims with different evidence levels.
+Do not use a fixed source hierarchy mechanically. Ask which source controls the claim.
 
-For example:
+For protocol and implementation behavior, prefer release-pinned BitcoinII Core source. For release identity and assets, prefer release metadata and provenance evidence. For a service's own settings, prefer that service's API or documentation. For what happened in a local test, prefer the dated test record.
 
-- A port number from source code may be E1.
-- A current explorer status may be E4.
-- A future feature mentioned in chat may be E7.
+Official-looking evidence in the wrong domain does not outrank claim-appropriate evidence.
 
-Do not average those together. Label the page honestly.
+## Page status labels
 
-## Status labels
+Common page-level labels include **Draft**, **Needs Review**, **Reviewed / Partial**, **Verified**, **Historical**, and **Superseded**.
 
-Use these page-level labels:
+Page status describes document maturity, not the evidence level of every sentence. A Draft can contain strong facts; a Reviewed page can contain explicit unknowns.
 
-### Draft
-
-The page is early work.
-
-Use when:
-
-- Structure exists.
-- Some claims may be sourced.
-- The page is not ready for outside reliance.
-
-### Needs Review
-
-The page is useful but still needs targeted checking.
-
-Use when:
-
-- Most content is written.
-- Important claims are not fully checked.
-- Source links may be missing or stale.
-
-### Verified
-
-The page has been checked against strong sources.
-
-Use only when:
-
-- Important claims have source links.
-- Time-sensitive claims have review dates.
-- Unverified claims have been removed or clearly labeled.
-- A second reviewer would likely be able to retrace the evidence.
-
-### Historical
-
-The page describes past information.
-
-Use when:
-
-- The content may be true for a past date.
-- It should not be assumed to describe the current network or software.
-
-### Superseded
-
-The page has been replaced by a newer page or newer source.
-
-Use when:
-
-- Keeping the page is useful for history.
-- Readers should not treat it as current guidance.
+Use **Verified** only when the page's stated verification scope has actually been met and another contributor can retrace the important evidence.
 
 ## Claim review workflow
 
 For each important claim, ask:
 
-1. What exactly is the claim?
-2. Is it current behavior, history, research, or discussion?
-3. What is the strongest source available?
-4. Is the source primary or secondary?
+1. What exactly is being claimed?
+2. Is it protocol behavior, release provenance, runtime behavior, service policy, history, or discussion?
+3. Which source has authority over that claim?
+4. Is the evidence release-pinned or mutable/current?
 5. Is the claim time-sensitive?
-6. Does the page clearly state the review date?
-7. Would another contributor be able to re-check it?
-8. Is the claim in the correct section?
-
-## Source priority
-
-Prefer sources in this order:
-
-1. Current BitcoinII source code.
-2. Official release notes, release assets, tags, or checksums.
-3. Official BitcoinII website or repository documentation.
-4. Running node output or public explorer data.
-5. Local testing.
-6. Public developer statements.
-7. Community discussion.
-8. Third-party summaries.
-
-Community discussion can be useful, but it must not be presented as implementation.
+6. What did the source or test *not* establish?
+7. Does the page record the relevant version/date/environment?
+8. Can another contributor retrace the evidence?
+9. Does newer evidence supersede an older statement?
 
 ## Source-code verification
 
-For source-code claims, record:
+For source-code claims, record the repository, release/tag/commit, file path, important symbol or call path, what was checked, and what remains unchecked.
 
-- File path.
-- Function, class, constant, or call path.
-- Branch or commit when practical.
-- What was checked.
-- What remains unchecked.
+Prefer release-pinned links for current-release claims. Mutable `main` observations should be labeled as such.
 
-Good wording:
+Keep consensus, policy, wallet behavior, networking, UI, and build tooling separate. A Bitcoin-like inherited structure is not proof that BitcoinII-specific behavior is identical.
 
-> `src/pow.cpp` defines the reviewed difficulty retarget path through `GetNextWorkRequired` and `CalculateNextWorkRequired`.
-
-Bad wording:
-
-> BitcoinII has the best difficulty algorithm.
+Current v31 examples requiring special care include ShockWave difficulty, replay-protection signature hashing, activation-boundary mempool behavior, fork-aware header synchronization, and consensus data restrictions.
 
 ## Release verification
 
-For release claims, record:
+For release claims, keep these distinct:
 
-- Version.
-- Release URL or tag.
-- Asset name.
-- Checksum/signature availability.
-- Date checked.
-- Whether the release matches the source branch being documented.
+- asset existence;
+- GitHub-reported asset digest;
+- independently calculated local hash;
+- tag/commit verification state;
+- maintainer-signed checksum or detached signature;
+- trusted release-signing-key path;
+- binary-to-source provenance;
+- reproducible-build proof.
 
-If checksum or signature verification is not available or not yet checked, say so.
+One does not automatically establish the others.
 
-## Live network verification
+## Live network and public-service verification
 
-For explorer or node-output claims, record:
+For explorer, API, WebSocket, Electrum, node-output, or other public-service observations, record the service, date/time window, route or method, relevant result, and limits of the observation.
 
-- Tool or explorer used.
-- Date checked.
-- Block height or sample data where useful.
-- Whether the observation may change.
-
-Do not treat live observations as permanent.
+A point-in-time HTTP 200 does not prove uptime, operator independence, custody-grade reliability, or valid transaction broadcast. Rejecting malformed transaction data proves less than successfully broadcasting a valid transaction.
 
 ## Local testing verification
 
-For tested commands, record:
+For tested commands or workflows, record operating system, BitcoinII version/ref, network, data-directory/wallet isolation, command or procedure, actual result, date, and safety boundaries.
 
-- Operating system.
-- BitcoinII version or commit.
-- Command used.
-- Expected output.
-- Actual result.
-- Date tested.
+Do not generalize a bounded regtest, partial-sync, platform-specific, or zero-peer result into universal mainnet behavior.
 
-Commands should not be marked verified if they have not been run.
+The September 2026 v31 wallet/PSBT test is a good example: it proves the documented isolated lifecycle worked, while replay activation itself remained source-confirmed rather than regtest-runtime-confirmed.
 
-## Developer or community statements
+## Service-owner evidence
 
-Developer statements can explain intent, context, or history.
+A service or exchange can be authoritative for its own operational setting. Record the exact field/wording and observation date.
 
-They do not override source code.
+Do not translate service terminology into protocol guarantees. For example, an exchange field named `irreversible_confirmations` is that exchange's setting; it is not cryptographic finality.
 
-Community statements can identify questions worth checking.
+## Developer, maintainer, community, and third-party evidence
 
-They do not prove implementation.
+Developer or maintainer statements can establish attributable intent, explanation, or plans, but do not override implemented source/runtime evidence.
 
-## When to use the verification queue
+Community and third-party material is useful for discovery, reports, historical context, and questions worth checking. Preserve it as that evidence type unless stronger evidence confirms the broader claim.
 
-Use the verification queue when:
+## Verification queue
 
-- A claim matters but lacks strong evidence.
-- A source link is missing.
-- A value might be stale.
-- A page makes a claim that needs live checking.
-- A contributor cannot finish verification in one pass.
+Use the verification queue when a claim matters but lacks claim-appropriate evidence, a source is stale, a release changed behavior, a service state needs rechecking, or a test has not been run.
 
-Use:
+Related pages:
 
-- [Verification queue](../verification/README.md)
+- [Verification index](../verification/verification-index.md)
+- [Verification section](../verification/README.md)
+- [Known unknowns](../verification/known-unknowns.md)
 - [Open questions backlog](../verification/open-questions.md)
-- [Documentation coverage](../documentation-coverage.md)
 
 ## Minimum verification block
 
-Every substantial page should end with:
+Substantial technical pages should state at minimum:
 
 ```md
 ## Verification
 
-**Status:** Draft / Needs Review / Verified / Historical / Superseded
-**Primary sources checked:** Yes / No / Partially
-**Notes:** Short explanation of what was checked and what remains open.
+**Status:** <page maturity>
+**Primary sources checked:** <claim-appropriate sources>
+**Notes:** <what was checked and what remains outside scope>
 ```
 
-Use more detailed source lists when the page makes technical claims.
+Add version, date, environment, route, commit, or service details wherever the claim needs them.
 
-## Upgrade rules
+## Upgrade and downgrade rules
 
-A page can move from Draft to Needs Review when:
-
-- It has a clear structure.
-- It avoids unsupported claims.
-- Major claims have at least some source path.
-
-A page can move from Needs Review to Verified when:
-
-- Important claims have primary sources.
-- Open questions are moved to the backlog.
-- Time-sensitive claims have current review dates.
-- The page has been checked for category drift.
-
-## Downgrade rules
-
-Downgrade a page when:
-
-- Sources become stale.
-- A release changes behavior.
-- A claim was based on discussion, not implementation.
-- A page mixes research or proposals into documentation.
+Upgrade a page only when its important claims are retraceable, time-sensitive claims are current, and unresolved boundaries are explicit. Downgrade or qualify a page when a new release changes behavior, a service observation becomes stale, a claim was based on weaker evidence than originally understood, or newer evidence contradicts it.
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** MoreBC2 evidence scale, style guide, contributor rules
-**Notes:** This is a workflow guide for contributors. It should be updated after the first outside review cycle.
+**Status:** Reviewed / Framework  
+**Primary sources checked:** Current MoreBC2 Evidence Scale, September 2026 verification records, contributor rules, and current documentation practice  
+**Notes:** Refreshed on 2026-09-12 to match claim-specific authority, E6 service-owner evidence, bounded local runtime testing, and current v31 evidence discipline.
