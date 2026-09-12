@@ -1,23 +1,27 @@
 # `src/kernel/chainparams.cpp`
 
-**Category:** Documentation
-**Status:** Needs Review
-**Last reviewed:** 2026-09-02
+**Category:** Developer / Source Atlas  
+**Status:** Reviewed / Source-confirmed partial  
+**Last reviewed:** 2026-09-12
 
 ## Purpose
 
-`chainparams.cpp` defines chain-specific parameters for BitcoinII Core and is a primary source for chain identity, network constants, activation heights, genesis data, and release-specific chain snapshots.
+`src/kernel/chainparams.cpp` defines BitcoinII chain-specific identity and consensus parameters. It is the primary release-pinned source for mainnet network identity, genesis data, deployment heights, proof-of-work parameters, checkpoints, address encodings, DNS seeds, minimum-chain-work, and assume-valid snapshots.
 
-This page now uses BitcoinII Core `v31.1.0` as the current release baseline.
+This page uses BitcoinII Core `v31.1.0` as the current release baseline.
 
 ## Mainnet identity
 
-- Chain type: `ChainType::MAIN`
-- Message start bytes: `0x42 0x49 0x49 0x21`
-- Default P2P port: `8338`
-- Prune-after height: `200000`
-- Assumed blockchain size hint: `10`
-- Assumed chain-state size hint: `10`
+Current `v31.1.0` mainnet source sets:
+
+- chain type: `ChainType::MAIN`;
+- message-start bytes: `0x42 0x49 0x49 0x21`;
+- default P2P port: `8338`;
+- prune-after height: `200000`;
+- assumed blockchain size hint: `10`;
+- assumed chain-state size hint: `10`.
+
+The September 11 Windows `v31.1.0` node test directly observed the mainnet listener on `8338` and successful outbound peer discovery. That runtime result reinforces the chain-parameter value and also exposes why the generated example configuration's inherited `8333` wording must not be treated as authoritative for current BC2 mainnet.
 
 ## Genesis block
 
@@ -47,20 +51,22 @@ This page now uses BitcoinII Core `v31.1.0` as the current release baseline.
 | Taproot deployment bit | `2` |
 | Taproot minimum activation height | `300` |
 
-The 2016-block miner confirmation window is a deployment-window parameter. It should not be confused with the current ShockWave difficulty schedule.
+The `2016` miner-confirmation window is a deployment parameter. It must not be confused with the current post-activation difficulty-adjustment schedule.
 
-## BitcoinII-specific v31.1.0 activations
+## BitcoinII-specific v31 activations
 
 Mainnet `v31.1.0` sets:
 
 | Rule | Height/value |
 |---|---|
-| `nDataRestrictionsHeight` | `57750` |
-| `nShockWaveActivationHeight` | `57750` |
-| `nReplayProtectionHeight` | `57750` |
-| `nReplayProtectionForkId` | `0x01324342` |
+| Data restrictions | `57750` |
+| ShockWave | `57750` |
+| Replay protection | `57750` |
+| Replay-protection fork/domain id | `0x01324342` |
 
-These values are central to current BitcoinII documentation and should be paired with the `v31.1.0` release notes and implementation files.
+These three height-`57750` changes are independent feature paths even though they share an activation height.
+
+See [Data restrictions](data-restrictions-v31.md), [ShockWave](shockwave-v31.md), and [Replay protection](replay-protection-v31.md).
 
 ## Proof-of-work parameters
 
@@ -72,26 +78,28 @@ These values are central to current BitcoinII documentation and should be paired
 | Allow minimum-difficulty blocks | `false` |
 | No retargeting | `false` |
 
-The target-timespan value remains in chain parameters, but current mainnet difficulty after height `57750` is governed by ShockWave in `src/pow.cpp`.
+The 14-day/2016-block values remain relevant to historical pre-ShockWave behavior and inherited helpers. Current mainnet difficulty at and after height `57750` is governed by ShockWave in `src/pow.cpp`.
 
 ## Chain work and assume-valid
 
-These are release-specific chain snapshots and must always be labeled by source version.
+These are release-specific snapshots and must always be labeled by source version.
 
-For `v31.1.0` MoreBC2 observed:
+For `v31.1.0`:
 
 - `nMinimumChainWork = 0000000000000000000000000000000000000000000000959028194ff1139272`
 - `defaultAssumeValid = 00000000000000067e82c9cebc8b58e70f0be31908598d3240a4ecbaa527682e`
 
 The source comment associates the assume-valid hash with height `33000`.
 
-## DNS seeds
+These values are startup/synchronization aids, not a replacement for BitcoinII's accumulated-work chain-selection rule.
 
-The `v31.1.0` mainnet section explicitly lists:
+## DNS seed
+
+Current `v31.1.0` mainnet source explicitly lists:
 
 - `dnsseed.bitcoin-ii.org.`
 
-Older MoreBC2 pages recorded `bitcoinII.ddns.net.` from earlier source. Treat that second seed as historical until it is re-confirmed in current release source or another current project-controlled source.
+Older MoreBC2 material recorded `bitcoinII.ddns.net.` from an earlier source version. Treat that older seed as historical unless re-established by current release-pinned/project-controlled evidence.
 
 ## Address encodings
 
@@ -104,28 +112,52 @@ Older MoreBC2 pages recorded `bitcoinII.ddns.net.` from earlier source. Treat th
 | Extended secret key | `04 88 AD E4` |
 | Bech32 HRP | `bc` |
 
-Because these are Bitcoin-like encodings, current docs should also mention BC2's explicit replay protection beginning at height `57750`.
+These Bitcoin-like encodings do **not** establish Bitcoin signing compatibility. From height `57750`, BC2 signing/verification paths use the BC2 replay-protection domain where applicable.
 
 ## Checkpoints
 
-`v31.1.0` includes checkpoint data through at least height `57752` in the reviewed mainnet section. Checkpoint lists are release-specific snapshots and should not be copied without a version label.
+The current `v31.1.0` mainnet checkpoint table contains **23 entries** and extends through:
+
+- height `57752`;
+- hash `000000000000000013ceffe797280c57f75a5b9f1d9e70c3503584058c322576`.
+
+Checkpoint tables are release-specific snapshots, not dynamic finality rules. See [Checkpoints](../../documentation/checkpoints.md).
+
+## Runtime boundary
+
+The September 11 Windows runtime record directly confirmed a bounded subset of chain-parameter consequences, including:
+
+- chain `main`;
+- runtime version `310100` / `/BitcoinII:31.1.0/`;
+- protocol `70016`;
+- P2P listener `8338`;
+- successful outbound peer discovery;
+- current mainnet header acquisition.
+
+It did not independently runtime-trigger the height-`57750` replay/data-restriction/ShockWave activation transitions.
 
 ## Related pages
 
 - [Network specifications](../../documentation/network-specifications.md)
 - [Consensus overview](../../documentation/consensus-overview.md)
-- [Source atlas: pow.cpp](pow-cpp.md)
-- [Difficulty adjustment](../../encyclopedia/difficulty-adjustment.md)
-- [Exchange integration package](../../exchange/integration-package.md)
+- [Checkpoints](../../documentation/checkpoints.md)
+- [pow.cpp](pow-cpp.md)
+- [ShockWave](shockwave-v31.md)
+- [Replay protection](replay-protection-v31.md)
+- [Data restrictions](data-restrictions-v31.md)
+- [Windows v31 node/RPC validation](../../verification/windows-v31-node-rpc-validation-2026-09-11.md)
 
-## Sources
+## Primary sources
 
-- `v31.1.0/src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/src/kernel/chainparams.cpp
-- `v31.1.0/src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/v31.1.0/src/pow.cpp
-- BitcoinII Core `v31.1.0` release: https://github.com/Bitcoin-II/BitcoinII-Core/releases/tag/v31.1.0
+- `v31.1.0/src/kernel/chainparams.cpp`
+- `v31.1.0/src/consensus/params.h`
+- `v31.1.0/src/pow.cpp`
+- BitcoinII Core `v31.1.0` release
+
+Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Needs Review
-**Primary sources checked:** Yes, partially
-**Notes:** Mainnet identity, v31-specific activation values, address encodings, and release-specific chain snapshots have been refreshed against `v31.1.0`. Non-mainnet sections and deeper activation-path behavior remain separate review tasks.
+**Status:** Reviewed / Source-confirmed partial  
+**Primary evidence:** BitcoinII Core `v31.1.0` release-pinned chain parameters plus September 11 bounded Windows mainnet runtime evidence  
+**Notes:** Current mainnet identity, activation values, proof-of-work parameters, address encodings, DNS seed, chain snapshots, and the 23-entry checkpoint table are synchronized. Non-mainnet parameter sets and controlled activation-boundary vectors remain separate work.
