@@ -1,154 +1,122 @@
 # Local development environment
 
 **Category:** Developer guide
-**Status:** Draft
-**Last reviewed:** 2026-06-30
+**Status:** Reviewed / Framework
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
 This page defines how MoreBC2 should document local BitcoinII Core development environments.
 
-It intentionally avoids presenting untested build commands as verified.
-
-Use this page as the safe contributor starting point until Linux, Windows, macOS, and CI build paths are directly tested.
-
-## Goal
-
-A local development guide should eventually help contributors:
-
-- Clone the correct BitcoinII Core repository.
-- Identify the source version being reviewed.
-- Install build dependencies.
-- Build daemon, CLI, and GUI targets where supported.
-- Run unit and functional tests.
-- Start a local node safely.
-- Keep test data separate from real wallet data.
-- Record exact command results for MoreBC2 verification.
-
-## Current repository note
-
-Current MoreBC2 review work observes this public source path:
+The canonical public source path remains:
 
 - `https://github.com/Bitcoin-II/BitcoinII-Core`
 
-Project-controlled GitHub metadata reviewed on 2026-07-10 supports this as the current canonical public reference-implementation repository. Repository ownership or location can still change, so contributors should recheck the [source registry](../../SOURCE_REGISTRY.md) before long-lived automation.
+Current MoreBC2 technical work uses release `v31.1.0` as the baseline unless a test or review is explicitly historical.
+
+## Important current boundary
+
+MoreBC2 has now run substantial **release-binary** `v31.1.0` testing on Windows using fresh disposable data directories and wallets. That includes node/RPC behavior and an isolated regtest PSBT lifecycle.
+
+MoreBC2 has **not yet** documented a clean source build of BitcoinII Core `v31.1.0` on Windows, Linux, or macOS. Do not describe the runtime validations as source-build verification.
+
+See:
+
+- [Windows v31.1.0 node and RPC validation](../verification/windows-v31-node-rpc-validation-2026-09-11.md)
+- [Windows v31.1.0 PSBT and replay-protection validation](../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
+- [Build system guide](build-system.md)
+- [Testing guide](testing.md)
 
 ## Safety rule
 
-Do not run development builds against a real wallet or production data directory unless you know exactly what you are doing.
+Development and runtime testing should use a fresh, explicitly named data directory and disposable wallet unless the procedure specifically requires otherwise.
 
-For testing, use a separate data directory and a test chain mode when available.
+Do not open, copy, rescan, import, unlock, inspect, or spend from an existing user wallet as part of a documentation test. Public-network submission should be a separate, explicitly scoped test rather than an accidental side effect of a local workflow.
 
 ## Environment checklist
 
-Before documenting a build as tested, record:
+Before documenting a build or runtime procedure as tested, record:
 
-- Operating system and version.
-- CPU architecture.
-- BitcoinII repository path.
-- Branch, tag, or commit hash.
-- Dependency installation method.
-- Build command used.
-- Test command used.
-- Whether GUI support was enabled.
-- Whether wallet support was enabled.
-- Exact result.
-- Date tested.
+- operating system and version;
+- CPU architecture;
+- source repository and tag/commit, or exact release artifact;
+- dependency installation method for source builds;
+- build command, when applicable;
+- test/runtime command or launch arguments;
+- network selection;
+- data-directory and wallet isolation;
+- whether GUI and wallet support were enabled;
+- exact result;
+- date tested.
 
 ## Repository checklist
 
-Before building, contributors should verify:
+Before building, verify:
 
-- The repository URL is the intended source.
-- The branch or tag is documented.
-- The working tree is clean.
-- Submodules, if any, are initialized when required.
-- Build instructions are taken from repository docs or tested locally, not guessed.
+- repository URL is the intended source;
+- branch/tag/commit is recorded;
+- working tree is clean;
+- submodules/dependencies are handled according to source documentation;
+- commands come from current repository documentation or a dated successful test, not assumption.
 
-## Build documentation levels
+Prefer release-pinned source when documenting current release behavior.
 
-### Framework
+## Evidence levels for development work
 
-A page exists, but commands have not been tested.
+### Source-documented
+
+The command or option exists in repository documentation/source, but MoreBC2 has not run it.
 
 ### Locally tested
 
-Commands were run successfully by a contributor in a named environment.
+The command/procedure succeeded in a named environment with a dated record.
 
 ### Reproduced
 
-Commands were successfully repeated by another contributor or CI job.
+The same important behavior was independently repeated in another environment or CI context.
 
 ### Release-grade
 
-Build behavior is documented well enough for release or exchange/service use, including verification of source, dependencies, and artifacts.
+The build/release workflow has enough source, dependency, artifact, test, and provenance evidence for operational reliance.
 
-## Suggested test matrix
+A release binary successfully running is not the same as a source build reaching Release-grade status.
 
-| Platform | Build target | Status | Notes |
+## Current source-build matrix
+
+| Platform | Build target | MoreBC2 source-build status | Notes |
 |---|---|---|---|
-| Linux | Daemon and CLI | Not tested | First priority. |
-| Linux | GUI | Not tested | Requires GUI dependencies. |
-| Windows | Daemon and CLI | Not tested | Needs Windows-specific instructions. |
-| Windows | GUI | Not tested | Needs release/build review. |
-| macOS | Daemon and CLI | Not tested | Needs platform review. |
-| macOS | GUI | Not tested | Needs platform review. |
+| Linux | Daemon and CLI | Not yet executed | High-value first reproducible source-build target |
+| Linux | GUI | Not yet executed | Requires GUI dependencies |
+| Windows | Daemon and CLI | Not yet executed | Release-binary runtime evidence exists separately |
+| Windows | GUI | Not yet executed | v31 Qt release binary has bounded runtime evidence; source build remains open |
+| macOS | Daemon and CLI | Not yet executed | Needs platform review |
+| macOS | GUI | Not yet executed | Needs platform review |
 
-## Suggested command-record format
+## Suggested first verified source-build path
 
-Use this format when someone tests a command:
+The next useful development milestone is:
 
-```md
-### Test record
+1. create a clean Linux environment;
+2. clone the canonical BitcoinII Core repository;
+3. check out tag `v31.1.0` and record the resolved commit;
+4. build daemon and CLI using current repository instructions;
+5. run the basic/default test target;
+6. start the resulting daemon with a fresh disposable data directory and safe test-chain configuration;
+7. call harmless loopback RPC;
+8. stop cleanly and record artifact hashes/results.
 
-**Date tested:** YYYY-MM-DD
-**Tester:** Name or handle
-**OS:** Example: Ubuntu 24.04 x86_64
-**Repository:** owner/repo
-**Commit:** full commit hash
-**Command:** `command here`
-**Result:** Pass / Fail
-**Notes:** Short notes, including error output if failed.
-```
+Publish the commands as tested only after this is actually performed.
 
-## Local data-directory rule
+## Current open questions
 
-Development testing should use a separate data directory.
-
-Document the data directory used in test records. Do not use examples that could accidentally point users at their real wallet data unless the page clearly explains the risk.
-
-## Suggested first verified path
-
-The first path MoreBC2 should verify is:
-
-1. Clean Linux environment.
-2. Clone BitcoinII Core from the confirmed source path.
-3. Build daemon and CLI only.
-4. Run the most basic available test target.
-5. Start the daemon with a temporary data directory.
-6. Call a harmless local RPC command.
-7. Shut down cleanly.
-
-This path should be documented only after it is actually performed.
-
-## Relationship to other pages
-
-- [Build system guide](build-system.md) should explain the build system itself.
-- [Testing guide](testing.md) should explain test organization and commands.
-- [Release process guide](release-process.md) should explain public release artifacts and verification.
-- This page should explain the local contributor environment.
-
-## Open questions
-
-- How should contributors detect and respond to a future canonical-repository move?
-- Which Linux distribution should MoreBC2 use for first verified builds?
-- Which dependency set is required for daemon-only builds?
-- Which dependency set is required for GUI builds?
-- Which test command is safest as the first documented smoke test?
-- Does BitcoinII use any BitcoinII-specific build configuration beyond naming and asset changes?
+- Which clean Linux distribution/environment should be the first reproducible source-build reference?
+- Which dependency versions are required in practice for daemon/CLI and GUI builds?
+- Which unit/functional subset gives the best first regression signal for v31-specific behavior?
+- Can the resulting binaries be reproduced deterministically enough to strengthen release authentication?
+- What additional platform-specific behavior appears under Windows/macOS source builds?
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This guide defines the local-development documentation workflow. It does not yet contain verified build commands. Canonical-source wording was synchronized from the dated project-identity evidence on 2026-08-27.
+**Status:** Reviewed / Framework  
+**Primary sources checked:** Current canonical repository, v31 build-system review, and September 11 release-binary runtime records  
+**Notes:** The guide now distinguishes current release-binary testing from still-unexecuted source-build workflows and strengthens the disposable-data/wallet safety boundary.
