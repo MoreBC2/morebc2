@@ -2,93 +2,107 @@
 
 **Category:** Developer platform
 **Status:** Draft / Observed partial
-**Last reviewed:** 2026-07-12
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-The 2026-07-12 public API smoke test found that several BitcoinII REST responses from `bc2mempool.com` resemble `mempool.space` endpoint shapes.
+BitcoinII currently has several public services with `mempool.space`-like REST and WebSocket behavior, but MoreBC2 does not treat them as complete drop-in replacements.
 
-This page records cautious compatibility wording. It does not claim full drop-in compatibility.
+Current evidence: [Public infrastructure smoke test — 2026-09-11](../verification/public-infrastructure-smoke-test-2026-09-11.md).
 
-Canonical evidence: [Public API, WebSocket, and Electrum smoke test - 2026-07-12](../verification/public-api-electrum-smoke-test-2026-07-12.md).
+The three Mempool-style hosts directly checked were:
 
-## Confirmed by current evidence
+- `https://bc2mempool.com`
+- `https://explorer.bitcoin-ii.org`
+- `https://bc2.live`
 
-The following is confirmed only within the dated smoke-test scope:
+The Official BitcoinII Explorer at `https://bitcoinii.ddns.net/explorer/` exposes a materially different API and should not be grouped into this compatibility class.
 
-- public GET endpoints responded for tip, blocks, transactions, address summaries, mempool, fees, mining analytics, prices, and rich-list data,
-- several paths used familiar `mempool.space`-style route shapes,
-- several response objects were classified as compatible/similar in the smoke test,
-- same-time REST tip height and hash matched the local BitcoinII Core node.
+## Current observed similarities
 
-## Observed as similar
-
-The smoke test classified these areas as compatible, similar, or similar with extensions:
+On all three Mempool-style hosts, the September check observed working route families for:
 
 - chain tip height and hash,
 - recent blocks,
-- block details,
-- block transaction IDs,
-- block transaction objects,
-- block hash by height,
-- transaction lookup,
-- address summary,
-- address transaction list,
-- mempool summary,
-- recent mempool transactions,
-- recommended fees.
+- mempool summary and recent transactions,
+- recommended fees,
+- difficulty adjustment,
+- mining hashrate,
+- prices,
+- rich-list data,
+- block lookup,
+- block transaction IDs and transaction objects,
+- block hash by height.
 
-For exact endpoint paths and classifications, use the table in [the public API/Electrum smoke test](../verification/public-api-electrum-smoke-test-2026-07-12.md).
+The following representative paths were directly observed:
 
-## BC2-specific extensions
+- `/api/v1/blocks/tip/height`
+- `/api/v1/blocks/tip/hash`
+- `/api/v1/blocks`
+- `/api/mempool`
+- `/api/mempool/recent`
+- `/api/v1/fees/recommended`
+- `/api/v1/difficulty-adjustment`
+- `/api/v1/mining/hashrate/3d`
+- `/api/v1/prices`
+- `/api/block/{hash}`
+- `/api/block/{hash}/txids`
+- `/api/block/{hash}/txs`
+- `/api/block-height/{height}`
 
-The same record observed BC2-specific or analytics-style endpoints and fields, including:
+## WebSocket similarity
 
-- a BC2 `electrum` field in address responses,
-- difficulty-adjustment data,
-- mining hashrate data,
-- BC2 price data,
-- rich-list data.
+Each host exposed:
 
-These should be documented as BC2-specific or service-specific extensions unless future evidence shows a broader standard.
+```text
+wss://HOST/api/v1/ws
+```
 
-## Known incompatibilities or gaps
+An `{"action":"init"}` request returned explorer-state data in the dated check.
 
-Known limitations from the smoke test:
+This establishes endpoint and initialization behavior only; it does not establish complete event-schema or subscription compatibility with upstream `mempool.space`.
 
-- `/api/address/{address}/utxo` returned 404.
-- `/api/address/{address}/utxos` returned 404.
-- `/api/v1` base path returned 404.
-- `/api/v1/services` timed out.
-- transaction broadcast was not tested.
-- complete schema coverage was not established.
-- WebSocket event schemas were only minimally observed.
-- Electrum success does not prove wallet compatibility.
+## Transaction-submission route
 
-## Compatibility labels
+Each tested Mempool-style service exposed:
 
-Use these labels in MoreBC2 docs:
+```text
+POST /api/tx
+```
 
-| Label | Meaning |
-|---|---|
-| Confirmed | Directly shown by a committed dated evidence record. |
-| Observed | Seen during a dated check, but not necessarily complete or stable. |
-| Likely | Reasonable inference from observed behavior, but not enough to document as confirmed. |
-| Untested | Not exercised in MoreBC2 evidence. |
-| Unsupported | A checked endpoint or behavior failed or was absent in the evidence record. |
+Sending deliberately invalid transaction payload `00` returned HTTP 400 on all three hosts.
+
+This proves route presence and malformed-transaction rejection behavior. It does **not** prove successful broadcast of a valid BC2 transaction.
+
+## Known gaps and differences
+
+Current or historical checked gaps include:
+
+- `/api/v1/services` returned HTTP 404 on all three services in the September check.
+- Historical address UTXO probes at `/api/address/{address}/utxo` and `/api/address/{address}/utxos` returned 404 on `bc2mempool.com`; those paths were not promoted to current supported endpoints.
+- `/api/v1` should not be assumed to provide a useful generic base response.
+- BC2-specific/service-specific fields and analytics exist and should not be assumed to match upstream `mempool.space` schemas exactly.
+- Full response-schema parity is not established.
+- Long-term WebSocket behavior, reconnect behavior, and all subscription message types remain unverified.
+
+## Redundancy caution
+
+`bc2mempool.com`, `explorer.bitcoin-ii.org`, and `bc2.live` showed closely aligned routes, schemas, values, WebSocket behavior, and invalid-broadcast rejection behavior.
+
+That does not prove they use one backend, but it also does not establish backend/operator independence. Do not count three hostnames as three independent providers without separate evidence.
 
 ## Safe conclusion
 
 Current evidence supports saying:
 
-> The observed REST API is mempool.space-like in several tested read-only endpoint shapes, with BC2-specific extensions and known gaps.
+> The three tested BC2 Mempool-style services expose a substantial set of mempool.space-like REST and WebSocket behaviors, with BC2-specific extensions and known gaps.
 
 Current evidence does not support saying:
 
-> The API is fully mempool.space-compatible.
+> The services are fully mempool.space-compatible or interchangeable with upstream mempool.space.
 
 ## Verification
 
 **Status:** Draft / Observed partial  
-**Primary sources checked:** [Public API, WebSocket, and Electrum smoke test - 2026-07-12](../verification/public-api-electrum-smoke-test-2026-07-12.md)  
-**Notes:** This page summarizes compatibility observations and known gaps from one dated smoke test.
+**Primary source checked:** [Public infrastructure smoke test — 2026-09-11](../verification/public-infrastructure-smoke-test-2026-09-11.md)  
+**Notes:** September testing supersedes the older July service snapshot for current route wording. Full schema parity, valid transaction broadcast, long-term service behavior, and independent redundancy remain unverified.
