@@ -1,272 +1,94 @@
 # Wallet RPC
 
 **Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-06-30
+**Status:** Source-reviewed / Runtime-tested partial
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page covers a first-pass review of:
+This page maps BitcoinII Core wallet-management and address RPC behavior centered on `src/wallet/rpc/wallet.cpp` and `src/wallet/rpc/addresses.cpp`.
 
-- `src/wallet/rpc/wallet.cpp`
-- `src/wallet/rpc/addresses.cpp`
+The command surface is broader than MoreBC2's runtime coverage. Current `v31.1.0` testing now establishes a bounded subset, so this page should no longer say that no wallet RPC examples have been executed.
 
-This page maps wallet RPC command registration, wallet management RPCs, address-generation RPCs, wallet flags, wallet creation/loading/unloading behavior, and the top-level wallet command groups.
+## Source-reviewed command groups
 
-It is not a tested wallet command guide. Examples should not be marked verified until they are run against BitcoinII Core.
+Reviewed wallet RPC areas include:
 
-## Why this file group matters
+- wallet information/listing: `getwalletinfo`, `listwalletdir`, `listwallets`;
+- loading/unloading: `loadwallet`, `unloadwallet`;
+- creation/flags/migration: `createwallet`, `setwalletflag`, `upgradewallet`, `migratewallet`;
+- address handling: `getnewaddress`, `getrawchangeaddress`, labels/groupings, multisig;
+- backup/import/rescan;
+- balances/coins;
+- encryption/passphrase;
+- spend/funding/PSBT;
+- transaction history;
+- message signing and related wallet functions.
 
-Wallet RPCs are where user, exchange, and service workflows usually touch wallet functionality.
+The specialized atlas pages cover backup/import, spend/PSBT, encryption, coins/balances, and transaction history in more detail.
 
-For MoreBC2, the important distinction is:
+## v31 runtime evidence
 
-- Wallet startup files explain how wallets are loaded.
-- Wallet RPC files explain how wallets are managed and queried after startup.
-- Spend, backup, encryption, address, and transaction RPC files should be reviewed before publishing user-facing command examples.
+The September 11 Windows tests used only fresh disposable wallet/data-directory state.
 
-## Key files reviewed
+Current directly exercised wallet-management/address calls include:
 
-- `src/wallet/rpc/wallet.cpp`
-- `src/wallet/rpc/addresses.cpp`
+- `listwallets`;
+- `listwalletdir`;
+- `createwallet`;
+- `getwalletinfo`;
+- `getnewaddress`;
+- `getbalances` in the isolated PSBT test.
 
-This is a first-pass review, not a complete wallet RPC audit.
+The disposable descriptor wallet was successfully created and used to receive locally generated regtest funds and complete a PSBT lifecycle. The earlier v31 node/RPC test also exercised safe disposable-wallet creation/inspection and restart/reload behavior under its documented environment.
 
-## Command registration
+No existing user wallet or production data directory was opened, copied, rescanned, imported, unlocked, inspected, or spent from.
 
-`GetWalletRPCCommands()` registers wallet-related RPC commands under the `wallet` category, with `fundrawtransaction` registered under `rawtransactions`.
+See:
 
-Reviewed registered command groups include:
+- [Windows v31.1.0 node and RPC validation](../../verification/windows-v31-node-rpc-validation-2026-09-11.md)
+- [Windows v31.1.0 PSBT and replay-protection validation](../../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
 
-- Wallet management.
-- Wallet information.
-- Wallet loading and unloading.
-- Wallet creation and migration.
-- Address generation and labeling.
-- Backup and import commands.
-- Balance and coin commands.
-- Encryption and passphrase commands.
-- Spend and PSBT commands.
-- Message signing.
-- Wallet transaction history and rescanning.
+## Replay-protection boundary
 
-## Wallet information and listing commands
+Wallet creation/address management is not itself proof of safe third-party signing. Mainnet v31 replay protection changes the signature-hash domain from activation height `57750`, and current BitcoinII Core wallet/PSBT signing paths carry that domain internally.
 
-Reviewed commands include:
+External signer and third-party wallet compatibility remain separate tests.
 
-- `getwalletinfo`
-- `listwalletdir`
-- `listwallets`
+See [Wallet spend and PSBT RPC](wallet-spend-rpc.md) and [Replay protection](replay-protection-v31.md).
 
-`getwalletinfo` returns wallet state such as wallet name, wallet version, database format, balance fields, transaction count, keypool data, pay transaction fee, private-key availability, avoid-reuse flag, scanning state, descriptor status, external-signer status, blank-wallet status, birth time, and last processed block information.
+## Still source-only or unverified here
 
-`listwalletdir` lists wallets found in the wallet directory.
+MoreBC2 has not yet published direct runtime coverage for every command in this group. Important open areas include:
 
-`listwallets` lists wallets currently loaded in the wallet context.
+- backup/restore and import workflows;
+- encryption/passphrase lifecycle;
+- migration/upgrade paths;
+- rescans and transaction-history edge cases;
+- multisig and message-signing workflows;
+- external-signer wallets;
+- broad direct-send and fee-bump behavior;
+- cross-platform wallet behavior.
 
-## Wallet loading and unloading commands
+Do not present those as tested merely because the RPCs exist in source.
 
-Reviewed commands include:
+## Related pages
 
-- `loadwallet`
-- `unloadwallet`
-
-`loadwallet` loads an existing wallet by name or path, can update persistent startup loading behavior, checks whether the wallet is already loaded, and calls the wallet loading path reviewed in the startup atlas entry.
-
-`unloadwallet` unloads a wallet by endpoint wallet or argument, rejects mismatched endpoint/argument names, reserves against active rescans, removes the wallet from context, and waits for wallet deletion.
-
-## Wallet creation and flag commands
-
-Reviewed commands include:
-
-- `createwallet`
-- `setwalletflag`
-
-`createwallet` creates and loads a new wallet. Reviewed options include:
-
-- wallet name
-- disable private keys
-- blank wallet
-- passphrase
-- avoid reuse
-- descriptor wallet flag
-- load on startup
-- external signer
-
-Reviewed constraints include:
-
-- Descriptor wallets require SQLite support.
-- Legacy wallet creation requires deprecated BDB behavior to be enabled.
-- Legacy wallet creation requires BDB support.
-- External signer wallet creation requires external signer support.
-- Empty passphrases generate a warning rather than encrypting the wallet.
-
-`setwalletflag` changes mutable wallet flags. The reviewed mutable flag map currently exposes `avoid_reuse`. Enabling it includes a caveat that rescanning is needed to correctly mark prior used destinations.
-
-## HD seed, upgrade, migration, and simulation commands
-
-Reviewed commands include:
-
-- `sethdseed`
-- `upgradewallet`
-- `migratewallet`
-- `simulaterawtransaction`
-
-`sethdseed` is legacy-wallet-only, requires wallet unlock, can generate or accept a WIF private key as a new HD seed, and can flush/regenerate the keypool. The help text warns that a new backup is needed after setting the HD seed.
-
-`upgradewallet` attempts to upgrade a wallet to a requested or latest version and returns previous/current version and result or error.
-
-`migratewallet` migrates a legacy wallet to descriptor form, creates a backup before migration, may produce additional watch-only or solvables wallets, and warns that the RPC may take a long time.
-
-`simulaterawtransaction` estimates wallet balance change from provided raw transactions without broadcasting them.
-
-## Address RPC commands reviewed
-
-`src/wallet/rpc/addresses.cpp` covers address-facing wallet RPCs.
-
-Reviewed commands include:
-
-- `getnewaddress`
-- `getrawchangeaddress`
-- `setlabel`
-- `listaddressgroupings`
-- `addmultisigaddress`
-
-`getnewaddress` creates a new receiving address, optionally assigns a label, and supports address type selection. It checks whether the wallet can provide addresses, rejects unknown address types, and rejects Bech32m for legacy wallets.
-
-`getrawchangeaddress` creates a new change address for raw-transaction workflows, not normal receiving use. It uses change type when configured, otherwise default address type, and has similar address-type checks.
-
-`setlabel` validates an address and updates the address book as receive or send depending on whether the destination is wallet-owned.
-
-`listaddressgroupings` reports groups of addresses whose common ownership has been made public by transaction input/change behavior.
-
-`addmultisigaddress` is legacy-wallet-only and creates a multisig address from required signature count plus addresses or public keys. The reviewed help text says it requires a new wallet backup.
-
-## Registered command inventory from first pass
-
-The reviewed registration table includes these wallet commands:
-
-- `abandontransaction`
-- `abortrescan`
-- `addmultisigaddress`
-- `backupwallet`
-- `bumpfee`
-- `psbtbumpfee`
-- `createwallet`
-- `createwalletdescriptor`
-- `restorewallet`
-- `dumpprivkey`
-- `dumpwallet`
-- `encryptwallet`
-- `getaddressesbylabel`
-- `getaddressinfo`
-- `getbalance`
-- `gethdkeys`
-- `getnewaddress`
-- `getrawchangeaddress`
-- `getreceivedbyaddress`
-- `getreceivedbylabel`
-- `gettransaction`
-- `getunconfirmedbalance`
-- `getbalances`
-- `getwalletinfo`
-- `importaddress`
-- `importdescriptors`
-- `importmulti`
-- `importprivkey`
-- `importprunedfunds`
-- `importpubkey`
-- `importwallet`
-- `keypoolrefill`
-- `listaddressgroupings`
-- `listdescriptors`
-- `listlabels`
-- `listlockunspent`
-- `listreceivedbyaddress`
-- `listreceivedbylabel`
-- `listsinceblock`
-- `listtransactions`
-- `listunspent`
-- `listwalletdir`
-- `listwallets`
-- `loadwallet`
-- `lockunspent`
-- `migratewallet`
-- `newkeypool`
-- `removeprunedfunds`
-- `rescanblockchain`
-- `send`
-- `sendmany`
-- `sendtoaddress`
-- `sethdseed`
-- `setlabel`
-- `settxfee`
-- `setwalletflag`
-- `signmessage`
-- `signrawtransactionwithwallet`
-- `simulaterawtransaction`
-- `sendall`
-- `unloadwallet`
-- `upgradewallet`
-- `walletcreatefundedpsbt`
-- `walletlock`
-- `walletpassphrase`
-- `walletpassphrasechange`
-- `walletprocesspsbt`
-
-`walletdisplayaddress` is registered only when external signer support is enabled.
-
-## Relationship to service documentation
-
-Wallet RPCs are high-impact because some commands can create addresses, reveal private keys, change wallet state, create transactions, sign transactions, or send funds.
-
-MoreBC2 should separate wallet RPCs into at least three future service-doc categories:
-
-- Read-only status commands.
-- Address/deposit commands.
-- Spend/signing/backup/encryption commands.
-
-Commands that expose keys or move funds should not be mixed casually into basic service guides.
-
-## Relationship to other pages
-
-Related pages:
-
-- [Source atlas: wallet startup](wallet-startup.md)
+- [Wallet startup](wallet-startup.md)
+- [Wallet spend and PSBT RPC](wallet-spend-rpc.md)
+- [Wallet backup/import RPC](wallet-backup-import-rpc.md)
+- [Wallet encryption RPC](wallet-encryption-rpc.md)
+- [Wallet coins and balances RPC](wallet-coins-rpc.md)
+- [Wallet transaction history RPC](wallet-transactions-rpc.md)
 - [Wallet guide](../../wallets/wallet-guide.md)
-- [RPC overview](../rpc-overview.md)
-- [Deposit monitoring](../../exchange/deposit-monitoring.md)
-- [Service integration checklist](../../exchange/service-integration-checklist.md)
-
-## BitcoinII-specific notes
-
-This first-pass review saw BitcoinII naming in wallet RPC help strings and examples.
-
-No upstream comparison has been completed, so this page does not claim whether wallet RPC behavior differs from upstream Bitcoin Core beyond naming and visible strings.
-
-## Open questions
-
-- Which wallet RPC command examples can be tested safely against a local wallet?
-- Which wallet RPCs should be recommended for exchanges or services?
-- Which commands should be hidden from normal user guides because they expose keys or create irreversible wallet changes?
-- Which backup and restore command paths should be reviewed next?
-- Which spend/signing RPC files should be reviewed next?
-- How should descriptor wallets versus legacy wallets be explained for BitcoinII users?
-- Which wallet commands behave differently depending on BDB, SQLite, external signer, or descriptor support?
-- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for these files before upgrading status.
+- [Wallet compatibility](../../compatibility/wallets.md)
 
 ## Sources
 
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
-
-- Current observed `main` `src/wallet/rpc/wallet.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/wallet.cpp
-- Current observed `main` `src/wallet/rpc/addresses.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/addresses.cpp
-- Current observed `main` `src/wallet/init.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/init.cpp
-- Current observed `main` `src/wallet/load.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/load.cpp
-- Current observed `main` `src/wallet/wallet.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/wallet.h
+Current source baseline: BitcoinII Core `v31.1.0`, including `src/wallet/rpc/wallet.cpp`, `src/wallet/rpc/addresses.cpp`, and related wallet implementation paths.
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This is a first-pass wallet RPC registration and address-management review. Backup, spend, encryption, transaction, coin, detailed wallet database behavior, and release-versus-main comparison still need deeper file-specific review. Commands have not been run.
+**Status:** Source-reviewed / Runtime-tested partial  
+**Primary sources checked:** BitcoinII Core `v31.1.0` plus September 11 disposable-wallet runtime records  
+**Notes:** Core wallet creation/listing/info/address behavior now has bounded runtime evidence. The wider wallet RPC surface remains source-reviewed unless a dated test record says otherwise.
