@@ -1,94 +1,84 @@
 # Wallet compatibility
 
 **Category:** Compatibility
-**Status:** Draft / Unknown for third-party wallets
-**Last reviewed:** 2026-07-13
+**Status:** Reviewed / Core wallet tested partial; third-party wallets unknown
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-MoreBC2 currently has source-reviewed BitcoinII Core wallet documentation and read-only Electrum infrastructure observations.
-
-It does not have a committed third-party wallet compatibility test record.
+MoreBC2 now has direct BitcoinII Core `v31.1.0` wallet/PSBT runtime evidence in addition to source review, but it still does not have a committed third-party wallet compatibility test record.
 
 Canonical evidence:
 
+- [Windows v31.1.0 PSBT and replay-protection validation — 2026-09-11](../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
+- [Windows v31.1.0 node and RPC validation — 2026-09-11](../verification/windows-v31-node-rpc-validation-2026-09-11.md)
 - [Wallet guide](../wallets/wallet-guide.md)
 - [Wallets section](../wallets/README.md)
 - [Ecosystem wallets](../ecosystem/wallets.md)
-- [Public API, WebSocket, and Electrum smoke test - 2026-07-12](../verification/public-api-electrum-smoke-test-2026-07-12.md)
-- [API Electrum page](../api/electrum.md)
+- [Electrum compatibility](electrum.md)
 
 ## BitcoinII Core wallet
 
-Status: **Source Reviewed / Needs Testing**
+Status: **Locally tested partial / Source reviewed**
 
-MoreBC2 has reviewed source for BitcoinII Core wallet startup and major wallet RPC groups. The wallet guide records source-observed behavior for:
+Current `v31.1.0` Windows testing established that a newly created disposable descriptor wallet could be created, inspected, stopped/reloaded, generate addresses, receive locally mined regtest funds, construct a funded PSBT, sign it, finalize it, and submit the resulting transaction to an isolated local regtest mempool.
 
-- wallet startup and loading,
-- wallet RPC registration,
-- address-management commands,
-- backup/import commands,
-- spend and PSBT commands,
-- encryption commands,
-- coin and balance commands,
-- transaction-history commands.
+The successful PSBT workflow exercised:
 
-Those source-reviewed notes do not make wallet command examples locally tested.
+- wallet creation/loading;
+- `getnewaddress`;
+- local regtest funding;
+- `getbalances`;
+- `walletcreatefundedpsbt`;
+- `walletprocesspsbt`;
+- `decodepsbt`;
+- `finalizepsbt`;
+- `decoderawtransaction`;
+- `testmempoolaccept`;
+- local-only `sendrawtransaction`.
+
+This is meaningful wallet compatibility evidence for BitcoinII Core itself. It is not a production-wallet certification and did not use an existing user wallet or public network submission.
+
+## Replay-protection implication for wallets
+
+BitcoinII Core `v31.1.0` activates BC2 replay protection on mainnet at height `57750` with fork/domain id `0x01324342`.
+
+The release-pinned source trace shows wallet, PSBT, raw-transaction, mempool, block-validation, and signature-hash paths carrying the replay domain. Third-party wallets or external signers that assume ordinary Bitcoin sighash behavior may therefore be incompatible even when they understand Bitcoin-like addresses.
+
+External-signer compatibility after activation remains unverified.
 
 ## Third-party wallets
 
 Status: **Unknown / Needs Testing**
 
-The committed repository does not establish compatibility for:
+The repository does not currently establish compatibility for:
 
-- BlueWallet,
-- Cake Wallet,
-- Komodo Wallet,
-- other third-party mobile, desktop, hardware, or web wallets.
+- BlueWallet;
+- Cake Wallet;
+- Komodo Wallet;
+- other third-party mobile, desktop, hardware, web, or external-signer wallets.
 
-The committed Electrum smoke test explicitly says Electrum connectivity does not prove compatibility with those wallets.
+Read-only Electrum server reachability does not prove that any wallet can safely define the BC2 network, recognize its genesis/domain rules, display units correctly, build replay-protected transactions, or broadcast them successfully.
 
-## BlueWallet
+## Watch-only and Electrum-wallet limitations
 
-Status: **Unknown / Not established by committed evidence**
+Current evidence does not establish:
 
-MoreBC2 has no committed record showing that BlueWallet can define a BitcoinII/BC2 network, accept the observed BC2 Electrum infrastructure, recognize the BitcoinII genesis hash, parse BC2 addresses, display balances/history correctly, or avoid BTC-vs-BC2 labeling problems.
+- third-party address/scripthash history correctness;
+- xpub/watch-only import behavior;
+- fee display in third-party wallets;
+- ticker/network labeling safety;
+- third-party transaction construction/signing;
+- hardware-wallet signing;
+- replay-protection-aware external signing;
+- Electrum transaction broadcast.
 
-Do not recommend BlueWallet as BC2-compatible from current MoreBC2 evidence.
+## Safe wording
 
-## Cake Wallet
-
-Status: **Unknown / Not established by committed evidence**
-
-MoreBC2 has no committed record showing that Cake Wallet can define a BitcoinII/BC2 network, connect to the observed BC2 Electrum infrastructure for BC2, parse BC2 addresses/history, or display units safely.
-
-Do not recommend Cake Wallet as BC2-compatible from current MoreBC2 evidence.
-
-## Komodo Wallet
-
-Status: **Unknown / Not established by committed evidence**
-
-MoreBC2 has no committed record showing that Komodo Wallet can define a BitcoinII/BC2 network, connect to the observed BC2 Electrum infrastructure for BC2, parse BC2 addresses/history, or display units safely.
-
-Do not recommend Komodo Wallet as BC2-compatible from current MoreBC2 evidence.
-
-## Watch-only limitations
-
-The committed Electrum smoke test did not test:
-
-- wallet-history methods,
-- address-history methods,
-- public address watch-only setup,
-- xpub import,
-- fee display,
-- transaction construction,
-- transaction broadcast,
-- ticker or unit labeling.
-
-Watch-only compatibility remains **Unknown / Needs Testing**.
+> BitcoinII Core v31.1.0 has current MoreBC2 runtime coverage for a disposable wallet and complete isolated PSBT lifecycle. Third-party wallet and hardware/external-signer compatibility remain unverified.
 
 ## Verification
 
-**Status:** Draft / Unknown for third-party wallets  
-**Primary sources checked:** Existing wallet source-review docs and public API/Electrum smoke-test record linked above  
-**Notes:** This page summarizes current wallet compatibility boundaries. It does not recommend unsupported wallets.
+**Status:** Reviewed / Core wallet tested partial; third-party wallets unknown  
+**Primary sources checked:** 2026-09-11 v31.1.0 node/wallet and PSBT validation records, release-pinned replay-protection trace, and wallet source-review documentation  
+**Notes:** Current evidence supports BitcoinII Core wallet workflows under the documented test conditions only. It does not support recommending an untested third-party wallet.
