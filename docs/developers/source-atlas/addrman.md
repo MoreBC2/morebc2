@@ -1,251 +1,122 @@
 # Addrman
 
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-07-02
+**Category:** Developer / Source Atlas  
+**Status:** Reviewed / Source-confirmed structural  
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page covers a first-pass review of address manager behavior in:
+This page maps BitcoinII Core's address manager (`addrman`) using the current `v31.1.0` baseline.
 
-- `src/addrman.h`
-- `src/addrman.cpp`
-- `src/addrman_impl.h`
-- selected fixed-seed and DNS-seed caller context from `src/kernel/chainparams.cpp`, `src/chainparamsseeds.h`, and `src/net.cpp`
+Addrman stores and selects candidate peer addresses learned from seed paths, peer address relay, and successful connections. It uses randomized new/tried tables, quality weighting, collision handling, and serialized `peers.dat` state rather than a simple static peer list.
 
-This is a focused Source Atlas slice. It is not a complete review of every peer-discovery path, every lower-level network thread, every addrman test, or live network behavior.
+The old page also carried stale seed wording: current `v31.1.0` mainnet chain parameters explicitly list **`dnsseed.bitcoin-ii.org.`**. The older `bitcoinII.ddns.net.` value is historical and should not be presented as a current v31 DNS seed without new evidence.
 
-## Why this area matters
+## New and tried tables
 
-Addrman is the node's peer-address manager. It stores addresses learned from peers, seed paths, and successful connections, then selects candidate peers for future outbound connections.
+Reviewed structure separates addresses into:
 
-For MoreBC2, addrman matters because node and service documentation should not imply that DNS seeds, fixed seeds, address gossip, or peer selection are simple static lists. The source shows an address database with randomized bucketing, new/tried tables, quality checks, service-bit updates, collision handling, and disk serialization.
+- **new** — not yet proven reachable by this node;
+- **tried** — promoted after successful connection handling.
 
-## Design goals observed
+The source uses randomized bucket placement keyed by a per-addrman secret to make wholesale table capture harder. Selection remains probabilistic and quality-weighted rather than deterministic.
 
-The source comments describe addrman as a stochastic address manager.
+## Quality and selection
 
-Observed design goals include:
+Reviewed selection logic considers factors such as:
 
-- keeping address tables in memory
-- asynchronously dumping the table to `peers.dat`
-- making it harder for a localized attacker to fill the entire table
-- organizing addresses into buckets
-- using a random 256-bit key for bucket selection
-- supporting optional consistency checks through `-checkaddrman`
+- recent attempts;
+- last success;
+- failure count;
+- address age / invalid future timestamps;
+- network filters;
+- new/tried bucket state.
 
-## New and tried tables observed
+A stored or returned address is therefore not proof that a peer is currently online.
 
-The reviewed source separates peer addresses into two broad groups:
-
-- `new` entries: addresses that have not been successfully connected to by this node
-- `tried` entries: addresses known to be accessible from prior successful connection handling
-
-Observed bucket structure includes:
-
-- 1024 new buckets
-- 256 tried buckets
-- 64 entries per bucket
-- up to 8 new-bucket references per address
-- tried entries with multiplicity 1
-
-The source comments describe new buckets as based partly on the source address group and the target address group. Tried buckets are based on the target address group. Bucket placement uses hashing with the addrman key.
-
-## Address quality and selection observed
-
-Reviewed quality/selection behavior includes:
-
-- very recent attempts are not treated as terrible
-- timestamps too far in the future are terrible
-- very old addresses can be terrible
-- never-successful entries with repeated attempts can become terrible
-- entries with many failures after an old success can become terrible
-- recently attempted addresses get much lower selection chance
-- each failed attempt lowers selection chance, bounded so selection does not become impossible forever
-- selection can be limited to new entries or selected networks
-- selection chooses a new or tried bucket, then a position, then uses chance-based filtering
-
-This supports cautious docs: peer selection is probabilistic and quality-weighted, not deterministic.
-
-## Add path observed
-
-`AddrMan::Add()` attempts to add one or more addresses to the new table.
-
-Observed behavior includes:
-
-- unroutable addresses are rejected
-- self-announcement source records avoid the time penalty
-- existing entries can update timestamp and service bits
-- tried entries are not updated through the new-entry add path
-- existing new entries can gain more bucket references, up to the maximum reference count
-- additional references become harder as refcount increases
-- occupied bucket positions can be overwritten only in selected cases, such as terrible existing entries or existing entries with multiple references while the new candidate has none
-
-## Good path observed
-
-`AddrMan::Good()` marks an address as successfully reachable and can move it toward the tried table.
-
-Observed behavior includes:
-
-- last success and last try are updated
-- attempt count is reset
-- `nTime` is not updated in this path to avoid leaking information about currently connected peers
-- already-tried entries do not move again
-- new entries can move into a tried bucket
-- when the target tried slot is occupied, the candidate can be placed into a tried-collision set instead of evicting immediately
-
-This behavior is connected to feeler connections and collision resolution.
-
-## Attempt and connected paths observed
+## Add / success / collision handling
 
 Reviewed behavior includes:
 
-- `Attempt()` records a connection attempt time
-- counted failures can increment attempt count when appropriate
-- `Connected()` updates the address time with a 20-minute update interval
-- the `addrman.h` comments note that `net_processing` calls `Connected()` on disconnect rather than immediately on connect, to avoid leaking information about currently connected peers
+- rejecting unroutable addresses;
+- updating timestamp/service metadata under defined conditions;
+- allowing an address multiple references in new buckets up to limits;
+- promoting successful candidates toward tried state;
+- handling tried-slot collisions through a bounded collision set / feeler-style reachability process rather than immediate blind eviction.
 
-## Tried collision behavior observed
+## `GetAddr` boundary
 
-Reviewed collision behavior includes:
+Addrman can return randomized candidate addresses subject to count/percentage/network/quality filtering. That output should not be described as a verified live peer list.
 
-- a small set of tried collisions is stored
-- `SelectTriedCollision()` randomly selects an old tried entry associated with a collision for testing
-- `ResolveCollisions()` can remove stale collision candidates
-- recent successful old entries are protected from replacement
-- old entries recently attempted get a short window to prove reachability
-- if collision testing cannot resolve within a reasonable window, the new entry can replace the old tried entry
+## Serialization / `peers.dat`
 
-This supports cautious wording around feeler connections and tried-table maintenance.
+Addrman serializes compact state including versioning, key, new/tried entries, bucket relationships, and asmap-related context. Load-time checks can reject corrupt/inconsistent state or rebucket entries where format/asmap context changes.
 
-## GetAddr behavior observed
+`peers.dat` should therefore be described as serialized address-manager state, not a human-maintained list of known-good nodes.
 
-`GetAddr()` returns randomly selected addresses, optionally by network and quality filter.
+## Current seed context
 
-Observed behavior includes:
+For current `v31.1.0` mainnet:
 
-- maximum returned count can be limited by absolute count and percentage
-- returned addresses are selected from a randomized ordering
-- low-quality addresses can be skipped when filtering is enabled
-- network-specific filtering is available
+- DNS seed: `dnsseed.bitcoin-ii.org.`
+- fixed-seed data remains source-defined separately in `chainparamsseeds.h` / chain parameters.
 
-This does not prove any returned peer is currently online.
+The older `bitcoinII.ddns.net.` seed recorded in earlier MoreBC2 material is historical unless re-established by a current release or project-controlled source.
 
-## Serialization behavior observed
+Source presence does not prove a seed is reachable at a particular moment.
 
-Reviewed serialization behavior includes:
+## Runtime evidence — 2026-09-11
 
-- addrman serializes a compact structure rather than raw internal maps
-- serialized data includes format version, compatible version, key, new/tried counts, bucket count marker, new addresses, tried addresses, new bucket entries, and asmap checksum
-- current file format is `V4_MULTIPORT`
-- deserialization validates counts and compatible format ranges
-- entries can be re-bucketed if bucket count or asmap checksum changes
-- invalid or collision-lost entries can be dropped during load
-- a consistency check can reject corrupted data
+The isolated Windows `v31.1.0` mainnet node successfully discovered outbound peers without manual peer injection:
 
-This supports documenting `peers.dat` as addrman state, not as a simple peer list.
+- 4 outbound peers during the first bounded run;
+- 6 after restart.
 
-## Consistency checks observed
+That provides current-release runtime corroboration that ordinary discovery/address-selection paths can produce working connections in the documented environment.
 
-Reviewed behavior includes:
+It does **not** instrument which exact DNS/fixed/addrman source supplied each peer, prove every seed reachable, or qualify addrman collision/eviction behavior.
 
-- consistency checks are optional and controlled by a ratio
-- consistency checks verify map/vector counts, new/tried status, reference counts, tried bucket placement, new bucket placement, random positions, key presence, and per-network counts
-- a nonzero check failure can trigger assertion behavior
+## Relationship to connection management
 
-This should remain developer-facing unless tied to a tested troubleshooting procedure.
+Addrman feeds the lower-level outbound connection machinery; peer processing can also add/update addresses and mark successful connectivity.
 
-## Fixed-seed and DNS-seed context observed
+See [Net connection management](net-connection-management.md), [Address relay](net-processing-address-relay.md), and [Network RPC](rpc-network.md).
 
-Fixed-seed data is visible in:
+## Privacy / operator boundary
 
-- `src/chainparamsseeds.h`
-- `src/kernel/chainparams.cpp`
+Raw address-manager and peer outputs can expose network addresses. MoreBC2's runtime records intentionally avoid publishing identifiable peer lists.
 
-Observed fixed-seed context includes:
-
-- fixed seed arrays are autogenerated by `contrib/seeds/generate-seeds.py`
-- each fixed seed line contains a BIP155 serialized network/address/port tuple
-- mainnet `vFixedSeeds` is populated from `chainparams_seed_main`
-- the observed mainnet array contains three serialized entries
-
-Observed DNS-seed context from chain parameters includes:
-
-- `dnsseed.bitcoin-ii.org.`
-- `bitcoinII.ddns.net.`
-
-This page does not claim those seeds are currently reachable. Live reachability is an ecosystem/network check, not a source-only fact.
-
-## Relationship to lower-level connection management
-
-The lower-level connection-management page reviewed seed-node, DNS-seed, and address-fetch behavior in `src/net.cpp`.
-
-Addrman connects to that behavior because:
-
-- DNS/fixed/address-fetch paths can provide addresses
-- address gossip can add addresses
-- successful connection handling can update addrman state
-- outbound connection selection can use addrman entries
-- tried collisions can produce feeler-style test candidates
-
-This page does not fully review every caller or every network thread.
-
-## Boundaries
-
-This page does not claim:
-
-- that any stored address is currently reachable
-- that DNS seeds are currently reachable
-- that fixed seeds are currently reachable
-- that peer discovery has been live tested by MoreBC2
-- that release behavior exactly matches current `main`
-- that every addrman caller has been reviewed
-- that every addrman test has been reviewed
-- that BitcoinII differs from upstream Bitcoin Core here
-
-This is source-observed documentation for the reviewed addrman slice only.
-
-## Documentation implications
-
-MoreBC2 can use this page to support cautious explanations of:
-
-- why peer discovery is probabilistic
-- why `peers.dat` should not be described as a plain static peer list
-- why DNS seeds and fixed seeds should be described as source-observed seed mechanisms, not live availability claims
-- why returned addresses from `getaddr`-adjacent behavior are not guaranteed live peers
-- why peer selection can prefer quality and recent reachability without guaranteeing success
-- why addrman details should mostly stay developer/operator-facing
+Detailed addrman mutation/testing commands should remain developer/operator-only until a dedicated safe fixture exists.
 
 ## Related pages
 
-- [Net connection management](net-connection-management.md)
-- [Net processing address relay](net-processing-address-relay.md)
-- [Network specifications](../../documentation/network-specifications.md)
+- [Network RPC](rpc-network.md)
+- [Protocol primitives](protocol.md)
 - [Peer communication model](../../architecture/peer-communication-model.md)
-- [Node guide](../../nodes/node-guide.md)
+- [Network specifications](../../documentation/network-specifications.md)
+- [Windows v31 node/RPC validation](../../verification/windows-v31-node-rpc-validation-2026-09-11.md)
 
-## Open questions
+## Open work
 
-- Review `src/net.cpp` addrman caller paths more completely.
-- Review fixed-seed fallback behavior in more detail.
-- Review addrman test coverage.
-- Compare the `v31.1.0` addrman behavior with subsequent `main` changes.
-- Decide what, if anything, belongs in beginner node troubleshooting docs.
-- Run live DNS/fixed-seed reachability checks separately if needed.
+- Map current v31 addrman tests/caller paths if deeper operator guidance becomes useful.
+- Test corruption/recovery or raw addrman diagnostics only with disposable state.
+- Keep live seed reachability as a separate dated network check rather than a source claim.
 
-## Sources
+## Primary sources
 
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+Pinned/current review scope:
 
-- Current observed `main` `src/addrman.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/addrman.h
-- Current observed `main` `src/addrman.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/addrman.cpp
-- Current observed `main` `src/addrman_impl.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/addrman_impl.h
-- Current observed `main` `src/chainparamsseeds.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/chainparamsseeds.h
-- Current observed `main` `src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/chainparams.cpp
-- Current observed `main` `src/net.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/net.cpp
+- `v31.1.0/src/addrman.h`
+- `v31.1.0/src/addrman.cpp`
+- `v31.1.0/src/addrman_impl.h`
+- `v31.1.0/src/chainparamsseeds.h`
+- `v31.1.0/src/kernel/chainparams.cpp`
+- `v31.1.0/src/net.cpp`
+
+Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This is a first-pass focused review of addrman and selected seed context. Runtime tests, release comparison, live seed reachability, full caller review, fixed-seed fallback details, and addrman test coverage remain open.
+**Status:** Reviewed / Source-confirmed structural  
+**Primary evidence:** BitcoinII Core `v31.1.0` addrman/seed source plus bounded September 11 automatic outbound-peer runtime evidence  
+**Notes:** Addrman structure and current DNS-seed wording are synchronized. Exact peer-source attribution, seed reachability, collision behavior, and raw addrman mutation remain untested.
