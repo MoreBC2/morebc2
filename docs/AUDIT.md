@@ -51,6 +51,19 @@ The principal reader-facing sections were reviewed against the same current evid
 
 A section may remain **Reviewed / Partial** after audit because real evidence gaps remain. That status is preferable to overstating certainty.
 
+## Tail-section and maintenance closure — 2026-09-12
+
+After the major technical-section passes, the remaining tail was reviewed as one maintenance sweep:
+
+- History was updated with current Core release/genesis chronology while preserving legacy repository history;
+- Discussion and News were converted from untouched June drafts into reviewed evidence/placement frameworks;
+- Verification router, evidence index, known-unknown queue, open-question queue, and command-testing matrix were synchronized to the current v31 runtime/source evidence;
+- the documentation root index and coverage dashboard were synchronized to the completed audit sequence;
+- obsolete pre-launch site-planning files were explicitly archived rather than left presenting a future website that already exists;
+- the repository audit, ongoing review handoff, and legal/reuse posture were rewritten for the actual public/deployed project state.
+
+Historical dated evidence records and rights/provenance audits were intentionally not rewritten merely to make them look newer.
+
 ## Current v31 technical posture
 
 Current source-backed documentation includes:
