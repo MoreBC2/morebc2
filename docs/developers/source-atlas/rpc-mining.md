@@ -1,57 +1,20 @@
 # Mining RPC
 
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-06-30
+**Category:** Developer / Source Atlas  
+**Status:** Source-reviewed / Runtime-tested partial  
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page covers a first-pass review of:
+This page maps BitcoinII Core `v31.1.0` mining-related JSON-RPC behavior centered on `src/rpc/mining.cpp` and the block-template path.
 
-- `src/rpc/mining.cpp`
+The important BitcoinII-specific v31 boundary is **ShockWave**: candidate header time can affect required work after mainnet height `57750`, so block-template code must derive `nBits` from the actual candidate header rather than assume difficulty is fixed between 2016-block boundaries.
 
-This file connects mining-related RPC commands to chain state, mempool state, block-template creation, block submission, and mining status output.
+MoreBC2 now has one bounded mining-RPC runtime result: `generatetoaddress` was exercised successfully on an isolated zero-peer `v31.1.0` regtest node during the September PSBT test. Public mining, `getblocktemplate`, network-hash estimation, and block/header submission remain source-reviewed rather than release-specific runtime-tested.
 
-This is not a user-facing mining setup guide. Commands and examples should not be marked tested until they are run against BitcoinII Core.
+## Registered mining RPC surface
 
-## Why this file matters
-
-The block-template source review explains how candidate blocks are assembled internally.
-
-`src/rpc/mining.cpp` shows how that machinery is exposed through RPC commands such as:
-
-- `getnetworkhashps`
-- `getmininginfo`
-- `getblocktemplate`
-- `submitblock`
-- `submitheader`
-- `prioritisetransaction`
-- `getprioritisedtransactions`
-- hidden generation helpers used mostly for testing or controlled local generation paths
-
-## Key symbols reviewed
-
-- `GetNetworkHashPS`
-- `getnetworkhashps`
-- `GenerateBlock`
-- `generateBlocks`
-- `getScriptFromDescriptor`
-- `generatetodescriptor`
-- `generatetoaddress`
-- `generateblock`
-- `getmininginfo`
-- `prioritisetransaction`
-- `getprioritisedtransactions`
-- `BIP22ValidationResult`
-- `getblocktemplate`
-- `submitblock_StateCatcher`
-- `submitblock`
-- `submitheader`
-- `RegisterMiningRPCCommands`
-
-## Registered commands
-
-Reviewed command registration places these commands in the `mining` RPC category:
+Release-pinned source review identifies these public mining-category commands:
 
 - `getnetworkhashps`
 - `getmininginfo`
@@ -61,205 +24,160 @@ Reviewed command registration places these commands in the `mining` RPC category
 - `submitblock`
 - `submitheader`
 
-Reviewed hidden commands include:
+Local/test generation helpers include:
 
 - `generatetoaddress`
 - `generatetodescriptor`
 - `generateblock`
-- `generate`
 
-The hidden `generate` RPC is replaced by the `-generate` CLI option and throws method-not-found behavior.
+The legacy hidden `generate` method is not a normal public mining workflow.
 
-## Network hash estimate
+## `getnetworkhashps`
 
-`GetNetworkHashPS` estimates network hash rate from chain work over time.
-
-Reviewed behavior includes:
-
-- Validating lookup and height parameters.
-- Supporting `lookup = -1` to estimate since the last difficulty change.
-- Clamping lookup length to available chain height.
-- Calculating work difference between two block indexes.
-- Dividing by observed time difference.
-- Returning zero when there is not enough usable time span.
-
-## Local block generation helpers
-
-`GenerateBlock` updates the merkle root, increments nonce until proof-of-work succeeds or limits are reached, and can submit the found block through `ProcessNewBlock`.
-
-`generateBlocks` repeatedly calls the mining interface to create new block templates, runs `GenerateBlock`, submits successful blocks, and returns generated block hashes.
-
-`generatetoaddress` and `generatetodescriptor` use those paths after converting an address or descriptor into a coinbase output script.
-
-These commands are useful for controlled local/test generation paths. They should not be presented as proof of practical public mining setup.
-
-## generateblock
-
-`generateblock` creates a block with a caller-supplied ordered transaction list.
+`GetNetworkHashPS` estimates network hashrate from accumulated chain work over observed time.
 
 Reviewed behavior includes:
 
-- Accepting an address or descriptor output.
-- Accepting transactions as raw hex or mempool transaction IDs.
-- Requiring transaction IDs to exist in the mempool.
-- Creating a template with mempool usage disabled.
-- Adding caller-supplied transactions after the coinbase transaction.
-- Regenerating coinbase commitments after transaction changes.
-- Running `TestBlockValidity` without proof-of-work or merkle-root checks before searching for proof-of-work.
-- Returning block hash and optionally block hex when not submitted.
+- validating lookup/height inputs;
+- supporting historical lookup windows;
+- clamping the requested range to available chain history;
+- comparing chain work between block indexes;
+- dividing work difference by elapsed time;
+- returning zero where a usable time span cannot be established.
 
-## getmininginfo
+This is an estimate derived from chain history. It is not a direct measurement of every miner connected to the network.
 
-`getmininginfo` returns mining-related chain and mempool state.
+MoreBC2 has not yet executed `getnetworkhashps` against its September `v31.1.0` runtime environment.
 
-Reviewed result fields include:
+## `getmininginfo`
 
-- Current height.
-- Last assembled block weight and transaction count when available.
-- Current `nBits`.
-- Current difficulty.
-- Current target.
-- Estimated network hash rate.
-- Mempool transaction count.
-- Chain name.
-- Next-block height, bits, difficulty, and target.
-- Signet challenge when applicable.
-- Warnings.
+Current source exposes mining and next-block context including chain height, difficulty/target information, network-hash estimate, mempool state, chain name, warnings, and next-block work context.
 
-## Transaction prioritization RPCs
+Under current BC2, next-block difficulty must reflect ShockWave rather than the old assumption that the tip's `nBits` can simply be reused between long retarget boundaries.
 
-`prioritisetransaction` applies a fee delta for transaction selection into future candidate blocks.
+MoreBC2 has not yet executed `getmininginfo` in a dated `v31.1.0` mining-RPC smoke test.
+
+## `getblocktemplate`
+
+`getblocktemplate` is the main Core-side block-template interface.
 
 Reviewed behavior includes:
 
-- Accepting a transaction ID.
-- Requiring the deprecated dummy argument to be zero or omitted.
-- Accepting positive or negative fee deltas in satoshis.
-- Rejecting prioritization for certain dust-output transactions under standardness rules.
-- Applying the delta through mempool prioritization state.
+- normal template mode and proposal mode;
+- required client rule handling such as `segwit`;
+- non-test-chain peer/sync checks before serving normal templates;
+- long-poll support;
+- cached template construction through the mining interface;
+- candidate-time refresh before response construction;
+- BIP22/BIP23-style response fields such as version, previous block hash, transactions, coinbase value, target, current time, `bits`, height, limits, and witness commitment where applicable.
 
-`getprioritisedtransactions` reports current user-created fee deltas by transaction ID, whether the transaction is in the mempool, and modified fee when available.
+### v31 candidate-time / `nBits` rule
 
-## getblocktemplate
+BitcoinII Core `v31.1.0` mining/template code recalculates required work through `GetNextWorkRequired()` when candidate time changes.
 
-`getblocktemplate` is the main reviewed RPC connection to block-template creation.
+That matters because ShockWave's post-activation calculation includes timestamp-aware behavior and emergency stall recovery. A miner, pool, proxy, or template implementation that updates `nTime` while retaining stale `nBits` can construct an invalid candidate.
 
-Reviewed behavior includes:
+Bitcoin-style GBT support by itself therefore does not establish BC2 mining compatibility.
 
-- Supporting template and proposal modes.
-- Requiring client rule support such as `segwit` for normal template mode.
-- Requiring `signet` on signet chains.
-- Rejecting unsupported modes.
-- Checking non-test chains for peer connection and initial sync status before serving templates.
-- Supporting long polling through `longpollid`.
-- Creating or refreshing a cached block template through the mining interface.
-- Updating time and resetting nonce before response construction.
-- Returning BIP22/BIP23-style template fields.
-
-Reviewed template response fields include:
-
-- `version`
-- `rules`
-- `vbavailable`
-- `vbrequired`
-- `previousblockhash`
-- non-coinbase `transactions`
-- `coinbaseaux`
-- `coinbasevalue`
-- `longpollid`
-- `target`
-- `mintime`
-- `mutable`
-- `noncerange`
-- `sigoplimit`
-- `sizelimit`
-- optional `weightlimit`
-- `curtime`
-- `bits`
-- `height`
-- optional `signet_challenge`
-- optional `default_witness_commitment`
+MoreBC2 has not yet run a controlled `getblocktemplate` vector demonstrating `nTime`/`nBits` changes across normal and stall-recovery candidate times.
 
 ## Proposal mode
 
-In proposal mode, `getblocktemplate` accepts proposed block data and checks it without attempting to mine or submit it.
+In proposal mode, reviewed source decodes proposed block data and checks it without treating the request as a normal mining/submission path.
 
-Reviewed behavior includes:
+The path can report duplicate/inconclusive states and invokes block-validity checks appropriate to proposal handling. Exact validation semantics remain defined by the release-pinned source.
 
-- Decoding block hex.
-- Returning duplicate states for already-known blocks.
-- Returning inconclusive status if the block is not built on the current tip.
-- Running `TestBlockValidity` without proof-of-work but with merkle-root checking.
-- Mapping validation results through `BIP22ValidationResult`.
+## Block and header submission
 
-## submitblock
+### `submitblock`
 
-`submitblock` decodes a hex block and submits it to validation.
+Reviewed source decodes a supplied block, updates required block structures where possible, and routes it through BitcoinII validation/`ProcessNewBlock`, returning BIP22-style or duplicate/inconclusive results as appropriate.
 
-Reviewed behavior includes:
+### `submitheader`
 
-- Decoding the supplied block hex.
-- Updating uncommitted block structures when the previous block index is known.
-- Registering a temporary validation event listener to capture `BlockChecked` result for the submitted block.
-- Calling `ProcessNewBlock` with force processing and minimum-proof-of-work checked.
-- Returning duplicate, inconclusive, null, or BIP22-style validation results depending on outcome.
+Reviewed source decodes a header, requires its previous header to be known, and routes it through new-header processing with proof-of-work checks.
 
-## submitheader
+Neither command has a current MoreBC2 `v31.1.0` submission test. They should remain advanced/operator-only examples until a dedicated isolated workflow is recorded.
 
-`submitheader` decodes a hex block header and submits it as a candidate chain tip.
+## Local generation helpers
 
-Reviewed behavior includes:
+The source-defined local generation helpers create templates and search for proof of work in controlled/local contexts.
 
-- Decoding the block header.
-- Requiring the previous header to already be known.
-- Calling `ProcessNewBlockHeaders` with minimum-proof-of-work checked.
-- Returning null on success or throwing RPC errors on invalid/error states.
+### Runtime evidence — 2026-09-11
 
-## Amount units note
+During the isolated Windows `v31.1.0` regtest PSBT validation, MoreBC2 successfully used `generatetoaddress` with a fresh disposable descriptor wallet to generate regtest funds.
 
-The reviewed file includes a note that mining RPCs follow GBT/BIP22 in using satoshi amounts, unlike wallet RPCs that use BC2 values.
+That establishes the command worked in the documented zero-peer regtest environment. It does **not** establish practical public-mainnet mining performance, pool compatibility, or public block submission.
 
-This matters for exchange/service docs and examples.
+See [Windows v31.1.0 PSBT and replay-protection validation](../../verification/windows-v31-psbt-replay-validation-2026-09-11.md).
 
-## Relationship to other pages
+## Transaction prioritization
 
-Related pages:
+`prioritisetransaction` applies a user-specified fee delta to local mempool transaction-selection state. `getprioritisedtransactions` exposes such deltas and related local state.
 
-- [Source atlas: block template assembly](miner.md)
+These are node-local policy/template controls, not BitcoinII consensus changes. MoreBC2 has not runtime-tested them on v31.
+
+## Core RPC versus pool Stratum
+
+BitcoinII Core mining RPC and pool Stratum are separate interfaces.
+
+Current pool pages publish BC2 Stratum endpoints for services such as 1Miner.Net and CapsPool, but MoreBC2 has not yet performed a current BC2 Stratum subscribe/authorize/share-submission qualification against those endpoints.
+
+A published pool hostname/port therefore does not prove:
+
+- successful Stratum handshake;
+- accepted shares;
+- correct share difficulty;
+- valid current block-template handling;
+- correct block attribution;
+- payout correctness.
+
+See [Mining overview](../../mining/mining-overview.md) and [Ecosystem mining pools](../../ecosystem/mining-pools.md).
+
+## Amount-unit note
+
+Mining/template protocols can express some values in atomic units rather than formatted BC2 amounts. Integrators should follow the exact RPC/template field semantics instead of assuming wallet-RPC amount formatting applies everywhere.
+
+## Current runtime matrix
+
+| Method/path | Current MoreBC2 evidence |
+|---|---|
+| `generatetoaddress` | Runtime-tested on isolated zero-peer `v31.1.0` regtest |
+| `getmininginfo` | Source-reviewed; current v31 runtime test still needed |
+| `getnetworkhashps` | Source-reviewed; current v31 runtime test still needed |
+| `getblocktemplate` | Source-reviewed, including ShockWave candidate-time coupling; runtime vector still needed |
+| `prioritisetransaction` / `getprioritisedtransactions` | Source-reviewed only |
+| `submitblock` | Source-reviewed; no current safe submission test |
+| `submitheader` | Source-reviewed; no current safe submission test |
+| Public pool Stratum | Published configuration observed; no MoreBC2 share test |
+
+## Related pages
+
+- [Block-template assembly](miner.md)
+- [ShockWave v31](shockwave-v31.md)
+- [pow.cpp](pow-cpp.md)
 - [Mining overview](../../mining/mining-overview.md)
-- [RPC overview](../rpc-overview.md)
-- [Mempool flow](../../architecture/mempool-flow.md)
-- [Life of a block](../../architecture/life-of-a-block.md)
-- [Source atlas: validation interface](validation-interface.md)
+- [v31 wallet/mempool/mining regression audit](../../verification/v31-wallet-mempool-mining-regression-2026-09-02.md)
+- [Windows v31 PSBT runtime record](../../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
+- [Command testing status](../../verification/command-testing.md)
 
-## BitcoinII-specific notes
+## Primary sources
 
-This first-pass review saw BitcoinII naming and command examples using BitcoinII terminology.
+Pinned to BitcoinII Core `v31.1.0`:
 
-No upstream comparison has been completed, so this page does not claim whether mining RPC behavior differs from upstream Bitcoin Core beyond naming and visible strings.
+- `src/rpc/mining.cpp`
+- `src/node/miner.cpp`
+- `src/node/miner.h`
+- `src/node/mini_miner.cpp`
+- `src/node/mini_miner.h`
+- `src/pow.cpp`
+- `src/rpc/server_util.cpp`
+- `src/validation.cpp`
 
-## Open questions
-
-- Which examples can be safely tested against BitcoinII Core and documented as verified?
-- Which RPCs should be recommended for exchanges or services, and which should remain developer-only?
-- Does BitcoinII differ from upstream Bitcoin Core in any mining RPC behavior beyond naming?
-- Which public mining software or pool tooling actually uses `getblocktemplate` for BitcoinII today?
-- How should satoshi-vs-BC2 amount units be highlighted in service integration docs?
-- Should hidden generation RPCs be documented only in developer/testing sections?
-- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for this file before upgrading status.
-
-## Sources
-
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
-
-- Current observed `main` `src/rpc/mining.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/mining.cpp
-- Current observed `main` `src/node/miner.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/miner.h
-- Current observed `main` `src/node/miner.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/miner.cpp
-- Current observed `main` `src/validationinterface.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validationinterface.h
-- Current observed `main` `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.cpp
+Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This is a first-pass mining RPC review. Commands have not been run; examples, exact operator guidance, upstream comparison, service integration recommendations, and release-versus-main comparison remain open.
+**Status:** Source-reviewed / Runtime-tested partial  
+**Primary evidence:** BitcoinII Core `v31.1.0`, September 2 mining regression source review, September 11 isolated regtest runtime record, September 12 mining/pool audit  
+**Notes:** The page is current for the v31 ShockWave/template boundary. `generatetoaddress` has bounded runtime evidence; GBT, mining-status/hashrate, prioritization, block/header submission, and public Stratum remain separately unverified at runtime.
