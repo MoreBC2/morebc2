@@ -78,13 +78,13 @@ Useful project-reference pages include:
 
 Use public GitHub issues for ordinary, non-sensitive documentation problems. Do not publish secrets, exploit details, personal information, private keys, seed phrases, or other sensitive security information in an issue.
 
-See [SECURITY.md](SECURITY.md) for scope, the upstream boundary, and the verified private-reporting route.
+See [SECURITY.md](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md) for scope, the upstream boundary, and the verified private-reporting route.
 
 ## Licensing
 
 Original MoreBC2 documentation is licensed under CC BY 4.0. Original MoreBC2 software, site tooling, configuration, tests, and rights-cleared project assets are licensed under MIT. Third-party material remains under its own terms.
 
-See [LICENSE](LICENSE), [NOTICE](NOTICE), and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+See [LICENSE](LICENSE), [NOTICE](NOTICE), and [THIRD_PARTY_NOTICES.md](https://github.com/MoreBC2/morebc2/blob/main/THIRD_PARTY_NOTICES.md).
 
 ## Site and tooling validation
 
