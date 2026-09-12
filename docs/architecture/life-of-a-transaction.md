@@ -1,178 +1,160 @@
 # Life of a transaction
 
 **Category:** Architecture
-**Status:** Draft
-**Last reviewed:** 2026-07-02
+**Status:** Reviewed / Partial
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page explains the reviewed BitcoinII transaction lifecycle at a high level.
+This page explains the BitcoinII transaction lifecycle at a high level: construction, signing, optional dry-run acceptance, mempool admission, relay, mining, confirmation, and possible later reorg effects.
 
-It is an explainer page, not a complete source audit. Technical claims should remain tied to reviewed source-atlas pages.
+The current release baseline is BitcoinII Core `v31.1.0`.
 
 ## Simplified lifecycle
 
 ```text
 Wallet / caller
-  -> creates or prepares transaction
-  -> optional dry-run acceptance check
-  -> broadcasts transaction
-  -> mempool acceptance
+  -> creates or funds transaction
+  -> signs under the correct BC2 signature domain
+  -> optional testmempoolaccept dry run
+  -> sendrawtransaction / wallet send path
+  -> local mempool acceptance
   -> local mempool storage
-  -> relay to peers
-  -> candidate block assembler selects transaction
-  -> transaction appears in a block
-  -> block is accepted and connected
+  -> peer relay, if enabled and policy permits
+  -> candidate block selection
+  -> block validation and connection
   -> transaction becomes confirmed
-  -> later confirmations build on top
+  -> later active-chain blocks increase confirmation depth
+  -> reorg can later reduce or remove those confirmations
 ```
 
-## Step 1: Transaction creation
+## Step 1: Transaction construction
 
-A wallet or external caller creates a transaction that spends one or more previous outputs and creates new outputs.
+A wallet or external caller creates a transaction that spends previous outputs and creates new outputs.
 
-Reviewed paths now include:
+Reviewed construction paths include:
 
-- Wallet spend and PSBT RPCs for wallet-backed construction, funding, signing, and sending.
-- Raw transaction RPCs for non-wallet transaction creation, decoding, explicit-key signing, and PSBT workflows.
+- wallet-backed funding/signing through wallet RPC;
+- raw-transaction construction and decoding;
+- PSBT creation, update, signing, finalization, and extraction.
 
-MoreBC2 has reviewed major wallet and raw transaction RPC surfaces, but lower-level wallet internals and GUI transaction construction still need deeper source review.
+Bitcoin-like transaction structure does not by itself guarantee compatibility with current BC2 signing rules.
 
-## Step 2: Optional dry-run acceptance check
+## Step 2: BC2 signing domain
 
-Reviewed mempool RPC behavior includes `testmempoolaccept`, which tests whether one or more raw transactions would be accepted by local mempool rules without submitting them.
+Mainnet replay protection activates at height `57750` with fork/domain id `0x01324342`.
 
-This is useful for future service documentation, but examples remain untested.
+The domain participates in signature-hash calculation; it is not a normal transaction field and does not change the basic address encoding.
 
-Important distinction:
+Current v31 source review establishes that wallet, raw-transaction, PSBT, mempool, and block-validation paths all obtain the height-appropriate domain.
 
-- `testmempoolaccept` is a dry-run acceptance check.
-- `sendrawtransaction` is a live broadcast path.
+This creates an important integration boundary: a third-party library can parse BC2 transactions or PSBTs correctly yet still produce invalid signatures if it uses ordinary Bitcoin digest semantics after activation.
 
-## Step 3: Broadcast path
+## Step 3: Optional dry-run acceptance
 
-The reviewed `node::BroadcastTransaction` path can be called by RPC or wallet code.
+`testmempoolaccept` checks whether one or more signed raw transactions would pass the local node's current mempool and consensus checks without adding them to the mempool.
 
-Reviewed behavior includes:
+The September 11 isolated regtest test directly exercised `testmempoolaccept` on the finalized disposable transaction and received `allowed = true`.
 
-- Checking whether the transaction is already confirmed in the active chain.
-- Checking whether a transaction with the same txid is already in the mempool.
-- Optionally running test acceptance first when a maximum transaction fee is specified.
-- Calling `ProcessTransaction` for mempool submission.
-- Adding the transaction to the unbroadcast set when relay is requested.
-- Optionally waiting for validation-interface callbacks.
-- Relaying the transaction through peer manager when relay is requested.
+That is a real v31 runtime result under the documented isolated regtest conditions.
 
-Reviewed mempool RPC behavior also covers `sendrawtransaction`, package submission, and mempool inspection commands.
+## Step 4: Local submission
 
-## Step 4: Mempool acceptance
+`sendrawtransaction` submits a signed transaction to the local node's transaction-acceptance path and, when ordinary networking/relay is available, can then lead to peer relay.
 
-Mempool acceptance is handled through the reviewed `MemPoolAccept` path.
+In the September 11 disposable test, `sendrawtransaction` was called only against a zero-peer loopback regtest node. The transaction entered the **local** mempool successfully.
 
-A simplified single-transaction acceptance path is:
+That proves local submission in the isolated environment. It does **not** prove public-network broadcast or propagation.
+
+## Step 5: Mempool acceptance
+
+A simplified single-transaction acceptance path remains:
 
 ```text
 AcceptSingleTransaction
   -> PreChecks
-  -> ReplacementChecks, if conflicts are being replaced
+  -> ReplacementChecks, when relevant
   -> PolicyScriptChecks
   -> ConsensusScriptChecks
   -> Finalize
   -> TransactionAddedToMempool notification
 ```
 
-Important distinction:
+Current v31 behavior adds an important rule: mempool signature validation uses the replay-protection domain for the **next block height**. This protects the activation boundary before a transaction is mined.
 
-- Consensus rules decide whether a transaction is valid in a block.
-- Mempool policy decides whether a node will keep and relay it before it is mined.
+## Step 6: Mempool storage
 
-A transaction may be consensus-valid but still rejected from the mempool for policy reasons.
+Accepted transactions are stored in `CTxMemPool`, which tracks identifiers, dependency relationships, fees, lock points, timing, memory use, and other metadata used by relay, mining, inspection, replacement, and eviction logic.
 
-## Step 5: Mempool storage
+The September 11 regtest submission produced a real local mempool entry for the disposable transaction.
 
-If accepted, the transaction is stored in `CTxMemPool`.
+## Step 7: Relay
 
-The mempool tracks:
+If relay is enabled and policy conditions are met, accepted transactions can be announced/requested through peer-manager transaction-relay paths.
 
-- Transaction ID and witness transaction ID indexes.
-- Direct parents and children.
-- Ancestor and descendant accounting.
-- Entry time.
-- Modified fees.
-- Lock points.
-- Sigop cost.
-- Memory usage.
-- Unbroadcast state where applicable.
+Local acceptance is not the same as network propagation. Propagation depends on peers, policy, connectivity, and remote-node behavior.
 
-These structures let the node relay, sort, evict, inspect, and later remove transactions efficiently.
+Current MoreBC2 public-infrastructure testing also has **not** established a valid public transaction-broadcast endpoint. Malformed-transaction rejection from public REST routes proves route handling, not successful valid broadcast.
 
-Reviewed RPC commands expose parts of this state through `getrawmempool`, `getmempoolentry`, `getmempoolancestors`, `getmempooldescendants`, `gettxspendingprevout`, and `getmempoolinfo`.
+## Step 8: Mining and block inclusion
 
-## Step 6: Relay
+Candidate block assembly selects from mempool transactions using package/fee/dependency logic.
 
-The reviewed broadcast path relays through peer manager when relay is requested.
+Under v31, candidate time can affect required block work through ShockWave, but that mining rule is separate from whether an individual transaction is otherwise valid and selectable.
 
-The first-pass P2P transaction relay source slice now documents:
+## Step 9: Block connection and confirmation
 
-- transaction relay setup from handshake
-- transaction inventory announcements
-- txid versus wtxid relay behavior
-- transaction relay being skipped during initial block download
-- full `tx` message handling
-- interaction with the transaction download manager
-- valid and invalid transaction post-processing
-- orphan transaction reconsideration
-- related `mempool`, bloom filter, `feefilter`, and `notfound` behavior
+Once a containing block becomes part of the active best-work chain, the transaction is confirmed.
 
-This still does not mean network propagation is guaranteed. Relay behavior remains policy-bound, peer-dependent, and not locally tested by MoreBC2.
+During block connection:
 
-## Step 7: Mining and block inclusion
+- referenced UTXOs are checked;
+- signatures/scripts are verified in the block's consensus context;
+- fees and sequence/finality rules are applied;
+- outputs are added and spent inputs removed from the UTXO set.
 
-A candidate block assembler may select transactions from the mempool for inclusion in a candidate block.
+Additional active-chain blocks increase confirmation depth.
 
-MoreBC2 has reviewed first-pass candidate-template assembly and mining RPC paths. The reviewed template path uses mempool package selection and fee/ancestor/descendant data, but external mining software and live pool behavior remain separate ecosystem questions.
+## Step 10: Reorganization
 
-## Step 8: Block acceptance
+A later valid branch with greater accumulated work can disconnect the block containing the transaction.
 
-Once a transaction appears in a block, the block follows the reviewed block lifecycle:
+The transaction may then:
 
-```text
-ProcessNewBlock
-  -> AcceptBlockHeader
-  -> AcceptBlock
-  -> ReceivedBlockTransactions
-  -> ActivateBestChain
-  -> ConnectBlock
-```
+- become unconfirmed;
+- return to the mempool if still valid and policy-acceptable;
+- confirm again on the replacement branch;
+- disappear if it conflicts with the new chain or no longer passes current rules.
 
-During `ConnectBlock`, transaction inputs are checked against the UTXO set, input verification checks run when required, fees are accumulated, and the coinbase payout is checked against fees plus subsidy.
+A finite confirmation count is therefore an operational risk measure, not absolute finality.
 
-## Step 9: Confirmation
+## Current runtime evidence
 
-When the block containing the transaction becomes part of the active best chain, the transaction becomes confirmed.
+The September 11 isolated v31.1.0 regtest test directly exercised:
 
-Additional blocks built on top of that block increase the transaction's confirmation depth.
+- disposable descriptor-wallet creation;
+- local mining for disposable funds;
+- `getbalances`;
+- `walletcreatefundedpsbt`;
+- `decodepsbt`;
+- `walletprocesspsbt`;
+- `finalizepsbt`;
+- `decoderawtransaction`;
+- `testmempoolaccept`;
+- local-only `sendrawtransaction`;
+- `getmempoolentry` / mempool inspection.
 
-Wallet transaction-history RPCs such as `listsinceblock` and `gettransaction` can surface confirmation and reorg-related wallet history, but service examples still need local testing.
+The transaction spent one disposable 50 BC2 regtest coinbase output, sent 1 BC2 to a new disposable destination, returned `48.99999859` BC2 as change, and paid `0.00000141` BC2 in fees.
 
-## Step 10: Reorg behavior
+The test did not use any existing user wallet, did not have peers, and did not broadcast to a public BitcoinII network.
 
-During a reorganization, a confirmed transaction can become unconfirmed again if its block is disconnected from the active chain.
+## What remains open
 
-Reviewed reorg behavior includes:
-
-- Transactions from disconnected blocks can be held in `DisconnectedBlockTransactions`.
-- Eligible non-coinbase transactions can be reconsidered for mempool re-addition.
-- Transactions confirmed again in the new branch are removed from the disconnected pool.
-- Transactions that are invalid, non-final, or spending immature coinbase outputs after the reorg can be removed.
-
-## What is not fully reviewed yet
-
-- Lower-level wallet transaction construction internals.
-- Transaction request scheduling and send-loop behavior.
-- Fee estimation.
-- Replacement policy in full detail.
-- Tested service-safe examples for transaction lookup, dry-run checks, and broadcast.
+- Controlled mainnet/testnet replay-domain transaction vectors.
+- Third-party wallet and hardware/external-signer compatibility.
+- Public-network broadcast and propagation testing.
+- Fee-estimation behavior and replacement-policy edge cases.
+- Cross-wallet recovery/import compatibility.
 
 ## Related pages
 
@@ -180,18 +162,14 @@ Reviewed reorg behavior includes:
 - [Block validation flow](block-validation-flow.md)
 - [Life of a block](life-of-a-block.md)
 - [Life of a reorganization](life-of-a-reorg.md)
-- [Source atlas: wallet spend and PSBT RPC](../developers/source-atlas/wallet-spend-rpc.md)
-- [Source atlas: wallet transaction history RPC](../developers/source-atlas/wallet-transactions-rpc.md)
-- [Source atlas: raw transaction RPC](../developers/source-atlas/rpc-rawtransaction.md)
-- [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
-- [Source atlas: mempool accept](../developers/source-atlas/mempool-accept.md)
-- [Source atlas: txmempool](../developers/source-atlas/txmempool.md)
-- [Source atlas: net processing transaction relay](../developers/source-atlas/net-processing-transaction-relay.md)
-- [Source atlas: block template assembly](../developers/source-atlas/miner.md)
-- [Source atlas: block lifecycle](../developers/source-atlas/block-acceptance.md)
+- [Replay protection v31](../developers/source-atlas/replay-protection-v31.md)
+- [Wallet spend and PSBT RPC](../developers/source-atlas/wallet-spend-rpc.md)
+- [Raw transaction RPC](../developers/source-atlas/rpc-rawtransaction.md)
+- [Mempool acceptance](../developers/source-atlas/mempool-accept.md)
+- [Windows v31.1.0 PSBT and replay validation](../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This explainer is built from reviewed wallet RPC, raw transaction RPC, mempool RPC, mempool acceptance, transaction acceptance, P2P transaction relay, block-template, block acceptance, and reorg notes. Lower-level wallet internals, transaction send-loop behavior, fee estimation, and tested service examples still need deeper review.
+**Status:** Reviewed / Partial  
+**Primary sources checked:** Current v31 wallet/PSBT/raw-RPC/mempool/validation source reviews plus the September 11 isolated PSBT and local-mempool runtime record  
+**Notes:** The ordinary v31 transaction lifecycle has meaningful local runtime coverage. Mainnet replay-domain activation, third-party signing, public broadcast, and propagation remain unverified.
