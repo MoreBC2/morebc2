@@ -1,272 +1,480 @@
-# Tested Windows node guide
+# Tested Windows v31 node guide
 
 **Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-08-28
+**Status:** Reviewed / Partial
+**Last reviewed:** 2026-09-12
 
 ## Scope
 
-This is one narrow, locally tested route for running the BitcoinII Core `v29.1.0` command-line node on 64-bit Windows. It uses:
+This is a bounded, evidence-backed route for running BitcoinII Core `v31.1.0` on 64-bit Windows using the Windows Qt release in server mode.
 
-- the Windows x86_64 CLI archive;
-- a dedicated data directory;
-- wallet functionality disabled;
-- outbound-only peer-to-peer networking;
-- cookie-authenticated RPC bound only to loopback;
-- safe read-only status calls;
-- the supported RPC shutdown path.
+It is based on the September 11 MoreBC2 validation that used:
 
-The test reached advancing initial block synchronization and then completed a clean shutdown and restart. It did not wait for full synchronization. This is not a wallet, transaction, mining, inbound-node, firewall, or public-RPC guide.
+- a fresh disposable data directory;
+- BitcoinII Core `v31.1.0` Windows Qt;
+- mainnet;
+- loopback-only JSON-RPC;
+- random-cookie authentication;
+- ordinary outbound peer discovery;
+- default pruning and optional-index settings;
+- one newly created disposable wallet;
+- clean shutdown and restart.
 
-**Peer-discovery evidence:** on 2026-08-27, one fresh isolated Windows `v29.1.0` node did not automatically obtain persistent peers. The synchronization progress reported below required three redacted one-shot peer addresses borrowed from a separate local node. Those addresses were test scaffolding and are not published or recommended.
+The test intentionally ended before initial block download completed.
 
-On 2026-08-28, [two additional fresh isolated Windows nodes](../verification/windows-peer-discovery-test-2026-08-28.md) successfully bootstrapped through the two configured DNS seeds without borrowed or manual peers. Independent review reproduced successful default DNS bootstrap again with another fresh data directory. Together, these dated Windows/mainnet `v29.1.0` tests demonstrate default DNS bootstrap repeatedly, but do not guarantee that every fresh node will obtain peers immediately. DNS seed availability can change over time, and a reader may still temporarily remain at zero peers. The three compiled fixed seeds did not establish usable fallback peers in bounded testing and are not recommended as a recovery path.
+This guide is **not** a production exchange configuration, public-RPC guide, inbound-node/firewall guide, long-duration stability claim, or endorsement of using a disposable test wallet for real funds.
 
-## 1. Obtain the tested release
+No existing BitcoinII wallet or data directory was opened, copied, rescanned, imported, unlocked, inspected, or spent from during the test.
 
-Use the canonical [`v29.1.0` release page](https://github.com/Bitcoin-II/BitcoinII-Core/releases/tag/v29.1.0) and select:
+## 1. Obtain the current tested release
+
+Use the canonical BitcoinII Core `v31.1.0` release and the Windows Qt asset:
 
 ```text
-BitcoinII-29.1.0-x86_64-win64-CLI.zip
+BitcoinII-v31.1-Win64-Qt.zip
 ```
 
-The 2026-08-27 MoreBC2 record observed:
+The current MoreBC2 release record lists:
 
-| Field | Expected value |
+| Field | Recorded value |
 |---|---|
-| Size | `7,987,528` bytes |
-| SHA-256 | `94985c39c2e99406b50b3a318442677ffa3df6f9d471c03cb30f1fb0c4b8fa3a` |
-| Executables | `bitcoinIId.exe`, `bitcoinII-cli.exe` |
+| Archive size | `20,557,870` bytes |
+| GitHub-reported SHA-256 | `f7b1d16423859bd2392b1bd4f62c16ba855a034c6ffb6693af667f2ec97b375d` |
+| Tested executable | `bitcoinII-qt.exe` |
+| Runtime version | `v31.1.0` |
+| Protocol version | `70016` |
 
-Check a download in PowerShell:
+The September runtime test independently calculated the same archive SHA-256 value.
 
-```powershell
-$Archive = 'C:\Downloads\BitcoinII-29.1.0-x86_64-win64-CLI.zip'
-(Get-Item -LiteralPath $Archive).Length
-(Get-FileHash -LiteralPath $Archive -Algorithm SHA256).Hash.ToLowerInvariant()
-```
+That is useful byte-integrity evidence, but it is not complete publisher authentication. MoreBC2 has not established a maintainer-signed checksum manifest, detached signature for every binary, trusted release-signing-key procedure, or reproducible-build proof for `v31.1.0`.
 
-The size and hash let you compare your file with the exact bytes MoreBC2 retrieved. They do not authenticate the publisher. No publisher checksum manifest, release-asset signature, or trusted BitcoinII release-key path was found for `v29.1.0`. Read the [dated release-artifact record](../verification/release-artifact-authentication-2026-08-27.md) before deciding whether that limitation is acceptable.
+See [BitcoinII Core v31.1.0 release assets](../releases/v31.1.0-assets.md).
 
-**Current conclusion:** **INTEGRITY RECORDED, AUTHENTICITY UNVERIFIED**
+## 2. Use a new data directory
 
-## 2. Extract into a dedicated location
+Do not test against an existing wallet or normal BitcoinII data directory.
 
-The tested path avoided the normal BitcoinII data directory and did not touch an existing wallet or node. Use a new writable directory; this example keeps the operator files under the current Windows user's local application-data area:
+Create a new directory for the node state. For example:
 
 ```powershell
-$NodeRoot = Join-Path $env:LOCALAPPDATA 'BitcoinII-v29.1.0-operator'
+$NodeRoot = Join-Path $env:LOCALAPPDATA 'BitcoinII-v31.1.0-morebc2-test'
 $DataDir = Join-Path $NodeRoot 'data'
-New-Item -ItemType Directory -Path $NodeRoot -ErrorAction Stop
-Expand-Archive -LiteralPath $Archive -DestinationPath $NodeRoot
-New-Item -ItemType Directory -Path $DataDir -ErrorAction Stop
-$BinDir = Join-Path $NodeRoot 'BitcoinII-29.1.0-x86_64-win64-CLI'
-Get-ChildItem -LiteralPath $BinDir
+
+if (Test-Path -LiteralPath $NodeRoot) {
+    throw "Refusing to reuse existing test path: $NodeRoot"
+}
+
+New-Item -ItemType Directory -Path $DataDir -Force | Out-Null
 ```
 
-Use a different empty directory if `$NodeRoot` already exists. Do not overwrite a data directory whose contents you have not inspected.
+The exact location is an operator choice. The important tested safety property is that the path is new and explicitly supplied on every launch.
 
-The final listing should include only the two executables named above. You can confirm their reported release without starting the node:
+## 3. Create a bounded RPC configuration
 
-```powershell
-& (Join-Path $BinDir 'bitcoinIId.exe') "-datadir=$DataDir" -version
-& (Join-Path $BinDir 'bitcoinII-cli.exe') -version
-```
-
-## 3. Create the isolated configuration
-
-Create `$DataDir\bitcoinII.conf` with exactly this bounded test configuration:
+The September mainnet test used this configuration shape:
 
 ```ini
 server=1
-disablewallet=1
-listen=0
+rpcport=28332
 rpcbind=127.0.0.1
 rpcallowip=127.0.0.1
-rpcport=28337
 ```
 
-Why these choices:
+`28332` was chosen only because local default port `8332` was already occupied by unrelated software.
 
-- `disablewallet=1` keeps wallet and key operations outside this procedure.
-- `listen=0` permits outbound peer connections but does not accept inbound P2P connections.
-- `rpcbind` and `rpcallowip` restrict RPC to the same computer.
-- `28337` is an explicit operator-selected port used by this isolated test because another local `v29.1.0` node already occupied `8337`.
+Current v31 JSON-RPC defaults are:
 
-Earlier Windows/mainnet `v29.1.0` testing observed RPC on `127.0.0.1:8337`, and that address was observed again during this test. This guide does not generalize `8337` or `28337` as a universal default. The source/configuration evidence that contains `8332` is also a separate evidence type; see [RPC configuration](../configuration/rpc-configuration.md).
+| Network | Default RPC port |
+|---|---:|
+| mainnet | `8332` |
+| testnet3 | `18332` |
+| testnet4 | `48332` |
+| signet | `38332` |
+| regtest | `18443` |
 
-Never bind RPC to a public address. Do not expose BitcoinII Core RPC to the public internet.
+If you choose a different loopback RPC port, use the same value consistently in the configuration and client calls.
 
-## 4. Start the node
+Do **not** widen `rpcbind` or `rpcallowip` merely to fix a local connection problem. Do not expose BitcoinII Core RPC directly to the public internet.
 
-Run this from the same PowerShell session that defines `$BinDir` and `$DataDir`:
+### Important P2P-port note
+
+Current BitcoinII `v31.1.0` mainnet chain parameters set the default P2P port to:
+
+```text
+8338
+```
+
+The generated example `bitcoinII.conf` still contains inherited wording showing mainnet `8333` for the generic `-port` option. That comment is stale for current BitcoinII mainnet.
+
+The September runtime test directly observed BitcoinII listening on `0.0.0.0:8338` and connecting to peers on the current network.
+
+Unless you have a specific reason to override P2P listening, do not copy the generated `8333` comment into a v31 setup.
+
+## 4. Start BitcoinII Qt in server mode
+
+Point `$Qt` at the extracted `bitcoinII-qt.exe` and start it with the disposable data directory:
 
 ```powershell
-$Node = Start-Process `
-  -FilePath (Join-Path $BinDir 'bitcoinIId.exe') `
-  -ArgumentList ('-datadir="{0}"' -f $DataDir) `
-  -WorkingDirectory $BinDir `
-  -WindowStyle Hidden `
-  -PassThru
+$Qt = 'C:\Path\To\BitcoinII-v31.1-Win64-Qt\bitcoinII-qt.exe'
+
+$args = @(
+    "-datadir=$DataDir",
+    '-server=1',
+    '-rpcport=28332',
+    '-rpcbind=127.0.0.1',
+    '-rpcallowip=127.0.0.1',
+    '-nosplash',
+    '-min'
+)
+
+$Node = Start-Process -FilePath $Qt `
+    -ArgumentList $args `
+    -WindowStyle Hidden `
+    -PassThru
 ```
 
-This is the startup method exercised on 2026-08-27. The daemon reads `$DataDir\bitcoinII.conf`, writes `$DataDir\debug.log`, stores chain state beneath `$DataDir`, and creates a temporary local authentication cookie there.
+The tested Windows Qt executable is a GUI-subsystem application. The September validation therefore identified the running release through runtime logs, file metadata, and RPC rather than relying on console `-version` output.
 
-Confirm the process exists:
+## 5. Wait for the RPC cookie
+
+BitcoinII Core creates a temporary authentication cookie in the selected data directory while RPC is running.
+
+A simple bounded readiness wait can look like:
 
 ```powershell
-Get-Process -Id $Node.Id
+$CookiePath = Join-Path $DataDir '.cookie'
+
+$deadline = (Get-Date).AddSeconds(60)
+while (-not (Test-Path -LiteralPath $CookiePath)) {
+    if ((Get-Date) -gt $deadline) {
+        throw 'RPC cookie did not appear before timeout.'
+    }
+    Start-Sleep -Milliseconds 500
+}
 ```
 
-Then inspect the end of the log:
+Do not print or publish the cookie value.
+
+## 6. Call RPC directly over loopback
+
+The locally available v31 Qt test artifact did not include a matching v31 CLI executable, so the successful test sent JSON-RPC directly over HTTP using the random cookie.
+
+This avoids accidentally mixing an older `bitcoinII-cli.exe` with the v31 node.
+
+A PowerShell helper can be written as:
 
 ```powershell
-Get-Content -LiteralPath (Join-Path $DataDir 'debug.log') -Tail 40
+function Invoke-Bc2Rpc {
+    param(
+        [Parameter(Mandatory)] [string] $Method,
+        [object[]] $Params = @(),
+        [string] $Wallet = $null
+    )
+
+    $cookie = (Get-Content -LiteralPath $CookiePath -Raw).Trim()
+    $auth = [Convert]::ToBase64String(
+        [Text.Encoding]::ASCII.GetBytes($cookie)
+    )
+
+    $headers = @{ Authorization = "Basic $auth" }
+    $body = @{
+        jsonrpc = '1.0'
+        id      = $Method
+        method  = $Method
+        params  = $Params
+    } | ConvertTo-Json -Compress -Depth 8
+
+    $uri = 'http://127.0.0.1:28332/'
+    if ($Wallet) {
+        $uri += 'wallet/' + [Uri]::EscapeDataString($Wallet)
+    }
+
+    (Invoke-RestMethod -Uri $uri `
+        -Method Post `
+        -Headers $headers `
+        -ContentType 'application/json' `
+        -Body $body).result
+}
 ```
 
-`Done loading` means initialization reached the point where the tested RPC calls can proceed. A running process alone does not prove that peers exist or that synchronization is complete.
+Keep the cookie and authorization header in memory only.
 
-## 5. Check RPC readiness and node identity
-
-The tested CLI syntax relies on its local default connection and supplies the same data directory and port as the daemon:
-
-```powershell
-$Cli = Join-Path $BinDir 'bitcoinII-cli.exe'
-& $Cli "-datadir=$DataDir" -rpcport=28337 getnetworkinfo
-```
-
-During the test, calls made before initialization completed failed transiently. Wait for `Done loading` and try the read-only call again. Do not add credentials to the command line; the CLI and daemon use the cookie in the shared data directory.
-
-For `v29.1.0`, the tested success fields were:
-
-- `version: 290100`;
-- `subversion: /Satoshi:29.1.0/`;
-- `networkactive: true`.
-
-Live connection counts vary.
-
-## 6. Observe peers and synchronization
-
-The 2026-08-27 synchronization figures below depended on the redacted one-shot peer scaffolding disclosed in the Scope section. Later 2026-08-28 tests repeatedly established default DNS bootstrap without manual peers, but this remains dated evidence rather than a guarantee for every startup. The commands below show whether your own node found peers and is advancing.
+## 7. Confirm node identity
 
 Run:
 
 ```powershell
-& $Cli "-datadir=$DataDir" -rpcport=28337 getconnectioncount
-& $Cli "-datadir=$DataDir" -rpcport=28337 getblockchaininfo
+Invoke-Bc2Rpc -Method 'getnetworkinfo'
 ```
 
-Interpret the fields together:
+The September `v31.1.0` test observed:
 
-| Question | Evidence to inspect |
+```text
+version = 310100
+subversion = /BitcoinII:31.1.0/
+protocolversion = 70016
+networkactive = true
+```
+
+Live connection counts and network traffic will vary.
+
+If the reported version is not the release you intended to run, stop and resolve the binary/path mismatch before continuing.
+
+## 8. Observe peers and initial synchronization
+
+Useful status calls include:
+
+```powershell
+Invoke-Bc2Rpc -Method 'getnetworkinfo'
+Invoke-Bc2Rpc -Method 'getblockchaininfo'
+Invoke-Bc2Rpc -Method 'getpeerinfo'
+Invoke-Bc2Rpc -Method 'getchaintips'
+Invoke-Bc2Rpc -Method 'uptime'
+```
+
+During the September test, the fresh node:
+
+- found 4 outbound full-relay IPv4 peers on the first run;
+- acquired the then-current header chain to height `58970`;
+- advanced validated block height while remaining in initial block download;
+- restarted later and obtained 6 outbound full-relay peers;
+- retained local chain state across restart.
+
+The observed peer subversion was `/BitcoinII:31.1.0/` and the peer protocol version was `70016`.
+
+Peer counts and chain heights are time-sensitive. Do not treat those exact numbers as expected constants.
+
+### How to tell whether synchronization is progressing
+
+Inspect these fields together:
+
+| Question | Evidence |
 |---|---|
-| Is the daemon answering? | The CLI returns structured output rather than a connection error. |
-| Is networking active? | `getnetworkinfo` reports `networkactive: true`. |
-| Are peers connected? | `getconnectioncount` is greater than zero; `getnetworkinfo` reports connection counts. |
-| Are headers being learned? | `headers` rises or is ahead of `blocks`. |
-| Are blocks being validated? | Repeated `getblockcount` or `blocks` values increase. |
-| Is initial sync still active? | `initialblockdownload` is `true`, or headers remain ahead of blocks. |
-| Is the node fully synchronized? | `initialblockdownload` is `false`, validated blocks have caught up with headers, and the tip continues to track a separately trusted current reference. |
+| Is RPC alive? | Structured RPC response rather than connection failure |
+| Is networking enabled? | `getnetworkinfo.networkactive = true` |
+| Are peers present? | outbound connections greater than zero |
+| Are headers arriving? | `headers` advances or is ahead of `blocks` during IBD |
+| Are blocks validating? | `blocks` increases over time |
+| Is IBD still running? | `initialblockdownload = true` |
+| Is the node fully synced? | `initialblockdownload = false`, validated chain is caught up, and tip remains aligned with a separately trusted current reference |
 
-The local test observed 57,743 headers and block height advancing from 0 through 4,901, with `initialblockdownload: true`. It did not establish full synchronization or an expected completion time.
+The September test did **not** wait for full synchronization. MoreBC2 therefore does not publish a v31 Windows full-sync duration from that test.
 
-Do not publish raw `getpeerinfo` output; it contains network addresses and session details. This beginner route does not require it.
+## 9. Check pruning and indexes
 
-## 7. Run the tested read-only checks
-
-These five commands were exercised against the isolated node:
+Run:
 
 ```powershell
-& $Cli "-datadir=$DataDir" -rpcport=28337 getblockchaininfo
-& $Cli "-datadir=$DataDir" -rpcport=28337 getnetworkinfo
-& $Cli "-datadir=$DataDir" -rpcport=28337 getconnectioncount
-& $Cli "-datadir=$DataDir" -rpcport=28337 getblockcount
-& $Cli "-datadir=$DataDir" -rpcport=28337 getbestblockhash
+Invoke-Bc2Rpc -Method 'getblockchaininfo'
+Invoke-Bc2Rpc -Method 'getindexinfo'
 ```
 
-Heights, hashes, peer counts, and progress are live values. Treat a well-formed response and internally consistent fields—not the dated example numbers—as success. For method details, follow [RPC overview](../developers/rpc-overview.md), [Source Atlas: blockchain RPC](../developers/source-atlas/rpc-blockchain.md), and the [dated Windows operator test](../verification/windows-node-operator-test-2026-08-27.md).
+The test intentionally left pruning and optional indexes at their defaults.
 
-## 8. Stop cleanly
+Observed:
 
-Use the supported RPC path:
-
-```powershell
-& $Cli "-datadir=$DataDir" -rpcport=28337 stop
+```text
+pruned = false
+getindexinfo = {}
 ```
 
-The tested response was `BitcoinII Core stopping`. Wait for the process to exit:
+Current source/defaults establish:
+
+- pruning default: disabled (`prune=0`);
+- `txindex` default: disabled;
+- pruning and `txindex` are incompatible.
+
+Do not enable `txindex`, pruning, block-filter indexes, coinstats indexes, or other service-oriented indexes merely because they exist. Choose them based on the workflow you actually need and test that exact profile.
+
+A pruned wallet can also face historical-rescan limits if required block data is no longer present locally.
+
+## 10. Wallet behavior observed in the node test
+
+You do not need a wallet to validate basic node startup and sync.
+
+The September mainnet test created one **new disposable** descriptor wallet only to verify current wallet loading behavior. Before creation:
+
+```text
+listwallets = []
+listwalletdir = no wallets
+```
+
+After creation, the wallet reported:
+
+- SQLite format;
+- descriptor wallet;
+- zero transactions;
+- private keys enabled;
+- no scan in progress.
+
+After node restart:
+
+- `listwallets` was empty;
+- `listwalletdir` still showed the disposable wallet;
+- explicit `loadwallet` succeeded;
+- the wallet still had zero transactions.
+
+That result demonstrates persistence plus explicit reload in the tested environment. It does not define every wallet autoload/migration configuration.
+
+Do **not** substitute an existing wallet into an experimental procedure.
+
+For current transaction/PSBT runtime evidence, see the separate isolated regtest record. That test used a fresh wallet, zero peers, and local-only submission.
+
+## 11. Mempool status
+
+The mainnet node test also exercised:
 
 ```powershell
+Invoke-Bc2Rpc -Method 'getmempoolinfo'
+```
+
+At the observed moment the mempool was loaded and empty while the node was still in IBD.
+
+The separate isolated regtest test later exercised a complete disposable PSBT flow, `testmempoolaccept`, `sendrawtransaction`, and `getmempoolentry` locally.
+
+That successful `sendrawtransaction` call was **not** a public broadcast: the regtest node had zero peers.
+
+## 12. Stop cleanly
+
+Use RPC shutdown rather than killing the process:
+
+```powershell
+Invoke-Bc2Rpc -Method 'stop'
 Wait-Process -Id $Node.Id
-Select-String -LiteralPath (Join-Path $DataDir 'debug.log') -Pattern 'Shutdown: done'
 ```
 
-Do not force-close the process merely because the CLI returned. The test treated process exit and `Shutdown: done` as the completion signals.
+The September test observed a normal `BitcoinII stopping` response and a clean process exit.
 
-## 9. Restart
+After shutdown:
 
-Run the startup command from step 4 again with the same `$DataDir`. After `Done loading`, repeat `getblockchaininfo`. The test restarted successfully, read the retained chain state at height 6,795, and then completed a second clean RPC shutdown without a corruption warning.
+- the RPC cookie had been removed;
+- the RPC listener was gone;
+- the log ended with `Shutdown done`.
 
-That bounded restart shows that the retained state was readable in this test; it is not an exhaustive filesystem-integrity or corruption test.
+Treat process exit and the completed shutdown log as stronger completion signals than merely receiving the RPC response.
+
+## 13. Restart against retained state
+
+Start the node again using the same **test** data directory and the same launch/configuration values.
+
+The September test directly observed that the node:
+
+- restarted successfully;
+- retained chain state from the first run;
+- reconnected normally;
+- had 6 outbound peers during the bounded restart observation;
+- found the disposable wallet on disk;
+- reloaded that wallet explicitly;
+- shut down cleanly again.
+
+This is bounded restart evidence, not an exhaustive corruption/recovery test.
 
 ## Troubleshooting boundaries
 
-Only cases directly observed in this test or supported by the linked help/source evidence are included:
+### RPC port already in use
 
-- **Executable not found:** confirm that `$BinDir` contains both release executables and that the archive was extracted one level where expected.
-- **RPC call fails during startup:** wait for `Done loading` in `debug.log`, then use the exact successful syntax with the same `$DataDir` and `-rpcport`.
-- **RPC bind failure:** another process may own the selected port. The test observed this at `127.0.0.1:8337`. Choose a free loopback port and update both the config and every CLI command; do not widen the bind address.
-- **Wrong config or data directory:** the beginning of `debug.log` reports the selected data directory and config file. Correct the command rather than copying cookies or passwords.
-- **No peers:** check `networkactive`, `connections`, and DNS/network errors in `debug.log`. The 2026-08-27 isolated test remained at zero peers, while repeated 2026-08-28 tests successfully used the configured DNS seeds without manual peers. Seed availability can change, so a temporary zero-peer result remains possible. This guide does not recommend untrusted peer lists or the unproven compiled fixed seeds as recovery paths.
-- **Node is still syncing:** inspect `initialblockdownload`, `headers`, `blocks`, and repeated block-height samples. Do not infer a sync deadline.
-- **Shutdown appears slow:** wait for process exit and `Shutdown: done`; do not kill the daemon while it is writing state.
+The September test encountered this on the ordinary mainnet RPC default `8332`, which was owned by unrelated software.
 
-## What this guide proves—and does not
+Choose a free loopback port and update both the node arguments/config and your client URI. Do not widen the RPC bind address.
 
-### Locally tested on 2026-08-27
+### Wrong version or executable
 
-- The named `v29.1.0` Windows CLI archive and executable names.
-- A dedicated, wallet-disabled, outbound-only data directory.
-- Config-file selection, log location, and loopback cookie RPC.
-- Five read-only RPC calls while initial sync advanced.
-- Clean RPC shutdown and restart with retained chain state.
+Check the exact executable path and confirm `getnetworkinfo.version` / `subversion` after startup.
 
-### Source/help reviewed
+Do not point an older CLI at a newer node merely because an old CLI happens to exist on the same machine.
 
-- The configuration switches used here and the meanings of the linked RPC fields.
+### No peers
 
-### Later peer-discovery evidence
+Check:
 
-- On 2026-08-28, two fresh isolated Windows/mainnet `v29.1.0` nodes obtained persistent peers through default DNS bootstrap without borrowed or manual peers.
-- Independent review reproduced successful default DNS bootstrap with another fresh data directory.
-- These results demonstrate a repeatable dated bootstrap path, not guaranteed future seed availability or immediate peer discovery in every environment.
-- The three compiled fixed seeds did not establish usable fallback peers in bounded testing and are not recommended as a recovery path.
+- `networkactive`;
+- outbound connection count;
+- `debug.log` networking messages;
+- DNS/network availability.
 
-### Release-specific
+The September v31 test found peers automatically, but that is dated evidence rather than a guarantee of immediate future bootstrap.
 
-- The artifact name, size, hash, executable names, and observed behavior are bounded to Windows x86_64 BitcoinII Core `v29.1.0` and the 2026-08-27 test.
+Do not respond to a temporary zero-peer state by pasting random public peer lists into a production configuration.
 
-### Still unresolved
+### Generated config says port 8333
 
-- Full-sync completion and sync duration.
-- Immediate automatic peer discovery in every environment and future DNS seed availability.
-- Universal RPC port behavior.
-- Publisher authenticity and binary-to-source reproducibility.
-- Wallet, transaction, mining, pruning, inbound networking, firewall, and public-service workflows.
+For current v31 mainnet, that generated comment is stale. Release-pinned chain parameters and runtime evidence use **8338** for BitcoinII P2P.
 
-## Related pages
+### Node is still syncing
+
+Use `blocks`, `headers`, `verificationprogress`, and `initialblockdownload` together.
+
+Do not infer a completion deadline from a short observation window.
+
+### Wallet exists but is not loaded after restart
+
+The disposable wallet in the September test remained on disk but was not automatically loaded after restart. `listwalletdir` showed it and explicit `loadwallet` succeeded.
+
+Do not search arbitrary wallet directories or try to import/rescan an existing wallet merely to troubleshoot a node-status question.
+
+### Need historical transaction lookup
+
+Default `txindex` is off. Whether you need `txindex=1` depends on the application and RPC lookup behavior required.
+
+Do not combine `txindex=1` with pruning; current source rejects that combination.
+
+## What this guide directly proves
+
+For the documented Windows 11 / BitcoinII Core `v31.1.0` / mainnet environment, MoreBC2 directly observed:
+
+- current Qt release startup with a fresh data directory;
+- loopback-only cookie-authenticated RPC;
+- runtime identity `310100` / `/BitcoinII:31.1.0/` / protocol `70016`;
+- P2P listening on `8338`;
+- automatic outbound peer discovery;
+- current header acquisition and advancing block validation during IBD;
+- default pruning disabled;
+- no optional indexes active;
+- creation of a fresh disposable descriptor wallet;
+- clean shutdown;
+- restart with retained chain state;
+- normal peer reconnection;
+- explicit reload of the same disposable wallet;
+- second clean shutdown.
+
+## What remains unresolved
+
+- Full v31 IBD completion and sync duration.
+- Long-duration node stability.
+- Linux/macOS parity.
+- Inbound public-node reachability and NAT/firewall setup.
+- Controlled pruning and recovery.
+- Optional-index enable/rebuild behavior.
+- Upgrade behavior from a real pre-v31 data directory.
+- Controlled competing-branch/reorg testing.
+- Production exchange/explorer/pool profiles.
+- Public-network valid transaction propagation.
+- Third-party wallet/hardware/external-signer compatibility.
+
+## Historical v29 evidence
+
+MoreBC2 retains the older Windows `v29.1.0` node and peer-discovery records as historical, version-scoped evidence. They should be used to understand prior behavior or compare releases, not as the current operational baseline.
+
+See:
 
 - [Windows node-operator test — 2026-08-27](../verification/windows-node-operator-test-2026-08-27.md)
 - [Windows fresh-node peer-discovery test — 2026-08-28](../verification/windows-peer-discovery-test-2026-08-28.md)
-- [Release-artifact authentication — 2026-08-27](../verification/release-artifact-authentication-2026-08-27.md)
-- [Node configuration](../configuration/node-configuration.md)
+
+## Related pages
+
+- [Nodes overview](README.md)
+- [Configuration](../configuration/README.md)
 - [RPC configuration](../configuration/rpc-configuration.md)
-- [Command testing status](../verification/command-testing.md)
-- [Source Atlas: startup initialization](../developers/source-atlas/init-cpp.md)
-- [Source Atlas: blockchain RPC](../developers/source-atlas/rpc-blockchain.md)
+- [Node startup architecture](../architecture/node-startup.md)
+- [Peer communication model](../architecture/peer-communication-model.md)
+- [RPC overview](../developers/rpc-overview.md)
+- [Network specifications](../documentation/network-specifications.md)
+- [Wallet guide](../wallets/wallet-guide.md)
+- [Windows v31.1.0 node and RPC validation — 2026-09-11](../verification/windows-v31-node-rpc-validation-2026-09-11.md)
+- [Windows v31.1.0 PSBT and replay-protection validation — 2026-09-11](../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** BitcoinII Core `v29.1.0` Windows x86_64 CLI release artifact and generated help; 2026-08-27 isolated local runtime, log, process, socket, RPC, shutdown, and restart evidence; independently reviewed 2026-08-28 fresh-node DNS-bootstrap evidence; linked Source Atlas and configuration records
-**Notes:** The primary route was locally tested through advancing initial sync, clean shutdown, and restart. Later dated tests repeatedly demonstrated default DNS bootstrap without manual peers. Draft status is retained because immediate peer discovery is not guaranteed, full sync, cross-platform behavior, release authenticity, and broader operational workflows remain unresolved.
+**Status:** Reviewed / Partial  
+**Primary sources checked:** BitcoinII Core `v31.1.0` release/source/configuration plus the September 11 Windows mainnet node/RPC validation and isolated regtest wallet/PSBT validation  
+**Notes:** This guide replaces the former v29-centered user-facing route with the current tested v31 Windows path. The historical v29 records remain unchanged as version-scoped evidence. Full sync, inbound networking, pruning/index rebuilds, cross-platform parity, upgrade paths, long-duration operation, and public transaction propagation remain open.
