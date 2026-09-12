@@ -1,71 +1,111 @@
 # MoreBC2 project status
 
-**Status:** Public source repository; ongoing verification and documentation work
-**Last reviewed:** 2026-09-08
+**Status:** Public source repository and deployed documentation site; ongoing verification work
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-MoreBC2 is an independently maintained, source-backed documentation and verification project for BitcoinII (BC2). Current-facing technical documentation uses BitcoinII Core `v31.1.0` as its baseline, while dated `v29.1.0` runtime and release records remain historical evidence.
+MoreBC2 is an independently maintained, source-backed documentation and verification project for BitcoinII (BC2).
 
-The source repository is public. The path-scoped licensing and third-party notice package is present, unnecessary personal local-user path details have been removed from reachable repository history, and [SECURITY.md](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md) separates ordinary public issues from sensitive reports and provides a verified private reporting route.
+Current-facing technical documentation uses BitcoinII Core `v31.1.0` as its baseline. Older `v29.1.0` runtime and release records remain preserved as historical, version-scoped evidence and must not be relabeled as current testing.
 
-## Current baseline
+The source repository is public, the documentation site is built and deployed through the repository's Cloudflare Pages workflow, and current project policy continues to separate source review, dated observations, local testing, historical evidence, service policy, and unresolved claims.
 
-The current documentation records the height-`57750` mainnet activation of:
+## Current BitcoinII baseline
+
+Current documentation records the mainnet height-`57750` activation of:
 
 - ShockWave per-block difficulty adjustment;
 - replay protection;
 - consensus-level data restrictions; and
 - fork-aware header-synchronization-related behavior.
 
-Current source-facing coverage is substantial, but status labels remain Draft, Partial, Source Reviewed, or Needs Review where the evidence does not support Verified.
+The current release is BitcoinII Core `v31.1.0`, published 2026-08-29.
 
-## What has evidence
+## Current evidence established
 
-- `v31.1.0` source and release metadata have been reviewed for the current documentation refresh.
-- Dedicated source notes cover ShockWave, replay protection, data restrictions, and fork-aware header synchronization.
-- Dated `v29.1.0` Windows/mainnet records cover node startup, local-only RPC, nine read-only commands, shutdown/restart, peer discovery, and release-asset integrity work.
-- Site generation, rendered-output checks, and documentation-specific validation are automated.
+MoreBC2 now has current `v31.1.0` evidence in addition to its preserved historical records:
 
-The dated `v29.1.0` evidence establishes only what those records say. It is not `v31.1.0` runtime verification.
+- release-pinned source and release metadata;
+- a 2026-09-11 isolated Windows `v31.1.0` node/RPC validation covering startup, cookie-authenticated loopback RPC, peer discovery, initial sync, restart, and clean shutdown;
+- a 2026-09-11 isolated `v31.1.0` regtest PSBT lifecycle with local-only mempool submission, plus a release-pinned replay-protection source trace;
+- a 2026-09-11 public explorer/API/WebSocket/Electrum smoke test;
+- a 2026-09-12 exchange-confirmation evidence record for CoinEx, NonKYC, NestEx, and Biconomy;
+- current release-asset digest/tag/commit provenance records with explicit authentication limits;
+- automated Starlight site generation, rendered-output checks, private-path scanning, and production deployment checks.
 
-## Completed publication prerequisites
+These records are deliberately bounded. They do not establish complete production custody behavior, permanent public-service availability, reproducible binaries, or universal exchange policy.
 
-1. The implemented path-scoped licensing map and third-party notices were reviewed and approved for source-repository publication.
-2. The repository contents and documented checks were accepted for public visibility.
-3. Owner approval for the controlled source-repository publication was completed.
+## Current exchange-integration position
 
-The visibility transition publishes the tracked source repository; it does not publish a tracked build, release archive, binary, vendored dependency tree, or other generated artifact. The current `NOTICE` and `THIRD_PARTY_NOTICES.md` are sufficient for that source-only step. Before a built site, downloadable release, or other generated artifact is newly distributed or treated as a publication artifact, generate and review dependency notices against that exact artifact.
+Direct exchange evidence supports **50 confirmations as a provisional MoreBC2 normal-deposit baseline** because NonKYC and NestEx independently expose 50-confirmation BC2 settings. CoinEx uses a much more aggressive `2` / `6` staged policy.
 
-## Security reporting
+This is operational MoreBC2 guidance, not a BitcoinII consensus rule, maintainer mandate, or mathematical-finality claim. See [Exchange confirmation evidence — 2026-09-12](docs/verification/exchange-confirmation-evidence-2026-09-12.md).
 
-GitHub Private Vulnerability Reporting is enabled and the external private-reporting interface has been verified. [SECURITY.md](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md) contains the working private-reporting instructions.
+## Publication and deployment state
+
+The source repository is public and the generated documentation site is deployed through the production Cloudflare Pages workflow.
+
+The workflow builds the static site, runs content/type checks, checks Windows-node documentation assumptions, scans generated output for blocked private-path variants, deploys the `main` build to the `morebc2` Cloudflare Pages project, and verifies the live site's indexing policy.
+
+A successful deployment proves that the generated site passed those automated checks and was published. It does **not** make every factual claim on the site Verified.
+
+## Contribute & project audit — 2026-09-12
+
+The root project/contribution documents used by the site's **Contribute & project** section were reviewed together so their current-state wording and project policies stay synchronized.
+
+| Page | Audit state | Current note |
+|---|---|---|
+| `PROJECT_STATUS.md` | Refreshed 2026-09-12 | Updated for current v31 runtime evidence, exchange evidence, and deployed production site. |
+| `CONTRIBUTING.md` | Refreshed 2026-09-12 | Contribution evidence rules, deployment boundaries, and current ownership wording were tightened. |
+| `EVIDENCE_SCALE.md` | Refreshed 2026-09-12 | Evidence authority is now explicitly claim-specific; service policy, release provenance, live observation, and local-test boundaries are clearer. |
+| `SOURCE_REGISTRY.md` | Refreshed 2026-09-12 | Stale `v29.1.0` current-release entry replaced with current `v31.1.0` sources and dated infrastructure/service records. |
+| `GLOSSARY.md` | Refreshed 2026-09-12 | Added current BC2 terms and clearer chainwork/finality/replay/ShockWave distinctions. |
+| `README.md` | Refreshed 2026-09-12 | Removed obsolete non-indexed/future-publication wording and synchronized the current evidence baseline. |
+| `ROADMAP.md` | Refreshed 2026-09-12 | Completed work was retired from the active queue and the remaining technical/operational priorities were narrowed. |
+| `GOVERNANCE.md` | Reviewed / current draft | Independence, stewardship, role, and disagreement rules remain appropriate. |
+| `FOUNDING_PRINCIPLES.md` | Reviewed / current framework | No substantive stale claim required revision. |
+| `DOCUMENTATION_PHILOSOPHY.md` | Reviewed / current framework | Evidence-first separation of documentation/research/discussion remains current. |
+| `DOCUMENTATION_TAXONOMY.md` | Reviewed / current framework | Current category placement rules remain appropriate. |
+| `STYLE_GUIDE.md` | Reviewed / current framework | Naming, uncertainty, and source-strength guidance remains appropriate. |
+| `STYLE_CONVENTIONS.md` | Reviewed / current framework | Current headings/status/date/verification conventions remain appropriate. |
+| `WRITING_CHECKLIST.md` | Reviewed / current framework | Current pre-commit verification checklist remains appropriate. |
+
+A document can remain **Draft** or **Framework** after being reviewed. Those labels describe the document's maturity or function; they do not mean the page was skipped in this audit.
 
 ## Important unresolved technical and operational work
 
-- Fresh bounded `v31.1.0` runtime and RPC evidence.
-- Independent authentication of `v31.1.0` release assets and a trusted signing-key path.
-- Detailed regression coverage for wallet, mempool, mining, RPC, validation, and PSBT behavior.
-- Exchange/service confirmation policy based on current network evidence.
-- Current wallet, explorer, API, exchange, and mining-service observations.
-- Live-network verification of activation and synchronization behavior.
-- Independent technical review of consequential current-facing claims is strongly encouraged as a public-review and quality task, but its absence alone is not a visibility blocker once the actual publication blockers are resolved.
-- Recheck live external services and links immediately before publication.
+The principal open areas are now narrower than the previous project-status page implied:
+
+- stronger publisher-authenticated release verification, including any signed checksum/signing-key/reproducible-build path that may exist;
+- a canonical BitcoinII technical/security contact process suitable for infrastructure providers;
+- production custody architecture and deposit/withdrawal runbooks;
+- concrete cumulative-chainwork thresholds and a reorganization incident playbook around exchange deposits;
+- external/third-party signer replay-protection compatibility and transaction vectors;
+- successful valid-public-broadcast evidence if that becomes necessary;
+- broader wallet/Electrum compatibility and long-duration node-operation evidence;
+- independent technical review of consequential current-facing claims;
+- periodic rechecks of time-sensitive exchanges, explorers, APIs, pools, wallet services, and community links.
+
+## Security reporting
+
+GitHub Private Vulnerability Reporting is enabled and the external private-reporting route has been verified. See [SECURITY.md](SECURITY.md). Ordinary non-sensitive documentation problems may use public GitHub issues; sensitive material should not be posted publicly.
 
 ## Navigation
 
 - [README](README.md)
+- [Contributing](CONTRIBUTING.md)
+- [Evidence scale](EVIDENCE_SCALE.md)
+- [Source registry](SOURCE_REGISTRY.md)
+- [Glossary](GLOSSARY.md)
+- [Roadmap](ROADMAP.md)
 - [Documentation index](docs/README.md)
 - [Documentation coverage](docs/documentation-coverage.md)
-- [Repository audit](docs/AUDIT.md)
-- [Roadmap](ROADMAP.md)
-- [Legal and reuse posture](docs/LEGAL_REUSE.md)
 - [Verification evidence index](docs/verification/verification-index.md)
 - [Known unknowns](docs/verification/known-unknowns.md)
-- [v31 currentness audit](docs/verification/v31-currentness-audit-2026-09-02.md)
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Current MoreBC2 evidence records and the BitcoinII Core `v31.1.0` release/source anchors cited by those records
-**Notes:** This is a project dashboard. It does not independently verify BitcoinII runtime behavior, release binaries, external services, or public-release readiness.
+**Status:** Reviewed project dashboard
+**Primary sources checked:** Current MoreBC2 v31.1.0 source/runtime records, release evidence, 2026-09-11 public-infrastructure evidence, 2026-09-12 exchange evidence, repository deployment workflow, and project policy files
+**Notes:** This page summarizes the state of the MoreBC2 project. It does not independently turn bounded evidence into universal BitcoinII behavior, permanent service availability, or production-readiness claims.
