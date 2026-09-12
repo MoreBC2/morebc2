@@ -1,202 +1,187 @@
 # Command testing status
 
-**Category:** Verification
-**Status:** Draft
-**Last reviewed:** 2026-08-27
+**Category:** Verification  
+**Status:** Reviewed / Partial  
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page tracks BitcoinII Core command examples that need local testing before MoreBC2 treats them as verified instructions.
+This page tracks which BitcoinII Core command/RPC examples MoreBC2 has actually exercised and which remain source-observed or untested.
 
-A command can be source-observed without being tested. Source-observed means MoreBC2 reviewed source code or generated help text that describes the command. Tested means the command was actually run in a documented environment.
+The strongest current evidence is now the September 11 `v31.1.0` Windows mainnet node/RPC record plus the separate isolated zero-peer regtest wallet/PSBT/mempool record. Older `v29.1.0` command tests remain historical evidence for that release.
 
-Use the [command smoke-test plan](command-smoke-test-plan.md) for the safe local test order. The first read-only node-status batch was completed on 2026-07-10; see [BitcoinII read-only RPC smoke test — 2026-07-10](read-only-rpc-smoke-test-2026-07-10.md).
-
-A separate wallet-disabled Windows command-line route was exercised on 2026-08-27 through startup, advancing initial sync, five read-only calls, clean RPC shutdown, and restart; see the [Windows node-operator test](windows-node-operator-test-2026-08-27.md).
-
-## Current rule
-
-No command example in MoreBC2 should be treated as verified unless it has a test record with:
-
-- Date tested.
-- Operating system.
-- BitcoinII Core version, release, branch, or commit.
-- Network mode: mainnet, testnet, signet, or regtest.
-- Command entered.
-- Expected result.
-- Actual result.
-- Notes about wallet state, sync state, pruning, or test data.
+A command appearing in source or help text is **not** the same as a locally tested command. A command tested on regtest is not automatically proof of mainnet/public-network behavior.
 
 ## Status labels
 
 | Label | Meaning |
 |---|---|
-| Source-observed | The command appears in reviewed source, docs, help text, or config material. |
-| Placeholder | The command is shown as a future example shape, not as a tested command. |
-| Locally tested | The command was run and a test record exists. |
-| Verified | The command was tested, reviewed, and is safe to present for the documented context. |
-| Needs recheck | The command was tested before, but release, platform, or network assumptions changed. |
-| Do not publish | The command is too sensitive, risky, confusing, or context-dependent for normal docs. |
+| Source-observed | Present in reviewed source/help but not executed in the stated environment. |
+| Locally tested | Executed in a dated, version-scoped test record. |
+| Context-verified | Locally tested and suitable to document for the exact stated context. |
+| Needs recheck | Earlier evidence exists but a materially different release/environment now matters. |
+| Advanced / do not copy blindly | State-changing, sensitive, or context-heavy command that should not appear as casual instructions. |
 
-## Read-only commands locally tested on 2026-07-10
+## Current `v31.1.0` Windows mainnet node/RPC evidence
 
-Environment: Windows, BitcoinII Core v29.1.0, mainnet, pruned node, localhost-only RPC at `127.0.0.1:8337`.
+Record: [Windows v31.1.0 node and RPC validation — 2026-09-11](windows-v31-node-rpc-validation-2026-09-11.md).
 
-| Command | Current status | Notes |
+Environment:
+
+- Windows 11 x86_64;
+- BitcoinII Core `v31.1.0` Windows Qt artifact;
+- fresh disposable mainnet data directory;
+- Qt `server=1` mode;
+- random-cookie JSON-RPC bound to loopback;
+- operator-selected RPC port `28332` because `8332` was already in use by an unrelated process;
+- no existing BitcoinII wallet/datadir opened or inspected.
+
+There was no matching v31 CLI executable in the tested artifact, so RPCs were sent directly over loopback HTTP JSON-RPC using the disposable cookie.
+
+### Node / network commands executed
+
+| RPC/action | Status | Evidence boundary |
 |---|---|---|
-| `bitcoinII-cli getblockcount` | Locally tested | Succeeded. Harmless read-only example; output is time-dependent. |
-| `bitcoinII-cli getbestblockhash` | Locally tested | Succeeded. Harmless read-only example; output is time-dependent. |
-| `bitcoinII-cli getblockchaininfo` | Locally tested | Succeeded. Suitable with example-output labeling and node-state context. |
-| `bitcoinII-cli getnetworkinfo` | Locally tested | Succeeded. Omit or redact local/public address fields before publication. |
-| `bitcoinII-cli getconnectioncount` | Locally tested | Succeeded. Harmless read-only example. |
-| `bitcoinII-cli getpeerinfo` | Locally tested | Succeeded. Raw output exposes peer/local addresses and session identifiers; publish only summarized/redacted output. |
-| `bitcoinII-cli getmempoolinfo` | Locally tested | Succeeded. Harmless read-only example; output is time-dependent. |
-| `bitcoinII-cli getdifficulty` | Locally tested | Succeeded. Harmless read-only example; output is time-dependent. |
-| `bitcoinII-cli uptime` | Locally tested | Succeeded. Harmless read-only example. |
+| `getnetworkinfo` | Locally tested v31 mainnet | Confirmed version `310100`, subversion `/BitcoinII:31.1.0/`, protocol `70016`, network-active state and outbound peers. |
+| `getblockchaininfo` | Locally tested v31 mainnet | Observed mainnet advancing IBD, current headers, `pruned=false`. |
+| `getmempoolinfo` | Locally tested v31 mainnet | Mempool/status fields returned during IBD. |
+| `getpeerinfo` | Locally tested v31 mainnet | Public record intentionally summarizes/redacts peer addresses. |
+| `getnettotals` | Locally tested v31 mainnet | Read-only traffic summary returned. |
+| `uptime` | Locally tested v31 mainnet | Returned process uptime. |
+| `getchaintips` | Locally tested v31 mainnet | Showed headers-only tip and active validated tip during IBD. |
+| `getindexinfo` | Locally tested v31 mainnet | Returned `{}`, establishing no optional indexes enabled in this test. |
+| `listwallets` | Locally tested v31 mainnet | Empty before creation; empty again after restart until explicit load. |
+| `listwalletdir` | Locally tested v31 mainnet | Empty before creation; showed only the disposable wallet after restart. |
+| `createwallet` | Locally tested v31 mainnet | Created only `morebc2-disposable-v31`; zero transactions. |
+| wallet-scoped `getwalletinfo` | Locally tested v31 mainnet | SQLite descriptor wallet; zero transactions; not scanning. |
+| `loadwallet` | Locally tested v31 mainnet | Explicit reload after restart succeeded; wallet remained zero-transaction. |
+| `stop` | Locally tested v31 mainnet | Clean shutdown twice; cookie/listener removed. |
+| restart with same disposable datadir | Locally tested v31 mainnet | Chain state retained; outbound reconnection resumed. |
 
-The local record also observed:
+The mainnet test intentionally **did not** call address-generation, signing, transaction, PSBT, send, import, rescan, backup, encryption, pruning-mutation, peer-mutation, or mining-template RPCs.
 
-- `version=290100`
-- `subversion=/Satoshi:29.1.0/`
-- `protocolversion=70016`
-- `chain=main`
-- `initialblockdownload=false`
-- `pruned=true`
-- 10 outbound peers and 0 inbound peers at test time
-- P2P v2 transport on all observed peers
+## Current `v31.1.0` isolated regtest wallet/PSBT evidence
 
-## Node lifecycle commands locally tested on 2026-08-27
+Record: [Windows v31.1.0 PSBT and replay-protection validation — 2026-09-11](windows-v31-psbt-replay-validation-2026-09-11.md).
 
-Environment: 64-bit Windows, BitcoinII Core `v29.1.0`, mainnet, unpruned isolated data directory, wallet disabled, outbound-only P2P, cookie RPC at the explicit loopback override `127.0.0.1:28337`.
+Environment:
 
-| Command or action | Current status | Notes |
+- fresh isolated regtest state;
+- zero peers;
+- fresh disposable wallet/test funds only;
+- no existing user wallet, keys, funds, datadir, imports, or public-network broadcast.
+
+### Commands executed
+
+| RPC | Status | Evidence boundary |
 |---|---|---|
-| `bitcoinIId.exe -datadir=<data-directory>` | Locally tested | Started from the CLI release through PowerShell `Start-Process`; the selected config and log paths were confirmed. |
-| `bitcoinII-cli.exe -datadir=<data-directory> -rpcport=28337 getblockchaininfo` | Locally tested | Returned mainnet initial-sync fields while block validation advanced. |
-| `bitcoinII-cli.exe -datadir=<data-directory> -rpcport=28337 getnetworkinfo` | Locally tested | Confirmed `v29.1.0`, network-active state, and connection counts. |
-| `bitcoinII-cli.exe -datadir=<data-directory> -rpcport=28337 getconnectioncount` | Locally tested | Returned outbound connection counts without publishing peer addresses. |
-| `bitcoinII-cli.exe -datadir=<data-directory> -rpcport=28337 getblockcount` | Locally tested | Height increased during initial sync. |
-| `bitcoinII-cli.exe -datadir=<data-directory> -rpcport=28337 getbestblockhash` | Locally tested | Returned the current validated-tip hash. |
-| `bitcoinII-cli.exe -datadir=<data-directory> -rpcport=28337 stop` | Locally tested | Returned the stopping acknowledgement; the process exited and the log recorded clean shutdown. |
-| Restart with the same data directory | Locally tested | Reopened retained chain state and accepted RPC before a second clean shutdown. |
+| `createwallet` | Locally tested v31 regtest | Disposable wallet only. |
+| `getwalletinfo` | Locally tested v31 regtest | Verified disposable wallet state. |
+| `getnewaddress` | Locally tested v31 regtest | Disposable wallet address only. |
+| `generatetoaddress` | Locally tested v31 regtest | Generated isolated regtest blocks/funds. This is **not** mainnet mining/pool evidence. |
+| `getbalances` | Locally tested v31 regtest | Confirmed disposable balance state. |
+| `walletcreatefundedpsbt` | Locally tested v31 regtest | Constructed funded PSBT. |
+| `decodepsbt` | Locally tested v31 regtest | Inspected PSBT structure. |
+| `walletprocesspsbt` | Locally tested v31 regtest | Signed/processed with disposable wallet. |
+| `finalizepsbt` | Locally tested v31 regtest | Produced final transaction. |
+| `decoderawtransaction` | Locally tested v31 regtest | Decoded final transaction. |
+| `testmempoolaccept` | Locally tested v31 regtest | Returned allowed for the disposable transaction. |
+| `sendrawtransaction` | Locally tested v31 regtest | Submitted only to a zero-peer local regtest mempool. **Not public broadcast evidence.** |
+| `getmempoolentry` | Locally tested v31 regtest | Confirmed local mempool entry. |
+| `getmempoolinfo` | Locally tested v31 regtest | Confirmed local mempool state. |
 
-The explicit `28337` value is a test override, not a default. Full synchronization was not reached, and the page remains Draft.
+The successful transaction was local-only. No peer propagation occurred because the test node had zero peers.
 
-## Remaining untested command inventory
+Regtest also leaves mainnet replay activation disabled as shipped, so ordinary signing success here does not independently exercise the mainnet `0x01324342` replay domain.
 
-### Basic node and chain status
+## Current mining/template command status
 
-| Command | Current status | Notes |
+| RPC | Current status | Notes |
 |---|---|---|
-| `bitcoinII-cli getmininginfo` | Placeholder | Needs node command record. Keep separate from mining-control commands. |
+| `generatetoaddress` | Locally tested v31 regtest | Used only for disposable regtest funding. |
+| `getmininginfo` | Source-observed | Not executed in the current v31 records. |
+| `getnetworkhashps` | Source-observed | Not executed in the current v31 records. |
+| `getblocktemplate` | Source-observed | Current ShockWave-aware source path reviewed; runtime command still untested. |
+| `submitblock` | Advanced / source-observed | Keep out of ordinary instructions until a dedicated safe workflow exists. |
+| `submitheader` | Advanced / source-observed | Same boundary as `submitblock`. |
 
-### Network and peer status commands
+Core mining RPC is separate from public pool Stratum. MoreBC2 has not yet performed a current BC2 Stratum subscribe/authorize/share test.
 
-| Command | Current status | Notes |
+## Current wallet/recovery/security command gaps
+
+These remain useful candidates for **disposable-only** testing where needed:
+
+| RPC/workflow | Current status | Notes |
 |---|---|---|
-| `bitcoinII-cli getnettotals` | Placeholder | Read-only traffic summary candidate. Needs local node record. |
-| `bitcoinII-cli getnodeaddresses` | Placeholder | Address-manager output depends on node state and peer discovery. Raw output may expose network addresses. |
-| `bitcoinII-cli getaddrmaninfo` | Placeholder | Address-manager summary; keep developer/operator-focused until tested. |
-| `bitcoinII-cli ping` | Placeholder | Sends peer ping requests and changes transient peer state. Needs a dedicated low-risk operator test. |
-| `bitcoinII-cli setnetworkactive true` | Do not publish | Changes network-active state. Keep out of beginner docs until a dedicated operator workflow exists. |
-| `bitcoinII-cli addnode ...` | Do not publish | Changes manual peer state. Needs careful operator context. |
-| `bitcoinII-cli disconnectnode ...` | Do not publish | Disconnects peers. Operator-only after testing. |
-| `bitcoinII-cli setban ...` | Do not publish | Alters ban list. Operator-only after testing and banman review. |
-| `bitcoinII-cli clearbanned` | Do not publish | Alters ban list. Operator-only after testing and banman review. |
+| `backupwallet` | Source-observed | No end-to-end current v31 backup/restore record. |
+| `restorewallet` | Source-observed | Needs disposable backup fixture. |
+| `walletpassphrase` / encryption workflow | Source-observed | Sensitive; only disposable encrypted wallet. |
+| `walletlock` | Source-observed | Same disposable-only boundary. |
+| `rescanblockchain` | Source-observed | Needs explicit chain/wallet fixture and timing notes. |
+| `listtransactions` / `gettransaction` | Source-observed for broader history behavior | No dedicated current wallet-history runtime fixture recorded. |
+| external/hardware signer workflow | Source-reviewed only | Requires BC2 replay-domain support; not runtime qualified. |
 
-### Wallet status and address commands
+## Current network/operator command gaps
 
-| Command | Current status | Notes |
+| RPC | Current status | Notes |
 |---|---|---|
-| `bitcoinII-cli getwalletinfo` | Placeholder | Phase 2 candidate after temporary wallet setup. |
-| `bitcoinII-cli listwallets` | Placeholder | Phase 2 candidate after wallet-enabled node setup. |
-| `bitcoinII-cli listwalletdir` | Placeholder | Needs wallet-directory path notes. |
-| `bitcoinII-cli getnewaddress` | Placeholder | Creates an address in a wallet; test only with a temporary/disposable wallet. |
-| `bitcoinII-cli gettransaction <txid>` | Placeholder | Needs wallet transaction fixture. |
-| `bitcoinII-cli listtransactions` | Placeholder | Needs temporary-wallet or regtest record. |
+| `getnodeaddresses` | Source-observed | Raw output can expose network addresses. |
+| `getaddrmaninfo` | Source-observed | Operator/developer-oriented. |
+| `ping` | Source-observed | Low risk but changes transient peer state. |
+| `setnetworkactive` | Advanced | Alters node network state. |
+| `addnode` / `disconnectnode` | Advanced | Alters peer state. |
+| `setban` / `clearbanned` | Advanced | Alters ban state. |
+| pruning mutation RPC/workflow | Untested current v31 | Current mainnet test observed pruning disabled only. |
 
-### Wallet movement and recovery commands
+These should not be added to beginner copy/paste docs merely because they exist.
 
-These commands should not appear in beginner docs until they are tested, caveated, and placed in the right context.
+## Raw transaction / service lookup gaps
 
-| Command | Current status | Notes |
+| RPC | Current status | Notes |
 |---|---|---|
-| `bitcoinII-cli sendtoaddress <address> <amount>` | Placeholder | Moves wallet funds; test only with temporary/regtest funds. |
-| `bitcoinII-cli backupwallet <destination>` | Placeholder | Needs temporary-wallet backup record. |
-| `bitcoinII-cli restorewallet <wallet_name> <backup_file>` | Placeholder | Needs temporary-wallet restore record. |
-| `bitcoinII-cli walletpassphrase ...` | Placeholder | Sensitive workflow; test only on disposable wallet. |
-| `bitcoinII-cli walletlock` | Placeholder | Needs disposable encrypted-wallet record. |
-| `bitcoinII-cli rescanblockchain` | Placeholder | Needs wallet and chain-state notes. |
+| `getrawtransaction` | Source-observed | Historical lookup semantics depend on mempool/blockhash/`txindex`; no current service-style runtime example recorded. |
+| `decodescript` | Source-observed | Harmless fixture could be used later. |
+| `analyzepsbt` | Source-observed | PSBT workflow exists, but this exact command was not part of the recorded current sequence. |
+| `createpsbt` | Source-observed | Current test used `walletcreatefundedpsbt`. |
+| `signrawtransactionwithwallet` | Source-reviewed | Source path is replay-domain aware; no dedicated current runtime equivalence test. |
+| `signrawtransactionwithkey` | Advanced | Explicit private-key material; avoid ordinary docs. |
+| `getrawmempool true` | Source-observed | No dedicated current public/mainnet record. |
+| `submitpackage` | Advanced / source-observed | Keep out of ordinary instructions until needed/tested. |
 
-### Mining and template commands
+## Historical v29 evidence
 
-| Command | Current status | Notes |
-|---|---|---|
-| `bitcoinII-cli getblocktemplate '{"rules":["segwit"]}'` | Placeholder | Needs local node record and context. Do after basic node checks. |
-| `bitcoinII-cli submitblock <hex>` | Do not publish | Advanced/live path; avoid normal docs until dedicated safe workflow exists. |
-| `bitcoinII-cli submitheader <hex>` | Do not publish | Advanced/live path; avoid normal docs until dedicated safe workflow exists. |
+The earlier Windows `v29.1.0` records remain valid for their exact environments, including the July read-only RPC smoke test and August node-operator/peer-discovery work.
 
-### Raw transaction and PSBT commands
+Do **not** use the historical configured `8337` or test override `28337` as current mainnet RPC defaults. Current v31 source default is `8332`; current runtime used the operator-selected test override `28332` because `8332` was occupied.
 
-| Command | Current status | Notes |
-|---|---|---|
-| `bitcoinII-cli getrawtransaction <txid> 1` | Placeholder | Needs txindex/blockhash/pruned-node context. |
-| `bitcoinII-cli decoderawtransaction <hex>` | Placeholder | Phase 3 candidate with harmless fixture. |
-| `bitcoinII-cli decodescript <hex>` | Placeholder | Phase 3 candidate with harmless fixture. |
-| `bitcoinII-cli analyzepsbt <psbt>` | Placeholder | Needs harmless PSBT fixture. |
-| `bitcoinII-cli createpsbt ...` | Placeholder | Needs regtest fixture. |
-| `bitcoinII-cli finalizepsbt <psbt>` | Placeholder | Needs harmless PSBT fixture. |
-| `bitcoinII-cli signrawtransactionwithkey ...` | Do not publish | Handles supplied private key material; avoid normal docs. |
+Historical records should remain linked for provenance, not silently rewritten into v31 evidence.
 
-### Mempool and transaction-sharing commands
+## Publishing rule
 
-| Command | Current status | Notes |
-|---|---|---|
-| `bitcoinII-cli testmempoolaccept '["signedhex"]'` | Placeholder | Phase 3 candidate only after a harmless fixture exists. |
-| `bitcoinII-cli sendrawtransaction <hex>` | Placeholder | Live submission path; keep out of early smoke tests except regtest-only plan. |
-| `bitcoinII-cli getrawmempool true` | Placeholder | Needs a local node record and privacy review of returned transaction IDs. |
-| `bitcoinII-cli getmempoolentry <txid>` | Placeholder | Needs a mempool fixture. |
-| `bitcoinII-cli submitpackage ...` | Do not publish | Experimental/advanced; avoid normal docs until deeper review and tests. |
+A command example should state or link:
 
-## Test record template
+- BitcoinII release/ref;
+- network;
+- platform/environment;
+- wallet/node state where relevant;
+- whether it was source-observed or actually executed;
+- whether the action is read-only, state-changing, sensitive, or local-only.
 
-```md
-### Command: `bitcoinII-cli example`
+Examples that move funds, expose keys, alter peers, mutate chain/index state, or submit blocks need stronger context than ordinary status commands.
 
-**Date tested:** YYYY-MM-DD
-**Tester:**
-**Operating system:**
-**BitcoinII Core version/release/commit:**
-**Network mode:** mainnet / testnet / signet / regtest
-**Node state:** synced / unsynced / pruned / wallet loaded / wallet disabled
-**Command:**
+## Next useful command tests
 
-```bash
-bitcoinII-cli example
-```
+The highest-value remaining command-level tests are:
 
-**Expected result:**
-
-**Actual result:**
-
-**Pass/fail:**
-
-**Notes:**
-```
-
-## Where to put tested examples later
-
-Once a command has a test record:
-
-- Basic node commands can move into node/configuration docs.
-- Network status commands can move into node/operator docs.
-- Wallet commands can move into wallet docs.
-- Read-only service commands can move into exchange/service docs.
-- Raw transaction and PSBT examples can move into developer docs.
-- Advanced or risky commands should stay in advanced pages only.
+1. `getmininginfo`, `getnetworkhashps`, and a safe `getblocktemplate` current-release record;
+2. a disposable wallet backup/restore workflow;
+3. a disposable encrypted-wallet lock/unlock workflow;
+4. `signrawtransactionwithwallet` equivalence against the tested wallet/PSBT path;
+5. a controlled `getrawtransaction` lookup matrix covering mempool/blockhash/`txindex` assumptions;
+6. optional index/pruning operator workflows if production integration guidance needs them.
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Current MoreBC2 RPC, wallet, node, mining, configuration pages, command smoke-test plan, first-pass network RPC source review, the local read-only RPC smoke-test record from 2026-07-10, and the Windows node-operator test from 2026-08-27
-**Notes:** Nine read-only node/network RPC commands have the earlier local Windows mainnet record; five of them were exercised again in the isolated command-line route together with startup, shutdown, and restart. This is not cross-platform or cross-version verification, and raw peer/network outputs still require privacy review.
+**Status:** Reviewed / Partial  
+**Primary evidence checked:** September 11 v31 node/RPC and PSBT runtime records, current Developers/Source Atlas mining/wallet/RPC reviews, and preserved historical v29 command records  
+**Notes:** Current command classification now reflects actual v31 execution. Remaining Partial status is command-specific; it is not accurate to describe all wallet/PSBT/mempool commands as untested anymore.
