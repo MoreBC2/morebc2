@@ -1,151 +1,98 @@
 # Net processing handshake
 
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-07-02
+**Category:** Developer / Source Atlas  
+**Status:** Reviewed / Runtime-corroborated structural  
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page covers a first-pass review of the peer handshake and early feature-negotiation portions of:
+This page maps the peer handshake and early feature-negotiation portion of BitcoinII Core `v31.1.0` `src/net_processing.*`.
 
-- `src/net_processing.cpp`
-- `src/net_processing.h`
+The source review covers `version` / `verack`, service/version checks, self-connection handling, relay preferences, and early feature messages such as `wtxidrelay`, `sendaddrv2`, compact-block signaling, and optional transaction-reconciliation negotiation.
 
-This is a focused slice of `net_processing`, not a full review of block relay, transaction relay, address relay, or peer eviction behavior.
+September `v31.1.0` runtime evidence now corroborates successful ordinary outbound handshakes because the isolated mainnet node established multiple outbound peers and began current header synchronization. That does not mean every feature-negotiation branch was instrumented.
 
-## Why this file area matters
+## Handshake flow
 
-`net_processing` is where BitcoinII Core handles many P2P messages after the lower-level network layer receives them.
+Reviewed `version` processing includes:
 
-The handshake path matters because it determines:
+- parsing protocol version, services, time, addresses, nonce, subversion, start height, and relay preference;
+- rejecting peers below the minimum supported protocol version;
+- self-connection detection for inbound connections;
+- recording peer services and negotiated common protocol version;
+- disconnecting selected outbound peers that fail expected-service requirements;
+- sending the local version response for inbound peers where appropriate;
+- transitioning toward `verack` and successful-connection state.
 
-- whether a peer has sent a valid first `version` message
-- whether the peer's protocol version is acceptable
-- which services the peer advertises
-- whether transaction relay is enabled for the peer
-- whether feature messages such as `wtxidrelay`, `sendaddrv2`, compact-block signaling, and transaction-reconciliation signaling are accepted
-- when a peer is treated as successfully connected
+Messages arriving before the expected handshake stage can be ignored or cause disconnect according to their timing requirements.
 
-## Header-level notes
+## Early feature negotiation
 
-`src/net_processing.h` defines `PeerManager`, its options, default limits, state stats, and the public `ProcessMessage` method used for message processing and fuzz testing.
+Source-reviewed early features include:
 
-Observed defaults and options include:
+- `wtxidrelay`;
+- `sendaddrv2`;
+- compact-block signaling;
+- optional transaction reconciliation;
+- address-fetch / `getaddr` behavior for selected outbound peers.
 
-- transaction reconciliation disabled by default
-- maximum orphan transaction count
-- block reconstruction extra transaction count
-- peer bloom filters disabled by default
-- peer block filters disabled by default
-- compact-block in-flight limit
-- max headers result value
-- blocksonly / incoming transaction ignore option
-- message capture option
-- deterministic RNG test option
+Some negotiation messages are only valid before successful connection and are treated differently if received after `verack`.
 
-This page does not fully document those settings outside the handshake context.
+## Runtime evidence — 2026-09-11
 
-## Handshake flow observed
+The isolated Windows `v31.1.0` mainnet node observed:
 
-The reviewed `ProcessMessage` section handles `version` first.
+- protocol version `70016`;
+- four outbound peers during the first run;
+- six outbound peers after restart;
+- current header acquisition and advancing IBD;
+- no manual peer injection required.
 
-Observed behavior includes:
+Those facts require successful enough version/verack/peer initialization for normal synchronization to proceed and therefore corroborate the ordinary outbound handshake path.
 
-- If a peer sends a redundant `version` message after already having a version, it is ignored.
-- The `version` message is parsed for protocol version, service flags, timestamp, address information, nonce, subversion string, starting height, and relay preference.
-- Negative timestamps are normalized to zero.
-- For non-inbound peers, advertised services can update address-manager service information.
-- Peers expected to provide desirable services can be disconnected if they do not offer the expected services.
-- Peers below `MIN_PEER_PROTO_VERSION` are disconnected.
-- Inbound self-connections are detected with the incoming nonce check and disconnected.
-- Inbound peers can cause the local node to respond with its own version message.
-- The common protocol version is set to the lower of the peer version and local `PROTOCOL_VERSION`.
-- The peer's advertised service flags, local address, subversion string, and starting height are recorded.
+MoreBC2 did **not** capture or publish every negotiation message, peer address, service-flag combination, or transport handshake detail.
 
-## Feature negotiation observed
+## BitcoinII-specific boundary
 
-During or around the handshake, reviewed behavior includes:
+The broad version/verack structure remains Bitcoin-style. Current BitcoinII divergence becomes material after/around connection establishment through chain/network identity and validation rules such as:
 
-- `wtxidrelay` can be announced when the common version supports it.
-- `sendaddrv2` can be sent when the common version is high enough for BIP155-style address relay.
-- transaction reconciliation can be signaled when enabled and when relay conditions allow it.
-- `verack` is sent after the local node processes the peer's version path.
-- preferred-download state can be set after the version path evaluates connection type, permissions, address-fetch state, and block-serving capability.
-- outbound peers can initialize address relay and may receive one `getaddr` request to help populate address manager state.
-- non-inbound successful connections can update address-manager success state.
-- feeler connections disconnect after completing the version path.
+- mainnet message start / P2P port;
+- ShockWave contextual header difficulty;
+- fork-aware header synchronization;
+- replay-protection transaction signatures;
+- consensus data restrictions.
 
-## Pre-verack behavior observed
+A successful generic Bitcoin-style handshake therefore does not imply full protocol/transaction/mining compatibility.
 
-After the `version` path:
+## Privacy boundary
 
-- Messages received before any version message are rejected as non-version messages before version handshake.
-- Duplicate `verack` messages are ignored after successful connection.
-- `verack` completion can log a successful connection.
-- Peers supporting compact blocks can receive `sendcmpct` with version 2 and low-bandwidth preference.
-- Transaction-reconciliation state can be cleared if required negotiation messages did not arrive.
-- Transaction download manager connection state is initialized.
-- `fSuccessfullyConnected` is set after `verack` processing.
-
-Some feature-negotiation messages are only valid before successful connection:
-
-- `wtxidrelay` after `verack` causes disconnect.
-- `sendaddrv2` after `verack` causes disconnect.
-- `sendtxrcncl` after `verack` causes disconnect.
-
-Unsupported messages before `verack` are ignored with a debug log.
-
-## Boundaries
-
-This page does not claim:
-
-- that a specific peer policy is ideal or recommended
-- that P2P behavior has been tested live
-- that BitcoinII differs from upstream Bitcoin Core in this area
-- that every handshake branch has been reviewed
-- that block relay, transaction relay, address relay, or peer eviction behavior is fully documented
-
-This is source-observed documentation for the reviewed handshake slice only.
-
-## Documentation implications
-
-MoreBC2 can use this page to support cautious explanations of:
-
-- version/verack handshake basics
-- why source-reviewed protocol message names are not enough to prove runtime behavior
-- why feature-negotiation messages need timing rules
-- why peer status in RPC output should not be confused with user-ready operating guidance
+Peer diagnostics can reveal public/local network addresses and session details. MoreBC2's runtime records summarize peer counts/state without publishing an identifiable peer list.
 
 ## Related pages
 
-- [P2P protocol primitives](protocol.md)
+- [Protocol primitives](protocol.md)
+- [Net connection management](net-connection-management.md)
 - [Network RPC](rpc-network.md)
-- [Node startup](../../architecture/node-startup.md)
-- [RPC overview](../rpc-overview.md)
-- [Network specifications](../../documentation/network-specifications.md)
+- [Fork-aware header synchronization](headers-sync-v31.md)
+- [Peer communication model](../../architecture/peer-communication-model.md)
+- [Windows v31 node/RPC validation](../../verification/windows-v31-node-rpc-validation-2026-09-11.md)
 
-## Open questions
+## Open work
 
-- Compare this handshake slice between the `v31.1.0` baseline and subsequent `main` changes.
-- Review the rest of `net_processing.cpp` in smaller slices.
-- Document address relay separately.
-- Document block/header relay separately.
-- Document transaction relay separately.
-- Confirm which P2P options should be surfaced in user-facing node docs.
-- Confirm whether any BitcoinII-specific behavior exists here beyond naming and visible comments.
+- Privacy-safe current v31 capture of selected negotiation/transport properties if needed.
+- Keep address, block/header, transaction relay and peer-health behavior in their dedicated pages.
+- Do not generalize one peer's negotiated features to the entire network.
 
-## Sources
+## Primary sources
 
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+- `v31.1.0/src/net_processing.cpp`
+- `v31.1.0/src/net_processing.h`
+- `v31.1.0/src/protocol.*`
 
-- Current observed `main` `src/net_processing.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/net_processing.cpp
-- Current observed `main` `src/net_processing.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/net_processing.h
-- Current observed `main` `src/protocol.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/protocol.h
-- [P2P protocol primitives](protocol.md)
-- [Network RPC](rpc-network.md)
+Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This is a first-pass focused review of the handshake and early feature-negotiation paths in `net_processing`. Runtime tests, release comparison, upstream comparison, and the rest of `net_processing` remain open.
+**Status:** Reviewed / Runtime-corroborated structural  
+**Primary evidence:** BitcoinII Core `v31.1.0` handshake source plus September 11 successful outbound-peer/synchronization runtime evidence  
+**Notes:** Ordinary outbound handshake success is corroborated. Exact feature-negotiation, inbound, transport, and failure branches remain uninstrumented.
