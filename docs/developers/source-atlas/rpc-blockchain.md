@@ -1,35 +1,18 @@
 # Blockchain RPC
 
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-06-30
+**Category:** Developer / Source Atlas  
+**Status:** Source-reviewed / Runtime-tested partial  
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page covers a first-pass review of:
+This page maps BitcoinII Core `v31.1.0` blockchain/chainstate RPC behavior centered on `src/rpc/blockchain.cpp`.
 
-- `src/rpc/blockchain.cpp`
+The earlier page was source-only. MoreBC2 now has bounded Windows `v31.1.0` runtime evidence for selected status methods, while pruning, scans, snapshots, state-changing chain controls, and most historical lookup paths remain source-reviewed only.
 
-This file exposes blockchain, block, chainstate, pruning, UTXO, scan, deployment, and validation-adjacent node status commands through JSON-RPC.
+## Reviewed command surface
 
-This page is not a tested command guide. Commands and examples should not be marked verified until they are run against BitcoinII Core.
-
-## Why this file matters
-
-Blockchain RPC commands are central for:
-
-- Node status checks.
-- Exchange deposit monitoring.
-- Explorer/index tooling.
-- Block and transaction inspection.
-- Confirmation checks.
-- Pruning and block-data management.
-- Chainstate and UTXO inspection.
-- Descriptor-based UTXO and block-filter scans.
-
-## Registered commands reviewed
-
-Reviewed command registration places these commands in the `blockchain` RPC category:
+Current source review includes methods such as:
 
 - `getblockchaininfo`
 - `getchaintxstats`
@@ -55,185 +38,151 @@ Reviewed command registration places these commands in the `blockchain` RPC cate
 - `dumptxoutset`
 - `loadtxoutset`
 - `getchainstates`
+- index/status helpers including `getindexinfo` through the current RPC surface.
 
-Reviewed hidden commands include:
+State-changing or advanced methods should not be promoted as tested operator instructions without a dated workflow.
 
-- `invalidateblock`
-- `reconsiderblock`
-- `waitfornewblock`
-- `waitforblock`
-- `waitforblockheight`
-- `syncwithvalidationinterfacequeue`
+## Runtime-tested v31 subset
 
-## Block and chain tip helpers
-
-Reviewed basic chain-tip commands include:
-
-- `getblockcount`
-- `getbestblockhash`
-- `getdifficulty`
-- `getblockhash`
-
-These commands read active chain state under `cs_main` and return height, tip hash, difficulty, or height-to-hash mapping.
-
-## Block header and block JSON helpers
-
-Reviewed helper functions include:
-
-- `GetDifficulty`
-- `ComputeNextBlockAndDepth`
-- `ParseHashOrHeight`
-- `blockheaderToJSON`
-- `blockToJSON`
-
-`blockheaderToJSON` returns fields such as hash, confirmations, height, version, merkle root, time, median time, nonce, bits, target, difficulty, chainwork, transaction count, previous block hash, and next block hash when available.
-
-`blockToJSON` extends header JSON with block size, stripped size, weight, and transactions. At higher verbosity it can use undo data to include previous-output information when undo data is available.
-
-## getblock
-
-`getblock` looks up a block by hash, reads raw block data from local storage, and returns either:
-
-- Raw hex when verbosity is zero or false.
-- Block JSON with transaction IDs at verbosity one.
-- Block JSON with transaction details at higher verbosity.
-- Block JSON with previous-output details at the highest reviewed verbosity when undo data can be read.
-
-This command depends on local block availability. It can fail if block data has been pruned or is otherwise unavailable.
-
-## Chain wait and queue sync helpers
-
-Reviewed hidden wait/sync helpers include:
-
-- `waitfornewblock`
-- `waitforblock`
-- `waitforblockheight`
-- `syncwithvalidationinterfacequeue`
-
-The wait helpers use the mining interface tip-wait path. `syncwithvalidationinterfacequeue` waits for the validation-interface queue to catch up to work already queued when the command begins.
-
-## getblockfrompeer
-
-`getblockfrompeer` schedules fetching a block from a specific peer.
-
-Reviewed behavior includes:
-
-- Requiring the block header to be known.
-- Rejecting if the block data is already downloaded.
-- Avoiding unsafe fetch behavior in prune mode for blocks above the current synced height.
-- Scheduling the fetch through peer manager.
-
-## Pruning-related RPC behavior
-
-Reviewed pruning paths include:
-
-- `GetPruneHeight`
-- `pruneblockchain`
-- pruning fields in `getblockchaininfo`
-
-`GetPruneHeight` searches for the highest pruned block height while avoiding treating the genesis block as pruned only because it lacks undo data.
-
-`pruneblockchain` requires prune mode, checks requested height or timestamp, respects the minimum blocks-to-keep window, calls manual pruning, and returns the last pruned height.
-
-## UTXO set statistics
-
-Reviewed UTXO-stat helpers include:
-
-- `ParseHashType`
-- `GetUTXOStats`
-- `gettxoutsetinfo`
-
-`gettxoutsetinfo` can report UTXO set statistics at the active tip, and at a specific hash or height when supported by the coin stats index. It supports hash types including `hash_serialized_3`, `muhash`, and `none`.
-
-## Chain status and deployment commands
-
-Reviewed status/deployment commands include:
+The September 11 isolated Windows mainnet validation directly exercised:
 
 - `getblockchaininfo`
-- `getdeploymentinfo`
 - `getchaintips`
-- `getchainstates`
+- `getindexinfo`
 
-`getblockchaininfo` reports chain name, block/header heights, best block hash, bits, target, difficulty, time, median time, verification progress, initial block download status, chain work, disk usage, pruning status, optional signet challenge, and warnings.
+The same runtime record observed advancing initial block download, current header acquisition, `pruned=false`, and no optional indexes enabled (`getindexinfo` returned no active optional index set in that environment).
 
-`getdeploymentinfo` reports deployment status for consensus changes at the current tip or a requested block hash.
+This is environment-bounded evidence. It does not establish behavior for a fully synchronized, pruned, txindexed, blockfilter-indexed, snapshot-based, or cross-platform node.
 
-`getchaintips` reports known chain tips, including active, invalid, headers-only, valid-headers, and valid-fork states.
+See [Windows v31.1.0 node and RPC validation](../../verification/windows-v31-node-rpc-validation-2026-09-11.md).
 
-`getchainstates` reports chainstate data, including headers, each chainstate tip, target, difficulty, verification progress, cache sizes, snapshot base hash when applicable, and whether the chainstate is fully validated.
+## `getblockchaininfo`
 
-## Descriptor and scan RPCs
+Current source/status output covers fields such as:
 
-Reviewed scan-related commands include:
+- chain;
+- blocks and headers;
+- best block hash;
+- target/difficulty context;
+- median time;
+- verification progress;
+- initial-block-download state;
+- chain work;
+- disk usage;
+- pruning state;
+- warnings and network-specific information.
 
+MoreBC2 directly exercised this method during bounded v31 IBD. Time-dependent example values should not be copied as protocol constants.
+
+## Block/header lookup
+
+Reviewed helpers support block/header lookup by hash/height and JSON conversion with fields such as:
+
+- confirmations;
+- height;
+- version;
+- merkle root;
+- time / median time;
+- nonce;
+- `bits` / target / difficulty;
+- chain work;
+- previous/next hashes where available;
+- transaction information according to requested verbosity.
+
+Historical lookup depends on local block/index availability. A pruned node or node without the relevant index can have legitimate lookup limitations.
+
+## Current difficulty interpretation
+
+`getdifficulty` and block/header JSON expose difficulty derived from chain state.
+
+For current BC2, do not pair those RPCs with documentation that says difficulty changes only every 2016 blocks. Mainnet uses ShockWave per block from height `57750`.
+
+See [ShockWave v31](shockwave-v31.md).
+
+## Chain tips and accumulated work
+
+`getchaintips` exposes known tip states, while the underlying validation path selects the active candidate by accumulated chain work.
+
+The September v31 runtime test exercised `getchaintips`; it did not intentionally create a fork/reorg fixture.
+
+Confirmation count is therefore an operational policy input rather than protocol finality.
+
+## Pruning and index boundary
+
+Current source/runtime evidence establishes:
+
+- pruning is not enabled by default;
+- `txindex` is not enabled by default;
+- pruning and some index/service workflows have compatibility constraints;
+- block/undo/history lookups can fail legitimately when required local data is unavailable.
+
+The September v31 test observed the default unpruned/no-optional-index state. It did **not** execute `pruneblockchain`, reindex, txindex, blockfilter, or snapshot workflows.
+
+## UTXO and scan RPCs
+
+Source-reviewed surfaces include:
+
+- `gettxout`
+- `gettxoutsetinfo`
 - `scantxoutset`
 - `scanblocks`
 - `getdescriptoractivity`
 
-`scantxoutset` scans the UTXO set for descriptor-derived scripts and supports `start`, `abort`, and `status` actions.
+These can be useful for service/recovery tooling but depend on exact chain/index/node state. MoreBC2 has not yet produced a current v31 runtime guide for these scan paths.
 
-`scanblocks` uses block filter indexes to find relevant blocks for descriptor-derived scripts and supports `start`, `abort`, and `status` actions.
+## UTXO snapshot / chainstate RPCs
 
-`getdescriptoractivity` reports spend and receive activity associated with descriptors for specified blocks, with optional mempool inclusion.
+Source-reviewed snapshot paths include `dumptxoutset`, `loadtxoutset`, and chainstate-status reporting.
 
-These commands are potentially useful for recovery and service tooling, but examples must be tested before being recommended.
+MoreBC2 has not runtime-tested assumeutxo/snapshot activation on BC2. Do not describe snapshot loading as operationally verified merely because the RPC exists in source.
 
-## UTXO snapshot RPCs
+## State-changing/advanced boundary
 
-Reviewed snapshot-related helpers include:
+Commands that alter validation state, manual pruning, precious-block preference, invalidation/reconsideration, peer-directed block fetching, or snapshots should remain advanced/operator documentation until a specific safe workflow is tested.
 
-- `PrepareUTXOSnapshot`
-- `WriteUTXOSnapshot`
-- `CreateUTXOSnapshot`
-- `dumptxoutset`
-- `loadtxoutset`
+A source-observed command is not a recommendation.
 
-`loadtxoutset` loads a serialized UTXO snapshot and activates a snapshot-based chainstate. Reviewed comments say the snapshot contents are checked by hash, and local services are adjusted while historical block serving is limited during sync.
+## Service integration implications
 
-MoreBC2 has not yet reviewed the full assumeutxo design document or tested snapshot workflows.
+For exchanges/custody/indexers:
 
-## Relationship to other pages
+- use an operator-controlled Core node as the authoritative chain source;
+- document pruning/index requirements for every historical lookup used;
+- use chain work and tip/fork state alongside confirmation thresholds for deposit risk;
+- do not rely on public explorer behavior as a substitute for the node's own chainstate;
+- distinguish a missing historical lookup caused by pruning/index configuration from a consensus failure.
 
-Related pages:
+## Related pages
 
 - [RPC overview](../rpc-overview.md)
-- [Source atlas: mining RPC](rpc-mining.md)
-- [Source atlas: block storage](block-storage.md)
-- [Source atlas: validation interface](validation-interface.md)
-- [Life of a block](../../architecture/life-of-a-block.md)
-- [Life of a reorganization](../../architecture/life-of-a-reorg.md)
+- [Block acceptance pipeline](block-acceptance.md)
+- [Block storage](block-storage.md)
+- [ShockWave v31](shockwave-v31.md)
 - [Deposit monitoring](../../exchange/deposit-monitoring.md)
+- [Node configuration](../../configuration/node-configuration.md)
+- [Windows v31 node/RPC validation](../../verification/windows-v31-node-rpc-validation-2026-09-11.md)
 
-## BitcoinII-specific notes
+## Open work
 
-This first-pass review saw BitcoinII naming in examples, binary names, and documentation strings.
+- Runtime-test `getblock` / `getblockheader` / `getdifficulty` against a current fully synchronized v31 fixture.
+- Exercise explicit pruning/index configurations in disposable data directories.
+- Qualify UTXO/descriptor scan methods for service/recovery use.
+- Test snapshot/assumeutxo behavior only in an isolated environment.
 
-No upstream comparison has been completed, so this page does not claim whether blockchain RPC behavior differs from upstream Bitcoin Core beyond naming and visible strings.
+## Primary sources
 
-## Open questions
+Pinned/current review scope:
 
-- Which blockchain RPC commands should be in exchange/service docs?
-- Which commands are safe for public documentation versus developer-only docs?
-- Which command examples can be tested against a local BitcoinII node first?
-- Which pruning and block-data failures should be documented for operators?
-- Which descriptor scan commands are relevant to BitcoinII users without wallet context?
-- Does BitcoinII differ from upstream Bitcoin Core in blockchain RPC behavior beyond naming?
-- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for this file before upgrading status.
+- `v31.1.0/src/rpc/blockchain.cpp`
+- `v31.1.0/src/rpc/blockchain.h`
+- `v31.1.0/src/validation.cpp`
+- `v31.1.0/src/node/blockstorage.*`
+- `v31.1.0/src/pow.cpp`
 
-## Sources
-
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
-
-- Current observed `main` `src/rpc/blockchain.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/blockchain.cpp
-- Current observed `main` `src/rpc/blockchain.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/blockchain.h
-- Current observed `main` `src/rpc/server.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/server.h
-- Current observed `main` `src/node/blockstorage.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/blockstorage.h
-- Current observed `main` `src/node/blockstorage.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/blockstorage.cpp
-- Current observed `main` `src/validationinterface.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validationinterface.h
-- Current observed `main` `src/validationinterface.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validationinterface.cpp
+Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This is a first-pass blockchain RPC review. Commands have not been run; examples, service recommendations, operator guidance, upstream comparison, and release-versus-main comparison remain open.
+**Status:** Source-reviewed / Runtime-tested partial  
+**Primary evidence:** BitcoinII Core `v31.1.0` source plus September 11 Windows mainnet node/RPC validation  
+**Notes:** Current v31 runtime evidence now covers selected chain/index status RPCs. Historical lookup, pruning/index mutation, scans, snapshots, and advanced chain controls remain source-only or untested.
