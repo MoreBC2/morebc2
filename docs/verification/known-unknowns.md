@@ -102,22 +102,27 @@ MoreBC2 has not confirmed the preferred public contact process for exchanges, ex
 
 ### Wallet and third-party compatibility
 
-MoreBC2 has source-reviewed BitcoinII Core wallet behavior and dated public Electrum observations, but broad third-party wallet compatibility is not established.
+MoreBC2 has source-reviewed BitcoinII Core wallet behavior and fresh read-only Electrum reachability evidence, but broad third-party wallet compatibility is not established.
 
 **Needed:** Safe current-release compatibility records without private keys, real funds, or unnecessary broadcast risk.
 
-### Active ecosystem resources
+### Public infrastructure independence and production behavior
 
-The primary explorer hierarchy was refreshed on 2026-09-12:
+Fresh 2026-09-11 direct checks now establish current point-in-time REST, WebSocket, Electrum, and invalid-broadcast rejection behavior across the documented public infrastructure.
 
-- `bitcoinii.ddns.net/explorer/` — Official BitcoinII Explorer
-- `explorer.bitcoin-ii.org` — project-linked but independently operated/community-funded
-- `bc2mempool.com` — supplemental public explorer/API service
-- `bc2.live` — supplemental public frontend/service
+The Official BitcoinII Explorer exposed a distinct v2.0.0 API surface. `bc2mempool.com`, `explorer.bitcoin-ii.org`, and `bc2.live` exposed closely aligned Mempool-style REST/WebSocket behavior.
 
-Current web reachability does not establish long-term uptime or backend independence.
+**Still needed:**
 
-**Needed:** fresh direct protocol checks for documented REST paths, WebSocket, Electrum TCP/TLS, transaction broadcast, and any claimed redundant backend operators.
+- evidence of backend/operator independence where multiple public services are counted as redundancy;
+- long-term uptime/reliability evidence;
+- successful broadcast of a valid BC2 transaction through any public submission service, if that proof becomes necessary;
+- wallet-level Electrum compatibility and Electrum transaction-broadcast behavior;
+- periodic dated rechecks because public services can change.
+
+**Resolved from the earlier queue:** current REST route reachability, Mempool-style WebSocket handshakes, Electrum TCP/TLS read-only reachability, TLS hostname validation, and existence/rejection behavior of `/api/tx` on the three tested Mempool-style services.
+
+See [Public infrastructure smoke test — 2026-09-11](public-infrastructure-smoke-test-2026-09-11.md).
 
 ### Architecture and Source Atlas release drift
 
@@ -138,5 +143,5 @@ Instead:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current `v31.1.0` release/source anchors, GitHub release/tag verification metadata, current public explorer observations, plus existing MoreBC2 evidence records
-**Notes:** This page is an executive list. Ticker identity, documented v31.1.0 RPC default, six-asset release inventory, verified target-commit state, and explorer hierarchy were refreshed on 2026-09-12. Runtime validation, binary authentication, confirmation policy, technical contact process, and current protocol-level service testing remain open.
+**Primary sources checked:** Current `v31.1.0` release/source anchors, GitHub release/tag verification metadata, current public infrastructure checks, plus existing MoreBC2 evidence records
+**Notes:** Ticker identity, documented v31.1.0 RPC default, six-asset release inventory, verified target-commit state, explorer hierarchy, current public REST/WebSocket reachability, read-only Electrum TCP/TLS reachability, and invalid public-broadcast rejection behavior have been refreshed. Runtime node/wallet validation, binary authentication, confirmation policy, technical contact process, successful valid-transaction broadcast, and backend/operator independence remain open.
