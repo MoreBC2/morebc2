@@ -1,216 +1,161 @@
 # Life of a reorganization
 
 **Category:** Architecture
-**Status:** Draft
-**Last reviewed:** 2026-06-30
+**Status:** Reviewed / Partial
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page explains the reviewed BitcoinII chain reorganization lifecycle at a high level.
+This page explains the BitcoinII chain-reorganization lifecycle at a high level.
 
-A reorganization happens when the node switches from one active chain branch to another usable branch with more work.
+A reorganization happens when the node switches from the current active branch to another valid, usable branch with greater accumulated work.
 
-The reviewed path connects candidate selection, old-branch rollback, stored undo data, disconnected-transaction handling, new-branch connection, mempool repair, storage state, wallet-visible transaction-history effects, and validation notifications.
+ShockWave changes how required work is calculated for post-activation blocks, but it does not replace accumulated-work chain selection and does not eliminate reorg risk.
 
 ## Simplified lifecycle
 
 ```text
-Competing chain appears
-  -> node finds most-work candidate
+Competing branch becomes known
+  -> headers/blocks are validated in branch context
+  -> node finds usable most-work candidate
   -> fork point is found
-  -> old active blocks roll back
+  -> old active blocks are disconnected
   -> undo data restores previous UTXO state
   -> disconnected transactions are held temporarily
-  -> new branch blocks connect
-  -> storage state supports the switch
-  -> eligible old-branch transactions are reconsidered for mempool
+  -> replacement branch blocks connect
+  -> eligible old-branch transactions are reconsidered
+  -> mempool is repaired under the new active-chain context
   -> active tip changes
-  -> validation notifications are emitted
-  -> wallets/indexes/services update after callbacks or polling
+  -> wallets/indexes/services observe the new state
 ```
 
-## Step 1: Competing chain appears
+## Step 1: Competing branch appears
 
 A node may learn about a competing branch through headers and blocks.
 
-The branch does not become active merely because it exists. It must be usable and have enough work to become the best-chain candidate.
+For ShockWave-era branches, current v31 header synchronization preserves branch-specific recent target and median-time-past context so candidate difficulty can be evaluated against that branch rather than the active chain's history.
+
+Learning about a branch does not make it active. It still must pass validation and become the best usable accumulated-work candidate.
 
 ## Step 2: Candidate selection
 
-Reviewed `FindMostWorkChain` behavior includes:
+The best-chain path evaluates candidates by accumulated chain work.
 
-- Selecting a candidate tip from `setBlockIndexCandidates`.
-- Preferring the candidate with the most work.
-- Rejecting candidate chains with failed blocks.
-- Rejecting candidate chains missing required block data.
-- Returning a usable candidate when one is found.
+A branch is not selected merely because it has:
 
-Block storage matters here because candidate chains may be known by header but unusable if required block data is not locally available.
+- more headers;
+- greater height;
+- a lower recent difficulty;
+- a newer timestamp.
+
+It must remain valid and usable and beat the active chain on the node's accumulated-work selection rules.
 
 ## Step 3: Fork point
 
-`ActivateBestChainStep` finds the fork point between the current active chain and the candidate chain.
+The node identifies the last common block shared by the active chain and the candidate branch.
 
-The fork point is the last shared block before the two branches diverge.
+Blocks above that point on the old branch must be disconnected before replacement-branch blocks can become active.
 
-## Step 4: Roll back old active blocks
+## Step 4: Disconnect old active blocks
 
-If the active tip is past the fork point, the node rolls back active blocks until it reaches the fork point.
+The disconnect path reads active blocks and undo information, reverses UTXO effects, moves the active tip backward, and stages eligible disconnected transactions for later reconsideration.
 
-Reviewed `DisconnectTip` behavior includes:
+Reorg handling depends on required block and undo data being available locally. Pruning and missing historical data therefore matter operationally.
 
-- Reading the current tip block from disk.
-- Creating a coins-view cache.
-- Calling `DisconnectBlock`.
-- Moving the active chain tip backward.
-- Adding disconnected block transactions to the disconnected-transaction pool when available.
-- Emitting `BlockDisconnected` signals.
+## Step 5: Restore UTXO state
 
-## Step 5: Restore earlier UTXO state
+Undo data restores outputs spent by the disconnected block while removing outputs that block had created.
 
-Reviewed `DisconnectBlock` behavior includes:
+This brings the coins view back to the fork-point state before replacement blocks are connected.
 
-- Reading undo data from disk.
-- Walking transactions in reverse order.
-- Removing outputs created by the rolled-back block.
-- Restoring previously spent inputs from undo data.
-- Moving the coins view best block backward.
-- Returning clean, unclean, or failed status.
+## Step 6: Hold disconnected transactions
 
-Undo data is what allows the node to return the UTXO view to the state before a previously connected block.
+Non-coinbase transactions from disconnected blocks may still be valid on the replacement branch.
 
-## Step 6: Storage support during reorgs
+BitcoinII Core temporarily tracks them so they can either:
 
-The reviewed block-storage layer supports reorg handling by keeping:
+- be confirmed again in replacement blocks;
+- return to the mempool if still valid and policy-acceptable;
+- be dropped if they conflict with the new chain or fail current rules.
 
-- Serialized block data in `blk` files.
-- Undo data in `rev` files.
-- Block-index metadata with file positions and availability flags.
-- Pruning state that can affect whether older block data is still available.
+## Step 7: Connect the replacement branch
 
-During rollback, validation needs block and undo data from storage.
+Replacement blocks are connected through the ordinary current validation path.
 
-## Step 7: Hold disconnected transactions
+For current v31 mainnet this means that block/header difficulty, replay-protection signature domains, and consensus data restrictions are evaluated according to the candidate block's height and branch context.
 
-Transactions from disconnected blocks may still be valid on the new chain.
+A reorg does not bypass BitcoinII-specific activation rules.
 
-Reviewed `DisconnectedBlockTransactions` behavior includes:
+## Step 8: Reprocess old-branch transactions
 
-- Temporarily storing transactions from disconnected blocks.
-- Keeping a queue with memory limits.
-- Removing entries when they are included again in newly connected blocks.
-- Providing the transaction list for later mempool reprocessing.
+After disconnection/reconnection, mempool repair reconsideres eligible transactions from the old branch.
 
-## Step 8: Connect the new branch
+The reviewed path includes:
 
-After reaching the fork point, `ActivateBestChainStep` connects blocks from the candidate branch.
+- skipping coinbase transactions;
+- attempting re-addition through the normal acceptance path;
+- removing transactions that are no longer valid or final;
+- repairing ancestor/descendant relationships;
+- removing transactions spending immature coinbase outputs;
+- reapplying mempool size limits.
 
-Reviewed behavior includes:
+Current v31 source also matters here because mempool signature checks use the replay-protection domain for the **next block height**.
 
-- Building a list of blocks to connect.
-- Calling `ConnectTip` for each block.
-- Calling `ConnectBlock` through `ConnectTip`.
-- Marking chains invalid if block connection fails due to consensus invalidity.
+## Step 9: New active tip and notifications
 
-When new branch blocks connect, they may remove transactions from the disconnected-transaction pool if those transactions are included again.
+After successful replacement-branch connection, the node updates the active tip and emits block/mempool notifications consumed by wallets, indexes, UI components, and other subscribers.
 
-## Step 9: Reprocess old-branch transactions
+Wallet or service state can therefore change after a reorg even when the underlying transaction bytes did not change.
 
-After rollback and reconnection, reviewed `MaybeUpdateMempoolForReorg` behavior includes:
-
-- Draining the disconnected transaction pool.
-- Processing transactions in reverse queue order so earlier previously-confirmed transactions are considered first.
-- Skipping coinbase transactions.
-- Attempting to re-add eligible transactions through mempool acceptance.
-- Removing failed resurrected transactions and descendants.
-- Updating descendants of successfully re-added transactions.
-- Removing transactions that are no longer final.
-- Recalculating invalidated lock points when possible.
-- Removing transactions that spend immature coinbase outputs.
-- Re-limiting mempool size.
-
-Reviewed mempool RPC pages describe how some mempool state can be inspected after a reorg, but examples remain untested.
-
-## Step 10: New active tip
-
-After successful connection, the active chain tip points to the candidate branch.
-
-Reviewed paths emit or call:
-
-- `UpdateTip`
-- `BlockDisconnected`
-- `BlockConnected`
-- `UpdatedBlockTip`
-
-## Step 11: Notification handoff
-
-The validation-interface layer delivers reorg-related block and mempool events to subscribers.
-
-Reviewed relevant callback types include:
-
-- `BlockDisconnected`
-- `BlockConnected`
-- `UpdatedBlockTip`
-- `TransactionAddedToMempool`
-- `TransactionRemovedFromMempool`
-- `MempoolTransactionsRemovedForBlock`
-
-Wallets, indexes, UI layers, and services may depend on these notifications, but MoreBC2 has not yet reviewed the subscriber call sites.
-
-Important ordering caveat:
-
-A single subscriber receives callbacks in generated order, but no ordering should be assumed across different subscribers.
-
-## Step 12: Wallet and service visibility
-
-Reviewed wallet transaction-history RPC behavior includes `listsinceblock`, which can report wallet transactions after a given block reference and can include removed transactions for reorg-related cases when available.
-
-The reviewed source warns that removed-transaction reporting is not guaranteed to work on pruned nodes.
-
-For service docs, this means reorg-aware polling and confirmation policy should stay in Draft until tested against a running BitcoinII Core node.
-
-## Why reorgs matter
-
-Reorgs are a normal part of Nakamoto-style proof-of-work consensus.
-
-They are the mechanism by which nodes converge on the most-work valid chain when multiple competing branches exist.
-
-## User-facing meaning
+## User and service meaning
 
 During a reorg:
 
-- A transaction that was confirmed can become unconfirmed.
-- A transaction may return to the mempool if it is still valid.
-- A transaction may be confirmed again on the new branch.
-- A transaction may leave the mempool if it is no longer valid under the new active chain.
-- Wallet or explorer display may update after validation-interface subscribers process the relevant callbacks or after wallet/service polling sees the changed chain state.
+- a confirmed transaction can become unconfirmed;
+- a transaction can return to the mempool if still valid;
+- a transaction can confirm again on the replacement branch;
+- a transaction can disappear if it conflicts with the new chain or fails current acceptance rules;
+- confirmation depth can decrease suddenly.
 
-## What is not fully reviewed yet
+This is why no finite confirmation count should be described as cryptographically irreversible.
 
-- P2P conditions that cause competing branches to be learned.
-- Wallet-specific reorg handling below the reviewed RPC surface.
+## Exchange/deposit interpretation
+
+MoreBC2's current exchange guidance uses a provisional **50-confirmation baseline for ordinary deposits**, supported by observed active exchange settings.
+
+That number is operational policy, not a consensus parameter. Higher-value or unusual deposits should consider cumulative chainwork since the deposit's parent block, network health, and manual review rather than blindly replacing the baseline with another universal confirmation count.
+
+See [Deposit monitoring](../exchange/deposit-monitoring.md).
+
+## Runtime evidence boundary
+
+MoreBC2 has current source coverage for best-chain activation, disconnection, undo handling, disconnected transactions, mempool repair, ShockWave, replay protection, and fork-aware header synchronization.
+
+The September 11 mainnet runtime test observed normal current peer/header acquisition and partial block synchronization but did not intentionally create or observe a controlled reorganization. Deep current-release reorg behavior therefore remains source-backed rather than directly reproduced by MoreBC2.
+
+## What remains open
+
+- Controlled v31 competing-branch/reorg simulation.
+- Reorg behavior spanning activation boundaries.
+- Wallet-specific reorg behavior below the reviewed RPC surface.
 - Index-specific reorg behavior.
-- Full validation-interface subscriber behavior.
-- Full undo-read failure handling.
-- Deep mempool policy beyond reviewed reorg processing.
-- Tested service examples for reorg-aware deposit monitoring.
+- Full pruning/undo failure scenarios.
+- End-to-end exchange deposit handling under a simulated reorg.
 
 ## Related pages
 
 - [Block validation flow](block-validation-flow.md)
 - [Life of a block](life-of-a-block.md)
 - [Life of a transaction](life-of-a-transaction.md)
-- [Source atlas: validation.cpp](../developers/source-atlas/validation-cpp.md)
-- [Source atlas: block storage](../developers/source-atlas/block-storage.md)
-- [Source atlas: validation interface](../developers/source-atlas/validation-interface.md)
-- [Disconnected transactions](../developers/source-atlas/disconnected-transactions.md)
-- [Source atlas: wallet transaction history RPC](../developers/source-atlas/wallet-transactions-rpc.md)
-- [Source atlas: mempool and transaction broadcast RPC](../developers/source-atlas/rpc-mempool.md)
 - [Mempool flow](mempool-flow.md)
+- [Header sync v31](../developers/source-atlas/headers-sync-v31.md)
+- [ShockWave v31](../developers/source-atlas/shockwave-v31.md)
+- [Replay protection v31](../developers/source-atlas/replay-protection-v31.md)
+- [Disconnected transactions](../developers/source-atlas/disconnected-transactions.md)
 - [Deposit monitoring](../exchange/deposit-monitoring.md)
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This explainer is based on reviewed validation, rollback, disconnected-transaction, storage, notification, mempool-reorg, wallet transaction-history RPC, mempool RPC, and best-chain activation code paths. Wallet internals, index behavior, P2P reorg behavior, and tested service examples still need review.
+**Status:** Reviewed / Partial  
+**Primary sources checked:** Current v31 chain-selection, validation, undo/disconnection, mempool-reorg, ShockWave, replay-protection, and header-sync reviews plus September runtime evidence  
+**Notes:** The architecture is current, but MoreBC2 has not yet reproduced a controlled v31 reorganization or activation-boundary reorg scenario.
