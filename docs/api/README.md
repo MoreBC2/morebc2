@@ -2,57 +2,68 @@
 
 **Category:** Developer platform
 **Status:** Draft / Evidence-linked summary
-**Last reviewed:** 2026-07-12
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This section collects BitcoinII / BC2 developer-platform notes for public APIs and read-only examples.
+This section collects BitcoinII / BC2 developer-platform notes for public APIs, Electrum, WebSockets, and local JSON-RPC examples.
 
-The pages here summarize dated MoreBC2 verification records. They are not independent service guarantees, not complete API specifications, and not a replacement for running a BitcoinII Core node for critical infrastructure.
+The pages here summarize dated MoreBC2 evidence. They are not service guarantees, complete API specifications, or a replacement for operating a BitcoinII Core node for critical infrastructure.
 
-Primary evidence records:
+Newest primary evidence:
 
-- [Public API, WebSocket, and Electrum smoke test - 2026-07-12](../verification/public-api-electrum-smoke-test-2026-07-12.md)
-- [Local BitcoinII node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md)
-- [Read-only RPC smoke test - 2026-07-10](../verification/read-only-rpc-smoke-test-2026-07-10.md)
+- [Public infrastructure smoke test — 2026-09-11](../verification/public-infrastructure-smoke-test-2026-09-11.md)
+- [Windows v31.1.0 node and RPC validation — 2026-09-11](../verification/windows-v31-node-rpc-validation-2026-09-11.md)
+- [Windows v31 PSBT/replay validation — 2026-09-11](../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
 - [Verification evidence index](../verification/verification-index.md)
 
-Release-asset and authentication-gap observations are tracked outside this API section in [Release asset inventory attempt](../verification/release-asset-inventory-attempt.md) and the [Verification evidence index](../verification/verification-index.md).
+The July API/Electrum and v29 RPC records remain historical evidence where useful, but September evidence should take precedence for current service/runtime wording.
 
-## Current API areas
+## Pages
 
-- [REST API](rest.md) - observed public GET endpoints and known limitations.
-- [WebSocket](websocket.md) - observed connection behavior and event-shape limits.
-- [Electrum](electrum.md) - observed read-only Electrum methods and wallet-compatibility cautions.
-- [Public endpoints](public-endpoints.md) - service-oriented endpoint list with evidence links.
-- [Read-only examples](read-only-examples.md) - locally tested RPC examples and safe-publication notes.
-- [mempool.space compatibility](mempool-space-compatibility.md) - what looked similar, what differed, and what remains untested.
+- [REST API](rest.md) — current public REST surfaces, including the Official BitcoinII Explorer and Mempool-style services.
+- [WebSocket](websocket.md) — current WebSocket reachability on the three Mempool-style services.
+- [Electrum](electrum.md) — current read-only Electrum reachability and TLS observations.
+- [Public endpoints](public-endpoints.md) — service-oriented endpoint directory with route-level qualifications.
+- [Read-only examples](read-only-examples.md) — current locally tested v31.1.0 JSON-RPC examples and publication cautions.
+- [mempool.space compatibility](mempool-space-compatibility.md) — tested similarities, extensions, and known gaps.
+
+## Section audit — 2026-09-12
+
+| Page | Audit result |
+|---|---|
+| `README.md` | Updated to September evidence. |
+| `rest.md` | Updated to September multi-service evidence. |
+| `websocket.md` | Updated from one July host to three September-tested hosts. |
+| `electrum.md` | Updated to September TCP/TLS recheck. |
+| `read-only-examples.md` | Updated to current v31.1.0 local RPC evidence. |
+| `mempool-space-compatibility.md` | Updated to September route and broadcast-rejection evidence. |
+| `public-endpoints.md` | Reviewed; already current from 2026-09-12 work. |
 
 ## Evidence language
 
 Use narrow labels:
 
-- **Locally Tested** - exercised against a documented local BitcoinII Core node.
-- **Observed** - seen from a public page, endpoint, or service during a dated check.
-- **Same-time comparison** - compared against another source during the recorded check window.
-- **Not yet verified** - not tested or not enough evidence to document as supported.
-- **Known limitation** - a specific gap or failed endpoint recorded in evidence.
-- **Roadmap** - maintainer or project direction, not current evidence.
+- **Locally Tested** — exercised against a documented local BitcoinII Core environment.
+- **Observed** — seen from a public endpoint or service during a dated check.
+- **Same-time comparison** — compared against another source in the same test window.
+- **Route present / invalid payload rejected** — a submission route accepted the HTTP method and rejected deliberately malformed data; this is not successful broadcast evidence.
+- **Not yet verified** — not tested or insufficiently evidenced.
+- **Known limitation** — a specific gap or failed behavior recorded in evidence.
 
 ## Current boundaries
 
-Observed public API availability does not prove reliability.
+Current evidence supports much stronger service documentation than the July snapshot, but several boundaries remain important:
 
-A same-time chain-tip match does not prove permanent synchronization.
-
-Electrum read-only method success does not prove wallet compatibility.
-
-REST endpoint similarity does not prove full `mempool.space` drop-in compatibility.
-
-No transaction broadcast endpoint is documented here as tested.
+- Public endpoint availability does not establish uptime or an SLA.
+- Same-time chain-tip agreement does not establish permanent synchronization or independent redundancy.
+- Electrum read-only success does not prove wallet or spending compatibility.
+- Mempool-style REST similarity does not prove complete `mempool.space` drop-in compatibility.
+- Invalid-transaction rejection on `/api/tx` proves route presence only; successful valid BC2 broadcast through those public services remains unverified.
+- Public explorer APIs should not replace an operator's own BitcoinII Core node for custody-critical workflows.
 
 ## Verification
 
 **Status:** Draft / Evidence-linked summary  
-**Primary sources checked:** Existing MoreBC2 verification records linked above  
-**Notes:** This index summarizes committed evidence records. It does not add new verification.
+**Primary sources checked:** September 2026 public-infrastructure and v31.1.0 local-runtime verification records linked above  
+**Notes:** Full API section audited on 2026-09-12. Historical July records are retained where useful, but current wording now follows the newer September evidence.
