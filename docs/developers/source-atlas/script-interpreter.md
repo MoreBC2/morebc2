@@ -1,27 +1,25 @@
 # Script interpreter
 
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-06-29
+**Category:** Developer / Source Atlas  
+**Status:** Reviewed / Source-confirmed partial  
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page covers a first-pass review of:
+This page maps BitcoinII Core script evaluation centered on:
 
 - `src/script/interpreter.cpp`
 - `src/script/interpreter.h`
 
-These files implement BitcoinII Core script evaluation helpers, script verification flags, script execution versions, witness program handling, Taproot/Tapscript helpers, and transaction signature-checking interfaces.
+The broad interpreter remains Bitcoin-style, but the old statement that no BitcoinII-specific interpreter behavior had been identified is no longer current. BitcoinII Core `v31.1.0` threads the BC2 replay-protection signature-hash domain through the interpreter/signature-checking path from mainnet height `57750`.
 
-This is a first-pass map, not a complete script semantics specification.
+This remains an implementation map, not a complete opcode-by-opcode consensus specification.
 
 ## Why this file matters
 
-Script validation is where spending conditions are evaluated.
+Higher-level validation determines whether inputs exist, values are sane, and a transaction is otherwise eligible. Script validation decides whether the spending data actually satisfies the output conditions being spent.
 
-Higher-level validation code can confirm that a transaction has available inputs and sane values, but script validation decides whether the provided spending data satisfies the script conditions attached to the outputs being spent.
-
-Because script behavior is consensus-sensitive, MoreBC2 should keep this page conservative and avoid simplifying it into user-facing wallet advice.
+For BC2 integration work, this layer is also where the replay-protection signing domain becomes cryptographically meaningful. Bitcoin-like address formats and script templates do not by themselves imply Bitcoin signature compatibility.
 
 ## Key symbols reviewed
 
@@ -31,186 +29,172 @@ Because script behavior is consensus-sensitive, MoreBC2 should keep this page co
 - `ScriptExecutionData`
 - `BaseSignatureChecker`
 - `GenericTransactionSignatureChecker`
-- `CheckSignatureEncoding`
 - `EvalScript`
 - `VerifyScript`
 - `VerifyWitnessProgram`
 - `ExecuteWitnessScript`
 - `SignatureHash`
 - `SignatureHashSchnorr`
-- `CountWitnessSigOps`
-- `FindAndDelete`
-- Taproot helper functions
+- signature/pubkey encoding helpers
+- witness/Taproot helpers
 
 ## Script verification flags
 
-`interpreter.h` defines script verification flags such as:
+`interpreter.h` defines verification flags covering areas such as:
 
-- P2SH evaluation.
-- Strict encoding.
-- DER signature rules.
-- Low-S signature rule.
-- Null dummy rule.
-- Push-only scriptSig rule.
-- Minimal data rule.
-- Clean stack rule.
-- CHECKLOCKTIMEVERIFY.
-- CHECKSEQUENCEVERIFY.
-- Witness support.
-- Taproot and Tapscript support.
-- Discouragement flags for upgradeable script features.
+- P2SH;
+- signature/public-key encoding;
+- DER and Low-S rules;
+- NULLDUMMY;
+- push-only/minimal-data behavior;
+- clean stack;
+- CHECKLOCKTIMEVERIFY;
+- CHECKSEQUENCEVERIFY;
+- witness;
+- Taproot/Tapscript;
+- discouragement flags for upgradeable script forms.
 
-Important note:
+Caller context matters. Some flags are consensus-mandatory in particular block-validation contexts while others are policy or relay restrictions. Do not classify every `SCRIPT_VERIFY_*` flag as a universal consensus rule merely because it lives in the interpreter.
 
-Some flags are consensus-relevant in specific contexts, while others are policy or standardness-related. The comments explicitly say some discouragement flags should not be mandatory block-validation flags.
+## Script/signature versions
 
-MoreBC2 should not label every `SCRIPT_VERIFY_*` flag as consensus without checking the caller context.
-
-## Script versions
-
-`SigVersion` identifies the script execution/signature context:
+`SigVersion` identifies execution/signature contexts including:
 
 - `BASE`
 - `WITNESS_V0`
 - `TAPROOT`
 - `TAPSCRIPT`
 
-This matters because the same operation can have different rules depending on the script version.
+Rules and signature hashing differ by context. Examples include separate Tapscript/Schnorr handling, witness-v0 hashing, Taproot key-path validation, and Tapscript-specific opcode behavior.
 
-Examples from review:
+## v31 replay-protection domain
 
-- Taproot key path spending has no script execution path.
-- Tapscript has separate handling for Schnorr checks, validation weight, OP_SUCCESS behavior, and cleanstack-like behavior.
-- Witness v0 and base script evaluation differ in several rules and hashing paths.
+Mainnet `v31.1.0` activates replay protection at height `57750` with fork/domain id:
+
+```text
+0x01324342
+```
+
+`Consensus::Params::SighashForkId(height)` selects zero before activation and the BC2 domain at/after activation.
+
+The domain is not serialized as a normal transaction field. Instead, it is supplied to signature-hash/precomputation/checker paths.
+
+Release-pinned review establishes that:
+
+- legacy signature-hash serialization includes the ordinary sighash type and incorporates the BC2 domain when non-zero;
+- `PrecomputedTransactionData` carries `m_sighash_fork_id`;
+- transaction-aware signature checking receives the same domain context;
+- wallet, raw-transaction RPC, PSBT, mempool, and block-validation paths are wired to the appropriate domain.
+
+A signature valid under the legacy domain therefore must not be assumed valid under the post-activation domain.
+
+See [Replay protection v31](replay-protection-v31.md).
 
 ## Signature-checking interface
 
-`BaseSignatureChecker` defines virtual hooks for checking:
+`BaseSignatureChecker` defines hooks for ECDSA, Schnorr, locktime, and sequence checks. `GenericTransactionSignatureChecker` provides transaction-aware implementations using transaction/input/amount/precomputed context.
 
-- ECDSA signatures.
-- Schnorr signatures.
-- Locktime conditions.
-- Sequence conditions.
+Reviewed structure includes:
 
-`GenericTransactionSignatureChecker` implements transaction-aware versions using the transaction, input index, amount, optional precomputed data, and missing-data behavior.
-
-Reviewed behavior includes:
-
-- ECDSA checks construct a signature hash and verify it against the public key.
-- Schnorr checks require Taproot/Tapscript context and use BIP341/BIP342-style hashing helpers.
-- CHECKLOCKTIMEVERIFY comparison requires matching height-vs-time locktime type.
-- CHECKSEQUENCEVERIFY requires transaction version at least 2 and compares sequence type and value after masking bits with consensus meaning.
+- ECDSA signature-hash construction and public-key verification;
+- Schnorr verification in Taproot/Tapscript contexts;
+- locktime type/value checks;
+- sequence-version/type/value checks;
+- replay-domain context through precomputed/signature-hash state in v31.
 
 ## `EvalScript`
 
-`EvalScript` is the script stack-machine evaluator.
+`EvalScript` implements the stack-machine evaluator.
 
 Reviewed behavior includes:
 
-- Script is evaluated as a stack machine without loops.
-- Push sizes are checked.
-- Disabled opcodes are rejected.
-- Opcode count limits apply to base and witness v0 script versions.
-- Conditional execution is tracked through `ConditionStack`.
-- `OP_CODESEPARATOR` can be rejected under `SCRIPT_VERIFY_CONST_SCRIPTCODE` in base scripts.
-- Minimal push checks are enforced when `SCRIPT_VERIFY_MINIMALDATA` is set.
-- CHECKLOCKTIMEVERIFY and CHECKSEQUENCEVERIFY rely on the checker interface when their flags are enabled.
-- CHECKSIG, CHECKSIGVERIFY, CHECKMULTISIG, and CHECKMULTISIGVERIFY use signature checking helpers.
-- OP_CHECKSIGADD is only available in Tapscript.
-- Tapscript rejects CHECKMULTISIG.
-- Stack and altstack combined size is limited.
-- Unbalanced conditionals fail script evaluation.
+- push-size and stack limits;
+- disabled-opcode rejection;
+- conditional execution tracking;
+- opcode-count behavior where applicable;
+- minimal-push checks when enabled;
+- CHECKLOCKTIMEVERIFY and CHECKSEQUENCEVERIFY through the checker interface;
+- CHECKSIG/CHECKMULTISIG families;
+- Tapscript-specific CHECKSIGADD behavior;
+- Tapscript rejection of CHECKMULTISIG;
+- failure on unbalanced conditionals.
 
-## Signature encoding and public key checks
+Exact opcode semantics remain defined by the release-pinned source and tests.
 
-Reviewed helpers include:
+## Signature encoding and public-key checks
 
-- `IsValidSignatureEncoding`
-- `IsLowDERSignature`
-- `IsDefinedHashtypeSignature`
-- `CheckSignatureEncoding`
-- `CheckPubKeyEncoding`
+Reviewed helpers cover DER shape, Low-S, defined sighash types, signature encoding, and public-key encoding. Which checks apply depends on script version and verification flags.
 
-Reviewed behavior includes DER-shape checks, Low-S checks, hash type checks, and public-key encoding checks depending on flags and script version.
-
-The source comments identify DER signature encoding as consensus-critical since BIP66.
+BIP66-era DER behavior is consensus-critical in the applicable validation context; other checks may be policy/context-dependent.
 
 ## Witness and Taproot paths
 
-`VerifyWitnessProgram` handles witness programs.
+`VerifyWitnessProgram` handles witness program validation.
 
-Reviewed behavior includes:
+Reviewed structure includes:
 
-- Witness v0 P2WSH verifies the SHA256 hash of the witness script before executing it.
-- Witness v0 P2WPKH builds an implied P2PKH-style execution script.
-- Witness v1 Taproot key path uses Schnorr checking when Taproot verification is enabled.
-- Taproot script path verifies control block size, computes Tapleaf hash, checks the Taproot commitment, and executes Tapscript for the Tapscript leaf version.
-- Unknown or future witness/Taproot forms can be accepted for soft-fork compatibility unless discouragement flags are set.
+- witness-v0 P2WSH commitment checking before script execution;
+- witness-v0 P2WPKH implied execution script;
+- Taproot key-path Schnorr checking when enabled;
+- Taproot script-path control-block/commitment checks and Tapscript execution;
+- forward-compatible handling of unknown witness/Taproot forms subject to discouragement-policy flags.
+
+Separately, BitcoinII `v31.1.0` consensus data restrictions add specific post-height-`57750` Taproot witness restrictions in the block-connection path. Those rules are documented in [Consensus data restrictions](data-restrictions-v31.md); they should not be confused with generic interpreter semantics.
 
 ## `VerifyScript`
 
-`VerifyScript` is the high-level script verification entry point reviewed here.
+The high-level reviewed flow includes:
 
-Reviewed behavior includes:
+- optional push-only scriptSig enforcement;
+- scriptSig then scriptPubKey evaluation;
+- P2SH redeem-script handling;
+- witness program handling;
+- P2SH-wrapped witness handling;
+- clean-stack checking when enabled;
+- unexpected-witness-data checks in the applicable context.
 
-- Optional push-only scriptSig check.
-- Sequential evaluation of scriptSig and scriptPubKey on the same stack.
-- P2SH stack-copy behavior.
-- Final stack truth check.
-- Bare witness program handling when witness verification is enabled.
-- P2SH redeemScript evaluation.
-- P2SH-wrapped witness program handling.
-- CLEANSTACK check when enabled.
-- Unexpected witness-data check when witness verification is enabled.
+## Runtime boundary
 
-## Witness operation counting
+The September 11 isolated `v31.1.0` regtest PSBT test exercised a complete disposable signing/finalization/local-mempool lifecycle. That is evidence that ordinary v31 signing and script validation worked for that controlled transaction.
 
-`CountWitnessSigOps` returns zero when witness verification is disabled.
+It did **not** runtime-exercise the mainnet replay-domain switch because regtest leaves the replay fork id at zero as shipped.
 
-When witness verification is enabled, it can count witness v0 keyhash and scripthash operation costs, including P2SH-wrapped witness programs.
+Mainnet replay-domain behavior on this page is source-confirmed, not independently demonstrated with pre/post-fork transaction vectors.
 
-Future witness versions currently return zero in the reviewed helper.
+## Related pages
 
-## Relationship to validation and mempool pages
-
-Script verification is called from higher-level validation paths.
-
-MoreBC2 already documents that block connection and mempool acceptance can run script checks, but this page anchors the lower-level interpreter side.
-
-Related higher-level pages:
-
-- [Consensus model](../../architecture/consensus-model.md)
+- [Replay protection v31](replay-protection-v31.md)
+- [Consensus data restrictions](data-restrictions-v31.md)
+- [Transaction consensus files](transaction-consensus.md)
+- [validation.cpp](validation-cpp.md)
+- [Mempool accept](mempool-accept.md)
+- [Wallet spend and PSBT RPC](wallet-spend-rpc.md)
 - [Block validation flow](../../architecture/block-validation-flow.md)
-- [Mempool flow](../../architecture/mempool-flow.md)
-- [Source atlas: validation.cpp](validation-cpp.md)
-- [Source atlas: mempool accept](mempool-accept.md)
-- [Source atlas: transaction consensus files](transaction-consensus.md)
+- [Windows v31 PSBT validation](../../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
 
-## BitcoinII-specific notes
+## Open work
 
-This first-pass review did not identify BitcoinII-specific script-interpreter behavior beyond project naming, comments, and header guards.
+- Map the exact mandatory-vs-policy flag set at each current caller.
+- Run or link the relevant v31 script/interpreter unit and functional tests.
+- Generate independent pre/post-replay-domain signature vectors.
+- Test external/hardware signers that claim BC2 support.
 
-The reviewed file structure appears Bitcoin-style, but no upstream comparison has been completed.
+## Primary sources
 
-## Open questions
-
-- Which script verification flags are used in mandatory block validation in the current BitcoinII source?
-- Which script verification flags are only policy or standardness rules?
-- Which exact caller paths pass script flags during block connection and mempool acceptance?
-- Does BitcoinII differ from upstream Bitcoin Core in script interpreter behavior?
-- Should MoreBC2 create separate encyclopedia pages for script, P2SH, SegWit, Taproot, and Tapscript?
-- Which script tests are inherited and which are BitcoinII-specific?
-
-## Sources
+Pinned to BitcoinII Core `v31.1.0`:
 
 - `src/script/interpreter.cpp`
 - `src/script/interpreter.h`
+- `src/script/sign.cpp`
 - `src/script/script_error.h`
+- `src/consensus/params.h`
 - `src/consensus/tx_verify.cpp`
 - `src/validation.cpp`
 
+Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
+
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This is a first-pass interpreter map. It is not a complete opcode-by-opcode specification and does not yet map every caller or mandatory-vs-policy flag combination.
+**Status:** Reviewed / Source-confirmed partial  
+**Primary evidence:** BitcoinII Core `v31.1.0` interpreter/signing source, replay-protection source trace, and September 11 disposable regtest signing record  
+**Notes:** The page now reflects BC2's v31 replay-domain behavior. Generic script structure and the ordinary regtest signing path are established; complete flag/caller mapping, activation-boundary vectors, and third-party signer compatibility remain open.
