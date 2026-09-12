@@ -1,20 +1,22 @@
 # Consensus model
 
 **Category:** Architecture
-**Status:** Draft
-**Last reviewed:** 2026-09-02
+**Status:** Reviewed / Partial
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
 This page explains how MoreBC2 currently frames BitcoinII consensus at a high level.
 
-It is not a complete consensus specification. It connects source-backed documentation already reviewed in MoreBC2 with the current BitcoinII Core `v31.1.0` consensus model.
+It is not a complete consensus specification. It connects release-pinned source review with the current BitcoinII Core `v31.1.0` architecture and keeps consensus distinct from mempool policy, wallet behavior, and exchange/service policy.
 
 ## Core idea
 
-Consensus rules are the rules every fully validating node must apply the same way to agree on which blocks and transactions are valid.
+Consensus rules are the rules fully validating nodes must apply consistently when deciding which blocks and transactions are valid.
 
-Mempool policy is different. Policy rules affect what a local node accepts, keeps, relays, or mines before confirmation. A transaction may be consensus-valid in a block but still fail local mempool policy.
+Mempool policy is different. Policy controls what a local node accepts, keeps, relays, or mines before confirmation. A transaction may be consensus-valid in a block while still failing local mempool policy.
+
+Exchange confirmation settings are different again. They are operational risk policy, not protocol finality.
 
 ## Simplified model
 
@@ -36,8 +38,8 @@ Transaction input/signature rules
   -> referenced outputs exist
   -> values are in range
   -> inputs are spendable
-  -> post-activation BC2 signature-hash domain
-  -> input verification checks pass
+  -> height-appropriate BC2 signature-hash domain
+  -> input/script verification checks pass
 
 Mempool policy layer
   -> next-block replay-protection domain
@@ -49,34 +51,34 @@ Chain selection / synchronization
   -> valid blocks only
   -> most accumulated work among usable candidates
   -> active chain may reorganize
-  -> alternate header branches reproduce branch-specific ShockWave history
+  -> alternate ShockWave-era branches use branch-specific history
 ```
 
-## Header consensus and difficulty
+## Difficulty and chain work
 
 `CheckProofOfWork` validates the proof-of-work target.
 
-For pre-activation history, BitcoinII used the inherited Bitcoin-style retarget path. Beginning at mainnet height `57750`, `GetNextWorkRequired` uses **ShockWave** for the next-block work requirement.
+For pre-activation history, BitcoinII used the inherited Bitcoin-style retarget path. Beginning at mainnet height `57750`, `GetNextWorkRequired` uses **ShockWave** for each next-block work requirement.
 
-The dedicated [ShockWave v31 source review](../developers/source-atlas/shockwave-v31.md) now documents the 25-block / 24-interval MTP rolling baseline, six-interval short-horizon controller, explicit per-block bounds, timestamp moderation, emergency recovery, mining interaction, and header-sync history requirements.
+The current ShockWave review documents a recent-history MTP baseline, a shorter-horizon timing controller, per-block bounds, timestamp safeguards, and emergency stall recovery. Exact behavior remains defined by the release-pinned implementation.
 
-Current MoreBC2 documentation must not describe BitcoinII mainnet as using only 2016-block retargeting.
+ShockWave changes required work; it does not replace accumulated-work chain selection. The active chain is still selected from valid usable candidates by accumulated chain work.
 
 ## v31.1.0 BitcoinII-specific consensus anchors
 
-Mainnet chain parameters set these BitcoinII-specific activations at height `57750`:
+Mainnet `v31.1.0` activates these BitcoinII-specific rules at height `57750`:
 
 - ShockWave difficulty adjustment;
 - consensus-level data restrictions;
 - BC2 replay protection.
 
-The replay-protection fork ID is `0x01324342`.
+The replay-protection fork/domain id is `0x01324342`.
 
 ## BitcoinII data restrictions
 
-The [v31 data-restriction review](../developers/source-atlas/data-restrictions-v31.md) traces the post-activation consensus rules into `src/consensus/bitcoinII_data.h` and `validation.cpp`.
+The current v31 data-restriction review traces the post-activation rules into `src/consensus/bitcoinII_data.h` and validation paths.
 
-The reviewed rules explicitly cover:
+The reviewed rules cover:
 
 - OP_RETURN output count;
 - OP_RETURN size;
@@ -86,68 +88,67 @@ The reviewed rules explicitly cover:
 - oversized script-path tapscripts;
 - semantic Ordinals inscription envelopes.
 
-These are consensus checks after activation, not merely relay-policy preferences. MoreBC2 should avoid broadening this into a claim that every conceivable arbitrary-data protocol is impossible.
+These are consensus checks after activation, not merely relay-policy preferences. MoreBC2 should not broaden them into a claim that every conceivable arbitrary-data protocol is impossible.
 
 ## Replay protection
 
-The [v31 replay-protection review](../developers/source-atlas/replay-protection-v31.md) confirms that the fork id is a signature-hash domain rather than an address-format change.
+Replay protection is implemented as a signature-hash domain, not an address-format change and not an extra transaction field.
 
-Below activation, the selected fork id is zero and legacy BitcoinII digests are preserved. At and above activation, the configured BC2 domain is included in signature hashing.
+Below activation, the selected fork id is zero and historical BitcoinII digest behavior is retained. At and above activation, the configured BC2 domain participates in signature hashing.
 
 The domain is threaded through:
 
 - mempool validation for the next block height;
-- script-validation cache keys;
+- block/script validation for the relevant block height;
+- script-validation cache separation;
 - raw-transaction signing;
 - wallet signing;
 - PSBT precomputation/finalization;
 - external-signer safety handling.
 
-The mempool is cleared immediately before activation so legacy-domain transactions are not carried across the boundary.
+The mempool is cleared immediately before activation so transactions accepted only under the legacy domain are not carried across the boundary.
 
-## Block consensus
-
-Reviewed block-level validation includes context-free block checks, contextual block checks, full block acceptance, best-chain activation, block connection, and undo-data writing for later disconnection.
-
-After height `57750`, BitcoinII-specific output and Taproot witness restrictions are added to the block-connection path.
-
-## UTXO model
+## UTXO and block consensus
 
 BitcoinII continues to use a Bitcoin-style UTXO model.
 
-When a block is connected, spent outputs are consumed and new outputs are added. During a reorganization, disconnected-block effects are reversed using undo data before the replacement branch is connected.
+When a block is connected, spent outputs are consumed and new outputs are added. Undo data permits those changes to be reversed during a reorganization before a replacement branch is connected.
 
-## Chain selection and reorganizations
-
-The reviewed best-chain path selects a usable most-work candidate and connects or disconnects blocks as required.
-
-A node does not switch to an invalid branch solely because it appears to contain more work.
-
-Reorganizations can make previously confirmed transactions unconfirmed again, which remains relevant to exchange confirmation policy even with ShockWave's faster response to hashrate changes.
+Current block validation therefore combines inherited UTXO/transaction structure with current BitcoinII-specific activation rules.
 
 ## Fork-aware header synchronization
 
-The [v31 header-sync review](../developers/source-atlas/headers-sync-v31.md) narrows the release-note phrase "fork-aware header synchronization" to a source-backed implementation path.
+The current v31 header-sync review narrows the release-note phrase `fork-aware header synchronization` to a concrete source-backed path.
 
-The existing PRESYNC/REDOWNLOAD anti-DoS framework is rooted at the candidate branch's known fork point. For ShockWave-era branches, `HeadersSyncState` maintains a private 35-index synthetic history so candidate `nBits` can be checked with production `GetNextWorkRequired()` using that branch's own target and MTP history.
+For ShockWave-era branches, the synchronization logic maintains branch-specific recent history so candidate `nBits` can be checked with production `GetNextWorkRequired()` using the candidate branch's own target and median-time-past context.
 
-Header sync does not itself choose the active chain; normal validation and most-work chain selection still perform that role.
+Header synchronization does not choose the active chain. Normal validation and accumulated-work selection still perform that role.
 
-## Consensus vs policy
+## Consensus vs policy vs service policy
 
-Policy remains distinct from consensus. Reviewed policy/service surfaces include mempool prechecks, replacement/package checks, ancestor/descendant limits, dry-run acceptance, and transaction broadcast RPCs.
+These should remain separate:
 
-Replay protection crosses this boundary in a deliberate way: mempool admission uses the consensus domain for the **next block** so activation cannot leave the mempool populated with signatures valid only under the old domain.
+- **Consensus:** whether a block/transaction is valid.
+- **Mempool policy:** whether a node will currently accept/relay an unconfirmed transaction.
+- **Wallet policy:** how a wallet constructs, funds, signs, or displays transactions.
+- **Exchange/service policy:** confirmations, chainwork thresholds, value limits, operational review, and other risk controls.
 
-## What is not fully reviewed yet
+MoreBC2's current exchange guidance uses a provisional 50-confirmation baseline for ordinary deposits because that threshold is observed in active exchange configurations. That is an operational recommendation, **not** a consensus rule or proof of irreversible finality.
 
-- Local execution of the located v31 consensus/header-sync tests.
-- Controlled replay-protection digest/test vectors.
-- Controlled data-restriction activation-boundary tests.
-- Live competing-branch/header-sync scenarios.
-- Full mandatory vs policy script-flag separation under `v31.1.0`.
-- Release-specific regression review outside the four audited v31 feature paths.
-- Current production confirmation-policy recommendations.
+## Runtime evidence boundary
+
+The September 11 Windows mainnet test exercised current `v31.1.0` startup, peer/header acquisition, partial block validation, RPC, restart, and shutdown. It did not complete initial block download or independently cross the `57750` activation boundary during the test.
+
+The separate September 11 disposable regtest wallet test exercised an ordinary v31 PSBT/signing/mempool flow. Regtest leaves replay protection disabled as shipped, so that test does not runtime-prove the mainnet replay-domain switch.
+
+## What remains open
+
+- Controlled pre/post-activation replay-protection digest vectors.
+- Controlled data-restriction activation-boundary vectors.
+- Live or synthetic competing-branch header-sync scenarios.
+- Deep reorganization simulation across current v31 behavior.
+- Full mandatory-versus-policy script-flag classification for the current release.
+- Source-build and full test-suite reproduction.
 
 ## Related pages
 
@@ -155,22 +156,14 @@ Replay protection crosses this boundary in a deliberate way: mempool admission u
 - [Replay protection v31](../developers/source-atlas/replay-protection-v31.md)
 - [Data restrictions v31](../developers/source-atlas/data-restrictions-v31.md)
 - [Header sync v31](../developers/source-atlas/headers-sync-v31.md)
-- [Consensus overview](../documentation/consensus-overview.md)
-- [Network specifications](../documentation/network-specifications.md)
-- [Proof-of-work](../encyclopedia/proof-of-work.md)
-- [Difficulty adjustment](../encyclopedia/difficulty-adjustment.md)
-- [Mining overview](../mining/mining-overview.md)
-- [Source atlas: pow.cpp](../developers/source-atlas/pow-cpp.md)
 - [Block validation flow](block-validation-flow.md)
 - [Life of a reorganization](life-of-a-reorg.md)
-
-## Sources
-
-- BitcoinII Core `v31.1.0` release: https://github.com/Bitcoin-II/BitcoinII-Core/releases/tag/v31.1.0
-- Canonical `v31.1.0` source: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
+- [Deposit monitoring](../exchange/deposit-monitoring.md)
+- [Windows v31.1.0 node and RPC validation](../verification/windows-v31-node-rpc-validation-2026-09-11.md)
+- [Windows v31.1.0 PSBT and replay validation](../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially, with dedicated `v31.1.0` source-path reviews for ShockWave, replay protection, data restrictions, and ShockWave-aware header synchronization
-**Notes:** Current high-level consensus framing now links to dedicated source reviews. Runtime and test execution remain explicitly separate evidence tasks.
+**Status:** Reviewed / Partial  
+**Primary sources checked:** BitcoinII Core `v31.1.0` release-pinned ShockWave, replay-protection, data-restriction, header-sync, validation, wallet/PSBT, and chain-selection reviews plus bounded September runtime records  
+**Notes:** Current consensus framing is synchronized to v31. Runtime activation-boundary vectors, deep reorg tests, complete script-flag classification, and source-build/test-suite reproduction remain open.
