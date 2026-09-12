@@ -1,37 +1,18 @@
 # Network RPC
 
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-07-01
+**Category:** Developer / Source Atlas  
+**Status:** Source-reviewed / Runtime-tested partial  
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page covers a first-pass review of:
+This page maps BitcoinII Core `v31.1.0` network RPC behavior centered on `src/rpc/net.cpp`.
 
-- `src/rpc/net.cpp`
+The earlier page was source-only. MoreBC2 now has bounded current-release runtime evidence for selected read-only network RPCs plus real outbound P2P peer discovery on mainnet. Peer-changing, ban-list, address-manager mutation, testing-only, and hidden methods remain source-reviewed rather than runtime-qualified.
 
-This file exposes peer, connection, address-manager, ban-list, network-activity, and network-status commands through JSON-RPC.
+## Reviewed command surface
 
-This is not a tested command guide. Commands and examples should not be marked verified until they are run against BitcoinII Core in a documented local environment.
-
-## Why this file matters
-
-Network RPCs are useful for:
-
-- Checking whether a node has peers.
-- Inspecting peer connection details.
-- Reading P2P network status.
-- Checking reachable network/proxy state.
-- Managing manually added peers.
-- Reviewing address-manager state.
-- Toggling local P2P activity.
-- Troubleshooting node connectivity.
-
-These commands matter for node operators, exchanges, explorers, pools, and anyone diagnosing sync or peer issues.
-
-## Registered commands reviewed
-
-`RegisterNetRPCCommands()` registers these commands under the `network` category:
+Source review includes:
 
 - `getconnectioncount`
 - `ping`
@@ -48,16 +29,35 @@ These commands matter for node operators, exchanges, explorers, pools, and anyon
 - `getnodeaddresses`
 - `getaddrmaninfo`
 
-Reviewed hidden commands include:
+Testing/hidden surfaces include commands such as `addconnection`, `addpeeraddress`, `sendmsgtopeer`, and `getrawaddrman`.
 
-- `addconnection`
-- `addpeeraddress`
-- `sendmsgtopeer`
-- `getrawaddrman`
+Existence in source is not a recommendation to expose or use a command in production.
 
-## Read-only status commands
+## Current v31 runtime evidence
 
-Reviewed read-only status commands include:
+The September 11 isolated Windows mainnet test directly exercised:
+
+- `getnetworkinfo`
+- `getpeerinfo`
+- `getnettotals`
+
+The same run observed:
+
+- `/BitcoinII:31.1.0/`;
+- protocol version `70016`;
+- P2P listener on mainnet port `8338`;
+- four outbound peers during the first bounded run;
+- six outbound peers after restart;
+- current header acquisition and advancing IBD;
+- clean shutdown/restart.
+
+Raw peer-address output was treated as privacy-sensitive and was not published as a peer list.
+
+See [Windows v31.1.0 node and RPC validation](../../verification/windows-v31-node-rpc-validation-2026-09-11.md).
+
+## Read-only status methods
+
+Source-reviewed status methods include:
 
 - `getconnectioncount`
 - `getpeerinfo`
@@ -68,22 +68,29 @@ Reviewed read-only status commands include:
 - `getaddrmaninfo`
 - `listbanned`
 
-Observed behavior includes:
+Typical outputs can expose peer addresses, local addresses, proxy configuration, service flags, connection types, byte totals, synchronization state, and other operational metadata.
 
-- Reading total peer counts from connection manager state.
-- Returning peer details such as address, services, relay state, bytes in/out, ping data, block/header sync data, permissions, connection type, transport type, and per-message byte totals.
-- Returning total network bytes in/out and upload-target state.
-- Returning local version, protocol version, service flags, relay fee fields, connection counts, reachable networks, proxy settings, local addresses, and warnings.
-- Returning manually added node information.
-- Returning known peer addresses filtered by count and optional network.
-- Returning address-manager counts by network.
-- Returning manually banned address or subnet entries.
+Even read-only output can be privacy-sensitive. Public documentation should prefer redacted/summarized examples where peer or local-network identifiers are present.
 
-These are the safest candidates for future node-operation examples after local testing.
+## `getnetworkinfo`
 
-## Commands that change peer or network state
+Current v31 runtime evidence establishes this RPC works in the documented loopback-cookie environment and reports release/protocol/network state.
 
-Reviewed state-changing commands include:
+Do not treat time-dependent connection counts, addresses, warnings, or traffic fields from one test as protocol constants.
+
+## `getpeerinfo`
+
+Current v31 runtime evidence establishes peer information was available while the isolated node maintained outbound mainnet connections.
+
+The method can expose addresses/session details. MoreBC2 should publish only the fields necessary for the point being documented, with addresses redacted unless a specific public-peer disclosure is intentional.
+
+## `getnettotals`
+
+Current v31 runtime evidence establishes network traffic totals were available in the bounded node test. Values are local-node/session data, not network-wide totals.
+
+## Commands that change network state
+
+Source-reviewed state-changing commands include:
 
 - `ping`
 - `addnode`
@@ -92,105 +99,62 @@ Reviewed state-changing commands include:
 - `clearbanned`
 - `setnetworkactive`
 
-Observed behavior includes:
+These can alter peer/network state even though they do not move wallet funds. They should stay operator/advanced material until a dedicated disposable-node workflow is tested.
 
-- `ping` asks the peer manager to send ping messages during later message handling.
-- `addnode` can add, remove, or try a manual peer connection, with optional v2 transport handling.
-- `disconnectnode` disconnects a peer by address or node id.
-- `setban` adds or removes a manual ban entry for an address or subnet and may disconnect matching peers.
-- `clearbanned` clears the manual ban list.
-- `setnetworkactive` enables or disables P2P network activity through connection manager state.
+The current MoreBC2 v31 node guide intentionally relies on ordinary peer discovery rather than publishing manual-peer manipulation as the normal setup path.
 
-These should be documented carefully because they can change node behavior even though they do not move funds.
+## Address-manager and ban-list boundary
 
-## Testing-only and experimental commands
+`getnodeaddresses`, `getaddrmaninfo`, `getrawaddrman`, ban-list methods, and address-manager mutation/testing commands operate on local peer-discovery state.
 
-Reviewed hidden/testing commands include:
+The September v31 test demonstrated successful automatic outbound peer discovery. It did **not** qualify raw addrman mutation, ban manipulation, or manual-peer state transitions.
 
-- `addconnection`
-- `addpeeraddress`
-- `sendmsgtopeer`
-- `getrawaddrman`
+See [Addrman](addrman.md) and [Banman](banman.md).
 
-Observed behavior includes:
+## Transport/connection types
 
-- `addconnection` is restricted to regtest mode and opens a specified outbound connection type.
-- `addpeeraddress` adds a potential peer address to the address manager table and is marked testing-only in help text.
-- `sendmsgtopeer` sends a supplied P2P message body to a peer and is marked testing-only in help text.
-- `getrawaddrman` is marked experimental and returns detailed address-manager table entries.
+Source/help text distinguishes connection types such as outbound full relay, block-relay-only, inbound, manual, addr-fetch, and feeler, and includes v1/v2 transport concepts.
 
-These should not be used in beginner node docs.
+MoreBC2 should not infer that every current BC2 connection uses one transport type from old v29 observations. The September v31 node test established working outbound connectivity, not an exhaustive v31 transport census.
 
-## Network and transport notes
+## Security boundary
 
-Reviewed help text describes connection types including:
+JSON-RPC should remain loopback/private unless an operator deliberately hardens and exposes it. The current MoreBC2 v31 runtime validation used loopback binding and random-cookie authentication.
 
-- outbound full relay
-- block-relay-only
-- inbound
-- manual
-- addr-fetch
-- feeler
+Network RPC is an administrative surface; peer-changing/testing methods should not be exposed to untrusted callers.
 
-Reviewed help text also describes transport protocol types:
-
-- detecting
-- v1 plaintext transport
-- v2 BIP324 encrypted transport
-
-MoreBC2 has not yet reviewed the lower-level P2P implementation deeply enough to explain transport behavior beyond the RPC help text.
-
-## Documentation implications
-
-MoreBC2 should separate future network command documentation into:
-
-- Read-only node status checks.
-- Manual peer management.
-- Ban-list management.
-- Network activity controls.
-- Address-manager diagnostics.
-- Regtest/testing-only commands.
-
-For first command smoke tests, `getnetworkinfo`, `getconnectioncount`, `getpeerinfo`, `getnettotals`, and `getmempoolinfo` are better candidates than peer-changing commands.
-
-## Relationship to other pages
-
-Related pages:
+## Related pages
 
 - [RPC overview](../rpc-overview.md)
+- [Protocol primitives](protocol.md)
+- [Net connection management](net-connection-management.md)
+- [Addrman](addrman.md)
+- [Banman](banman.md)
+- [Peer communication model](../../architecture/peer-communication-model.md)
 - [Node guide](../../nodes/node-guide.md)
-- [Node startup](../../architecture/node-startup.md)
-- [Command smoke-test plan](../../verification/command-smoke-test-plan.md)
-- [Command testing status](../../verification/command-testing.md)
+- [Windows v31 node/RPC validation](../../verification/windows-v31-node-rpc-validation-2026-09-11.md)
 
-## BitcoinII-specific notes
+## Open work
 
-This first-pass review saw BitcoinII naming in RPC help text and examples.
+- Runtime-test `getconnectioncount`, `getnodeaddresses`, and `getaddrmaninfo` in a current isolated v31 operator fixture if useful.
+- Keep manual-peer/ban/network-active changes out of beginner docs until tested safely.
+- Add a dedicated v31 transport observation only if it can be collected without exposing peer information.
+- Continue release-pinned review where network RPC behavior materially diverges from inherited Bitcoin structure.
 
-No upstream comparison has been completed, so this page does not claim whether network RPC behavior differs from upstream Bitcoin Core beyond naming and visible strings.
+## Primary sources
 
-## Open questions
+Pinned/current review scope:
 
-- Which network RPC commands should be included in the first local smoke-test record?
-- Which network RPCs should appear in normal node-operator docs?
-- Which peer-changing commands should remain advanced-only?
-- Which hidden/testing commands should be left out of public docs entirely?
-- How should v2 transport and BIP324 be explained for BitcoinII users?
-- Which lower-level P2P files should be reviewed next?
-- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for this file before upgrading status.
+- `v31.1.0/src/rpc/net.cpp`
+- `v31.1.0/src/net.cpp`
+- `v31.1.0/src/net.h`
+- `v31.1.0/src/net_processing.cpp`
+- `v31.1.0/src/protocol.*`
 
-## Sources
-
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
-
-- Current observed `main` `src/rpc/net.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/rpc/net.cpp
-- Current observed `main` `src/net_processing.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/net_processing.h
-- Current observed `main` `src/net.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/net.h
-- Current observed `main` `src/netbase.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/netbase.h
-- Current observed `main` `src/protocol.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/protocol.h
+Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This is a first-pass network RPC review. Commands have not been run. Public examples, node-operator recommendations, lower-level P2P behavior, upstream comparison, and release-versus-main comparison remain open.
+**Status:** Source-reviewed / Runtime-tested partial  
+**Primary evidence:** BitcoinII Core `v31.1.0` source plus September 11 Windows mainnet network-RPC/P2P runtime evidence  
+**Notes:** Selected read-only network RPCs and automatic outbound connectivity are current-release runtime-observed. Peer-changing, addrman/ban mutation, hidden/testing commands, inbound behavior, and exhaustive transport behavior remain unverified.
