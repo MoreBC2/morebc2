@@ -71,7 +71,7 @@ assert.match(guide, /4 outbound full-relay IPv4 peers/i);
 assert.match(guide, /6 outbound full-relay peers/i);
 assert.match(guide, /initialblockdownload = true/i);
 assert.match(record, /initialblockdownload.*true/is);
-assert.match(guide, /did not.*wait for full synchronization/i);
+assert.match(guide, /September test did .*not.* wait for full synchronization/is);
 assert.match(record, /did not wait for initial block download to complete/i);
 assert.match(guide, /pruned = false/i);
 assert.match(guide, /getindexinfo = \{\}/i);
