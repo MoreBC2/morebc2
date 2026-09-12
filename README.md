@@ -84,7 +84,7 @@ See [SECURITY.md](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md) for 
 
 Original MoreBC2 documentation is licensed under CC BY 4.0. Original MoreBC2 software, site tooling, configuration, tests, and rights-cleared project assets are licensed under MIT. Third-party material remains under its own terms.
 
-See [LICENSE](LICENSE), [NOTICE](NOTICE), and [THIRD_PARTY_NOTICES.md](https://github.com/MoreBC2/morebc2/blob/main/THIRD_PARTY_NOTICES.md).
+See [LICENSE](https://github.com/MoreBC2/morebc2/blob/main/LICENSE), [NOTICE](https://github.com/MoreBC2/morebc2/blob/main/NOTICE), and [THIRD_PARTY_NOTICES.md](https://github.com/MoreBC2/morebc2/blob/main/THIRD_PARTY_NOTICES.md).
 
 ## Site and tooling validation
 
