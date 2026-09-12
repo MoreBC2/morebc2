@@ -2,82 +2,110 @@
 
 **Category:** Developer platform
 **Status:** Draft / Locally tested partial
-**Last reviewed:** 2026-07-12
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page summarizes BitcoinII read-only command examples that have a dated local test record.
+This page summarizes harmless BitcoinII JSON-RPC examples with current local test evidence.
 
-Canonical evidence:
+Primary current evidence:
 
-- [Read-only RPC smoke test - 2026-07-10](../verification/read-only-rpc-smoke-test-2026-07-10.md)
-- [Local BitcoinII node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md)
+- [Windows v31.1.0 node and RPC validation — 2026-09-11](../verification/windows-v31-node-rpc-validation-2026-09-11.md)
 
-## Locally tested environment
+Historical v29.1.0 command-line evidence remains available in:
 
-The 2026-07-10 smoke test used:
+- [Read-only RPC smoke test — 2026-07-10](../verification/read-only-rpc-smoke-test-2026-07-10.md)
 
-- BitcoinII Core `v29.1.0`
-- Windows
+## Current tested environment
+
+The 2026-09-11 validation used:
+
+- BitcoinII Core `v31.1.0`
+- Windows 11 x86_64
 - mainnet
-- local GUI node
-- local-only RPC at `127.0.0.1:8337`
-- cookie authentication
-- `bitcoinII-cli.exe`
+- official Win64 Qt release artifact
+- `-server=1`
+- disposable, newly created datadir
+- loopback-only JSON-RPC on an explicitly selected test port `127.0.0.1:28332`
+- random-cookie authentication
+- direct HTTP JSON-RPC from PowerShell
 
-This is one documented environment, not a guarantee for every platform, release, or configuration.
+Port `28332` was a test override because local port `8332` was already occupied. The documented v31.1.0 mainnet RPC default remains `8332`.
 
-## Tested read-only commands
+## Current read-only methods exercised
 
-The following commands succeeded in the 2026-07-10 smoke test:
+The current v31.1.0 record directly exercised or recorded results from:
 
-| Command | Status | Publication note |
+| Method | Status | Publication note |
 |---|---|---|
-| `getblockcount` | Locally Tested | Suitable as a harmless read-only example; output is time-dependent. |
-| `getbestblockhash` | Locally Tested | Suitable as a harmless read-only example; output is time-dependent. |
-| `getblockchaininfo` | Locally Tested | Suitable with clear example-output labeling. |
-| `getnetworkinfo` | Locally Tested | Suitable only with local/public address fields omitted or redacted. |
-| `getconnectioncount` | Locally Tested | Suitable as a harmless read-only example. |
-| `getpeerinfo` | Locally Tested | Raw output is not safe for publication without redacting peer/local addresses and session fields. |
-| `getmempoolinfo` | Locally Tested | Suitable as a harmless read-only example; output is time-dependent. |
-| `getdifficulty` | Locally Tested | Suitable as a harmless read-only example; output is time-dependent. |
-| `uptime` | Locally Tested | Suitable as a harmless read-only example. |
+| `getnetworkinfo` | Locally Tested | Safe as an example if local/network address details are omitted. |
+| `getblockchaininfo` | Locally Tested | Safe with time-dependent/sync-dependent output clearly labeled. |
+| `getmempoolinfo` | Locally Tested | Safe with output labeled as point-in-time. |
+| `getpeerinfo` | Locally Tested | Do not publish raw peer addresses or session-specific fields. |
+| `getnettotals` | Locally Tested | Safe with time-dependent counters labeled. |
+| `uptime` | Locally Tested | Harmless read-only example. |
+| `getchaintips` | Locally Tested | Safe with sync-state context; test node was still in initial block download. |
+| `getindexinfo` | Locally Tested | Safe; returned `{}` because optional indexes were not enabled. |
+| `listwallets` | Locally Tested | Safe only in an explicitly isolated disposable environment. |
+| `listwalletdir` | Locally Tested | Safe only with wallet names reviewed before publication. |
+| `getwalletinfo` | Locally Tested | Tested only against the new disposable zero-transaction wallet. |
 
-## Command prefix used in evidence record
+The test also used state-changing administrative methods such as `createwallet`, `loadwallet`, and `stop` within the disposable environment. Those are not presented here as generic read-only examples.
 
-The exact prefix is preserved in [Read-only RPC smoke test - 2026-07-10](../verification/read-only-rpc-smoke-test-2026-07-10.md).
+## Example direct JSON-RPC shape
 
-Do not copy local paths into general user instructions without adapting them to the user's installation.
+The v31.1.0 test did not use a v29 CLI against the v31 node. It sent JSON-RPC directly over loopback HTTP using the disposable datadir's cookie authentication.
 
-## Commands not covered here
+Conceptual PowerShell shape:
 
-The smoke test does not support treating the following as safe public examples:
+```powershell
+$body = @{
+  jsonrpc = '1.0'
+  id      = 'getblockchaininfo'
+  method  = 'getblockchaininfo'
+  params  = @()
+} | ConvertTo-Json -Compress
 
-- wallet commands,
-- private-key commands,
-- seed or descriptor commands,
-- address-generation commands,
-- transaction creation or broadcast commands,
-- mining commands,
-- import/export commands,
-- peer-control commands,
-- shutdown,
-- any state-changing RPC.
+Invoke-RestMethod `
+  -Uri 'http://127.0.0.1:<rpc-port>/' `
+  -Method Post `
+  -Headers $headers `
+  -ContentType 'application/json' `
+  -Body $body
+```
+
+Do not publish RPC cookie contents, credentials, or copied local filesystem paths.
+
+## Historical CLI examples
+
+The July v29.1.0 smoke test also succeeded with these familiar read-only commands through `bitcoinII-cli.exe`:
+
+- `getblockcount`
+- `getbestblockhash`
+- `getblockchaininfo`
+- `getnetworkinfo`
+- `getconnectioncount`
+- `getpeerinfo`
+- `getmempoolinfo`
+- `getdifficulty`
+- `uptime`
+
+These remain useful historical command-shape evidence, but current release examples should identify whether they were tested on v31.1.0 or only on v29.1.0.
 
 ## Output privacy rules
 
-Do not publish raw output that includes:
+Do not publish raw output containing:
 
 - peer IP addresses,
-- local bind addresses,
-- local service addresses,
-- session identifiers,
-- RPC credentials,
-- cookie contents,
-- wallet data.
+- local bind or service addresses,
+- RPC credentials or cookie contents,
+- local user paths,
+- unrelated process details,
+- real wallet names or wallet contents,
+- private keys, descriptors, seeds, or signing material.
 
 ## Verification
 
 **Status:** Draft / Locally tested partial  
-**Primary sources checked:** [Read-only RPC smoke test - 2026-07-10](../verification/read-only-rpc-smoke-test-2026-07-10.md), [Local BitcoinII node inspection - 2026-07-10](../verification/local-node-inspection-2026-07-10.md)  
-**Notes:** This page summarizes locally tested read-only commands. It does not broaden the tested scope.
+**Primary source checked:** [Windows v31.1.0 node and RPC validation — 2026-09-11](../verification/windows-v31-node-rpc-validation-2026-09-11.md)  
+**Notes:** Current v31.1.0 read-only/node-inspection examples are separated from historical v29 CLI evidence. No existing wallet or datadir was used in the current test.
