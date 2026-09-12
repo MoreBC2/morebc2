@@ -1,97 +1,93 @@
 # Contributing to MoreBC2
 
 **Status:** Public contribution workflow
-**Last reviewed:** 2026-09-08
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-MoreBC2 is an independently maintained, source-backed documentation project for BitcoinII (BC2). This guide is intended for reviewers and contributors preparing focused issues and pull requests.
+MoreBC2 is an independently maintained, source-backed documentation and verification project for BitcoinII (BC2). Contributions should make the evidence easier to inspect without making claims stronger than the evidence supports.
 
-## Current contribution posture
-
-The repository uses a path-scoped licensing model described in [`LICENSE`](https://github.com/MoreBC2/morebc2/blob/main/LICENSE):
-
-- Original MoreBC2 documentation is licensed under CC BY 4.0.
-- Original MoreBC2 software, site tooling, configuration, tests, and rights-cleared project assets are licensed under MIT.
-- Third-party material is not relicensed and remains under its applicable terms.
-
-When contributing:
-
-- Do not publish MoreBC2 pages as official BitcoinII documentation.
-- Do not imply that Draft, Partial, or Needs Review pages are final.
-- Do not upgrade claims from memory or community assumption.
-- Keep contributions narrow enough for factual, licensing, and provenance review.
+MoreBC2 is not the official BitcoinII project, release channel, or reference implementation.
 
 ## Licensing of contributions
 
-Submit only material that you have the authority to contribute. By submitting an original contribution, you agree that it may be distributed under the repository license applicable to that material: CC BY 4.0 for original documentation and MIT for original software, tooling, configuration, tests, and project assets.
+The repository uses the path-scoped licensing model described in [`LICENSE`](LICENSE):
 
-You retain your copyright; contributing does not assign it to MoreBC2. Identify third-party material and its source and license in the pull request. Do not submit proprietary, confidential, or otherwise restricted material without documented permission compatible with its intended use. No contributor license agreement or Developer Certificate of Origin is introduced by this policy.
+- original MoreBC2 documentation: CC BY 4.0;
+- original MoreBC2 software, site tooling, configuration, tests, and rights-cleared project assets: MIT;
+- third-party material: remains under its own applicable terms and is not automatically relicensed.
+
+Submit only material you have authority to contribute. Identify third-party material, its source, and its license. Do not submit proprietary, confidential, or restricted material without compatible permission.
+
+Contributors retain their copyright. MoreBC2 does not currently impose a separate contributor license agreement or Developer Certificate of Origin.
 
 ## Core rule
 
-Document what is verified.
+Document what the evidence supports.
 
-Clearly label what is not verified.
+Clearly label what it does not support.
 
-Do not make uncertain material sound more certain than the evidence supports.
+Do not promote uncertainty, inference, memory, or community assumption into fact.
+
+## Evidence authority is claim-specific
+
+Use the source that has authority for the particular claim:
+
+- release-pinned BitcoinII Core source for protocol/implementation facts;
+- official release metadata for release identity and asset inventory;
+- dated local-test records for the exact behavior tested;
+- direct public-service observations for point-in-time explorer/API/network behavior;
+- an exchange or service's own API/docs for that service's operational policy;
+- project-controlled website/docs for public project links and positioning;
+- attributed maintainer statements or community discussion only within their proper evidentiary scope.
+
+An exchange API can be primary evidence for that exchange's confirmation policy while being irrelevant as authority for BitcoinII consensus. Likewise, an official website can be project-controlled but still contain older technical wording than the current release source.
+
+See [EVIDENCE_SCALE.md](EVIDENCE_SCALE.md) and [SOURCE_REGISTRY.md](SOURCE_REGISTRY.md).
 
 ## Repository workflow
 
-Use a short-lived branch for each focused change. Changes should normally enter `main` through a pull request rather than a direct push.
+Use a short-lived branch for a focused change. Changes should normally enter `main` through a pull request rather than a direct push.
 
-The preferred review flow is:
+Preferred flow:
 
-1. Keep the branch and pull request limited to one understandable purpose.
-2. Complete the relevant checks in this guide and record the validation in the pull request.
-3. Ask a reviewer to check substantive changes. Authors should not approve their own substantive work.
-4. Verify factual and technical claims against the cited evidence; a formatting-only review is not enough for those claims.
-5. Involve `@toiletslayer` when a change affects repository administration, dependencies, validation, build behavior, deployment behavior, or other workflow-sensitive paths.
-6. Merge only after the requested review and validation are complete.
+1. Keep the pull request limited to one understandable purpose.
+2. Cite or link the evidence for factual changes.
+3. Run the relevant repository checks.
+4. Ask for substantive review when the change affects technical meaning, verification status, security, build/deploy behavior, or broad project policy.
+5. Do not approve your own substantive work as its independent review.
+6. Merge only when the requested review and validation are complete.
 
-The `contributors`, `reviewers`, and `maintainers` teams are the intended long-term access model, but the verified `reviewers` and `maintainers` teams currently have no members. Until those teams are populated, `@toiletslayer`, the verified organization owner, is the effective CODEOWNER. Contributors do not need organization Owner access.
-
-The CODEOWNERS file records the effective owner, but GitHub does not currently enforce the preferred `main` review protections for this repository. The pull-request and review steps above remain project policy even where the GitHub interface does not require them.
+The current repository `CODEOWNERS` file assigns effective review ownership to `@toiletslayer`, including workflow/build/deployment-sensitive paths. That records review ownership; it does not make every direct push or owner-authored change independently reviewed.
 
 ## Repository safety and privacy
 
-Do not commit secrets, API tokens, passwords, private keys, seed phrases, personal information, or unnecessary personal data. Use redacted examples and safe test data. If sensitive material is exposed, stop sharing it and follow [`SECURITY.md`](https://github.com/MoreBC2/morebc2/blob/main/SECURITY.md). Never place sensitive details in a public issue; the security policy provides the verified private reporting route.
+Do not commit:
 
-Preserve MoreBC2's existing status vocabulary, evidence scale, sourcing standards, and verification blocks. Do not weaken an uncertainty label or strengthen a claim merely to make a change appear complete.
+- secrets, API tokens, passwords, private keys, seed phrases, or RPC credentials;
+- personal information that is not necessary for the documentation;
+- real wallet backup material;
+- unredacted private local paths when a neutral placeholder is sufficient;
+- exploit details that belong in a private security report.
 
-## Evidence expectations
-
-When adding or changing a factual claim, identify the evidence source.
-
-Preferred evidence types:
-
-- Current BitcoinII source code.
-- Release tag source code.
-- Official project website or repository.
-- Current release asset or release page.
-- Local command test record.
-- Direct ecosystem check with date.
-- Maintainer statement, clearly attributed.
-- Archived historical source for historical claims.
-
-Do not use memory alone as evidence.
+Use disposable test data and isolated environments where practical. If sensitive material is exposed, stop sharing it publicly and follow [`SECURITY.md`](SECURITY.md).
 
 ## Status labels
 
-Use existing page status labels conservatively:
+Use page status conservatively:
 
-- **Draft** — useful structure exists, but not ready to rely on.
-- **Framework** — mostly structure, placeholders, or checklist material.
-- **Partial** — some source-backed material exists, but review is incomplete.
-- **Reviewed** — a meaningful first-pass review exists.
-- **Needs Review** — important material still needs checking.
-- **Verified** — only use when evidence is strong and current.
+- **Draft** — useful material exists but important review/work remains.
+- **Framework** — structure, policy, or checklist material rather than a completed factual record.
+- **Partial** — meaningful evidence exists, but coverage is incomplete.
+- **Reviewed** — a substantive review pass has been performed within the page's stated scope.
+- **Needs Review** — important content remains unchecked or stale.
+- **Verified** — use only when the page's stated verification scope has actually been met.
 
-Do not mark a page Verified without explicit review and a verification block that explains why.
+A current page does not need to be marked Verified. Draft or Reviewed can be the correct mature label when unresolved production or evidence boundaries remain.
 
 ## Page verification blocks
 
-Most pages should end with:
+Substantial pages should end with a verification block that says what was checked and what remains outside scope:
 
 ```md
 ## Verification
@@ -101,82 +97,77 @@ Most pages should end with:
 **Notes:** ...
 ```
 
-If a page is only a framework, say so.
-
-If command examples are untested, say so.
-
-If ecosystem links are not directly checked, say so.
-
-## Command examples
-
-Command examples are not verified unless they have a test record.
-
-Before adding or promoting a command example, check:
-
-- [Command testing status](docs/verification/command-testing.md)
-
-A tested command record should include:
-
-- Date tested.
-- Operating system.
-- BitcoinII Core version, release, branch, or commit.
-- Network mode.
-- Node or wallet state.
-- Command entered.
-- Expected result.
-- Actual result.
-- Pass/fail.
-- Notes.
-
-Do not add wallet-moving, sensitive, or live submission examples to beginner docs.
-
-## Release claims
-
-Release claims must stay conservative.
-
-Before claiming a release artifact is verified, check:
-
-- [Release verification guide](docs/developers/release-verification.md)
-- [Release source comparison notes](docs/verification/release-source-comparison.md)
-- [Release artifact checklist](docs/verification/release-artifact-checklist.md)
-
-Do not claim that a binary is verified unless hashes and available signatures have been checked.
-
-A GitHub release asset existing is not the same as a verified binary.
-
-A workflow artifact is not the same as a release asset unless it is confirmed on the release page.
-
-## Ecosystem claims
-
-Do not list explorers, APIs, pools, exchanges, wallets, tools, or services as active unless they have been directly checked.
-
-Every ecosystem listing should include:
-
-- Status.
-- URL.
-- Last checked date.
-- Evidence level.
-- Notes.
-
-Do not call a resource official unless an official source says so.
+Do not use a verification block as decoration. Its wording should match the actual evidence.
 
 ## Source review workflow
 
-When reviewing source:
+When reviewing BitcoinII source:
 
 1. Name the repository.
-2. Name the ref: branch, tag, or commit.
+2. Pin the branch, tag, or commit when the claim is version-sensitive.
 3. Name the file path.
-4. Describe only what was actually checked.
-5. Avoid broad claims about unreviewed files.
-6. Link related Source Atlas or architecture pages.
-7. Add open questions for anything unresolved.
+4. Describe only the behavior actually reviewed.
+5. Separate source-confirmed behavior from runtime-tested behavior.
+6. Preserve activation heights, network scope, and other important conditions.
+7. Add unresolved questions instead of filling gaps by assumption.
 
-If a page is based on `main`, and a release tag differs, say so.
+Current-facing protocol documentation should prefer the `v31.1.0` release-pinned source unless a page explicitly targets another version.
+
+## Command and runtime examples
+
+A command example is not verified merely because it resembles Bitcoin Core syntax.
+
+A strong test record identifies:
+
+- date;
+- operating system;
+- BitcoinII Core version/ref;
+- network;
+- node/wallet state;
+- command or procedure;
+- expected and actual result;
+- isolation/safety conditions;
+- pass/fail and caveats.
+
+Keep wallet-moving, signing, key-management, or live-submission examples out of beginner copy/paste material unless the surrounding safety and prerequisites are explicitly reviewed.
+
+See [Command testing status](docs/verification/command-testing.md), [Windows v31.1.0 node and RPC validation — 2026-09-11](docs/verification/windows-v31-node-rpc-validation-2026-09-11.md), and [Windows v31.1.0 PSBT and replay-protection validation — 2026-09-11](docs/verification/windows-v31-psbt-replay-validation-2026-09-11.md).
+
+## Release claims
+
+Keep source provenance, byte integrity, signatures, and reproducibility separate.
+
+For the current `v31.1.0` release, MoreBC2 records GitHub asset digest metadata and a cryptographically verified target commit, while a standalone maintainer-signed checksum manifest, per-binary detached signatures, documented release-signing-key process, and reproducible-build proof remain unestablished.
+
+Do not collapse those distinctions into “the binaries are verified.”
+
+See [BitcoinII Core v31.1.0 release assets](docs/releases/v31.1.0-assets.md).
+
+## Ecosystem and service claims
+
+Do not list an explorer, API, pool, exchange, wallet, or service as currently active without a direct recent check appropriate to the claim.
+
+A useful service record includes status, URL/endpoint, last checked date, what was directly observed, and what was not established.
+
+Do not infer:
+
+- uptime from one successful request;
+- independent redundancy from different hostnames;
+- valid transaction broadcast from an endpoint rejecting malformed data;
+- wallet compatibility from a read-only Electrum handshake;
+- protocol finality from an exchange field named `irreversible`.
+
+## Documentation-site changes
+
+The public site is generated from the repository and deployed through the Cloudflare Pages production workflow on `main`.
+
+Relevant changes should pass the repository's documented checks. The deployment workflow also performs a generated-output private-path scan and a live indexing-policy check.
+
+A successful site build/deployment means the tooling checks passed for that commit. It does **not** make every factual claim in the published content Verified.
 
 ## Suggested feedback buckets
 
-Use these buckets for issues, review notes, or private comments:
+Useful issue/review labels include:
 
 - `source-mismatch`
 - `stale-link`
@@ -193,59 +184,29 @@ Use these buckets for issues, review notes, or private comments:
 
 ## Good first contributions
 
-Good first tasks are narrow:
+Good first tasks are deliberately narrow: fix a broken link, check one claim against one source, add a missing verification note, update one dated service observation, improve one cross-link, or add one well-scoped open question.
 
-- Fix a broken link.
-- Add a missing related-page link.
-- Mark an untested command as untested.
-- Check one source-backed claim against one source file.
-- Add a verification note to one page.
-- Add one open question to the backlog.
-- Review one explorer/API/pool/exchange listing with a direct date.
+Changes that deserve extra review include broad multi-page rewrites, Verified promotions, consensus wording changes, install/recovery guides, wallet movement, active ecosystem claims, security-sensitive material, and build/deployment changes.
 
-## Changes requiring extra review
+## Tone and naming
 
-Use a narrowly scoped proposal and maintainer review for:
+Use plain, useful language without hype or investment advice. Help newcomers without talking down to experienced readers.
 
-- Rewriting many pages at once.
-- Marking pages Verified.
-- Adding install guides with copy/paste commands.
-- Adding wallet movement or recovery guides.
-- Adding active ecosystem listings without direct checks.
-- Making repository-readiness or adoption claims.
-- Changing consensus claims without source review.
-
-## Pull request or review note checklist
-
-Before submitting changes or review notes, ask:
-
-- Did I keep Draft/Partial/Needs Review labels conservative?
-- Did I separate current facts from research, discussion, and history?
-- Did I avoid claiming untested commands are working instructions?
-- Did I avoid claiming live services are active without direct checks?
-- Did I link any unresolved issue to the verification queue?
-- Did I avoid treating MoreBC2 as official BitcoinII documentation?
-
-## Tone
-
-Use plain, useful language. The site should help newcomers without talking down to experienced users.
-
-## Naming standard
-
-Use **BitcoinII** for the project name and **BC2** for the ticker. Avoid using **Bitcoin2** in MoreBC2 documentation unless quoting or documenting historical third-party usage.
+Use **BitcoinII** for the project, **BC2** for the ticker, and **BitcoinII Core** for the reference node/wallet software. Avoid **Bitcoin2** except when documenting historical third-party usage.
 
 ## Related pages
 
-- [Docs index](docs/README.md)
-- [Owner review handoff](docs/REVIEW_HANDOFF.md)
+- [Project status](PROJECT_STATUS.md)
+- [Evidence scale](EVIDENCE_SCALE.md)
+- [Source registry](SOURCE_REGISTRY.md)
+- [Writing checklist](WRITING_CHECKLIST.md)
 - [Documentation coverage](docs/documentation-coverage.md)
 - [Known unknowns](docs/verification/known-unknowns.md)
-- [Open questions backlog](docs/verification/open-questions.md)
-- [Command testing status](docs/verification/command-testing.md)
-- [Release artifact checklist](docs/verification/release-artifact-checklist.md)
+- [Open questions](docs/verification/open-questions.md)
+- [Security policy](SECURITY.md)
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Current MoreBC2 project status, review handoff, verification queue, command tracker, and release tracker
-**Notes:** The repository licensing map is implemented. Review and enforcement practices may evolve as the maintainer team grows.
+**Status:** Reviewed
+**Primary sources checked:** Current MoreBC2 project status, evidence scale/source registry, CODEOWNERS, security policy, current v31 verification records, and production deployment workflow
+**Notes:** Refreshed on 2026-09-12. Review/enforcement practices may evolve as additional maintainers and reviewers participate.
