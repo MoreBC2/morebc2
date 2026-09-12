@@ -68,6 +68,11 @@
   overflow-x: auto;
 }
 
+.sl-markdown-content table a {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
 .sl-markdown-content h2:is(#sources, #verification),
 .sl-markdown-content h2:is(#sources, #verification) + * {
   scroll-margin-top: 6rem;
