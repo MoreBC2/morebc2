@@ -1,137 +1,98 @@
 # Verification
 
-**Category:** Verification
-**Status:** Draft
+**Category:** Verification  
+**Status:** Reviewed / Partial  
 **Last reviewed:** 2026-09-12
 
 ## Summary
 
-This section tracks MoreBC2 evidence records, open questions, test plans, and verification queues.
+Verification is MoreBC2's evidence layer: dated runtime records, direct public-service observations, release-integrity records, open questions, and test plans.
 
-Start with the [Verification evidence index](verification-index.md). It is the canonical evidence summary for MoreBC2.
+Start with the [Verification evidence index](verification-index.md). It is the canonical current evidence summary.
 
-The dated records contain the detailed evidence. Plans are not completed results, and archived readiness dashboards are not current public-release assessments.
+A dated record is preserved for the environment/version actually tested. A plan is not a completed result. A source review is not automatically runtime verification. A successful website deployment verifies the documentation build/deploy workflow, not every BitcoinII technical claim on the site.
 
-## 1. Evidence index
+## Current strongest evidence
 
-Canonical current evidence summary:
+### BitcoinII Core `v31.1.0`
 
-- [Verification evidence index](verification-index.md)
+- [Windows v31.1.0 node and RPC validation — 2026-09-11](windows-v31-node-rpc-validation-2026-09-11.md)
+- [Windows v31.1.0 PSBT and replay-protection validation — 2026-09-11](windows-v31-psbt-replay-validation-2026-09-11.md)
+- [v31 wallet/mempool/mining source regression audit — 2026-09-02](v31-wallet-mempool-mining-regression-2026-09-02.md)
+- [v31 currentness audit — 2026-09-02](v31-currentness-audit-2026-09-02.md)
 
-Older navigation/status pages:
+### Public infrastructure and exchange policy
 
-- [Older verification index](index.md) - retained as a superseded/historical navigation page.
-- [Verification dashboard](dashboard.md) - retained as a legacy manually maintained dashboard concept.
+- [Public infrastructure smoke test — 2026-09-11](public-infrastructure-smoke-test-2026-09-11.md)
+- [Exchange confirmation evidence — 2026-09-12](exchange-confirmation-evidence-2026-09-12.md)
+- [Public API/WebSocket/Electrum smoke test — 2026-07-12](public-api-electrum-smoke-test-2026-07-12.md)
 
-## 2. Dated evidence records
+### Release provenance
 
-Local runtime and RPC:
+- [Current v31.1.0 release assets](../releases/v31.1.0-assets.md)
+- [Release authentication status](../releases/authentication-status.md)
+- [Release-artifact authentication — 2026-08-27](release-artifact-authentication-2026-08-27.md) — historical `v29.1.0` evidence
 
-- [Windows v31.1.0 PSBT and replay-protection validation - 2026-09-11](windows-v31-psbt-replay-validation-2026-09-11.md)
-- [Windows v31.1.0 node and RPC validation - 2026-09-11](windows-v31-node-rpc-validation-2026-09-11.md)
-- [Windows fresh-node peer discovery test - 2026-08-28](windows-peer-discovery-test-2026-08-28.md)
-- [Windows node-operator test - 2026-08-27](windows-node-operator-test-2026-08-27.md)
-- [Local BitcoinII node inspection - 2026-07-10](local-node-inspection-2026-07-10.md)
-- [Read-only RPC smoke test - 2026-07-10](read-only-rpc-smoke-test-2026-07-10.md)
-- [Local RPC enablement plan](local-rpc-enablement-plan.md)
+## Current evidence boundary
 
-Developer platform, public infrastructure, and exchange evidence:
+The current records establish, among other things:
 
-- [Exchange confirmation evidence - 2026-09-12](exchange-confirmation-evidence-2026-09-12.md)
-- [Public infrastructure smoke test - 2026-09-11](public-infrastructure-smoke-test-2026-09-11.md)
-- [Public API, WebSocket, and Electrum smoke test - 2026-07-12](public-api-electrum-smoke-test-2026-07-12.md)
+- bounded Windows `v31.1.0` mainnet startup, peer discovery, cookie RPC, partial initial sync, shutdown/restart, and disposable-wallet isolation;
+- isolated zero-peer regtest wallet/PSBT creation, signing, finalization, decoding, mempool acceptance, and local submission;
+- source-confirmed mainnet ShockWave, replay-protection, data-restriction, and fork-aware-header-sync paths;
+- current public explorer/API/WebSocket/Electrum reachability observations;
+- current exchange confirmation-policy observations supporting a provisional MoreBC2 50-confirmation normal-deposit baseline;
+- current release asset inventory/digests and verified target-commit evidence, with explicit binary-authentication limits.
 
-Project identity:
+They do **not** establish universal production readiness, permanent service uptime, successful public transaction propagation, external-signer compatibility, reproducible binaries, or deterministic transaction finality.
 
-- [Project identity source check - 2026-07-10](project-identity-source-check-2026-07-10.md)
+## Open work
 
-Release integrity and authentication:
-
-- [Release-artifact authentication - 2026-08-27](release-artifact-authentication-2026-08-27.md)
-
-## 3. Open questions and known unknowns
-
-Unresolved items stay in these queues until a dated record or source review resolves them:
+Use these pages for unresolved work:
 
 - [Open questions backlog](open-questions.md)
 - [Known unknowns](known-unknowns.md)
-
-## 4. Test plans and testing status
-
-Plans are not completed results. They describe safe order, scope, or test coverage until a dated execution record exists.
-
 - [Command testing status](command-testing.md)
+
+The remaining high-value work is increasingly execution/operations oriented: long-duration/current-release node behavior, optional indexes/pruning, controlled ShockWave vectors, external-signer/replay-domain compatibility, production custody/deposit workflows, chainwork-aware settlement examples, and periodic service rechecks.
+
+## Plans versus results
+
+Planning/checklist pages remain useful, but should never be cited as if they are execution records:
+
 - [Command smoke-test plan](command-smoke-test-plan.md)
-- [Command example scan](command-example-scan.md)
 - [Network test coverage map](network-test-coverage-map.md)
 - [Network test run plan](network-test-run-plan.md)
-- [Stale wording scan](stale-wording-scan.md)
-
-Internal task prompts and narrow reviewer packets are intentionally not linked from this reader-facing index.
-
-## 5. Release verification
-
-Release records are carefully bounded. Asset inventory is not binary verification, and maintainer roadmap context is not cryptographic proof.
-
-- [Release asset inventory attempt](release-asset-inventory-attempt.md)
-- [Release-artifact authentication - 2026-08-27](release-artifact-authentication-2026-08-27.md)
+- [Ecosystem direct-check plan](ecosystem-direct-check-plan.md)
 - [Release artifact checklist](release-artifact-checklist.md)
-- [Release source comparison notes](release-source-comparison.md)
-- [Network release comparison](network-release-comparison.md)
 
-Narrow reviewer packets for release wording are intentionally kept outside the normal reader flow.
+When a plan is executed, create or update a dated result record rather than silently converting the plan into evidence.
 
-## 6. Ecosystem checks
+## Historical evidence
 
-Ecosystem records and plans should distinguish reachable services from reliable, official, synced, or recommended services.
+Historical records remain version-scoped. In particular, `v29.1.0` Windows/node/release records continue to be useful evidence for that environment, but they are not upgraded to `v31.1.0` by wording changes.
 
-- [Exchange confirmation evidence - 2026-09-12](exchange-confirmation-evidence-2026-09-12.md)
-- [Ecosystem direct check plan](ecosystem-direct-check-plan.md)
-- [Public infrastructure smoke test - 2026-09-11](public-infrastructure-smoke-test-2026-09-11.md)
-- [Public API, WebSocket, and Electrum smoke test - 2026-07-12](public-api-electrum-smoke-test-2026-07-12.md)
-- [Explorers](../ecosystem/explorers.md)
-- [APIs](../ecosystem/apis.md)
-- [Exchanges](../ecosystem/exchanges.md)
-- [Mining pools](../ecosystem/mining-pools.md)
-- [Infrastructure service directory](../infrastructure/service-directory.md)
-- [Infrastructure status policy](../infrastructure/status-policy.md)
+Current-facing pages should prefer the September v31 records where they answer the same question.
 
-## 7. Archived review coordination
+## Superseded coordination material
 
-Earlier invite-only review packets and coordination pages are retained as project-management history. They are intentionally omitted from this reader-facing index and from normal site navigation/search. Use the current [owner public-release review handoff](../REVIEW_HANDOFF.md) for release-readiness work.
-
-## 8. Project identity and status evidence
-
-Use these pages to keep canonical-source, naming, contact, and status claims scoped to the evidence.
-
-- [Project identity source check - 2026-07-10](project-identity-source-check-2026-07-10.md)
-- [Verification evidence index](verification-index.md)
-- [Project status](../../PROJECT_STATUS.md)
-- [Known unknowns](known-unknowns.md)
-- [Open questions backlog](open-questions.md)
-
-## How to use this section
-
-1. Check the [Verification evidence index](verification-index.md) first.
-2. Follow the linked dated record for detailed evidence.
-3. Keep unresolved items in [Open questions](open-questions.md) or [Known unknowns](known-unknowns.md).
-4. Keep plans separate from completed records.
-5. Keep archived review coordination separate from current public-release readiness.
-6. Do not upgrade a page or claim without the required evidence record.
+- [Older verification index](index.md) — historical/superseded navigation.
+- [Verification dashboard](dashboard.md) — legacy manually maintained dashboard concept.
+- earlier invite-only/private-review coordination pages — project-management history, not current evidence.
 
 ## Rules
 
-- Do not move an item out of verification until the evidence is strong enough for the target page.
-- Keep current facts, historical facts, research ideas, and discussion proposals separate.
-- Record the source type used: source code, release artifact, official website, archive, maintainer statement, local test, or current direct check.
-- Command examples should remain unverified until run locally with environment details.
-- Release artifact claims should remain unverified until assets and hashes are checked directly.
-- Ecosystem claims should remain direct, dated, and narrowly scoped.
-- Exchange confirmation counts are operational service policy, not protocol constants; preserve dated evidence and recheck them periodically.
-- Developer test-suite plans should remain separate from user-facing command smoke tests.
+- Name the release/ref, platform, network, date, and environment for runtime evidence.
+- Keep source review, runtime testing, public-service observation, and operational policy distinct.
+- Do not infer public broadcast from local zero-peer `sendrawtransaction`.
+- Do not infer wallet compatibility from Electrum reachability or Bitcoin-style address formats.
+- Do not infer service independence from similar/different hostnames alone.
+- Do not call an exchange confirmation count a consensus constant or cryptographic finality rule.
+- Preserve old dated evidence; add new records for new releases/tests.
+- Recheck time-sensitive public services before using them as current recommendations.
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Current verification section structure, verification evidence index, dated records, open-question queues, test plans, release records, ecosystem records, current exchange evidence, and private-review coordination pages
-**Notes:** This page is a router for verification material. It does not independently verify BitcoinII protocol behavior, service reliability, release binaries, or ecosystem claims.
+**Status:** Reviewed / Partial  
+**Primary evidence checked:** Current verification records/indexes, completed v31 Source Atlas/Architecture audits, September runtime/public-infrastructure records, and September exchange evidence  
+**Notes:** The verification navigation is current. Remaining Partial status reflects genuine unexecuted tests and operational unknowns, not an unaudited section.
