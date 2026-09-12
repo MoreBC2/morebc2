@@ -1,53 +1,56 @@
 # `src/hash.h`
 
-**Category:** Documentation
-**Status:** Needs Review
-**Last reviewed:** 2026-06-30
+**Category:** Developer / Source Atlas  
+**Status:** Reviewed / Source-confirmed structural  
+**Last reviewed:** 2026-09-12
 
 ## Purpose
 
-`hash.h` defines hashing helpers used by BitcoinII Core.
+`src/hash.h` defines hashing helpers used throughout BitcoinII Core. For current MoreBC2 documentation it is an important source anchor for the double-SHA256 block-header hashing path.
 
-For MoreBC2, this file is currently important because it verifies the double-SHA256 hashing path used through `HashWriter::GetHash()`.
+## Current reviewed behavior
 
-## Why it matters
+Release-pinned/current review establishes:
 
-This file helps verify:
+- `CHash256` implements the double-SHA256 construction used by Bitcoin-style 256-bit hashing helpers;
+- `HashWriter::GetHash()` finalizes SHA-256, resets/writes the first digest, and finalizes SHA-256 again;
+- `HashWriter::GetSHA256()` exposes a single-SHA256 result;
+- `CBlockHeader::GetHash()` routes through `HashWriter::GetHash()`.
 
-- The double-SHA256 helper behavior.
-- The SHA-256 + RIPEMD-160 helper behavior.
-- The `HashWriter` behavior used by block header hashing.
+Accordingly, MoreBC2 uses **double-SHA256** (or SHA-256d where context makes that abbreviation clear) for BitcoinII block-header proof-of-work wording.
 
-## Behavior already documented from this file
+## v31 boundary
 
-MoreBC2 currently cites this file for:
+BitcoinII Core `v31.1.0` changes current mining behavior through **ShockWave difficulty calculation**, not by replacing the block-header hash function.
 
-- `CHash256` being described in comments as Bitcoin's 256-bit hash, double SHA-256.
-- `HashWriter::GetHash()` finalizing SHA-256 once, resetting, writing the first result, and finalizing SHA-256 again.
-- `HashWriter::GetSHA256()` producing a single SHA-256 hash.
+The distinction matters:
 
-## Related MoreBC2 pages
+- hashing answers whether a candidate header hash satisfies its target;
+- ShockWave determines the target/`nBits` required for the next candidate block from height `57750`;
+- accumulated chain work determines best-chain selection among valid candidates.
 
-- [Consensus overview](../../documentation/consensus-overview.md)
-- [Network specifications](../../documentation/network-specifications.md)
+Do not describe “SHA-256 compatibility” as proof that generic Bitcoin mining/template software is fully BC2-compatible. Candidate-time/required-work behavior must also be correct.
+
+## Other hashing helpers
+
+The file also contains single-SHA256 and SHA-256/RIPEMD-160-related helpers used elsewhere in Bitcoin-style key/script/data processing. This page does not attempt to enumerate every call site.
+
+## Related pages
+
+- [Block primitives](block-primitives.md)
+- [pow.cpp](pow-cpp.md)
+- [ShockWave v31](shockwave-v31.md)
 - [Mining overview](../../mining/mining-overview.md)
 - [Proof-of-work](../../encyclopedia/proof-of-work.md)
-- [Block primitives](block-primitives.md)
 
-## Open questions
+## Primary source
 
-- Confirm maintainer-preferred public wording: `double-SHA256`, `SHA-256d`, or another phrase.
-- Confirm whether any BitcoinII-specific hashing changes exist elsewhere.
-- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes before upgrading status.
+- BitcoinII Core `v31.1.0/src/hash.h`
 
-## Sources
-
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
-
-- Current observed `main` `src/hash.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/hash.h
+Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Needs Review
-**Primary sources checked:** Yes
-**Notes:** Hashing helper behavior has been checked from source, but this page should be reviewed against the `v31.1.0` release baseline and subsequent `main` changes before being marked Verified.
+**Status:** Reviewed / Source-confirmed structural  
+**Primary evidence:** BitcoinII Core `v31.1.0` hash and block-primitives paths  
+**Notes:** Double-SHA256 block-header hashing is source-confirmed. This page does not claim a runtime benchmark, source-build reproduction, or blanket third-party miner compatibility.
