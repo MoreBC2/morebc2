@@ -1,216 +1,94 @@
 # `src/kernel/mempool_entry.h`
 
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-06-30
+**Category:** Developer / Source Atlas  
+**Status:** Reviewed / Source-confirmed structural  
+**Last reviewed:** 2026-09-12
 
 ## Purpose
 
-`mempool_entry.h` defines the per-transaction data stored by BitcoinII Core's mempool.
+`src/kernel/mempool_entry.h` defines the per-transaction metadata stored by BitcoinII Core's mempool, principally through `CTxMemPoolEntry`.
 
-The main type reviewed here is `CTxMemPoolEntry`.
+The reviewed `v31.1.0` structure remains broadly Bitcoin-style. BitcoinII-specific replay-protection behavior is applied during admission/script validation and cache separation rather than by adding a replay-domain field to `CTxMemPoolEntry` itself.
 
-## File header notes
+## What an entry tracks
 
-The file header states that BitcoinII was forked from Bitcoin Core version `0.27.0` and is distributed under the MIT software license.
+Reviewed entry state includes:
 
-## Why it matters
+- transaction reference;
+- direct mempool parents/children;
+- original and modified fee;
+- transaction weight and memory usage;
+- local entry time and chain height at admission;
+- whether the transaction spends coinbase output;
+- signature-operation cost;
+- cached sequence-lock `LockPoints`;
+- ancestor/descendant counts, sizes, and modified-fee totals;
+- entry sequence / relay-recency state.
 
-`CTxMemPoolEntry` is the unit of accounting for mempool transactions.
-
-It stores both the transaction itself and cached metadata used for:
-
-- Fee sorting.
-- Mining selection.
-- Ancestor tracking.
-- Descendant tracking.
-- Replacement and relay policy support.
-- Reorg lock-point repair.
-- Mempool graph algorithms.
+These cached values support policy, mining/template selection, graph operations, replacement/eviction behavior, and reorg repair.
 
 ## `LockPoints`
 
-`LockPoints` stores cached height and median-time-past values needed to satisfy relative locktime constraints.
+`LockPoints` caches height, MedianTimePast-related time, and the highest relevant input block used for relative-locktime evaluation.
 
-Reviewed fields:
+After a reorg, cached lock points can remain usable only when the new active chain still has the relevant ancestry; otherwise higher-level mempool/reorg logic repairs or removes affected entries.
 
-- `height`
-- `time`
-- `maxInputBlock`
+## Ancestor/descendant accounting
 
-The source comment explains that cached lock points remain valid after a reorg as long as the current chain still descends from the highest block containing one of the transaction inputs used in the calculation.
+`CTxMemPoolEntry` caches package-level state used by ancestor-aware policy and mining selection.
 
-## Parent and child references
+This is relevant to current block-template assembly, which still uses ancestor-aware package scoring in the reviewed v31 path. ShockWave changes required block work, not this per-entry fee/graph data structure.
 
-`CTxMemPoolEntry` defines:
+See [Block-template assembly](miner.md).
 
-- `Parents`
-- `Children`
+## Modified fee and local policy
 
-Both are sets of references to other mempool entries, ordered by transaction hash.
+The entry keeps original fee and a local modified-fee value used by prioritization/template policy. Local fee deltas do not rewrite the transaction or alter BitcoinII consensus validity.
 
-These are used to track direct in-mempool parents and direct in-mempool children.
+## Notification helper structs
 
-## Core stored fields
+The header also defines transaction-info structures used for mempool notifications/removals/additions, carrying fields such as transaction reference, fee, virtual size, admission height, and package/current-chain-state context.
 
-Reviewed private fields include:
+## v31 replay boundary
 
-- `tx` — transaction reference.
-- `m_parents` — direct mempool parents.
-- `m_children` — direct mempool children.
-- `nFee` — original transaction fee.
-- `nTxWeight` — cached transaction weight.
-- `nUsageSize` — cached memory usage.
-- `nTime` — local mempool entry time.
-- `entry_sequence` — sequence used for relay recency behavior.
-- `entryHeight` — chain height when the transaction entered the mempool.
-- `spendsCoinbase` — whether the transaction spends a coinbase output.
-- `sigOpCost` — total signature operation cost.
-- `m_modified_fee` — fee after local priority adjustment.
-- `lockPoints` — cached relative-locktime values.
+Mempool admission on current BitcoinII validates signatures for the **next block's** replay domain and clears legacy-domain state at the activation boundary. Validation-cache keys are also separated by fork id.
 
-## Descendant accounting
+Those behaviors live in the surrounding validation/script paths. A `CTxMemPoolEntry` existing in memory should therefore be understood as state produced after the relevant admission checks, not as the implementation of replay protection itself.
 
-Reviewed descendant fields:
+See [Mempool accept](mempool-accept.md) and [Replay protection v31](replay-protection-v31.md).
 
-- `m_count_with_descendants`
-- `nSizeWithDescendants`
-- `nModFeesWithDescendants`
+## Runtime boundary
 
-The source comment explains that when a new mempool entry is added, descendant state is updated for all ancestors of the newly added transaction.
+The September 11 isolated `v31.1.0` regtest PSBT test successfully inserted a disposable signed transaction into the local mempool and confirmed it with `getmempoolentry`.
 
-## Ancestor accounting
+That runtime result corroborates ordinary current-release entry creation/inspection in the documented zero-peer environment. It did not instrument every internal field or the mainnet replay activation transition.
 
-Reviewed ancestor fields:
+## Related pages
 
-- `m_count_with_ancestors`
-- `nSizeWithAncestors`
-- `nModFeesWithAncestors`
-- `nSigOpCostWithAncestors`
-
-These values cache package-level data needed for ancestor-aware policy and mining selection.
-
-## Constructor behavior
-
-The constructor stores transaction metadata and initializes:
-
-- Original fee.
-- Transaction weight.
-- Memory usage.
-- Entry time.
-- Entry height.
-- Coinbase-spend flag.
-- Sigop cost.
-- Modified fee as the original fee.
-- Lock points.
-- Ancestor and descendant counts/sizes/fees to the transaction itself.
-
-## Reviewed methods
-
-### Transaction accessors
-
-Reviewed methods include:
-
-- `GetTx()`
-- `GetSharedTx()`
-- `GetFee()`
-- `GetTxSize()`
-- `GetTxWeight()`
-- `GetTime()`
-- `GetHeight()`
-- `GetSequence()`
-- `GetSigOpCost()`
-- `GetModifiedFee()`
-- `DynamicMemoryUsage()`
-- `GetLockPoints()`
-
-### State update methods
-
-Reviewed methods include:
-
-- `UpdateDescendantState()`
-- `UpdateAncestorState()`
-- `UpdateModifiedFee()`
-- `UpdateLockPoints()`
-
-`UpdateModifiedFee()` updates the modified fee for the entry itself and also updates cached modified-fee totals with ancestors and descendants.
-
-`UpdateLockPoints()` is used after a reorg when cached lock-point values need to be repaired.
-
-### Parent and child accessors
-
-Reviewed methods include:
-
-- `GetMemPoolParentsConst()`
-- `GetMemPoolChildrenConst()`
-- `GetMemPoolParents()`
-- `GetMemPoolChildren()`
-
-These are the direct link structures used by broader mempool graph logic.
-
-## Transaction notification structs
-
-The file also defines transaction-info helper structs:
-
-### `TransactionInfo`
-
-Stores:
-
-- Transaction reference.
-- Fee.
-- Virtual transaction size.
-- Height when the transaction entered the mempool.
-
-The source comment notes that virtual transaction size is a policy field and is the primary metric used by the mining algorithm to select transactions.
-
-### `RemovedMempoolTransactionInfo`
-
-Wraps `TransactionInfo` for removed mempool transactions.
-
-### `NewMempoolTransactionInfo`
-
-Stores new-transaction notification metadata, including whether:
-
-- Mempool limits were bypassed.
-- The transaction was submitted as part of a package.
-- The chainstate was current when added.
-- The transaction had no unconfirmed parents.
-
-## Relationship to other mempool files
-
-`CTxMemPoolEntry` is used by `CTxMemPool` in `src/txmempool.h` and `src/txmempool.cpp`.
-
-`CTxMemPool` updates entry ancestor/descendant state when transactions are added, removed, reprioritized, or repaired after reorg processing.
-
-## BitcoinII-specific notes
-
-The reviewed file shows BitcoinII naming and fork metadata, but this first pass has not identified BitcoinII-specific entry behavior beyond inherited Bitcoin Core-derived logic.
-
-## Related MoreBC2 pages
-
+- [Mempool accept](mempool-accept.md)
 - [Mempool source](txmempool.md)
 - [Mempool flow](../../architecture/mempool-flow.md)
-- [Block validation flow](../../architecture/block-validation-flow.md)
+- [Block-template assembly](miner.md)
 - [Disconnected transactions](disconnected-transactions.md)
+- [Windows v31 PSBT validation](../../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
 
-## Open questions
+## Open work
 
-- Review how `CTxMemPoolEntry` fields are set during transaction acceptance.
-- Review mining/block-template selection to confirm how virtual transaction size and ancestor data are used.
-- Review replacement policy interactions with entry metadata.
-- Review fee-estimation use of entry data.
-- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for this file before upgrading status.
+- Map replacement/eviction and fee-estimator consumers in more detail if operator guidance needs them.
+- Build a deterministic package fixture if ancestor/descendant behavior needs direct runtime examples.
+- Keep the current regtest mempool observation distinct from mainnet replay-boundary testing.
 
-## Sources
+## Primary sources
 
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+- `v31.1.0/src/kernel/mempool_entry.h`
+- `v31.1.0/src/txmempool.h`
+- `v31.1.0/src/txmempool.cpp`
+- `v31.1.0/src/validation.cpp`
 
-- Current observed `main` `src/kernel/mempool_entry.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/mempool_entry.h
-- Current observed `main` `src/txmempool.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/txmempool.h
-- Current observed `main` `src/txmempool.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/txmempool.cpp
+Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Yes
-**Notes:** This page documents the mempool entry data structure. Transaction acceptance, mining selection, replacement policy, and release-versus-main comparison still need separate review.
+**Status:** Reviewed / Source-confirmed structural  
+**Primary evidence:** BitcoinII Core `v31.1.0` mempool entry/source review plus September 11 local-mempool runtime evidence  
+**Notes:** Entry structure is current and ordinary entry creation was runtime-corroborated. Full internal-field instrumentation, package/replacement tests, and mainnet replay-boundary behavior remain separate work.
