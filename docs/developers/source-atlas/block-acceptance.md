@@ -1,262 +1,209 @@
 # Block acceptance pipeline
 
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-06-30
+**Category:** Developer / Source Atlas  
+**Status:** Reviewed / Source-confirmed partial  
+**Last reviewed:** 2026-09-12
 
 ## Purpose
 
-This page documents the reviewed BitcoinII Core path for accepting blocks into local node state.
+This page maps the reviewed BitcoinII Core `v31.1.0` path from incoming header/block data through validation, storage, best-chain selection, block connection, and active-tip updates.
 
-It connects the previously reviewed validation, proof-of-work, chainstate, block index, disk storage, and best-chain activation notes into one source-backed block lifecycle map.
+The broad Bitcoin-style pipeline remains intact, but current BC2 adds three material height-`57750` boundaries that must now be considered in the same lifecycle:
 
-## Main source files
+- ShockWave next-work calculation;
+- consensus data restrictions;
+- replay-protection signature validation.
+
+## Main source paths
 
 - `src/validation.cpp`
 - `src/validation.h`
 - `src/pow.cpp`
 - `src/kernel/chainparams.cpp`
+- `src/consensus/bitcoinII_data.h`
+- `src/script/interpreter.cpp`
 
 ## High-level flow
 
 ```text
-Network / disk / caller
-    -> ProcessNewBlock or ProcessNewBlockHeaders
-        -> AcceptBlockHeader
-            -> CheckBlockHeader
-            -> ContextualCheckBlockHeader
-        -> AcceptBlock
-            -> CheckBlock
-            -> ContextualCheckBlock
-            -> SaveBlockToDisk
-            -> ReceivedBlockTransactions
-        -> ActivateBestChain
-            -> FindMostWorkChain
-            -> ActivateBestChainStep
-            -> ConnectTip
-            -> ConnectBlock
-            -> UpdateTip
+network / disk / caller
+  -> ProcessNewBlock or ProcessNewBlockHeaders
+      -> AcceptBlockHeader
+          -> CheckBlockHeader
+          -> ContextualCheckBlockHeader
+      -> AcceptBlock
+          -> CheckBlock
+          -> ContextualCheckBlock
+          -> save block data
+          -> ReceivedBlockTransactions
+      -> ActivateBestChain
+          -> FindMostWorkChain
+          -> ActivateBestChainStep
+              -> disconnect old branch if needed
+              -> ConnectTip
+                  -> ConnectBlock
+          -> update active tip
 ```
 
-This is simplified. The actual implementation includes locking, cached block pointers, anti-DoS checks, reorg handling, pruning behavior, disk flushing, and validation-interface notifications.
+This intentionally omits locking, anti-DoS shortcuts, cached block pointers, pruning/disk details, background-chainstate handling, and callback scheduling.
 
 ## Responsibility table
 
-| Function | Reviewed responsibility |
+| Function/path | Reviewed responsibility |
 |---|---|
-| `ProcessNewBlockHeaders` | Processes incoming headers and passes each one to `AcceptBlockHeader` |
-| `ProcessNewBlock` | Public full-block processing entry point; checks block, accepts/stores block, then activates best chain |
-| `AcceptBlockHeader` | Validates and indexes headers after proof-of-work and contextual header checks |
-| `AcceptBlock` | Accepts a full block for storage after block and contextual checks |
-| `ReceivedBlockTransactions` | Marks block data as received and makes eligible block indexes candidates for chain connection |
-| `FindMostWorkChain` | Selects a usable highest-work candidate chain |
-| `ActivateBestChainStep` | Disconnects old tip blocks when needed and connects candidate blocks |
-| `ConnectTip` | Connects one block to the active chain tip |
-| `ConnectBlock` | Applies block effects to the UTXO set and runs UTXO/script-dependent checks |
+| `ProcessNewBlockHeaders` | Processes incoming headers through `AcceptBlockHeader` and updates header-tip state |
+| `ProcessNewBlock` | Full-block entry point; context-free check, acceptance/storage, then best-chain activation |
+| `AcceptBlockHeader` | Header proof-of-work/context validation and block-index insertion |
+| `ContextualCheckBlockHeader` | Required `nBits`, MTP/future-time, checkpoints, version/context checks |
+| `AcceptBlock` | Full-block pre-storage checks and data persistence |
+| `ReceivedBlockTransactions` | Marks block transaction data present and updates candidate eligibility |
+| `FindMostWorkChain` | Selects a usable highest-accumulated-work candidate |
+| `ActivateBestChainStep` | Disconnects/reconnects around the fork point toward the most-work candidate |
+| `ConnectTip` | Connects one block to the active tip and updates mempool/tip state |
+| `ConnectBlock` | UTXO-, script-, and BC2-specific consensus checks while applying block effects |
 
-## `ProcessNewBlockHeaders`
+## Header proof of work and ShockWave
 
-Reviewed behavior:
+`CheckBlockHeader` verifies the claimed proof of work against the header's target.
 
-- Processes a vector of block headers.
-- Calls `AcceptBlockHeader` for each header.
-- Calls `CheckBlockIndex()` after accepted headers.
-- Notifies header-tip changes after processing.
-- Uses `min_pow_checked` to indicate whether anti-DoS proof-of-work checks have already been done by the caller for the headers chain.
+`ContextualCheckBlockHeader` requires the header's `nBits` to equal `GetNextWorkRequired(...)` for its actual candidate context.
 
-## `ProcessNewBlock`
+On current mainnet, block height `57750` and later use ShockWave. Because ShockWave can depend on candidate time, the required target cannot safely be modeled as “reuse the previous block's difficulty until the next 2016-block boundary.”
 
-Reviewed behavior:
+See [pow.cpp](pow-cpp.md) and [ShockWave v31](shockwave-v31.md).
 
-- Is a public incoming-block processing path.
-- Calls `CheckBlock` under `cs_main` because `CBlock::fChecked` can otherwise cause data races.
-- Calls `AcceptBlock` if context-free block checks pass.
-- Reports failed block checks through validation signals.
-- Calls `NotifyHeaderTip`.
-- Calls `ActivateBestChain` on the active chainstate.
-- Also activates the background chainstate when background sync is in progress.
-- Does not guarantee the specific supplied block becomes active; it guarantees the best known valid block is made active if processing succeeds.
+## Full-block checks before connection
 
-## `AcceptBlockHeader`
+The reviewed pre-connection flow still covers:
 
-Reviewed behavior:
+- merkle-root and mutation checks;
+- size/weight limits;
+- coinbase placement;
+- context-independent transaction checks;
+- transaction finality/context checks;
+- witness commitments;
+- legacy/signature-operation accounting;
+- checkpoint/context rules where enabled.
 
-- Rejects duplicate known invalid headers.
-- Calls `CheckBlockHeader` for non-genesis headers.
-- Requires the previous block header to be known.
-- Rejects headers that build on invalid previous blocks.
-- Calls `ContextualCheckBlockHeader`.
-- Checks whether the header descends from known failed blocks.
-- Requires anti-DoS proof-of-work validation before adding a new header to permanent block-index memory.
-- Adds valid headers to the block index.
+These checks do not replace the UTXO- and script-dependent work performed during block connection.
 
-## Header checks
+## `ConnectBlock`
 
-### `CheckBlockHeader`
+`ConnectBlock` applies a candidate block's effects to a coins/UTXO view and performs context-dependent consensus validation.
 
-Reviewed behavior:
+Reviewed structural responsibilities include:
 
-- Calls `CheckProofOfWork(block.GetHash(), block.nBits, consensusParams)` when proof-of-work checking is enabled.
-- Rejects the header with reason `high-hash` if proof-of-work fails.
+- checking the coins view is based on the expected previous block;
+- handling the genesis special case;
+- BIP30/sequence-lock context;
+- input existence/value/coinbase-maturity checks;
+- fee accumulation;
+- signature-operation cost accounting;
+- script/input verification;
+- UTXO updates;
+- coinbase reward ceiling versus subsidy plus fees;
+- undo-data generation;
+- advancing the coins-view best block.
 
-### `ContextualCheckBlockHeader`
+### v31 data restrictions
 
-Reviewed behavior:
+From mainnet height `57750`, `validation.cpp` also applies BitcoinII-specific consensus data restrictions during block connection.
 
-- Checks that `block.nBits` equals `GetNextWorkRequired(...)`.
-- Applies checkpoint restrictions when checkpoints are enabled.
-- Rejects timestamps not greater than previous median time past.
-- Rejects timestamps too far in the future.
-- Rejects outdated block versions after relevant deployments are active.
+The release-pinned path checks explicit output and Taproot-witness constructions documented in [Consensus data restrictions](data-restrictions-v31.md). These are consensus checks, not merely mempool policy.
 
-## `AcceptBlock`
+### v31 replay-protection domain
 
-Reviewed behavior:
+At/after replay activation, script/signature verification uses the BC2 replay-protection domain selected by consensus parameters.
 
-- Calls `AcceptBlockHeader` first.
-- Avoids re-processing blocks that already have data.
-- Applies anti-DoS logic for unrequested blocks, including less-work and too-far-ahead blocks.
-- Calls `CheckBlock`.
-- Calls `ContextualCheckBlock`.
-- Marks invalid block indexes when validation fails.
-- Saves valid block data to disk.
-- Calls `ReceivedBlockTransactions` after saving.
-- Flushes state to disk in `FlushStateMode::NONE`.
+The validation cache also separates results by sighash fork id so validity from one signature domain cannot be reused across another.
 
-## Full block checks before storage
+See [Replay protection v31](replay-protection-v31.md) and [Script interpreter](script-interpreter.md).
 
-### `CheckBlock`
+## Best-chain selection and reorganization
 
-Reviewed behavior:
+`FindMostWorkChain` selects usable candidate chains by accumulated chain work, not by confirmation count alone.
 
-- Calls `CheckBlockHeader`.
-- Checks signet block solution when signet rules apply.
-- Checks merkle root when requested.
-- Rejects merkle mutation / duplicate-transaction merkle malleability.
-- Checks block size and weight limits.
-- Requires the first transaction to be coinbase.
-- Rejects additional coinbase transactions after the first transaction.
-- Calls `CheckTransaction` for every transaction.
-- Counts legacy signature operations and rejects blocks over the sigops limit.
-- Marks the block as checked when proof-of-work and merkle-root checks were both performed.
+`ActivateBestChainStep` finds the fork point, disconnects active-chain blocks where necessary, connects the selected branch, and reconciles mempool state.
 
-### `ContextualCheckBlock`
+A simplified reorg path is:
 
-Reviewed behavior:
+```text
+FindMostWorkChain
+  -> find fork point
+  -> DisconnectTip / DisconnectBlock
+      -> roll UTXO state backward using undo data
+      -> queue disconnected transactions
+  -> ConnectTip / ConnectBlock new branch
+  -> MaybeUpdateMempoolForReorg
+      -> re-add eligible disconnected transactions
+      -> remove invalid/non-final/immature descendants
+      -> re-limit mempool state
+```
 
-- Applies context-dependent block checks that do not use the UTXO set.
-- Enforces BIP113 median-time-past locktime behavior when CSV is active.
-- Checks that all transactions are final.
-- Enforces coinbase height commitment after the relevant deployment is active.
-- Validates witness commitments when SegWit is active.
-- Checks final block weight after witness commitment validation.
+ShockWave affects the amount of work represented by valid blocks through their targets, but chain selection still uses accumulated chain work.
 
-## `ReceivedBlockTransactions`
+## Mempool boundary
 
-Reviewed behavior:
+Block consensus and mempool policy are not the same thing.
 
-- Marks the block as having transaction data.
-- Records block file position and data position.
-- Adds witness-data status when SegWit is active for that block.
-- Raises validity to `BLOCK_VALID_TRANSACTIONS`.
-- Marks the block index dirty for persistence.
-- Recursively processes descendant blocks that may now be eligible for connection.
-- Calls `TryAddBlockIndexCandidate` for eligible blocks across chainstates.
-- Stores blocks with valid parents later through `m_blocks_unlinked` if parent transaction data is not yet available.
+Mempool acceptance adds policy constraints and v31 next-block replay-domain handling. A transaction can be policy-rejected while potentially remaining block-consensus-valid, while a BitcoinII-specific post-activation consensus violation cannot be made valid by bypassing the mempool.
 
-## `ActivateBestChain`
+See [Mempool accept](mempool-accept.md).
 
-Reviewed high-level behavior:
+## Notifications observed
 
-- Ensures only one activation loop runs at a time with the chainstate mutex.
-- Drains or limits validation-interface callbacks to avoid callback backlog.
-- Locks `cs_main` and mempool while connecting blocks.
-- Calls `FindMostWorkChain` when no cached candidate is available.
-- Calls `ActivateBestChainStep` to move toward the selected candidate.
-- Emits `BlockConnected` signals from the connect trace.
-- Emits tip-update notifications when the active chain tip changes.
-- Handles initial-block-download exit behavior.
-- Calls `CheckBlockIndex` after activation loop completion.
-- Periodically flushes state to disk.
-
-## `ConnectTip` and `ConnectBlock`
-
-Reviewed behavior:
-
-- `ConnectTip` requires the new block index to build on the current chain tip.
-- `ConnectTip` reads the block from disk unless a cached block pointer is available.
-- `ConnectTip` calls `ConnectBlock` with a coins-view cache.
-- `ConnectBlock` applies UTXO changes and UTXO-dependent validation.
-- `ConnectBlock` checks non-coinbase inputs with `Consensus::CheckTxInputs`.
-- `ConnectBlock` runs input script checks when script checking is enabled.
-- `ConnectBlock` checks that coinbase output value does not exceed fees plus subsidy.
-- `ConnectTip` removes confirmed transactions from the mempool.
-- `ConnectTip` sets the active chain tip and calls `UpdateTip`.
-
-## Consensus vs policy note
-
-Block acceptance and block connection are consensus-critical paths.
-
-Mempool acceptance is policy-sensitive: transactions can be rejected from the mempool for policy reasons while still being potentially valid if mined in a block.
-
-This page should not mix mempool policy rules with block consensus rules unless the reviewed source path clearly does so.
-
-## Notifications and callbacks observed
-
-Reviewed paths mention or emit:
+Reviewed validation paths emit or interact with notifications such as:
 
 - `BlockChecked`
 - `BlockConnected`
 - `BlockDisconnected`
 - `UpdatedBlockTip`
-- `NotifyHeaderTip`
-- `TransactionAddedToMempool` in transaction acceptance, not block acceptance itself
+- header-tip notifications
 
-MoreBC2 should keep notification behavior source-backed because callback ordering matters for wallets, RPC, indexes, and external observers.
+Wallets, indexes, UI, and other subscribers consume these interfaces. Exact callback ordering remains a source-level detail and should not be generalized without tracing the relevant subscriber.
 
-## Relationship to disk and block index
+## Runtime boundary
 
-Reviewed source shows the block acceptance path updates:
+The September 11 Windows `v31.1.0` node test observed real mainnet header acquisition and advancing block validation during bounded initial block download, followed by a clean restart.
 
-- Block index validity flags.
-- Block file/data positions.
-- Dirty block-index tracking.
-- Disk block storage through block save paths.
-- Candidate sets used for best-chain selection.
+That is runtime evidence that the current release's ordinary header/block synchronization path operates in the documented environment.
 
-This page does not yet fully document block file allocation, pruning, or block storage internals.
+It is **not** a controlled activation-boundary test for ShockWave, replay protection, or data restrictions, and the bounded run did not complete full IBD.
 
-## Related MoreBC2 pages
+## Related pages
 
-- [Source atlas: validation.cpp](validation-cpp.md)
+- [validation.cpp](validation-cpp.md)
 - [Block validation flow](../../architecture/block-validation-flow.md)
-- [Consensus overview](../../documentation/consensus-overview.md)
-- [Network specifications](../../documentation/network-specifications.md)
-- [Checkpoints](../../documentation/checkpoints.md)
-- [Proof-of-work](../../encyclopedia/proof-of-work.md)
-- [Reorganizations](../../encyclopedia/reorganizations.md)
+- [Life of a block](../../architecture/life-of-a-block.md)
+- [Life of a reorganization](../../architecture/life-of-a-reorg.md)
+- [ShockWave v31](shockwave-v31.md)
+- [Replay protection v31](replay-protection-v31.md)
+- [Consensus data restrictions](data-restrictions-v31.md)
+- [Block storage](block-storage.md)
+- [Windows v31 node/RPC validation](../../verification/windows-v31-node-rpc-validation-2026-09-11.md)
 
-## Open questions
+## Open work
 
-- Review block storage internals in detail.
-- Review pruning behavior and block-file allocation.
-- Review validation-interface callback ordering in detail.
-- Review net-processing caller paths for incoming network blocks and headers.
-- Review disk import and reindex paths more deeply.
-- Decide whether this page should later split into network block acceptance and disk/reindex block acceptance.
-- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for these paths before upgrading status.
+- Complete a release-pinned review of block-storage/pruning details affected by current Core.
+- Trace exact validation-interface callback ordering for selected subscribers.
+- Execute controlled v31 activation-boundary vectors for ShockWave, replay protection, and data restrictions.
+- Complete a full mainnet IBD record in an isolated environment if operationally useful.
 
-## Sources
+## Primary sources
 
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
+Pinned to BitcoinII Core `v31.1.0`:
 
-- Current observed `main` `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.cpp
-- Current observed `main` `src/validation.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.h
-- Current observed `main` `src/pow.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/pow.cpp
-- Current observed `main` `src/kernel/chainparams.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/chainparams.cpp
+- `src/validation.cpp`
+- `src/validation.h`
+- `src/pow.cpp`
+- `src/kernel/chainparams.cpp`
+- `src/consensus/bitcoinII_data.h`
+- `src/script/interpreter.cpp`
+
+Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This page consolidates reviewed block acceptance and activation behavior. It should be expanded after reviewing block storage, pruning, net-processing caller paths, validation-interface callbacks, and release-versus-main differences.
+**Status:** Reviewed / Source-confirmed partial  
+**Primary evidence:** BitcoinII Core `v31.1.0` validation/PoW/data/script paths plus September 11 bounded Windows mainnet synchronization evidence  
+**Notes:** The page now includes the material v31 consensus boundaries. Full IBD, controlled activation vectors, and exhaustive callback/storage review remain open.
