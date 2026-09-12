@@ -1,32 +1,16 @@
 # Wallet coins and balances RPC
 
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-06-30
+**Category:** Developer / Source Atlas  
+**Status:** Source-reviewed / Runtime-tested partial  
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page covers a first-pass review of:
+This page maps wallet coin/balance RPC behavior centered on `src/wallet/rpc/coins.cpp` for the current BitcoinII Core `v31.1.0` documentation baseline.
 
-- `src/wallet/rpc/coins.cpp`
-
-This file contains wallet RPC behavior for received amounts, wallet balances, manual output selection state, locked outputs, and listing available wallet outputs.
-
-This is not a tested command guide. Examples should not be marked verified until they are run against BitcoinII Core with a temporary wallet.
-
-## Why this file matters
-
-Coin and balance RPCs are core building blocks for:
-
-- Wallet status pages.
-- Exchange and service balance monitoring.
-- Deposit accounting.
-- Manual coin/output selection.
-- Troubleshooting why funds are or are not available for spending.
+The earlier page said none of these commands had been run. That is no longer current: `getbalances` was exercised successfully on a fresh disposable `v31.1.0` regtest descriptor wallet during the September PSBT validation. Other received-amount, UTXO-listing, and lock-state methods remain source-reviewed unless a separate dated test says otherwise.
 
 ## Commands reviewed
-
-Reviewed commands include:
 
 - `getreceivedbyaddress`
 - `getreceivedbylabel`
@@ -37,111 +21,105 @@ Reviewed commands include:
 - `listlockunspent`
 - `listunspent`
 
+## Runtime evidence — `getbalances`
+
+The September 11 isolated regtest test created a fresh disposable descriptor wallet, mined only disposable regtest funds to it with `generatetoaddress`, and called `getbalances` before constructing the PSBT spend.
+
+That establishes `getbalances` worked for the documented `v31.1.0` wallet/environment.
+
+No existing user wallet was opened, copied, rescanned, imported, unlocked, inspected, or spent from.
+
+See [Windows v31.1.0 PSBT and replay-protection validation](../../verification/windows-v31-psbt-replay-validation-2026-09-11.md).
+
+## Balance command behavior
+
+Source review shows balance methods synchronize wallet results to chain state and can distinguish categories such as trusted, untrusted-pending, and immature funds according to the command/wallet configuration.
+
+`getunconfirmedbalance` is deprecated in favor of the relevant `getbalances` field in the reviewed source.
+
+Wallet balance output is wallet state, not an exchange accounting ledger. Confirmation requirements, watch-only state, coinbase maturity, wallet ownership, and wallet policy can all change reported categories.
+
 ## Received amount helpers
 
-`GetReceived` is the common helper for `getreceivedbyaddress` and `getreceivedbylabel`.
+`getreceivedbyaddress` and `getreceivedbylabel` use common received-value logic with filters such as ownership and minimum confirmations. Source review also accounts for immature coinbase handling where applicable.
 
-Reviewed behavior includes:
+These methods were not exercised in the September v31 runtime test.
 
-- Looking up either one destination or all destinations for a label.
-- Requiring wallet-owned output scripts.
-- Applying minimum confirmation depth.
-- Excluding immature coinbase outputs unless requested.
-- Summing matching outputs from wallet transactions.
+## UTXO listing
 
-## Balance commands
+`listunspent` exposes wallet outputs subject to confirmation, address, safety, and query-option filters.
 
-Reviewed balance commands include:
+Reviewed fields/options cover areas such as:
 
-- `getbalance`
-- `getbalances`
-- `getunconfirmedbalance`
+- minimum/maximum confirmations;
+- optional address filters;
+- `include_unsafe`;
+- amount/count/sum query constraints;
+- immature coinbase handling;
+- transaction/output identifiers;
+- amount and confirmations;
+- spendable/solvable/safe state;
+- descriptor/parent-descriptor information where available.
 
-Reviewed behavior includes:
+MoreBC2 has not yet produced a current v31 runtime `listunspent` fixture for public documentation.
 
-- Syncing wallet results to the current chain view before returning values.
-- Respecting minimum confirmation settings where supported.
-- Optionally including watch-only balances where supported.
-- Respecting avoid-reuse wallet behavior when enabled.
-- Separating trusted, untrusted pending, and immature balance categories in `getbalances`.
-- Marking `getunconfirmedbalance` as deprecated in favor of the relevant `getbalances` field.
+## Output lock state
 
-## Output lock commands
+`lockunspent` / `listlockunspent` manage wallet-local output-selection state.
 
-Reviewed output lock commands include:
+They can affect later wallet spending behavior and should not be treated as harmless read-only examples merely because no transaction is broadcast. No current v31 lock/unlock workflow has been runtime-tested by MoreBC2.
 
-- `lockunspent`
-- `listlockunspent`
+## Miner-specific balance caveat
 
-Reviewed behavior includes:
+Fresh coinbase outputs are subject to coinbase maturity before ordinary spending. A pool's dashboard balance or payout-accounting balance is also conceptually distinct from a BitcoinII Core wallet's `getbalances` categories.
 
-- Temporarily marking wallet outputs as unavailable for automatic selection.
-- Supporting persistent locks when requested.
-- Validating transaction IDs and output indexes.
-- Rejecting unknown, already-spent, already-locked, or not-locked outputs depending on action.
-- Returning currently locked outputs through `listlockunspent`.
+See [Mining overview](../../mining/mining-overview.md).
 
-## listunspent
+## Replay-protection boundary
 
-`listunspent` returns available wallet outputs filtered by confirmation range, optional addresses, safety handling, and query options.
+Balance/UTXO inspection itself does not require producing a replay-domain signature. Spending selected outputs does.
 
-Reviewed behavior includes:
+Any workflow that moves from `listunspent` or balance inspection into wallet/raw/PSBT signing must use the BC2 replay-protection domain after mainnet height `57750`.
 
-- Minimum and maximum confirmation filters.
-- Optional address filters with duplicate-address rejection.
-- `include_unsafe` handling.
-- Query options for minimum amount, maximum amount, maximum count, minimum sum amount, and immature coinbase inclusion.
-- Output fields such as transaction id, output index, address, label, output script, amount, confirmations, mempool ancestry data, spendable/solvable flags, descriptor data, parent descriptors, reused flag when applicable, and safe flag.
+See [Wallet spend and PSBT RPC](wallet-spend-rpc.md) and [Replay protection v31](replay-protection-v31.md).
 
-## Documentation implications
+## Service integration caution
 
-MoreBC2 should distinguish:
+For exchanges/custody systems:
 
-- Balance reporting commands.
-- Deposit/received-amount commands.
-- Output listing commands.
-- Manual output-selection commands.
+- do not equate wallet balance with customer ledger balance;
+- define confirmation/maturity rules independently;
+- test the exact wallet/index/pruning/custody architecture used;
+- use transaction/UTXO-level accounting where the service model requires it;
+- keep private signing material and wallet RPC behind appropriately restricted administrative boundaries.
 
-Service docs should be careful with balance commands because wallet balance and exchange accounting balance are not always the same thing. Confirmation depth, watch-only state, immature coinbase outputs, and avoid-reuse behavior can change what a command reports.
+## Related pages
 
-## Relationship to other pages
-
-Related pages:
-
-- [Source atlas: wallet RPC](wallet-rpc.md)
-- [Source atlas: wallet spend and PSBT RPC](wallet-spend-rpc.md)
+- [Wallet RPC](wallet-rpc.md)
+- [Wallet spend and PSBT RPC](wallet-spend-rpc.md)
 - [Wallet guide](../../wallets/wallet-guide.md)
-- [RPC overview](../rpc-overview.md)
 - [Deposit monitoring](../../exchange/deposit-monitoring.md)
-- [Service integration checklist](../../exchange/service-integration-checklist.md)
+- [Windows v31 PSBT validation](../../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
 
-## BitcoinII-specific notes
+## Open work
 
-This first-pass review saw BitcoinII naming and amount strings in wallet RPC help text.
+- Runtime-test `getbalance`, `listunspent`, and selected received-amount queries with disposable fixtures.
+- Test immature coinbase visibility/maturity transitions on isolated regtest if useful.
+- Keep `lockunspent` state-changing examples out of beginner docs until a dedicated workflow exists.
 
-No upstream comparison has been completed, so this page does not claim whether coins/balance RPC behavior differs from upstream Bitcoin Core beyond naming and visible strings.
+## Primary sources
 
-## Open questions
+Pinned/current review scope includes:
 
-- Which balance and UTXO examples can be tested safely on a temporary wallet?
-- Which commands belong in service docs versus advanced wallet docs?
-- How should immature coinbase outputs be explained for miners?
-- How should watch-only and avoid-reuse behavior be explained to non-developers?
-- Which output-selection workflows map to GUI coin-control behavior?
-- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for this file before upgrading status.
+- `v31.1.0/src/wallet/rpc/coins.cpp`
+- `v31.1.0/src/wallet/receive.*`
+- `v31.1.0/src/wallet/spend.*`
+- `v31.1.0/src/wallet/wallet.*`
 
-## Sources
-
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
-
-- Current observed `main` `src/wallet/rpc/coins.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/rpc/coins.cpp
-- Current observed `main` `src/wallet/receive.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/receive.h
-- Current observed `main` `src/wallet/spend.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/spend.h
-- Current observed `main` `src/wallet/coincontrol.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/coincontrol.h
-- Current observed `main` `src/wallet/wallet.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/wallet/wallet.h
+Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This is a first-pass wallet coins/balances RPC review. Commands have not been run. Public examples, exchange/service recommendations, GUI mapping, upstream comparison, and release-versus-main comparison remain open.
+**Status:** Source-reviewed / Runtime-tested partial  
+**Primary evidence:** BitcoinII Core `v31.1.0` wallet source plus September 11 disposable regtest wallet/PSBT runtime record  
+**Notes:** `getbalances` is current-release runtime-observed. Received-amount, UTXO-listing, output-lock, watch-only, and maturity edge-case behavior remains source-reviewed or untested.
