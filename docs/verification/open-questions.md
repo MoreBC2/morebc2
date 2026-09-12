@@ -2,11 +2,11 @@
 
 **Category:** Verification
 **Status:** Draft
-**Last reviewed:** 2026-09-02
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page collects major unresolved questions across MoreBC2 after the BitcoinII Core `v31.1.0` refresh, deep consensus-source audit, and wallet/mempool/mining regression review.
+This page collects major unresolved questions across MoreBC2 after the BitcoinII Core `v31.1.0` refresh, deep consensus-source audit, wallet/mempool/mining regression review, current-release runtime checks, public-infrastructure probes, and current exchange-policy review.
 
 The principal v31 source paths are now documented. Remaining work is increasingly about **executing tests, collecting runtime evidence, measuring the live network, and validating third-party compatibility** rather than discovering where the new code lives.
 
@@ -16,19 +16,19 @@ The principal v31 source paths are now documented. Remaining work is increasingl
 
 **Question:** How should users independently verify current `v31.1.0` downloads?
 
-**Known:** Current release metadata, four uploaded asset names/sizes, and GitHub-reported SHA-256 digests are recorded.
+**Known:** Current release metadata, six uploaded assets, GitHub-reported SHA-256 digests, the lightweight `v31.1.0` tag, and a GitHub-verified target commit are recorded.
 
-**Needed:** Independent downloads/hashes, tag/commit signature review, publisher checksum/signature discovery, trusted BitcoinII release-key guidance, and reproducible-build evidence if available.
+**Needed:** Independent downloads/hashes for the remaining current assets, publisher checksum/signature discovery, trusted BitcoinII release-key guidance, and reproducible-build evidence if available.
 
 **Priority:** High
 
 ### v31.1.0 runtime regression record
 
-**Question:** Which earlier node/RPC behaviors have been re-tested on the current release?
+**Question:** Which current-release behaviors have been re-tested?
 
-**Known:** Strong dated Windows evidence exists for `v29.1.0`.
+**Known:** Fresh isolated Windows v31.1.0 evidence now covers Qt server-mode startup, cookie RPC, mainnet peer discovery, initial sync, selected read-only commands, shutdown/restart, and a disposable regtest PSBT lifecycle.
 
-**Needed:** Fresh `v31.1.0` startup/sync/read-only RPC/peer/header-sync record.
+**Needed:** Full sync, longer-duration operation, headless-daemon coverage, optional index/pruning combinations, fee behavior, production custody flows, and external-signer compatibility.
 
 **Priority:** High
 
@@ -44,7 +44,9 @@ The principal v31 source paths are now documented. Remaining work is increasingl
 
 **Resolved source question:** Activation, fork-id selection, signature hashing, mempool boundary handling, validation-cache separation, wallet/raw-RPC/PSBT and external-signer paths are source-reviewed.
 
-**Needed:** Deterministic pre/post-fork digest vectors, disposable-wallet runtime tests, external/hardware-signer tests, and third-party signing-library audits.
+**Known runtime evidence:** A fresh isolated v31.1.0 regtest wallet completed a PSBT create/fund/sign/finalize/decode/mempool/local-submit workflow. Regtest leaves the mainnet replay activation disabled as shipped.
+
+**Needed:** Deterministic mainnet-domain digest vectors, external/hardware-signer tests, and third-party signing-library audits.
 
 ### Consensus data-restriction boundary tests
 
@@ -58,15 +60,27 @@ The principal v31 source paths are now documented. Remaining work is increasingl
 
 **Needed:** Run current-release competing-branch/recovery scenarios and map tests to observed behavior.
 
-### Confirmation recommendations
+### Exchange confirmation policy
 
-**Question:** What confirmation count should exchanges/services use under current network conditions?
+**Question:** How should MoreBC2 refine and maintain its provisional exchange confirmation baseline under changing network conditions?
 
-**Needed:** Maintainer guidance or a documented risk model informed by current reorg/hashrate behavior.
+**Known:** Direct 2026-09-12 exchange evidence records CoinEx at `2/6`, NonKYC at `50`, and NestEx at explicit BC2 `50`; Biconomy's current count remains unverified. MoreBC2 therefore currently uses **50 confirmations as a provisional normal-deposit baseline**.
+
+**Needed:**
+
+- community/maintainer review of the provisional baseline;
+- a worked cumulative-chainwork monitoring example;
+- empirical reorganization-depth/history analysis;
+- value/risk-based escalation thresholds for large or unusual deposits;
+- periodic exchange-policy rechecks.
+
+The open question is no longer simply “what number should exchanges use?” The number now has a documented provisional answer; the remaining work is to validate and operationalize the risk model around it.
+
+See [Exchange confirmation evidence — 2026-09-12](exchange-confirmation-evidence-2026-09-12.md).
 
 ## Wallet, PSBT, RPC, mempool, and mining
 
-The 2026-09-02 regression audit now classifies the major v31 differences across these subsystems:
+The 2026-09-02 regression audit classifies the major v31 differences across these subsystems:
 
 - wallet/PSBT signing propagates the BC2 next-block sighash fork domain;
 - raw-transaction signing/finalization uses the same next-block domain;
@@ -81,18 +95,14 @@ See [v31 wallet/mempool/mining regression audit](v31-wallet-mempool-mining-regre
 
 **Needed:**
 
-1. wallet PSBT create/process/finalize on a disposable environment;
-2. raw-transaction signing equivalence with wallet signing;
-3. deterministic signature-hash vectors;
-4. isolated mempool activation-boundary test;
-5. candidate-time / ShockWave `nBits` template test;
-6. third-party and external signer compatibility matrix.
+1. raw-transaction signing equivalence with wallet signing;
+2. deterministic signature-hash vectors;
+3. isolated mempool activation-boundary test;
+4. candidate-time / ShockWave `nBits` template test;
+5. third-party and external signer compatibility matrix;
+6. production-oriented fee estimation and broadcast monitoring examples.
 
 ## Project identity and contact
-
-### Official ticker source
-
-**Question:** What is the strongest project-controlled source explicitly confirming `BC2` as the ticker?
 
 ### Technical/security contact
 
@@ -104,7 +114,9 @@ See [v31 wallet/mempool/mining regression audit](v31-wallet-mempool-mining-regre
 
 **Question:** Which explorers, APIs, pools, exchanges, wallets, and community tools are currently active and compatible with v31-era BitcoinII?
 
-**Needed:** Dated direct checks before current recommendations.
+**Known:** Dated direct checks now exist for the main public explorer/API/Electrum surfaces and for CoinEx, NonKYC, NestEx, and Biconomy exchange metadata/policy visibility.
+
+**Needed:** Periodic direct rechecks before current recommendations or integration submissions.
 
 ### Third-party wallet compatibility
 
@@ -124,10 +136,10 @@ See [v31 wallet/mempool/mining regression audit](v31-wallet-mempool-mining-regre
 
 The highest-priority consensus and subsystem paths now have release-specific reviews.
 
-**Next priority after runtime evidence:** ecosystem/service freshness, exchange confirmation-risk analysis, and release-specific annotations for any remaining lower-priority wallet/RPC pages encountered during testing.
+**Next priority after current runtime/evidence work:** chainwork-aware exchange operations, ecosystem/service freshness, and release-specific annotations for any remaining lower-priority wallet/RPC pages encountered during testing.
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** BitcoinII Core `v31.1.0`, dedicated v31 Source Atlas reviews, subsystem regression audit, refreshed current-facing MoreBC2 docs, and historical verification records
-**Notes:** This backlog now separates resolved source-path questions from runtime, empirical, and third-party compatibility work.
+**Primary sources checked:** BitcoinII Core `v31.1.0`, dedicated v31 Source Atlas reviews, subsystem regression audit, fresh v31 runtime records, current public-infrastructure evidence, current exchange evidence, and refreshed current-facing MoreBC2 docs
+**Notes:** This backlog now separates resolved source/runtime questions from the remaining empirical, operational, and third-party compatibility work. The exchange confirmation count has moved from unknown to provisional guidance; chainwork thresholds and ongoing validation remain open.
