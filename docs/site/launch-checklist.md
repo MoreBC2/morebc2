@@ -1,72 +1,53 @@
-# Website launch checklist
+# Website launch checklist — archived
 
-**Category:** Project maintenance
-**Status:** Draft
-**Last reviewed:** 2026-06-29
+**Category:** Project maintenance  
+**Status:** Historical planning artifact / Superseded  
+**Last reviewed:** 2026-09-12
 
-## Summary
+> This checklist was created before MoreBC2's public site existed. The repository and production documentation site are now public/deployed, so these pre-launch boxes are no longer the active release gate.
 
-This checklist defines what MoreBC2 should review before making the documentation website public.
+## Historical purpose
 
-## Content readiness
+The original checklist covered:
 
-- [ ] Homepage drafted.
-- [ ] Navigation map reviewed.
-- [ ] Content inventory reviewed.
-- [ ] Core documentation pages linked.
-- [ ] Verification pages linked.
-- [ ] Contribution pages linked.
-- [ ] No page implies official BitcoinII authority unless verified.
+- homepage/navigation/content readiness;
+- source-link and naming review;
+- evidence/status labeling;
+- static-site generator selection;
+- build/link/mobile/theme checks;
+- hosting/DNS/HTTPS setup;
+- contribution/governance/community readiness.
 
-## Source readiness
+Those concerns informed the implemented site and repository workflow.
 
-- [ ] Source registry reviewed.
-- [ ] Canonical BitcoinII repository path reviewed.
-- [ ] Official website link reviewed.
-- [ ] Release page reviewed.
-- [ ] Explorer links reviewed, if listed.
-- [ ] Mining pool links reviewed, if listed.
-- [ ] Exchange links reviewed, if listed.
+## Current deployment gate
 
-## Editorial readiness
+For current substantial documentation changes use the [Ongoing review handoff](../REVIEW_HANDOFF.md) and repository workflows.
 
-- [ ] Naming consistency checked: BitcoinII / BC2 / BitcoinII Core.
-- [ ] No unsupported use of Bitcoin2.
-- [ ] Draft pages clearly marked.
-- [ ] Needs Review pages clearly marked.
-- [ ] Verified pages only marked Verified after review.
-- [ ] Opinion and discussion are not mixed into documentation.
-- [ ] Research is not presented as implementation.
+The present production gate includes:
 
-## Technical readiness
+- type/content check;
+- static site build;
+- rendered output/internal-link audit;
+- Windows node-documentation guard;
+- generated-output private-path scan;
+- production Cloudflare Pages deployment;
+- live indexing-policy verification;
+- canonical site reachability.
 
-- [ ] Static site generator selected.
-- [ ] Local build instructions added.
-- [ ] Site builds locally.
-- [ ] Broken links checked.
-- [ ] Search configured or intentionally deferred.
-- [ ] Mobile layout checked.
-- [ ] Dark/light theme checked, if supported.
+Preview deployment is separate from the production workflow and should be interpreted separately.
 
-## Hosting readiness
+## Current evidence gate
 
-- [ ] Hosting target selected.
-- [ ] Deployment instructions added.
-- [ ] Custom domain plan documented.
-- [ ] DNS plan documented.
-- [ ] HTTPS confirmed after deployment.
+Technical claims still need their own evidence regardless of deployment success. Use:
 
-## Community readiness
-
-- [ ] Contributing guide reviewed.
-- [ ] Issue templates reviewed.
-- [ ] PR template reviewed.
-- [ ] Governance reviewed.
-- [ ] First public announcement draft written.
-- [ ] Maintainers/community asked for corrections before wider sharing.
+- [Verification evidence index](../verification/verification-index.md)
+- [Known unknowns](../verification/known-unknowns.md)
+- [Open questions](../verification/open-questions.md)
+- [Documentation coverage](../documentation-coverage.md)
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Not applicable
-**Notes:** This is a MoreBC2 launch checklist, not BitcoinII technical documentation.
+**Status:** Historical planning artifact / Superseded  
+**Primary evidence checked:** Current public/deployed site state and active GitHub Actions deployment gate  
+**Notes:** Preserved for project history; not the current launch checklist.
