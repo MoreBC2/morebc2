@@ -1,128 +1,84 @@
-# Public website plan
+# Site planning and deployment history
 
-**Category:** Project maintenance
-**Status:** Draft
-**Last reviewed:** 2026-06-30
+**Category:** Project maintenance  
+**Status:** Reviewed / Historical planning collection  
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This section plans the future MoreBC2 public website.
+This directory contains planning material created before the MoreBC2 public documentation site was implemented.
 
-The website should be generated from the repository's Markdown documentation so GitHub remains the source of edits and review history.
+The old wording that described a **future** public website is no longer current. MoreBC2 now has:
 
-This is a planning section only. It does not make BitcoinII technical claims.
+- a public source repository;
+- an Astro/Starlight static documentation site generated from repository Markdown;
+- Cloudflare Pages production deployment;
+- automated type/content checks;
+- generated-site link/output checks;
+- a Windows node-documentation guard;
+- generated-output private-path scanning;
+- live `robots.txt` / indexing-policy verification after production deployment.
 
-## Recommended direction
+The historical planning files remain useful for project history, but they should not be treated as the current site specification.
 
-Use a static documentation site.
+## Current production model
 
-Good candidate tools include:
+Repository Markdown remains the editable source of record.
 
-- Astro Starlight
-- MkDocs Material
-- Docusaurus
-- VitePress
+The production deployment workflow builds the site from `main`, deploys the generated output to the Cloudflare Pages project `morebc2`, and verifies that the canonical site is reachable/indexable according to the workflow's policy checks.
 
-## Why static docs
+The repository also has a separate Cloudflare GitHub App preview deployment. Preview success/failure is distinct from the production GitHub Actions deployment and should not be confused with production state.
 
-A static documentation site is a good fit because:
+## What the original plan got right
 
-- Markdown files remain easy to edit.
-- Pull requests can review documentation changes.
-- Hosting can be simple and low-cost.
-- Pages are fast and search-engine friendly.
-- There is no database to maintain.
-- The GitHub repository remains the source of truth for MoreBC2 content.
+The implemented site retains the core principles from the early planning material:
 
-## Website principles
+- static documentation generated from Markdown;
+- reviewable changes in Git history;
+- fast/mobile-friendly pages;
+- built-in search/index generation;
+- evidence/status labels kept with the content;
+- separation between Documentation, Architecture, Verification, Research, Discussion, History, and ecosystem material;
+- source links and verification blocks retained in generated pages.
 
-- Fast.
-- Searchable.
-- Mobile-friendly.
-- Easy to contribute to.
-- Clear about evidence level and verification status.
-- No price hype.
-- No unsupported claims.
-- Easy links to original sources.
-- Clear separation between Documentation, Research, Discussion, History, Ecosystem, and Verification.
+## Historical planning files
 
-## Proposed top-level navigation
+The other files in `docs/site/` are retained as planning artifacts:
 
-- Start here
-- Documentation
-- Architecture
-- Wallets
-- Nodes
-- Mining
-- Developers
-- Exchange integration
-- Ecosystem
-- Encyclopedia
-- Research
-- Discussion
-- History
-- Verification
-- Contribute
+- `announcement-draft.md`
+- `content-inventory.md`
+- `homepage-draft.md`
+- `launch-checklist.md`
+- `navigation-map.md`
 
-## Homepage goals
+They may contain assumptions or launch tasks that were superseded by the implemented Astro/Starlight + Cloudflare setup. When project state conflicts with those drafts, use the current repository configuration/workflows and current project-status pages.
 
-The homepage should answer:
+## Current source of truth for site state
 
-- What is MoreBC2?
-- What is BitcoinII?
-- Where should a newcomer start?
-- Where should a developer start?
-- Where should an exchange or service provider start?
-- What is verified and what still needs review?
-- What should not be treated as verified yet?
+Use:
 
-## Pages needed before public launch
-
-- What is BitcoinII?
-- Network specifications
-- Consensus overview
-- Wallet guide
-- Node guide
-- Mining overview
-- RPC overview
-- Exchange integration package
-- Source registry
-- Evidence scale
-- Verification dashboard
-- Known unknowns
-- Contributing guide
-- Project status
-- Documentation coverage
-
-## Open website decisions
-
-- Static-site generator choice.
-- Hosting target: GitHub Pages, Cloudflare Pages, or another host.
-- Custom domain setup.
-- Search provider or built-in search.
-- Theme and branding.
-- Logo and favicon.
-- Whether docs should live at `/docs` or the site root.
-- How to display Draft/Partial/Reviewed/Verified status on every page.
-
-## Rules
-
-- Do not publish pages as public-ready until their status is clear.
-- Do not hide known unknowns from public readers.
-- Do not make ecosystem listings look official unless they are verified.
-- Keep the repository as the editable source of record.
-- Preserve source links and verification blocks when generating the website.
-
-## Related pages
-
-- [Docs index](../README.md)
 - [Project status](../../PROJECT_STATUS.md)
-- [Repository audit](../AUDIT.md)
+- [Documentation index](../README.md)
 - [Documentation coverage](../documentation-coverage.md)
-- [Documentation polish plan](../POLISH_PLAN.md)
+- [Repository audit](../AUDIT.md)
+- `.github/workflows/site-check.yml`
+- `.github/workflows/deploy-pages.yml`
+- current Astro/Starlight configuration and build scripts.
+
+## Deployment evidence boundary
+
+A green site build/deploy establishes that the documentation pipeline succeeded for that commit. It does **not** prove that every BitcoinII technical claim is correct, that every public service is permanently available, or that every operational workflow is production-ready.
+
+Technical evidence remains governed by the [Verification evidence index](../verification/verification-index.md).
+
+## 2026-09-12 maintenance result
+
+This index was repaired specifically to remove the obsolete “future public website” framing after repeated successful production deployments.
+
+The historical planning documents are intentionally preserved rather than rewritten as though they had always described the current implementation.
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Not applicable for this planning page
-**Notes:** This is a site-planning page, not a BitcoinII technical source.
+**Status:** Reviewed / Historical planning collection  
+**Primary evidence checked:** Current repository/project status and repeatedly successful GitHub Actions/Cloudflare production deployment workflow  
+**Notes:** This is project-maintenance documentation, not BitcoinII protocol evidence.
