@@ -2,227 +2,173 @@
 
 **Category:** Ecosystem
 **Status:** Draft
-**Last reviewed:** 2026-07-13
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
 This page tracks BitcoinII (BC2) public API resources such as explorer APIs, service APIs, and community-hosted data endpoints.
 
-No API should be listed as active, synced, reliable, or recommended until it has been directly checked and dated with clear limits.
+No API should be treated as permanently active, independently redundant, custody-grade, or reliable merely because a dated probe passed.
 
-First-class current API summaries now live under [API documentation](../api/README.md). Service availability and status wording now live under [Infrastructure](../infrastructure/README.md). Compatibility interpretation now lives under [Compatibility](../compatibility/README.md). Use this page as ecosystem context and historical observation support, not as the canonical API reference.
+Current protocol-level evidence is recorded in [Public infrastructure smoke test — 2026-09-11](../verification/public-infrastructure-smoke-test-2026-09-11.md). First-class endpoint inventory lives under [Public endpoints](../api/public-endpoints.md).
 
-Use [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md) before adding or promoting API listings, and link the [verification evidence index](../verification/verification-index.md) when summarizing dated records.
+## Current public API surfaces
 
-## API categories
-
-Potential API categories include:
-
-- Explorer API
-- Block lookup API
-- Transaction lookup API
-- Address lookup API
-- Mempool API
-- Network statistics API
-- Mining pool API
-- Exchange market-data API
-- Community utility API
-
-## Listing format
-
-```md
-### API name
-
-**Category:** Explorer / Pool / Exchange / Community / Other
-**Status:** Needs Review / Observed / Partially checked / Active, dated check / Unreachable / Historical / Do not recommend
-**Official:** Yes / No / Unknown
-**Base URL:**
-**Documentation URL:**
-**Maintainer:** Unknown unless public
-**Last checked:** YYYY-MM-DD
-**Evidence level:** E1-E8
-**Supports:** Blocks / transactions / addresses / mempool / stats / other
-**Authentication:** None / API key / Unknown
-**Rate limits:** Unknown unless documented
-**What was checked:**
-**What was not checked:**
-**Notes:**
-```
-
-## Observed public APIs
-
-### BitcoinII Explorer API
+### Official BitcoinII Explorer API
 
 **Category:** Explorer  
-**Status:** Partially checked / Needs comparison  
-**Official:** Page claims official explorer; not independently verified  
+**Status:** Active, dated check / Distinct API surface  
+**Official:** Yes — explorer page explicitly identifies itself as the Official BitcoinII Explorer  
 **Base URL:** `https://bitcoinii.ddns.net/explorer/api/`  
-**Documentation URL:** Not found  
-**Maintainer:** Unknown  
-**Last checked:** 2026-07-06  
-**Evidence level:** E4 direct harmless GET checks; not E8 synced/reliable service evidence  
-**Supports:** Tip, block lookup, transaction lookup, address lookup, mempool summary  
+**Last checked:** 2026-09-11  
 **Authentication:** None observed for checked GET endpoints  
-**Rate limits:** Unknown
+**Rate limits:** Not established
 
-**Endpoints observed:**
+Directly observed working/current routes included:
 
-| Endpoint shape | Method | Result summary | Status |
-|---|---|---|---|
-| `/explorer/api/blocks/tip` | GET | Returned JSON; tip hash observed as `0000000000000000230effe4c66d34cc5a97064e0860f462df9920ac4ba96f83`. | Partial |
-| `/explorer/api/block/<hash>` | GET | Returned JSON for a public block hash. | Partial |
-| `/explorer/api/tx/<txid>` | GET | Returned JSON for a public transaction ID. | Partial |
-| `/explorer/api/address/<address>` | GET | Returned JSON for a public address. | Partial |
-| `/explorer/api/mempool/summary` | GET | Returned JSON. | Partial |
+- `/blocks/tip`
+- `/version`
+- `/blockchain/coins`
+- `/blockchain/utxo-set`
+- `/blockchain/next-halving`
+- `/mempool/summary`
+- `/mempool/fees`
+- `/mining/hashrate`
+- `/mining/diff-adj-estimate`
+- `/mining/next-block`
+- `/mining/miner-summary` (route present; bare request requires parameters)
+- `/price` (route present, but exchange-rate functionality disabled at test time)
+- `/block/{hash}`
+- `/block/header/{hash}`
+- `/block/{height}`
+- `/block/header/{height}`
 
-**API docs checked:**
+Observed qualifications:
 
-| URL path | Result |
-|---|---|
-| `/explorer/api-docs` | 404 |
-| `/explorer/api-doc` | 404 |
-| `/explorer/docs` | 404 |
-| `/explorer/rest` | 404 |
+- `/mempool/count` returned HTTP 404.
+- `/price` returned HTTP 200 with an application-level `success:false` because rate requests were disabled in server configuration.
+- `/price/marketcap` returned HTTP 500.
+- `/blockchain/utxo-set` returned a statistics snapshot at height `58958` while the live tip was `58968`; treat it as a potentially lagged/cached statistics endpoint, not tip authority.
+- Candidate broadcast routes `/tx`, `/tx/send`, and `/broadcast` returned HTTP 403. No public transaction-submission route was established for this API.
 
-**What was not checked:**
+The API reported version `2.0.0` during the test.
 
-- Endpoint response schemas were not stabilized into public documentation.
-- A later same-time local node comparison was performed in a separate dated record; this older 2026-07-06 entry did not include one.
-- No permanent sync claim was made.
-- No POST/search submission was performed.
-- No authentication, rate-limit, or long-term availability claim was checked.
+### Mempool-style public APIs
 
-**Notes:**
+The following services exposed closely aligned Mempool-style API behavior during the 2026-09-11 checks:
 
-These public API observations are useful ecosystem context, but they should not be used as a sole exchange/service source of truth. For current REST/WebSocket/Electrum summaries, use [API documentation](../api/README.md), [Infrastructure](../infrastructure/README.md), and the dated [public API/Electrum smoke test](../verification/public-api-electrum-smoke-test-2026-07-12.md).
+- `https://bc2mempool.com`
+- `https://explorer.bitcoin-ii.org`
+- `https://bc2.live`
+
+Observed working route family:
+
+- `/api/v1/blocks/tip/height`
+- `/api/v1/blocks/tip/hash`
+- `/api/v1/blocks`
+- `/api/mempool`
+- `/api/mempool/recent`
+- `/api/v1/fees/recommended`
+- `/api/v1/difficulty-adjustment`
+- `/api/v1/mining/hashrate/3d`
+- `/api/v1/prices`
+- `/bc2-price.json`
+- `/richlist.json`
+- `/api/block/{hash}`
+- `/api/block/{hash}/txids`
+- `/api/block/{hash}/txs`
+- `/api/block-height/{height}`
+
+`/api/v1/services` returned HTTP 404 on the tested Mempool-style services.
+
+Each tested Mempool-style host also exposed `wss://HOST/api/v1/ws`; an `init` message received explorer-state data during the dated checks.
+
+Each tested Mempool-style host exposed `POST /api/tx`; deliberately invalid transaction payload `00` was accepted as a POST and rejected with HTTP 400. This establishes route presence/rejection behavior only, not successful valid-transaction broadcast.
+
+## Current tip comparison
+
+During the multi-explorer check, the Official BitcoinII Explorer, `explorer.bitcoin-ii.org`, and `bc2.live` all reported:
+
+- height `58968`
+- best hash `0000000000000000fb4d304134d055212b16595626526fce3bce6637aff882cd`
+
+`bc2mempool.com` reported the same tip during the immediately preceding focused probe.
+
+This is point-in-time agreement, not permanent synchronization evidence.
+
+## Redundancy caution
+
+The Official BitcoinII Explorer presents a materially different API shape from the Mempool-style services.
+
+The three Mempool-style hostnames returned closely aligned route behavior, response schemas, block/mempool values, fee values, WebSocket state, and invalid-broadcast rejection behavior.
+
+That does not prove they share a single backend, but it also does not establish backend/operator independence. Do not count three hostnames as three independent API providers without separate evidence.
+
+## Electrum service
+
+Fresh read-only protocol checks on 2026-09-11 observed:
+
+- `tcp://infra1.bitcoin-ii.org:50008` — `server.version` returned ElectrumX `1.18.0`, protocol `1.4`.
+- `ssl://infra1.bitcoin-ii.org:50009` — TLS 1.3 connection succeeded with hostname validation; `server.version` returned ElectrumX `1.18.0`, protocol `1.4`.
+- `tcp://explorer.bitcoin-ii.org:5008` — timed out again and should not be represented as a working current Electrum endpoint.
+
+These checks establish read-only protocol reachability only. Wallet compatibility, spending behavior, and Electrum transaction broadcast remain unverified.
+
+## Other observed API resources
 
 ### MiningPoolStats BitcoinII data endpoints
 
 **Category:** Mining/network statistics  
-**Status:** Observed / Related / Needs comparison  
+**Status:** Historical observation / Needs current recheck  
 **Official:** No  
 **Base URL:** `https://data.miningpoolstats.stream/data/`  
-**Documentation URL:** Not found  
-**Maintainer:** MiningPoolStats  
-**Last checked:** 2026-07-06  
-**Evidence level:** E4 public page/data endpoint observation; not E8 synced/reliable service evidence  
-**Supports:** Mining/network stats and price/history data endpoints  
-**Authentication:** None observed for checked public JS endpoints  
-**Rate limits:** Unknown
+**Last checked:** 2026-07-06
 
-**Observed related page:** `https://miningpoolstats.stream/bitcoinii`
-
-**Endpoints observed:**
+Historical related endpoints included:
 
 - `https://data.miningpoolstats.stream/data/bitcoinii.js?...`
 - `https://data.miningpoolstats.stream/data/price/bitcoinii.js?...`
 - `https://data.miningpoolstats.stream/data/history/bitcoinii.js?...`
 
-**Observed data:**
-
-- Page title identified `Bitcoin II (BC2) SHA-256 | Mining Pools`.
-- Visible/data endpoint height was `57,398` during the check.
-- Page linked to `https://bitcoinii.ddns.net/explorer`.
-
-**What was not checked:**
-
-- No pool payout correctness.
-- No pool sync status.
-- No mining account or payout behavior.
-- No endpoint stability or formal API documentation.
-- No claim that height is reliable enough to call any explorer synced.
-
-## Broken or unresolved API candidates
-
-| Candidate URL | Date checked | Result | Status |
-|---|---|---|---|
-| `https://bitcoinii.ddns.net/api` | 2026-07-06 | `502 Bad Gateway` | Broken / Needs Review |
-| `https://bitcoinii.ddns.net/explorer/api` | 2026-07-06 | `404 Not Found` | Needs Review |
-| `https://chainz.cryptoid.info/bc2/api.dws?q=getblockcount` | 2026-07-06 | `404 Not Found` | Unrelated / Broken |
-
-## Endpoint test format
-
-For each checked endpoint, record:
-
-```md
-#### Endpoint: `GET /example`
-
-**Date checked:** YYYY-MM-DD
-**Checked by:**
-**Base URL:**
-**Request method:** GET / POST / other
-**Request:**
-**Response status:**
-**Expected result:**
-**Actual result summary:**
-**Status:** Pass / Fail / Partial
-**Notes:**
-```
-
-## Recommended endpoint categories to test
-
-Before an explorer or API is useful to service integrators, MoreBC2 should check whether it supports:
-
-- Latest block height.
-- Latest block hash.
-- Block lookup by height.
-- Block lookup by hash.
-- Transaction lookup by txid.
-- Address lookup.
-- Confirmation count display.
-- Mempool transaction lookup, if supported.
-- Fee or difficulty data, if supported.
-- API health or sync status, if supported.
+These observations are retained as ecosystem context only and were not part of the 2026-09-11 infrastructure probe.
 
 ## Service-integration caution
 
-Public explorer APIs are useful for observations, but they should not replace a service provider's own BitcoinII Core node for critical deposit, withdrawal, or custody workflows.
+Public explorer APIs are useful for observations, support, and cross-checks, but they should not replace a service provider's own BitcoinII Core node for critical deposit, withdrawal, or custody workflows.
 
-For exchanges and services, API docs should distinguish:
+For exchanges and services, documentation should distinguish:
 
-- Useful public observation endpoints.
-- Endpoints appropriate for monitoring.
-- Endpoints that are not safe as the only source of truth.
-- Endpoints that require authentication or have rate limits.
-- Endpoints whose data can lag behind the network.
+- useful public observation endpoints;
+- endpoints appropriate for monitoring;
+- endpoints that are not safe as the only source of truth;
+- endpoints whose data may be cached or lagged;
+- public transaction-submission routes whose successful valid-transaction behavior has not yet been tested;
+- providers whose backend/operator independence has not been established.
 
 ## What not to claim yet
 
-Do not claim yet that:
+Do not claim that:
 
-- Any listed API is synced.
-- Any listed API is official without a separate official source.
-- Any API is reliable enough for exchange use.
-- Any endpoint can replace running a local node.
-- MiningPoolStats is a general block explorer.
-- Public API endpoint availability proves long-term service reliability.
-
-## Remaining checks
-
-- Recheck API availability on a deliberate schedule before publication.
-- Compare explorer/API height and tip against a local BitcoinII node or another reliable source before any fresh sync-status wording.
-- Locate formal API documentation if it exists.
-- Check whether response fields remain stable enough to document.
-- Add direct check dates and evidence levels to any future examples.
+- any public API has permanent uptime or an SLA;
+- three Mempool-style hostnames necessarily represent three independent backends;
+- a public explorer/API can replace an operator's own node;
+- a valid BC2 transaction has been successfully broadcast through the tested public `/api/tx` routes;
+- read-only Electrum reachability proves wallet compatibility;
+- current endpoint availability proves long-term service reliability.
 
 ## Related pages
 
-- [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md)
-- [API documentation](../api/README.md)
+- [Public infrastructure smoke test — 2026-09-11](../verification/public-infrastructure-smoke-test-2026-09-11.md)
+- [Public endpoints](../api/public-endpoints.md)
+- [Explorers](explorers.md)
+- [Verification evidence index](../verification/verification-index.md)
+- [Public API, WebSocket, and Electrum smoke test — 2026-07-12](../verification/public-api-electrum-smoke-test-2026-07-12.md)
 - [Infrastructure directory](../infrastructure/README.md)
 - [Compatibility](../compatibility/README.md)
-- [Verification evidence index](../verification/verification-index.md)
-- [Public API, WebSocket, and Electrum smoke test - 2026-07-12](../verification/public-api-electrum-smoke-test-2026-07-12.md)
-- [Explorers](explorers.md)
-- [Explorer resources](../documentation/explorer-resources.md)
 - [Exchange integration](../exchange/README.md)
-- [Deposit monitoring](../exchange/deposit-monitoring.md)
-- [RPC overview](../developers/rpc-overview.md)
-- [Command testing status](../verification/command-testing.md)
-- [Open questions backlog](../verification/open-questions.md)
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Ecosystem direct check plan, existing API framework, Codex explorer/API recon report from 2026-07-06, verification evidence index, API section, Infrastructure section, and public API/Electrum smoke test from 2026-07-12
-**Notes:** This page records ecosystem API observations and historical context. It does not verify permanent sync status, official status, long-term reliability, wallet compatibility, broadcast behavior, or exchange suitability.
+**Primary evidence:** Direct public API/WebSocket/Electrum checks from 2026-09-11 plus preserved historical ecosystem observations
+**Notes:** Current route reachability and protocol behavior are dated observations. Long-term reliability, backend independence, wallet compatibility, successful valid-transaction broadcast, and exchange/custody suitability remain unverified.
