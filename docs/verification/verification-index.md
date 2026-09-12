@@ -1,96 +1,101 @@
 # Verification evidence index
 
-**Category:** Verification
-**Status:** Draft
+**Category:** Verification  
+**Status:** Reviewed / Partial  
 **Last reviewed:** 2026-09-12
 
 ## Purpose
 
-This page is the quickest way to see what MoreBC2 has directly observed, locally tested, source-reviewed, or left unresolved.
+This is the canonical current summary of what MoreBC2 has source-reviewed, directly observed, locally exercised, or deliberately left unresolved.
 
-Evidence is version-scoped. A dated `v29.1.0` test remains valid evidence for that environment, but it does not become `v31.1.0` evidence unless the workflow is re-tested.
+Evidence is version- and environment-scoped. Historical records are preserved as history; current-facing claims use the strongest relevant current evidence.
 
 ## Current evidence snapshot
 
-| Area | Status | Evidence | Remaining limit |
+| Area | Current status | Evidence established | Remaining boundary |
 |---|---|---|---|
-| Canonical public implementation | Source-reviewed | `Bitcoin-II/BitcoinII-Core` remains the canonical current source/release path used by MoreBC2. | Periodic path/ownership recheck remains useful. |
-| Current release metadata | Directly observed | BitcoinII Core `v31.1.0`, published 2026-08-29; six Linux/Windows/macOS release assets and GitHub-reported SHA-256 digests recorded. The lightweight tag points to commit `8daaf7b12e71d3646eed787f040bf2899a69dc1c`, which GitHub reports as verified. | Independent binary hashing, signed-manifest/release-key discovery, and reproducibility remain open. |
-| Historical v29 release audit | Integrity recorded / historical | `v29.1.0` 2026-08-27 audit independently hashed 10 uploaded assets and two generated source archives. | Applies to `v29.1.0` only. |
-| Current release binary signatures | Partially resolved | Verified target-commit evidence exists, but no maintainer-signed binary checksum/signature path has been established by MoreBC2. | Commit verification is not binary authentication or reproducible-build proof. |
-| Current consensus identity | Source-reviewed partial | `v31.1.0` documents ShockWave, data restrictions, replay protection, and fork-aware header synchronization; mainnet activation anchors at height `57750` are recorded. | Detailed new validation/synchronization caller paths remain open. |
-| Current difficulty model | Source-reviewed | ShockWave per-block difficulty after height `57750`; 10-minute target spacing remains. | Empirical network-performance analysis remains open. |
-| Replay protection | Source-confirmed / runtime-boundary limited | `v31.1.0` mainnet activates at height `57750` with fork ID `0x01324342`; signing, PSBT, mempool, block-validation, cache, and activation-boundary paths are traced. Regtest leaves replay activation disabled, so the domain switch was not runtime-exercised. | Mainnet vectors, external signers, and third-party implementations remain runtime-unverified. |
-| Data restrictions | Source-reviewed partial | Activation height `57750`; release describes Ordinals/inscriptions/Runes mitigation. | Detailed rule boundary/testing remains open. |
-| Local BitcoinII node | Locally tested / current-dated | Isolated Windows `v31.1.0` Qt-server startup, mainnet peer discovery, initial sync, cookie RPC, shutdown, and restart passed on 2026-09-11. | Full sync, long-duration operation, optional indexes/pruning, and a v31 headless-daemon path remain unverified. |
-| Read-only RPC commands | Locally tested / current-dated | The requested v31.1.0 node/network RPC set passed through direct cookie-authenticated loopback JSON-RPC; one newly created zero-transaction disposable wallet was isolated and inspected. | Fee estimation, wallet security, public-network transaction behavior, and production workflows remain untested. |
-| PSBT and local transaction flow | Locally tested / current-dated | A fresh isolated v31.1.0 regtest wallet funded, signed, finalized, decoded, mempool-tested, and locally submitted a one-input/two-output PSBT transaction on 2026-09-11. | Public-network broadcast, replay-domain activation, external signers, and third-party signing remain untested. |
-| Explorer/API/WebSocket | Directly observed / current-dated | 2026-09-11 checks verified the Official BitcoinII Explorer API plus Mempool-style REST/WebSocket surfaces on `bc2mempool.com`, `explorer.bitcoin-ii.org`, and `bc2.live`; compared explorers agreed on the same tip. | Long-term uptime, custody-grade reliability, and backend/operator independence remain unverified. |
-| Electrum | Directly observed / current-dated | `infra1.bitcoin-ii.org:50008` TCP and `:50009` TLS answered `server.version` as ElectrumX `1.18.0`, protocol `1.4`; TLS hostname validation succeeded. | Wallet compatibility, spending, and Electrum broadcast behavior remain unverified. |
-| Public transaction submission | Route presence observed | `/api/tx` on three Mempool-style services accepted POST and rejected deliberately invalid transaction payloads with HTTP 400. | Successful valid-BC2 transaction broadcast has not been tested. |
-| Exchange confirmation policy | Directly observed / provisional guidance | 2026-09-12 direct API evidence: CoinEx `2/6`, NonKYC `50`, NestEx explicit BC2 `50`; Biconomy count remains unverified. MoreBC2 now uses 50 as a provisional normal-deposit baseline. | Community/maintainer review, cumulative-chainwork examples, large-deposit thresholds, and periodic exchange rechecks remain open. |
-| Exchange integration docs | Current-facing source review | v31.1.0 integration/operator docs include ShockWave, replay protection, data restrictions, current release assets, current explorer hierarchy, current exchange evidence, and a provisional 50-confirmation baseline. | Production custody design, chainwork thresholds, technical contact process, and production deposit/withdrawal procedures remain open. |
-| Third-party wallet/service compatibility | Partial / unresolved | Source review and current Electrum reachability evidence exist. | Current v31 wallet/service workflow testing remains needed. |
+| Canonical implementation | Source-reviewed | `Bitcoin-II/BitcoinII-Core` is the current source/release path used by MoreBC2. | Recheck if upstream organization/repository ownership changes. |
+| Current release | Directly observed | `v31.1.0`, published 2026-08-29; six Linux/Windows/macOS assets and GitHub SHA-256 metadata recorded. | Release metadata is mutable; recheck when exact inventory matters. |
+| Tag / source provenance | Directly observed | Lightweight `v31.1.0` tag points to `8daaf7b12e71d3646eed787f040bf2899a69dc1c`; GitHub reports target commit verified/valid. | This is not a signed release tag, binary signature, or reproducible-build proof. |
+| Current binary integrity | Partial direct verification | MoreBC2 independently hashed `BitcoinII-v31.1-Win64-Qt.zip`; result matched GitHub's `f7b1d164...` digest. Extracted executable was `Authenticode: NotSigned`. | Independent hashes for the other five assets, publisher-signed checksums, release-key path, and reproducibility remain open. |
+| Consensus / v31-specific paths | Source-reviewed | ShockWave, replay protection, consensus data restrictions, fork-aware header sync, validation/mempool/signing/template interactions, and height `57750` activation are release-pinned and mapped. | Controlled runtime vectors/activation-boundary tests remain incomplete. |
+| Difficulty / ShockWave | Source-reviewed | Post-`57750` per-block ShockWave path, 25-block/24-interval baseline, six-interval response, candidate-time behavior, emergency recovery, and chainwork boundary documented. | Controlled candidate-time vectors and empirical live-network performance remain open. |
+| Replay protection | Source-confirmed / runtime-boundary limited | Mainnet activation `57750`, domain `0x01324342`; wallet/raw/PSBT/mempool/block/cache/signing paths traced. | Regtest did not activate mainnet replay domain; external signer/third-party vectors remain open. |
+| Data restrictions | Source-reviewed | Height `57750`; output/Taproot witness restrictions and block-connection enforcement path documented in v31 source reviews. | Execute located tests and record activation-boundary vectors. |
+| Fork-aware header sync | Source-reviewed | Two-phase sync, fork anchoring, bounded private ShockWave history, and exact work validation are documented. | Competing-branch/recovery runtime scenarios remain unexecuted. |
+| Chain selection / reorganizations | Source-reviewed | Valid usable branches compete by accumulated chainwork; disconnect/undo/reconnect/mempool-repair lifecycle mapped. | Controlled v31 reorg simulation and empirical reorg-depth history remain open. |
+| Windows v31 node/RPC | Locally tested / current-dated | Isolated Qt server-mode startup, outbound peers, advancing IBD, cookie RPC, selected node/network RPC, disposable wallet, shutdown/restart passed 2026-09-11. | Full sync, long-duration operation, headless-daemon route, optional index/pruning combinations, and production deployment remain open. |
+| Wallet / PSBT / local transaction | Locally tested / current-dated | Fresh isolated v31 regtest wallet funded, PSBT-created, signed, finalized, decoded, `testmempoolaccept`-checked, and locally submitted with zero peers. | Public propagation, mainnet replay activation, external signers, backup/restore, encryption, and third-party wallets remain open. |
+| Mining RPC | Mixed | `generatetoaddress` was exercised in isolated v31 regtest; mining/template source paths reviewed. | `getmininginfo`, `getnetworkhashps`, `getblocktemplate`, `submitblock`, `submitheader`, and public Stratum share workflows remain untested. |
+| Public explorers / APIs | Directly observed / dated | 2026-09-11 Official Explorer plus Mempool-style REST/WebSocket checks; compared services agreed on the sampled tip. | Long-term uptime, custody-grade reliability, and backend/operator independence remain unverified. |
+| Electrum | Directly observed / dated | `infra1.bitcoin-ii.org:50008` and TLS `:50009` answered as ElectrumX 1.18.0 / protocol 1.4; TLS hostname validation passed. | Wallet compatibility, history correctness, spending, and Electrum broadcast behavior remain unverified. |
+| Public transaction submission | Route behavior observed | Three Mempool-style `/api/tx` routes rejected deliberately invalid `00` payloads with HTTP 400. Official Explorer candidate routes returned 403. | Successful valid BC2 public broadcast/propagation has not been demonstrated. |
+| Exchange confirmation policy | Directly observed / provisional | CoinEx `2/6`; NonKYC `50`; NestEx BC2 `50`; Biconomy exact count not public. MoreBC2 uses 50 as provisional normal-deposit guidance. | Maintainer/community review, chainwork example, large-value escalation thresholds, reorg statistics, and periodic rechecks remain open. |
+| Pool / Stratum evidence | Public configuration observed | Current pool modes/fees/endpoint families documented for 1Miner, CapsPool and other current sources. | End-to-end subscribe/authorize/share acceptance, payout accounting/reliability, and template compatibility remain untested. |
+| Third-party wallet/service compatibility | Partial | Current Core wallet source/runtime evidence and Electrum reachability exist. | External/hardware signer, wallet, and service workflow compatibility remains incomplete. |
+| Documentation architecture | Reviewed current | Documentation, Configuration, Nodes, Releases, API/Explorer, Infrastructure, Wallets, Mining, Developers/Source Atlas, Architecture, Ecosystem, Encyclopedia, and Research were audited against current v31 evidence. | Future release/service drift requires maintenance; Reviewed does not equal universal runtime Verified. |
+| Site build/deployment | Repeatedly tested | Astro/Starlight content checks, rendered-link checks, Windows-doc guard, private-path scan, production Cloudflare deployment, and live indexing checks have repeatedly passed. | Site deployment validates publication mechanics, not BitcoinII claims. |
 
-## Current release evidence
+## Current v31 runtime records
 
 - [Windows v31.1.0 node and RPC validation — 2026-09-11](windows-v31-node-rpc-validation-2026-09-11.md)
 - [Windows v31.1.0 PSBT and replay-protection validation — 2026-09-11](windows-v31-psbt-replay-validation-2026-09-11.md)
-- [v31.1.0 release asset record](../releases/v31.1.0-assets.md)
-- [BitcoinII release documentation](../documentation/releases.md)
-- [Network specifications](../documentation/network-specifications.md)
-- [Consensus overview](../documentation/consensus-overview.md)
-- [Source atlas: chainparams.cpp](../developers/source-atlas/chainparams-cpp.md)
-- [Source atlas: pow.cpp](../developers/source-atlas/pow-cpp.md)
+- [v31 wallet/mempool/mining source regression audit — 2026-09-02](v31-wallet-mempool-mining-regression-2026-09-02.md)
 
-## Historical runtime and release evidence
+## Current public-service / exchange records
 
-These records are intentionally preserved with their original version/date:
+- [Public infrastructure smoke test — 2026-09-11](public-infrastructure-smoke-test-2026-09-11.md)
+- [Exchange confirmation evidence — 2026-09-12](exchange-confirmation-evidence-2026-09-12.md)
+- [Public API/WebSocket/Electrum smoke test — 2026-07-12](public-api-electrum-smoke-test-2026-07-12.md)
+
+These are point-in-time observations, not permanence or independence guarantees.
+
+## Current release/provenance records
+
+- [v31.1.0 release assets](../releases/v31.1.0-assets.md)
+- [Authentication status](../releases/authentication-status.md)
+- [Release verification guide](../releases/release-verification-guide.md)
+
+Current evidence proves useful integrity/provenance facts but does **not** establish a maintainer-authenticated binary checksum chain or reproducible build.
+
+## Historical evidence preserved
+
+The following remain valuable but version-scoped:
 
 - [Windows node-operator test — 2026-08-27](windows-node-operator-test-2026-08-27.md)
 - [Windows fresh-node peer discovery test — 2026-08-28](windows-peer-discovery-test-2026-08-28.md)
-- [Local BitcoinII node inspection — 2026-07-10](local-node-inspection-2026-07-10.md)
+- [Local node inspection — 2026-07-10](local-node-inspection-2026-07-10.md)
 - [Read-only RPC smoke test — 2026-07-10](read-only-rpc-smoke-test-2026-07-10.md)
 - [Release-artifact authentication — 2026-08-27](release-artifact-authentication-2026-08-27.md)
 
-Do not rewrite those files to substitute `v31.1.0`; create new evidence records when re-testing occurs.
-
-## Ecosystem evidence
-
-- [Exchange confirmation evidence — 2026-09-12](exchange-confirmation-evidence-2026-09-12.md)
-- [Public infrastructure smoke test — 2026-09-11](public-infrastructure-smoke-test-2026-09-11.md)
-- [Public API, WebSocket, and Electrum smoke test — 2026-07-12](public-api-electrum-smoke-test-2026-07-12.md)
-- [Public endpoints](../api/public-endpoints.md)
-- [Explorers](../ecosystem/explorers.md)
-- [APIs](../ecosystem/apis.md)
-- [Exchanges](../ecosystem/exchanges.md)
-- [Mining pools](../ecosystem/mining-pools.md)
-
-These are dated observations, not permanent reliability claims.
+Do not rewrite them to appear current; add a new dated record when a workflow is re-tested.
 
 ## Current priorities
 
-1. Independently authenticate the current `v31.1.0` assets beyond the repeat-byte Windows Qt hash recorded in the new runtime test.
-2. Complete a fresh `v31.1.0` initial sync and exercise optional index/pruning configurations where needed.
-3. Produce independent replay-protection transaction vectors and test external/third-party signer compatibility.
-4. Add a cumulative-chainwork monitoring example and operational risk thresholds around the provisional 50-confirmation exchange baseline.
-5. Map data-restriction validation behavior in detail.
-6. Review fork-aware header synchronization internals/runtime behavior.
-7. Establish backend/operator independence where infrastructure redundancy is claimed.
-8. Test valid-transaction behavior only in a deliberately isolated, safe integration workflow if that evidence becomes necessary.
+1. Complete stronger current-release artifact authentication: remaining independent asset hashes, publisher-signed checksum/key discovery, and reproducibility if available.
+2. Run longer/full-sync v31 node coverage and deliberately test optional pruning/index combinations where operationally useful.
+3. Produce controlled ShockWave candidate-time / `nBits` vectors and execute/map relevant upstream tests.
+4. Produce deterministic replay-domain vectors and qualify external/hardware/third-party signers.
+5. Build a worked cumulative-chainwork deposit-monitoring example and a reorganization incident playbook around the provisional 50-confirmation baseline.
+6. Qualify selected pool Stratum endpoints end-to-end if mining integration evidence becomes important.
+7. Perform safe third-party wallet/Electrum workflow qualification without using existing user wallets or unnecessary real funds.
+8. Recheck public exchanges, explorers, APIs, pools, wallets, and release metadata periodically.
+9. Establish/maintain a clear upstream technical/security contact path for integration providers.
 
 ## Update rule
 
 When new evidence is added:
 
-1. Link the dated record here.
-2. Name the BitcoinII version/ref and environment.
-3. Use the narrowest accurate status.
-4. Do not upgrade historical evidence into current evidence by wording alone.
-5. Re-date live-service claims when they are checked again.
+1. link the dated record here;
+2. name the release/ref, platform/network, and environment;
+3. use the narrowest accurate status;
+4. preserve historical records as historical;
+5. re-date live-service claims when rechecked;
+6. move resolved source questions out of the active unknown queue;
+7. do not convert a successful documentation build into technical verification.
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Current `v31.1.0` release/source anchors plus MoreBC2 dated historical evidence, 2026-09-11 public-infrastructure and isolated Windows runtime records, and 2026-09-12 direct exchange API observations
-**Notes:** This is an evidence navigation page; it does not independently reproduce every linked check. The exchange baseline is explicitly provisional and should not be presented as protocol finality.
+**Status:** Reviewed / Partial  
+**Primary evidence checked:** BitcoinII Core `v31.1.0` release/source reviews, current MoreBC2 runtime records, current public infrastructure and exchange evidence, completed documentation-section audits, and deployment workflows  
+**Notes:** This index is current through the September 12 documentation audit sequence. Partial status reflects real remaining runtime, third-party, operational, and release-authentication work.
