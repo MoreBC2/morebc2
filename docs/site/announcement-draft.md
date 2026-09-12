@@ -1,54 +1,40 @@
-# Announcement draft
+# Announcement draft — archived
 
-**Category:** Project maintenance
-**Status:** Draft
-**Last reviewed:** 2026-06-29
+**Category:** Project maintenance  
+**Status:** Historical planning artifact  
+**Last reviewed:** 2026-09-12
 
-## Summary
+> This was an early pre-publication announcement draft. MoreBC2 is now public and deployed, so this copy should not be used as a current announcement without a fresh rewrite.
 
-This is a draft announcement for sharing MoreBC2 with the BitcoinII community when the project is ready for feedback.
+## Historical purpose
 
-## Short version
+The draft was written to introduce MoreBC2 as an independent, community-maintained BitcoinII (BC2) documentation/resource project focused on:
 
-MoreBC2 is a community-maintained documentation and resource hub for the BitcoinII (BC2) ecosystem.
+- organizing public information;
+- linking technical claims to sources;
+- separating Documentation, Research, Discussion, History, and Verification;
+- tracking unknowns instead of guessing;
+- inviting corrections and technical review.
 
-It is not intended to replace official BitcoinII resources. It exists to organize public information, cite sources, preserve useful context, and clearly separate verified documentation from research, discussion, history, and open questions.
+Those principles remain broadly consistent with the current project, but the old “I have started building” / “still early” launch framing is no longer current.
 
-## Longer version
+## Current project wording
 
-I have started building MoreBC2 as a community documentation project for BitcoinII.
+For present-day project state use:
 
-The goal is simple: make BitcoinII easier to understand, verify, and build around.
+- [Project status](../../PROJECT_STATUS.md)
+- [Root README](../../README.md)
+- [Documentation index](../README.md)
+- [Repository audit](../AUDIT.md)
 
-MoreBC2 is being structured around a few basic principles:
+MoreBC2 remains independent and does not speak for BitcoinII maintainers unless an authoritative source explicitly establishes otherwise.
 
-- Documentation should describe what is currently verifiable.
-- Research and discussion should be clearly labeled.
-- Community discussion should not be presented as implementation.
-- Technical claims should point back to source code, releases, official resources, explorer data, or other clear sources.
-- Unknowns should be tracked openly instead of guessed.
+## Reuse rule
 
-The project is still early and many pages are Draft or Needs Review. Feedback, corrections, sources, and technical review are welcome.
+If a new announcement is needed, draft it from current project status and current evidence rather than reviving this launch-era copy verbatim.
 
-## Suggested ask
+## Verification
 
-If you know BitcoinII well, help review:
-
-- Network specifications.
-- Consensus overview.
-- Release verification.
-- Wallet guidance.
-- Node/RPC guidance.
-- Explorer and pool links.
-- Exchange integration information.
-- Known unknowns.
-
-## Important clarification
-
-MoreBC2 is community-maintained. It does not speak for BitcoinII maintainers unless they explicitly choose to use it that way.
-
-The goal is to support the ecosystem by preserving knowledge and making sources easier to find.
-
-## Footer line
-
-Preserving the knowledge. Strengthening the ecosystem.
+**Status:** Historical planning artifact  
+**Primary evidence checked:** Current public/deployed project state  
+**Notes:** This file is preserved for project history and should not be treated as current launch copy.
