@@ -1,163 +1,95 @@
 # Disconnected transactions
 
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-06-30
+**Category:** Developer / Source Atlas  
+**Status:** Reviewed / Source-confirmed structural  
+**Last reviewed:** 2026-09-12
 
 ## Source files
 
-- `src/kernel/disconnected_transactions.h`
-- `src/kernel/disconnected_transactions.cpp`
+- `v31.1.0/src/kernel/disconnected_transactions.h`
+- `v31.1.0/src/kernel/disconnected_transactions.cpp`
+- related reorg handling in `v31.1.0/src/validation.cpp`
 
 ## Purpose
 
-`DisconnectedBlockTransactions` temporarily stores transactions from blocks that leave the active chain during a reorganization.
+`DisconnectedBlockTransactions` temporarily holds transactions removed from the active chain during a reorganization so eligible transactions can later be reconsidered for the mempool.
 
-Its job is to preserve transactions that may need to be reconsidered for the mempool after the reorg finishes, while avoiding expensive mempool re-acceptance during every intermediate step.
+It is an intermediate reorg structure, not a permanent wallet/history database and not a final statement that every disconnected transaction will be reaccepted.
 
-## File header notes
+## Memory and ordering
 
-The reviewed files state that BitcoinII was forked from Bitcoin Core version `0.27.0` and is distributed under the MIT software license.
+The reviewed structure caps disconnected-transaction memory at:
 
-## Why it matters
-
-During a reorg, transactions from the old active chain may become unconfirmed.
-
-Some of those transactions may still be valid and useful to keep in the mempool. Others may be confirmed again in the new chain or may no longer be valid.
-
-`DisconnectedBlockTransactions` provides the temporary holding area used between block handling and final mempool reprocessing.
-
-## Memory limit
-
-The header defines:
-
-```cpp
-MAX_DISCONNECTED_TX_POOL_BYTES = 20'000'000
+```text
+20,000,000 bytes
 ```
 
-This caps the memory used for disconnected transaction processing.
+Transactions are queued in an order chosen so later re-add processing can preserve dependency relationships. If memory exceeds the cap, entries are evicted and callers can remove affected descendants from mempool state as needed.
 
-## Queue ordering
+## Key reviewed operations
 
-The source comments describe the queue order:
+- `AddTransactionsFromBlock` adds transactions from a disconnected block and enforces the memory cap.
+- `removeForBlock` removes queued transactions that become confirmed again on the newly connected branch.
+- `take` transfers the remaining queue for later reorg processing and clears internal state.
+- `clear` resets the holding structure.
+- destructor assertions require the structure to be drained/cleared correctly.
 
-- The front of the list should contain the most recently confirmed transactions.
-- Transactions are added while blocks leave the active chain.
-- If memory usage grows too large, trimming removes entries from the front.
-- Remaining transactions can later be re-added from the back toward the front without missing inputs.
+## Current reorg flow
 
-## Key data structures
-
-Reviewed members:
-
-- `cachedInnerUsage` — cached dynamic memory usage for transaction references.
-- `m_max_mem_usage` — maximum allowed memory usage.
-- `queuedTx` — ordered list of transactions being held for later review.
-- `iters_by_txid` — lookup map from transaction ID to list iterator.
-
-## Reviewed behavior
-
-### Destructor
-
-The destructor asserts that:
-
-- `queuedTx` is empty.
-- `iters_by_txid` is empty.
-- `cachedInnerUsage` is zero.
-
-The source comment explains that failing to drain this structure before destruction is considered a logic bug.
-
-### `LimitMemoryUsage`
-
-Reviewed behavior:
-
-- While memory usage exceeds the configured maximum, evict entries from the front of the queue.
-- Subtract evicted transaction memory usage.
-- Remove evicted transactions from the txid lookup map.
-- Return the evicted transactions so callers can handle them.
-
-### `DynamicMemoryUsage`
-
-Reviewed behavior:
-
-- Returns cached transaction memory usage plus dynamic usage of the lookup map and transaction list.
-
-### `AddTransactionsFromBlock`
-
-Reviewed behavior:
-
-- Reserves txid lookup capacity.
-- Iterates through the block's transactions in reverse order.
-- Appends each transaction to the holding queue.
-- Adds each transaction to the txid lookup map.
-- Asserts that callers do not pass duplicate transaction IDs.
-- Updates cached memory usage.
-- Calls `LimitMemoryUsage` and returns any evicted transactions.
-
-### `removeForBlock`
-
-Reviewed behavior:
-
-- Does nothing if the queue is empty.
-- For each transaction in a newly connected block, removes matching entries from the holding queue.
-- Updates cached memory usage and the txid lookup map.
-
-### `clear`
-
-Reviewed behavior:
-
-- Clears memory usage accounting.
-- Clears the txid lookup map.
-- Clears the queue.
-
-### `take`
-
-Reviewed behavior:
-
-- Moves out the queued transaction list.
-- Clears the internal data structures.
-- Returns the moved transaction list.
-
-## Relationship to reorg flow
-
-Reviewed validation flow shows:
+The current reviewed v31 validation path now resolves an older open question from this page:
 
 ```text
 DisconnectTip
   -> AddTransactionsFromBlock
-  -> evicted transactions may be removed from mempool recursively
+  -> possible memory-limit eviction handling
 
 ConnectTip
-  -> removeForBlock
+  -> removeForBlock for transactions confirmed on the new branch
 
-After chain switch handling
-  -> MaybeUpdateMempoolForReorg, still needs deeper review
+MaybeUpdateMempoolForReorg
+  -> take remaining disconnected transactions
+  -> attempt reacceptance in dependency-safe order
+  -> remove transactions/descendants that cannot be restored
+  -> refresh descendant state
+  -> remove transactions no longer final or spending immature coinbase outputs
+  -> re-limit mempool size
 ```
 
-## Related MoreBC2 pages
+So the queue is only a temporary bridge. Final mempool state is determined by current-chain validity/policy when the reorg settles.
 
-- [Source atlas: validation.cpp](validation-cpp.md)
-- [Block validation flow](../../architecture/block-validation-flow.md)
+## v31 replay-protection boundary
+
+Reorg/mempool reacceptance ultimately flows through current BitcoinII transaction validation. From mainnet height `57750`, replay-domain-aware signature validation matters for any transaction being considered for the next block.
+
+The disconnected-transaction container itself does not calculate signature hashes; the relevant current-domain checks happen in validation/mempool acceptance.
+
+See [Mempool accept](mempool-accept.md) and [Replay protection v31](replay-protection-v31.md).
+
+## Chainwork boundary
+
+A reorganization is driven by best-valid-chain selection according to accumulated chain work. This holding structure reacts to blocks leaving/entering the active chain; it does not choose the winning branch.
+
+## Runtime boundary
+
+MoreBC2 has not created an intentional `v31.1.0` reorg fixture that observes this queue directly. September mainnet and regtest tests did not force a competing branch/reorg.
+
+Current behavior on this page is source-confirmed rather than runtime-instrumented.
+
+## Related pages
+
+- [validation.cpp](validation-cpp.md)
+- [Mempool accept](mempool-accept.md)
+- [Life of a reorganization](../../architecture/life-of-a-reorg.md)
 - [Reorganizations](../../encyclopedia/reorganizations.md)
 
-## Open questions
+## Open work
 
-- Review `MaybeUpdateMempoolForReorg` in detail.
-- Confirm exact mempool re-add order after `take()`.
-- Confirm whether any BitcoinII-specific behavior differs from inherited Bitcoin Core behavior.
-- Decide whether disconnected transaction handling belongs in a separate reorg architecture page.
-- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for these files before upgrading status.
-
-## Sources
-
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
-
-- Current observed `main` `src/kernel/disconnected_transactions.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/disconnected_transactions.h
-- Current observed `main` `src/kernel/disconnected_transactions.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/disconnected_transactions.cpp
-- Current observed `main` `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.cpp
+- Build an isolated deterministic reorg fixture if direct runtime qualification becomes useful.
+- Record transaction re-add/removal behavior across that fixture.
+- Map relevant unit/functional tests after a clean v31 source build.
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Yes
-**Notes:** This page documents the disconnected-transaction holding structure. Final mempool re-add behavior and release-versus-main comparison still need review.
+**Status:** Reviewed / Source-confirmed structural  
+**Primary evidence:** BitcoinII Core `v31.1.0` disconnected-transaction helpers plus current v31 reorg/mempool validation review  
+**Notes:** The holding queue and its place in `MaybeUpdateMempoolForReorg` are source-mapped. Direct runtime reorg instrumentation remains open.
