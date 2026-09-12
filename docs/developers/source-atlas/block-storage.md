@@ -1,239 +1,118 @@
 # Block storage
 
-**Category:** Documentation
-**Status:** Draft
-**Last reviewed:** 2026-06-30
+**Category:** Developer / Source Atlas  
+**Status:** Reviewed / Source-confirmed structural  
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page covers a first-pass review of:
+This page maps BitcoinII Core block-index persistence, block/undo files, pruning bookkeeping, raw block reads, reindex/import support, and related storage state centered on `src/node/blockstorage.*`.
 
-- `src/node/blockstorage.h`
-- `src/node/blockstorage.cpp`
+The broad storage architecture remains Bitcoin-style in the reviewed `v31.1.0` baseline. September runtime evidence now adds a bounded current-release observation: the disposable Windows mainnet node started unpruned with no optional indexes, retained chain state across clean shutdown/restart, and continued IBD. That does not qualify pruning/reindex failure paths or assumeutxo/snapshot storage workflows.
 
-These files manage block index persistence, block and undo flat files, pruning bookkeeping, block-file cursors, raw block reads, undo reads/writes, and block import/reindex support.
+## Key reviewed roles
 
-This page is a storage-path map. It is not a full validation review and does not replace the block lifecycle or validation pages.
+The block-storage layer covers:
 
-## Why this file matters
+- block-index database persistence;
+- serialized block (`blk`) and undo (`rev`) files;
+- block-file cursor/statistics bookkeeping;
+- proof-of-work checks while loading stored block/index data;
+- prune state and file unlinking;
+- reindex/import state;
+- support for validation/reorg paths that require block and undo data.
 
-A BitcoinII node needs more than consensus rules. It also needs durable local storage for:
-
-- Known block headers and block-index metadata.
-- Serialized block data.
-- Undo data used when disconnecting blocks.
-- Block-file statistics.
-- Pruning state.
-- Reindex state.
-
-The block storage layer connects validation to disk.
-
-## Key symbols reviewed
-
-- `kernel::BlockTreeDB`
-- `node::BlockManager`
-- `BlockMap`
-- `BlockfileCursor`
-- `BlockfileType`
-- `PruneLockInfo`
-- `LoadBlockIndex`
-- `LoadBlockIndexDB`
-- `WriteBlockIndexDB`
-- `AddToBlockIndex`
-- `InsertBlockIndex`
-- `FindNextBlockPos`
-- `WriteBlock`
-- `ReadBlock`
-- `ReadRawBlock`
-- `WriteBlockUndo`
-- `ReadBlockUndo`
-- `FindFilesToPrune`
-- `FindFilesToPruneManual`
-- `PruneOneBlockFile`
-- `UnlinkPrunedFiles`
-- `ImportBlocks`
-
-## BlockTreeDB
-
-`kernel::BlockTreeDB` wraps the block index database stored under `blocks/index/`.
-
-Reviewed database key areas include:
-
-- Block file metadata.
-- Block index records.
-- Boolean flags.
-- Reindex flag.
-- Last block file number.
-
-Reviewed methods include reading and writing block-file info, reindex state, flags, and batch-synced dirty block index/file metadata.
+Important classes/helpers include `kernel::BlockTreeDB`, `node::BlockManager`, `BlockfileCursor`, block/undo read/write helpers, prune helpers, and `ImportBlocks`.
 
 ## Block index loading
 
-`LoadBlockIndexGuts` loads disk block-index entries into memory.
+Reviewed storage/index load behavior reconstructs in-memory block-index entries from disk, including previous pointers, height, file positions, header fields, status, and transaction counts, then derives chain work and related indexes/state.
+
+This storage layer supplies data to validation; it does not independently decide the active chain. Best-chain selection remains in validation/chainstate logic and is based on accumulated valid work.
+
+## Block and undo files
 
 Reviewed behavior includes:
 
-- Iterating block-index records from the database.
-- Constructing or finding in-memory `CBlockIndex` entries.
-- Restoring previous-block pointers, height, file positions, header fields, status, and transaction count.
-- Checking proof-of-work on loaded block-index entries.
+- selecting block-file positions;
+- serializing message-start bytes, size, and block payload;
+- reading/deserializing blocks and checking proof of work / expected hash where applicable;
+- writing undo data with previous-block context/checksum;
+- retaining undo positions/status so chainstate can disconnect blocks during reorgs.
 
-`LoadBlockIndex` then calculates chain work, time max, skip pointers, failure-child state, and chain transaction counts where possible.
-
-## BlockManager role
-
-`BlockManager` maintains the block index map and block/undo file bookkeeping.
-
-The header describes it as maintaining a tree of blocks consulted to determine where the most-work tip is.
-
-Important state includes:
-
-- `m_block_index`
-- `m_blocks_unlinked`
-- `m_block_tree_db`
-- `m_blockfile_info`
-- `m_blockfile_cursors`
-- `m_dirty_blockindex`
-- `m_dirty_fileinfo`
-- `m_prune_locks`
-- `m_have_pruned`
-- `m_blockfiles_indexed`
-- `m_importing`
-
-## Block file layout constants
-
-Reviewed constants include:
-
-- Block file pre-allocation chunk: 16 MiB.
-- Undo file pre-allocation chunk: 1 MiB.
-- Maximum block file size: 128 MiB.
-- Block serialization header size: message-start bytes plus serialized block size field.
-- Undo-data disk overhead: serialization header plus checksum size.
-
-## Block file cursors
-
-`BlockfileCursor` tracks:
-
-- Current block file number.
-- Highest block height in that file whose undo data has been written.
-
-The reviewed comments explain that block files are written in download order, while undo files are written in validation order. The cursor helps decide when block and undo files can be trimmed or finalized.
-
-`BlockfileType` separates normal and assumed chainstate block-file regions when assumeutxo-style state is in use.
-
-## Writing blocks
-
-`WriteBlock` serializes a block to disk.
-
-Reviewed behavior:
-
-- Calculates serialized block size with witness data.
-- Calls `FindNextBlockPos` to choose a block-file position.
-- Opens the block file.
-- Writes message-start bytes and block size.
-- Writes the serialized block.
-- Returns the block position after the serialization header.
-
-`FindNextBlockPos` handles choosing the correct file, rolling to a new file if needed, updating file statistics, allocating disk space, and setting the pruning check flag when new space is allocated in prune mode.
-
-## Reading blocks
-
-`ReadBlock` opens the block file, deserializes the block, and checks the header proof-of-work.
-
-The index-based overload also checks that the read block hash matches the expected block-index hash.
-
-`ReadRawBlock` reads the raw serialized block payload by seeking backward to the block-storage header, verifying message-start bytes, reading the stored size, and then reading the block bytes.
-
-## Undo data
-
-`WriteBlockUndo` writes undo data used to return local state to the prior chain tip when needed.
-
-Reviewed behavior includes:
-
-- Finding or allocating undo-file position.
-- Writing message-start bytes and undo size.
-- Writing undo data.
-- Writing a checksum based on the previous block hash and undo data.
-- Updating the block index with undo position and `BLOCK_HAVE_UNDO`.
-
-`ReadBlockUndo` is declared in the header and should receive a deeper follow-up review alongside reorg internals.
+Undo data is operationally important for reorganization handling and must not be described as optional history if a node still needs it for its retained reorg window.
 
 ## Pruning
 
-Pruning removes old block and undo files while preserving enough data for current operation.
+Source review covers both automatic and manual prune bookkeeping: eligible old block/undo files can be selected, block-index availability flags updated, persistent prune state recorded, and files unlinked.
 
-Reviewed pruning behavior includes:
+Important current configuration boundary:
 
-- Manual prune height selection.
-- Automatic pruning based on configured prune target.
-- Minimum prune range checks from chain manager.
-- Avoiding files outside the allowable prune range.
-- Removing block and undo file references together.
-- Updating block-index status flags by unsetting data and undo availability.
-- Recording pruned state in database flags.
-- Physically unlinking selected `blk` and `rev` files.
+- pruning is disabled by default in current MoreBC2 v31 evidence;
+- `txindex` is also disabled by default;
+- pruning and `txindex` are incompatible in the current node configuration path;
+- changing from a pruned state back to a full historical block store requires reindex/redownload behavior according to the reviewed source/configuration guidance.
 
-The header notes that changing back from pruned mode to unpruned requires reindexing and redownloading the blockchain.
+The September 11 v31 node test observed `pruned=false` and no optional indexes. It did **not** execute manual pruning or a pruned-node reindex/recovery cycle.
 
-## Reindex and block import
+## Reindex and import
 
-`ImportBlocks` handles reindex and `-loadblock=` import paths.
+`ImportBlocks` and related state support reindex and external block-file import paths. The reviewed structure includes ordered block-file scanning, persistent reindex state, block import, and best-chain activation afterward.
 
-Reviewed behavior includes:
+MoreBC2 has not runtime-qualified `-reindex`, `-reindex-chainstate`, `-loadblock`, corrupted-index recovery, or prune-to-unpruned recovery on `v31.1.0`.
 
-- Setting an importing flag while import is active.
-- Reindexing block files in order when block files are not indexed.
-- Loading external block files.
-- Clearing the reindex flag when reindexing finishes.
-- Retrying genesis load after reindex.
-- Calling best-chain activation after block import/reindex work.
+## v31 consensus boundary
 
-## Relationship to validation and reorg pages
+Storage is not where ShockWave, replay protection, or data restrictions are defined. Stored blocks/headers/undo state are consumed by validation paths that enforce those current rules.
 
-Block storage is not the same as block validation.
+A block being present on disk does not imply it is active or consensus-valid. Likewise, a stored alternate branch can exist while best-chain selection remains determined by valid accumulated chain work.
 
-Validation decides whether a block can become active.
+## Runtime evidence — 2026-09-11
 
-Block storage provides the durable data that validation and reorg handling need, including serialized blocks and undo data.
+The isolated Windows `v31.1.0` mainnet test observed:
 
-Related pages:
+- fresh disposable chain/data state;
+- unpruned default state;
+- no optional indexes enabled;
+- advancing block validation during IBD;
+- clean shutdown;
+- restart using retained disposable chain state.
 
+This is current-release corroboration of ordinary storage persistence. It is not a stress, corruption-recovery, pruning, or reindex test.
+
+## Related pages
+
+- [Block acceptance](block-acceptance.md)
+- [validation.cpp](validation-cpp.md)
+- [Disconnected transactions](disconnected-transactions.md)
 - [Life of a block](../../architecture/life-of-a-block.md)
 - [Life of a reorganization](../../architecture/life-of-a-reorg.md)
-- [Block validation flow](../../architecture/block-validation-flow.md)
-- [Source atlas: validation.cpp](validation-cpp.md)
-- [Source atlas: block lifecycle](block-acceptance.md)
-- [Source atlas: validation interface](validation-interface.md)
+- [Node configuration](../../configuration/node-configuration.md)
+- [Windows v31 node/RPC validation](../../verification/windows-v31-node-rpc-validation-2026-09-11.md)
 
-## BitcoinII-specific notes
+## Open work
 
-This first-pass review did not identify BitcoinII-specific block-storage behavior beyond project naming, headers, and comments.
+- Release-pinned review/testing of `ReadBlockUndo` failure behavior.
+- Disposable prune/reindex/recovery vectors.
+- Corrupt/missing block-index/file operator recovery guidance.
+- Assumeutxo/snapshot storage qualification if MoreBC2 later documents that workflow.
+- Relevant unit/functional test execution after a clean v31 source build.
 
-The reviewed file structure appears Bitcoin-style, but no upstream comparison has been completed.
+## Primary sources
 
-## Open questions
+Pinned/current review scope:
 
-- Does BitcoinII differ from upstream Bitcoin Core in block storage, pruning, or reindex behavior?
-- Which `ReadBlockUndo` paths should be documented together with reorg follow-up work?
-- Which operator-facing pruning behaviors should be moved into node operation docs?
-- Which block-storage failures should be explained for troubleshooting users?
-- How should assumeutxo-related storage behavior be explained, if at all, for BitcoinII readers?
-- Which tests cover block storage and pruning behavior?
-- Confirm whether the `v31.1.0` release baseline differs from subsequent `main` changes for these files before upgrading status.
+- `v31.1.0/src/node/blockstorage.h`
+- `v31.1.0/src/node/blockstorage.cpp`
+- `v31.1.0/src/validation.cpp`
+- `v31.1.0/src/undo.h`
+- `v31.1.0/src/flatfile.h`
+- `v31.1.0/src/kernel/blockmanager_opts.h`
 
-## Sources
-
-The mutable current-upstream `main` links below were re-observed on 2026-08-27 and are intentionally retained to track upstream state. They are not release-pinned evidence.
-
-- Current observed `main` `src/node/blockstorage.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/blockstorage.h
-- Current observed `main` `src/node/blockstorage.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/node/blockstorage.cpp
-- Current observed `main` `src/validation.cpp`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/validation.cpp
-- Current observed `main` `src/undo.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/undo.h
-- Current observed `main` `src/flatfile.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/flatfile.h
-- Current observed `main` `src/kernel/blockmanager_opts.h`: https://github.com/Bitcoin-II/BitcoinII-Core/blob/main/src/kernel/blockmanager_opts.h
+Canonical tag: https://github.com/Bitcoin-II/BitcoinII-Core/tree/v31.1.0
 
 ## Verification
 
-**Status:** Draft
-**Primary sources checked:** Partially
-**Notes:** This is a first-pass block-storage review. Full pruning flow, undo-read behavior, failure recovery, tests, upstream comparison, and release-versus-main comparison remain open.
+**Status:** Reviewed / Source-confirmed structural  
+**Primary evidence:** BitcoinII Core `v31.1.0` block-storage source plus bounded September 11 persistent disposable-node runtime evidence  
+**Notes:** Ordinary storage structure and retained-state restart behavior are current. Pruning, reindex, corruption recovery, and snapshot storage remain untested.
