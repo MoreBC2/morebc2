@@ -2,200 +2,190 @@
 
 **Category:** Documentation
 **Status:** Draft
-**Last reviewed:** 2026-07-06
+**Last reviewed:** 2026-09-12
 
 ## Summary
 
-This page tracks public BitcoinII (BC2) exchange listings and exchange-integration opportunities.
+This page tracks public BitcoinII (BC2) exchange listings and current exchange-integration observations.
 
-Exchange data is time-sensitive and should be checked directly before publication.
+Exchange data is time-sensitive. A public trading pair does not prove that deposits, withdrawals, liquidity, or user-specific access are currently available.
 
-Use [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md) before adding or promoting exchange listings.
+For current confirmation-count evidence, see [Exchange confirmation evidence — 2026-09-12](../verification/exchange-confirmation-evidence-2026-09-12.md).
 
-## Listing format
-
-```md
-### Exchange name
-
-**Status:** Needs Review / Observed / Partially checked / Active, dated check / Unreachable / Historical / Delisted / Application discussed / Do not recommend
-**Official:** No, unless confirmed by BitcoinII maintainers
-**URL:**
-**Pairs:** Unknown unless verified
-**Deposits enabled:** Unknown unless verified
-**Withdrawals enabled:** Unknown unless verified
-**Trading enabled:** Unknown unless verified
-**Region/KYC restrictions:** Unknown unless visible
-**Last checked:** YYYY-MM-DD
-**Evidence level:** E8 unless verified directly
-**What was checked:**
-**What was not checked:**
-**Notes:**
-```
-
-## Direct exchange-source observations
-
-### NonKYC
-
-**Status:** Partially checked / Public direct exchange-source observation  
-**Official:** No, unless confirmed by BitcoinII maintainers  
-**URL:** `https://nonkyc.io/market/BC2_USDT` and `https://nonkyc.io/asset/BC2`  
-**Pairs:** `BC2/USDT` observed on market page; `BC2/USDT` and `BC2/BTC` observed on asset page  
-**Deposits enabled:** Public asset page displayed `Deposits: Active` during check; no deposit was attempted  
-**Withdrawals enabled:** Public asset page displayed `Withdraws: Active` during check; no withdrawal was attempted  
-**Trading enabled:** Public market/order UI visible; trade action requires login/signup and was not tested  
-**Region/KYC restrictions:** No specific region/KYC warning observed in fetched page text  
-**Last checked:** 2026-07-06  
-**Evidence level:** E4/E6 direct public-page observation; not E8 account/service verification
-
-**What was checked:**
-
-- Public market page loaded.
-- Public asset page loaded.
-- Pages clearly identified `BitcoinII` / `BC2`.
-- Direct exchange pages showed `BC2/USDT` and asset-page market/liquidity-pool references including `BC2/BTC`.
-- Public asset page displayed deposit and withdrawal status text.
-
-**What was not checked:**
-
-- No account login.
-- No order placement.
-- No trade execution.
-- No deposit.
-- No withdrawal.
-- No wallet/address generation.
-- No region/KYC/account-specific checks.
-
-**Notes:**
-
-Deposit and withdrawal status is recorded only as public page text observed on 2026-07-06. It is not proof that a user in any specific region can deposit or withdraw.
+## Current direct exchange-source observations
 
 ### CoinEx
 
-**Status:** Partially checked / Public direct exchange-source observation  
+**Status:** Active public BC2 listing / direct API status checked  
 **Official:** No, unless confirmed by BitcoinII maintainers  
-**URL:** `https://www.coinex.com/en/exchange/BC2-USDT` and `https://www.coinex.com/en/info/BC2`  
-**Pairs:** `BC2/USDT` indicated by public market page title; detailed rows limited by rendered/static-text visibility  
-**Deposits enabled:** Not publicly confirmed from inspected text  
-**Withdrawals enabled:** Not publicly confirmed from inspected text  
-**Trading enabled:** Public navigation/actions visible; actual trading was not tested  
-**Region/KYC restrictions:** Risk/disclaimer text visible on info page; no specific region/KYC warning extracted from fetched page text  
-**Last checked:** 2026-07-06  
-**Evidence level:** E4 direct public-page observation; not E8 account/service verification
+**Public market:** `BC2/USDT`  
+**Deposits enabled:** `true` in public deposit/withdraw configuration API on 2026-09-12  
+**Withdrawals enabled:** `true` in public deposit/withdraw configuration API on 2026-09-12  
+**Trading enabled:** Public BC2/USDT market exists; account trade execution was not tested  
+**Confirmation policy:** `safe_confirmations = 2`; `irreversible_confirmations = 6`  
+**Last checked:** 2026-09-12  
+**Evidence level:** Direct public exchange API / exchange page observation
 
-**What was checked:**
+Direct configuration query:
 
-- Public market page loaded through browser inspection, though local shell request could not connect.
-- Public market page title indicated `BC2/USDT`.
-- Public info page loaded and clearly identified `BitcoinII` / `BC2`.
-- Info page included `Deposit` and `Trade` actions.
-- Info page included project-style information such as PoW and links to website/source/explorer.
+```text
+GET https://api.coinex.com/v2/assets/deposit-withdraw-config?ccy=BC2
+```
 
-**What was not checked:**
+Important interpretation:
 
-- No account login.
-- No order placement.
-- No trade execution.
-- No deposit.
-- No withdrawal.
-- No account-gated wallet or status checks.
-- No confirmation that deposits or withdrawals are open.
+CoinEx's `irreversible_confirmations` is an exchange policy field. MoreBC2 does not describe six BC2 confirmations as cryptographically irreversible.
 
-**Notes:**
+Sources:
 
-CoinEx has public BC2 pages, but market details and status fields were limited by JavaScript-rendered/static-text visibility during this check.
+- https://docs.coinex.com/api/v2/assets/deposit-withdrawal/http/list-all-deposit-withdrawal-config
+- https://coinex-announcement.zendesk.com/hc/en-us/articles/41890315584916-CoinEx-Will-List-BC2-BitcoinII-on-Oct-6-2025
+- https://www.coinex.com/en/orderbook/bc2-usdt
 
-### NestEx candidate
+### NonKYC
 
-**Status:** Needs Review / Not confirmed from direct page  
-**Official:** No  
-**URL:** `https://nestex.com/market/BC2_USDT`  
-**Pairs:** Not confirmed from direct page  
-**Deposits enabled:** Not visible  
-**Withdrawals enabled:** Not visible  
-**Trading enabled:** Not confirmed  
-**Region/KYC restrictions:** Not visible  
-**Last checked:** 2026-07-06  
-**Evidence level:** E2/E4 candidate observation only
+**Status:** Active public BC2 listing / direct API status checked  
+**Official:** No, unless confirmed by BitcoinII maintainers  
+**Pairs:** `BC2/USDT` and `BC2/BTC` publicly associated with the asset  
+**Deposits enabled:** `depositActive = true` on 2026-09-12  
+**Withdrawals enabled:** `withdrawalActive = true` on 2026-09-12  
+**Trading enabled:** Public BC2 market pages exist; account trade execution was not tested  
+**Confirmation policy:** `confirmsRequired = 50`; separate `securityConfirmsRequired = 20` field has unresolved public semantics  
+**Last checked:** 2026-09-12  
+**Evidence level:** Direct public exchange API observation
 
-**What was checked:**
+Direct asset query:
 
-- Direct market URL only loaded a small redirect shell from the check environment.
-- `/lander` returned forbidden from the check environment.
-- Third-party aggregators listed NestEx as a candidate.
+```text
+GET https://api.nonkyc.io/api/v2/asset/getbyticker/BC2
+```
 
-**What was not checked:**
+Caution:
 
-- No direct market content confirmed.
-- No account login.
-- No trade, deposit, withdrawal, region, or KYC checks.
+The same public record contained descriptive fields that do not match current BC2 technical facts, including `isProofOfWork = false`, and it contained `Upcoming fork` notes that may be stale. MoreBC2 therefore treats the operational status/confirmation fields as useful current exchange evidence without treating every descriptive field as protocol authority.
 
-**Notes:**
+The meaning of `securityConfirmsRequired = 20` has not been established from public documentation and must not be equated with CoinEx's second-stage confirmation field.
 
-Do not list NestEx as a confirmed direct exchange listing until its public direct market page can be checked.
+### NestEx
 
-## Third-party aggregator observations
+**Status:** Active public BC2 listing / direct backend status checked  
+**Official:** No, unless confirmed by BitcoinII maintainers  
+**Public spot page:** `https://trade.nestex.one/spot/BC2`  
+**Deposits enabled:** `candeposit = true` in public coin API on 2026-09-12  
+**Withdrawals enabled:** `canwithdraw = true` in public coin API on 2026-09-12  
+**Trading enabled:** `spottrade = true` in public coin API; account trade execution was not tested  
+**Confirmation policy:** explicit BC2 backend `conf = 50`  
+**Decimals:** `8`  
+**Last checked:** 2026-09-12  
+**Evidence level:** Direct public exchange backend/API observation
 
-Aggregators are useful discovery sources, but they should not be treated as proof that deposits, withdrawals, liquidity, or trading are currently available on an exchange source.
+Direct coin query:
 
-| Resource | Date checked | Result | Status |
-|---|---|---|---|
-| CoinPaprika `bc2-bitcoin-ii` | 2026-07-06 | Loaded and identified BitcoinII/BC2. Named NonKYC.io and NestEx and indicated exchange/market count. | Third-party discovery source |
-| CoinCodex `bitcoinii` | 2026-07-06 | Loaded and identified BitcoinII/BC2. Listed `BC2/USDT`, NonKyc.io, and CoinEx. | Third-party discovery source |
-| LiveCoinWatch `BitcoinII-BC2` | 2026-07-06 | Loaded and identified BitcoinII/BC2. Listed `BC2/USDT`, `BC2/BTC`, NonKYC Exchange, CoinEx, and NestEx. | Third-party discovery source |
-| CoinMarketCap `bitcoinii` | 2026-07-06 | Loaded and identified BitcoinII/BC2, but market rows were not visible in fetched static text. | Third-party discovery source / limited extraction |
-| CoinGecko `bitcoinii` | 2026-07-06 | Blocked with 403 from check environment. | Not checked |
+```text
+GET https://api.nestex.one/v1/coins
+```
 
-## Current status
+NestEx's Wallet Status frontend uses `50` as a fallback display when an asset has no explicit confirmation value. That fallback alone would not prove BC2's configured count. The `/v1/coins` backend response resolves the ambiguity because the BC2 object itself explicitly returns `conf = 50`.
 
-MoreBC2 has direct public-page observations for NonKYC and CoinEx, but no exchange has been evaluated as safe, recommended, liquid, operationally reliable, or available to any specific user or region.
+Other public evidence observed during the same review included a BC2 liquidity endpoint and proof-of-reserves pages showing BC2 wallet infrastructure. Those observations do not constitute a recommendation or a liquidity-quality guarantee.
 
-Public deposit/withdrawal text was observed only for NonKYC's asset page, and no deposit or withdrawal was attempted.
+Sources:
 
-## What to check
+- https://api.nestex.one/v1/coins
+- https://trade.nestex.one/wallet-status
+- https://trade.nestex.one/spot/BC2
+- https://trade.nestex.one/proof-of-reserves
 
-For each exchange, verify:
+### Biconomy
 
-- Exchange website loads.
-- BC2 or BitcoinII is listed directly by the exchange.
-- Trading pair exists.
-- Trading appears enabled, if visible.
-- Deposits status is visible, if available.
-- Withdrawals status is visible, if available.
-- Volume/market information is current and dated.
-- KYC or regional restrictions are visible, if available.
-- Last checked date is recorded.
+**Status:** BC2 listing confirmed / current wallet policy only partially visible publicly  
+**Official:** No, unless confirmed by BitcoinII maintainers  
+**BC2 listing metadata:** Publicly retrievable  
+**Deposits enabled:** Current status not independently verified from a public wallet-status endpoint  
+**Withdrawals enabled:** Current status not independently verified  
+**Trading enabled:** BC2 listing/trading material remains public; current account trading was not tested  
+**Confirmation policy:** Not publicly verified  
+**Last checked:** 2026-09-12  
+**Evidence level:** Direct public Biconomy metadata and frontend/API review; wallet-specific configuration unresolved
 
-A trading pair alone does not prove deposits or withdrawals are open.
+Biconomy's public BC2 metadata endpoint:
 
-Do not claim a current listing from a third-party price aggregator alone.
+```text
+GET https://openapi.biconomy.com/api/v1/assetIntro/BC2
+```
 
-## Exchange applications
+The record identifies `BC2` / `BitcoinII` but does not expose deposit confirmation count or present wallet-status fields.
 
-If an exchange listing is only being discussed or applied for, list it as:
+Biconomy's public frontend contains a deposit warning parameterized with `min_confirmation`, showing that the platform uses a per-deposit confirmation value. Its public `/api/v1/chains-config` endpoint did not expose BC2-specific confirmation data during the 2026-09-12 check. Wallet-specific per-asset routes appear to require authenticated user context.
 
-**Status:** Application discussed
+#### January 2026 wallet-upgrade incident
 
-Do not list it as active.
+Biconomy announced the BC2 spot listing in January 2026 and initially announced deposits and withdrawals as available.
 
-## Open items
+Shortly after launch, a community report stated that BC2 deposits were temporarily closed for a **Wallet Upgrade**. A later community follow-up reported deposits operational again and included a successful small test deposit.
 
-- Recheck NonKYC deposit/withdrawal status from public pages before any publication.
-- Recheck CoinEx public market/status with a method that can inspect rendered market data.
-- Confirm or reject NestEx only after direct public market content can be reached.
-- Verify current exchange listings from direct exchange pages, not aggregators alone.
-- Verify whether deposits and withdrawals are open without making a deposit or withdrawal.
-- Add exchange-specific region/KYC notes only after direct review.
+MoreBC2 records this only as a dated wallet-service interruption. It does not infer the underlying technical cause, does not connect the event to later chain conditions without evidence, and does not treat it as proof of current deposit or withdrawal status.
+
+Sources:
+
+- https://biconomy.zendesk.com/hc/en-us/articles/53895465558553-Biconomy-com-New-Listing-Bitcoin-II-BC2-for-Spot-Trading
+- https://openapi.biconomy.com/api/v1/assetIntro/BC2
+- https://openapi.biconomy.com/api/v1/chains-config
+- https://www.reddit.com/r/BitcoinII/comments/1q3pjmv/re_biconomy_deposits_closed/
+
+## Confirmation-policy comparison
+
+| Exchange | Current verified BC2 confirmation evidence |
+|---|---|
+| CoinEx | `2` safe / `6` exchange-defined `irreversible` |
+| NonKYC | `50` deposit confirmations; separate `securityConfirmsRequired = 20` meaning unresolved |
+| NestEx | explicit BC2 backend `conf = 50` |
+| Biconomy | not publicly verified |
+
+Two independently queried BC2 venues currently use 50 confirmations. This supports MoreBC2's **provisional 50-confirmation normal-deposit baseline**, but it does not create a network rule or fixed finality guarantee.
+
+See [Deposit monitoring](../exchange/deposit-monitoring.md) for the current operational guidance.
+
+## What has not been verified
+
+For all venues above unless explicitly stated otherwise:
+
+- No user account was logged into during the public checks recorded here.
+- No order was placed.
+- No deposit was sent.
+- No withdrawal was performed.
+- No exchange is being represented as safe, reliable, liquid, or recommended.
+- Region/KYC/account-specific availability was not established.
+- Public status can change after the dated check.
+
+## Third-party aggregators
+
+Aggregators remain useful for discovering possible markets, but they should not be treated as proof that deposits, withdrawals, liquidity, or trading are currently operational.
+
+Direct exchange sources should take precedence whenever available.
+
+## Update rules
+
+For each exchange recheck:
+
+- Record the date.
+- Prefer direct exchange APIs and pages over aggregators.
+- Separate listing existence from deposit, withdrawal, trading, liquidity, and account availability.
+- Record confirmation settings exactly as the exchange exposes them.
+- Preserve exchange-specific terminology without turning it into a protocol claim.
+- Do not infer a disabled/enabled wallet state from a historical incident.
 
 ## Related pages
 
-- [Ecosystem direct check plan](../verification/ecosystem-direct-check-plan.md)
+- [Exchange confirmation evidence — 2026-09-12](../verification/exchange-confirmation-evidence-2026-09-12.md)
 - [Exchange integration package](../exchange/integration-package.md)
 - [Exchange operator guide](../exchange/operator-guide.md)
+- [Deposit monitoring](../exchange/deposit-monitoring.md)
 - [Service integration checklist](../exchange/service-integration-checklist.md)
 - [Known unknowns](../verification/known-unknowns.md)
 
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Ecosystem direct check plan, existing exchange framework, and Codex public exchange listing check from 2026-07-06
-**Notes:** Direct public-page observations are recorded for NonKYC and CoinEx. NestEx remains unconfirmed from direct public page access. Aggregators are treated as discovery sources only. No exchange is recommended, tested through an account, or verified for user-specific availability.
+**Primary sources checked:** Direct public CoinEx, NonKYC, NestEx, and Biconomy APIs/pages plus current exchange documentation and dated community evidence where explicitly labeled
+**Notes:** CoinEx, NonKYC, and NestEx now have direct current BC2 confirmation/status observations. Biconomy's listing is confirmed, but its current wallet availability and BC2 confirmation count remain publicly unresolved. No exchange is recommended or account-tested by this record.
