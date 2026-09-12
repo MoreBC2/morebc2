@@ -103,7 +103,7 @@ Those should remain historical provenance only. Current operational source/relea
 - [Network specifications](network-specifications.md)
 - [Consensus overview](consensus-overview.md)
 - [Releases](releases.md)
-- [Source Registry](../../SOURCE_REGISTRY.md)
+- [Source Registry](https://github.com/MoreBC2/morebc2/blob/main/SOURCE_REGISTRY.md)
 - [Ecosystem resources](../ecosystem/resources.md)
 - [Wallets](../ecosystem/wallets.md)
 - [Compatibility](../compatibility/README.md)
