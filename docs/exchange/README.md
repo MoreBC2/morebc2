@@ -8,11 +8,32 @@
 
 This section is for centralized exchanges, swap services, wallets, explorers, payment processors, and other infrastructure providers that want to integrate BitcoinII (BC2).
 
-The goal is to create a clear integration package that reduces back-and-forth and helps service providers quickly find the technical information they need.
+The goal is to provide a source-backed technical package while keeping exchange policy, public-service observations, and unresolved operational work clearly separated.
 
-The section now includes a current-dated exchange confirmation evidence record and a **provisional 50-confirmation normal-deposit baseline**. That value is MoreBC2 operational guidance, not a BitcoinII consensus rule or maintainer mandate.
+The section now includes current v31.1.0 runtime evidence, a current-dated exchange confirmation evidence record, a **provisional 50-confirmation normal-deposit baseline**, and refreshed listing/readiness material.
 
-This section is still a draft and should not be represented as a complete production exchange runbook until custody architecture, production deposit/withdrawal procedures, technical contact process, chainwork thresholds, and remaining release-authentication work are reviewed.
+That baseline is MoreBC2 operational guidance, not a BitcoinII consensus rule or maintainer mandate.
+
+The section remains Draft because production custody architecture, deposit/withdrawal procedures, a canonical technical/security contact process, concrete chainwork thresholds, and some release-authentication work remain unresolved.
+
+## Exchange-folder audit — 2026-09-12
+
+Every page in `docs/exchange/` was reviewed against the current v31.1.0 documentation/evidence set and the current exchange research available on 2026-09-12.
+
+| Page | Audit state | Current note |
+|---|---|---|
+| [Deposit monitoring](deposit-monitoring.md) | Reviewed / current draft | Current confirmation evidence and provisional 50-confirmation baseline are integrated; chainwork calculation examples and production reorg procedures remain open. |
+| [Exchange listing target matrix](exchange-listing-targets.md) | Refreshed 2026-09-12 | Existing BC2 venues are separated from prospective targets; StakeCube/SafeTrade and current applicant-authority requirements were added; TradeOgre/Exbitron were removed from consideration. |
+| [Exchange readiness checklist](exchange-readiness-checklist.md) | Refreshed 2026-09-12 | Stale generic `Draft` / `Needs verification` statuses were replaced with source-confirmed, current-dated tested/observed, provisional, and genuinely unresolved states. |
+| [Exchange integration package](integration-package.md) | Reviewed / current draft | Current v31 source/runtime, release, replay, explorer, and confirmation-policy evidence is represented; production custody/contact/release-authentication gaps remain visible. |
+| [Exchange listing packet template](listing-packet-template.md) | Refreshed 2026-09-12 | Stable BC2 facts are prefilled; applicant authority, release-authentication caveats, confirmation guidance, and independent-contributor wording are explicit. |
+| [Native coin exchange listing guide](native-coin-listing-guide.md) | Refreshed 2026-09-12 | Existing BC2 integration precedent, current target categories, authorization limits, and provisional confirmation guidance are incorporated. |
+| [Exchange operator guide](operator-guide.md) | Reviewed / current draft | Current v31 operational anchors and confirmation/chainwork guidance are represented; production withdrawal/custody procedures remain incomplete. |
+| [Service integration checklist](service-integration-checklist.md) | Reviewed / current draft | Checklist reflects current v31 evidence, replay considerations, 50-confirmation provisional baseline, and chainwork-aware risk controls. |
+| [Why native coins get rejected](why-native-coins-get-rejected.md) | Refreshed 2026-09-12 | BC2 readiness snapshot now reflects what has actually been resolved and adds applicant-authority/legal-compliance failure modes. |
+| `README.md` | Refreshed 2026-09-12 | Section status, rules, page map, and this audit record are current. |
+
+A reviewed page can remain **Draft**. “Draft” means unresolved production or policy work remains; it does not mean the page was skipped or is stale.
 
 ## Current pages
 
@@ -53,7 +74,15 @@ Rules for presenting that number:
 - Do not call 50 confirmations mathematically final.
 - Do not repeat CoinEx's `irreversible` terminology as cryptographic finality.
 - Do not automatically promote `100` confirmations as a universal second tier without a separate risk justification.
-- For large or unusual deposits, combine the minimum count with chainwork, current tip/network health, transaction value, account risk, and manual review where appropriate.
+- For large or unusual deposits, combine the minimum count with cumulative chainwork, current tip/network health, transaction value, account risk, and manual review where appropriate.
+
+## Applicant-authority rule
+
+MoreBC2 is an independent documentation project. It must not imply that it is the BitcoinII project team or that an independent contributor has authority to submit an official listing application.
+
+Some current exchange processes explicitly require official-team status, team permission, project-owner information, legal-entity material, or core-team KYC.
+
+MoreBC2 can prepare and maintain the technical packet. Where an exchange requires official authority, the final submission should come from an authorized BitcoinII representative or be made with documented permission.
 
 ## Source-backed anchors
 
@@ -69,39 +98,35 @@ Rules for presenting that number:
 - [Confirmations](../encyclopedia/confirmations.md)
 - [Reorganizations](../encyclopedia/reorganizations.md)
 
-## Draft checklist
+## Current section-level blockers
 
-- Project name: BitcoinII.
-- Ticker: BC2.
-- Official website.
-- Official repositories.
-- Current wallet release.
-- Source code.
-- License.
-- Network parameters.
-- Block explorer links.
-- RPC documentation.
-- Provisional deposit confirmation baseline and evidence record.
-- Chainwork / reorganization risk handling.
-- Daemon setup notes.
-- Wallet backup notes.
-- Branding assets.
-- Technical contact process.
-- Known exchanges and services.
-- Integration test procedure.
+The exchange section no longer treats basic identity, ticker, v31 network parameters, current release identification, current explorer reachability, bounded v31 node/RPC testing, or confirmation guidance as wholly unknown.
+
+The principal remaining gaps are:
+
+- canonical technical/security contact process;
+- production custody architecture and deposit/withdrawal runbook;
+- concrete cumulative-chainwork thresholds and reorganization incident procedure;
+- stronger release-binary authentication where signed/reproducible evidence is required;
+- external/third-party signer compatibility;
+- current branding/community assets required by a specific submission;
+- applicant authorization, legal, KYC, and audit material where required by a target exchange.
 
 ## Rules
 
-- Treat BC2 as a native coin, not a token, unless official sources say otherwise.
-- Confirmation counts must be source-backed exchange observations or clearly labeled MoreBC2 risk guidance.
-- Do not list a service as active without direct current checking.
+- Treat BC2 as a native coin, not a token.
+- Use current release-pinned source for protocol facts; do not copy stale pre-v31 website/whitepaper claims into current integration guidance.
+- Confirmation counts must be direct exchange observations or clearly labeled MoreBC2 risk guidance.
+- Do not list a service as active without a current direct check.
+- Do not present point-in-time service reachability as an uptime or custody-grade reliability guarantee.
 - Do not present untested RPC commands as production instructions.
 - Clearly separate read-only RPC commands from wallet-moving, broadcast, import/export, private-key, and passphrase commands.
 - Do not recommend exposing RPC publicly.
-- Keep release-verification status visible.
-- Keep technical-contact status visible until confirmed from official or maintainer sources.
-- Treat third-party listing-fee estimates as unconfirmed unless the exchange publishes the fee directly.
-- Recheck exchange confirmation settings periodically; they are operational policy and can change without a protocol release.
+- Keep release-verification limitations visible.
+- Keep technical-contact status visible until confirmed from an official or maintainer-approved source.
+- Do not submit as an official project representative without the authority required by that exchange.
+- Treat third-party listing-fee estimates as unconfirmed unless the exchange itself publishes the fee.
+- Recheck exchange fees, requirements, confirmation settings, and wallet status immediately before outreach because they can change without a protocol release.
 
 ## Related pages
 
@@ -115,5 +140,5 @@ Rules for presenting that number:
 ## Verification
 
 **Status:** Draft
-**Primary sources checked:** Current v31.1.0 source/runtime evidence plus direct current exchange API observations
-**Notes:** The exchange section now has an evidence-backed provisional 50-confirmation normal-deposit baseline. Production custody design, chainwork thresholds, technical contact process, complete release authentication, and production deposit/withdrawal procedures remain open.
+**Primary sources checked:** BitcoinII Core v31.1.0 source/release metadata, current MoreBC2 v31.1.0 runtime records, 2026-09-11 public-infrastructure evidence, 2026-09-12 exchange-confirmation evidence, and refreshed 2026-09-12 exchange-listing requirement research
+**Notes:** Full `docs/exchange/` audit completed on 2026-09-12. All ten pages were reviewed; stale listing/readiness/template/rejection material was refreshed while already-current operational pages were retained with their unresolved boundaries intact.
