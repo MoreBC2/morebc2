@@ -1,4 +1,7 @@
-# Tested Windows v31 node guide
+---
+description: "Tested BitcoinII (BC2) Core v31.1.0 node and JSON-RPC guide for Windows, with security, release-verification, and evidence boundaries."
+---
+# BitcoinII (BC2) node and RPC guide
 
 **Category:** Documentation
 **Status:** Reviewed / Partial
@@ -7,6 +10,8 @@
 ## Scope
 
 This is a bounded, evidence-backed route for running BitcoinII Core `v31.1.0` on 64-bit Windows using the Windows Qt release in server mode.
+
+For protocol constants, start with [BitcoinII v31.1.0 network specifications](../documentation/network-specifications.md). For public cross-checks rather than node authority, see [BitcoinII explorer resources](../documentation/explorer-resources.md).
 
 It is based on the September 11 MoreBC2 validation that used:
 

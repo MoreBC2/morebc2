@@ -1,4 +1,7 @@
-# Wallet guide
+---
+description: "Evidence-backed BitcoinII (BC2) wallet guide for Core v31.1.0, PSBT workflows, replay protection, and third-party wallet limitations."
+---
+# BitcoinII (BC2) wallet guide
 
 **Category:** Documentation  
 **Status:** Reviewed / Partial  
@@ -6,7 +9,7 @@
 
 ## Summary
 
-This page is the starting point for BitcoinII (BC2) wallet documentation.
+This page is the starting point for BitcoinII (also written Bitcoin II or Bitcoin-II) wallet documentation. For hardware and external-signer evaluation, use the [BitcoinII hardware-wallet integration notes](hardware-wallet-integration-notes.md).
 
 MoreBC2 now has direct BitcoinII Core `v31.1.0` wallet runtime evidence in addition to source review. The current evidence is strong enough to document several disposable-wallet and PSBT workflows as tested under controlled conditions, but not strong enough to treat every wallet workflow, platform, or third-party wallet as verified.
 

@@ -11,7 +11,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'MoreBC2',
-      description: 'Community-maintained, source-backed documentation for the BitcoinII (BC2) ecosystem.',
+      description: 'Independent, source-backed BitcoinII (BC2) documentation for the current Core v31.1.0 ecosystem.',
       disable404Route: true,
       lastUpdated: true,
       pagination: true,
@@ -22,6 +22,7 @@ export default defineConfig({
           items: [
             { label: 'MoreBC2', link: '/' },
             { label: 'What is BitcoinII?', link: '/documentation/what-is-bitcoinii/' },
+            { label: 'Hardware-wallet integration', link: '/wallets/hardware-wallet-integration-notes/' },
             { label: 'Project status', link: '/project/project-status/' },
           ],
         },

@@ -1,4 +1,7 @@
-# Mining overview
+---
+description: "BitcoinII (BC2) mining guide for Core v31.1.0, including SHA-256d proof of work, ShockWave difficulty, templates, pools, and evidence limits."
+---
+# BitcoinII (BC2) mining guide: ShockWave v31
 
 **Category:** Documentation  
 **Status:** Reviewed / Partial  
@@ -9,6 +12,8 @@
 BitcoinII (BC2) uses proof-of-work mining. Miners search for a block-header hash below the target encoded by the candidate block's `nBits` value.
 
 BitcoinII Core `v31.1.0` keeps double-SHA256 block-header hashing and a 10-minute target spacing, but current mainnet difficulty is governed by **ShockWave** from height `57750`. That changes an important mining assumption inherited from ordinary Bitcoin-style 2016-block retargeting: under ShockWave, candidate header time can affect the next required target, so template software must not update time while blindly retaining stale `nBits`.
+
+For the chain constants behind these rules, see [BitcoinII v31.1.0 network specifications](../documentation/network-specifications.md). Operators running their own infrastructure should also use the [BitcoinII node and RPC guide](../nodes/node-guide.md).
 
 This page separates three evidence layers:
 

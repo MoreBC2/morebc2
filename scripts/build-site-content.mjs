@@ -442,14 +442,14 @@ async function writeConverted(entry, maps, linkIssues, metadataSummary) {
 
 async function writeHomepage() {
   const homepage = `---
-title: MoreBC2
-description: Community-maintained, source-backed documentation for the BitcoinII (BC2) ecosystem.
+title: BitcoinII (BC2) technical documentation
+description: Independent, source-backed BitcoinII (BC2) documentation for Core v31.1.0 wallets, nodes, mining, explorers, APIs, ShockWave, and integrations.
 template: splash
 prev: false
 next: false
 hero:
   title: MoreBC2
-  tagline: Preserving the knowledge. Strengthening the ecosystem.
+  tagline: Independent, evidence-backed BitcoinII (BC2) technical documentation for the current Core v31.1.0 baseline.
   actions:
     - text: Start with BitcoinII
       link: /documentation/what-is-bitcoinii/
@@ -464,17 +464,17 @@ hero:
 
 ## A map to the source of truth
 
-MoreBC2 preserves, organizes, and explains publicly verifiable information about BitcoinII. It is not the source of truth; it is a map to the source of truth.
+MoreBC2 preserves, organizes, and explains publicly verifiable information about BitcoinII (also written Bitcoin II or Bitcoin-II; ticker BC2). It is an independent technical resource, not the source of truth or an official BitcoinII project site; it is a map to the source of truth.
 
 The documentation separates established facts, direct observations, research, historical context, and open questions so readers can see how strongly each claim is supported.
 
 ## New here?
 
-Start with [What is BitcoinII?](/documentation/what-is-bitcoinii/), then continue to [network specifications](/documentation/network-specifications/), [wallets](/wallets/), [nodes](/nodes/), or [mining](/mining/).
+Start with [What is BitcoinII?](/documentation/what-is-bitcoinii/), then continue to the [BitcoinII v31.1.0 network specifications](/documentation/network-specifications/), [BitcoinII wallet guide](/wallets/wallet-guide/), [BitcoinII node and RPC guide](/nodes/node-guide/), [BitcoinII mining guide](/mining/mining-overview/), or [BitcoinII explorer resources](/documentation/explorer-resources/).
 
 ## Building or integrating?
 
-Developers and service operators can browse the [developer documentation](/developers/), [RPC material](/developers/rpc-overview/), [exchange integration package](/exchange/), and [verification records](/verification/).
+Developers and service operators can browse the [developer documentation](/developers/), [BitcoinII RPC material](/developers/rpc-overview/), [exchange integration package](/exchange/), [hardware-wallet integration notes](/wallets/hardware-wallet-integration-notes/), and [verification records](/verification/).
 
 ## Reviewing or contributing?
 

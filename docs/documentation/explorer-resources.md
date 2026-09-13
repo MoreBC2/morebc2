@@ -1,4 +1,7 @@
-# Explorer resources
+---
+description: "Current BitcoinII (BC2) explorer, API, WebSocket, and Electrum resources with dated service checks and broadcast limitations."
+---
+# BitcoinII (BC2) explorer resources
 
 **Category:** Documentation
 **Status:** Reviewed / Time-sensitive
@@ -8,7 +11,7 @@
 
 Block explorers help users inspect BitcoinII (BC2) blocks, transactions, addresses, mempool state, and network statistics.
 
-This page records the current explorer hierarchy and the evidence boundary around those services. It does not treat a public explorer as a substitute for an operator's own BitcoinII Core node in custody-critical workflows.
+This page records the current BitcoinII explorer hierarchy and the evidence boundary around those services. It does not treat a public explorer as a substitute for an operator's own [BitcoinII Core node](../nodes/node-guide.md) in custody-critical workflows. Wallet engineers should also review the [hardware-wallet integration notes](../wallets/hardware-wallet-integration-notes.md).
 
 For route-level API behavior, see [Public endpoints](../api/public-endpoints.md). For Electrum details, see [Electrum](../api/electrum.md). For service role/status wording, see [Infrastructure](../infrastructure/README.md). The canonical dated evidence is [Public infrastructure smoke test — 2026-09-11](../verification/public-infrastructure-smoke-test-2026-09-11.md).
 

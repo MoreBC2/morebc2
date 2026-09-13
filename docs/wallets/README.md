@@ -1,4 +1,4 @@
-# Wallets
+# BitcoinII (BC2) wallets
 
 **Category:** Documentation  
 **Status:** Reviewed / Partial  
@@ -10,11 +10,12 @@ This section is the user-facing starting point for BitcoinII (BC2) wallet docume
 
 Wallet documentation is intentionally conservative. A wallet being project-linked, open source, listed in an app store, or able to reach a BC2 API/Electrum service does not by itself establish safe signing, correct recovery, replay-protection compatibility, or production readiness.
 
-The strongest current MoreBC2 wallet evidence is for the BitcoinII Core `v31.1.0` wallet in isolated disposable environments. Third-party wallet and hardware/external-signer compatibility remain largely unverified.
+The strongest current MoreBC2 wallet evidence is for the BitcoinII Core `v31.1.0` wallet in isolated disposable environments. Third-party wallet and hardware/external-signer compatibility remain largely unverified. Engineers evaluating cold-storage support should start with the [BitcoinII hardware-wallet integration notes](hardware-wallet-integration-notes.md).
 
 ## Current pages
 
 - [Wallet guide](wallet-guide.md)
+- [Hardware-wallet integration notes](hardware-wallet-integration-notes.md)
 
 ## Current evidence state
 

@@ -1,4 +1,7 @@
-# What is BitcoinII?
+---
+description: "A current, evidence-backed introduction to BitcoinII (Bitcoin II / Bitcoin-II), ticker BC2, and the Core v31.1.0 ShockWave baseline."
+---
+# What is BitcoinII (Bitcoin II / BC2)?
 
 **Category:** Documentation
 **Status:** Reviewed / Partial
@@ -9,6 +12,8 @@
 BitcoinII (BC2) is a peer-to-peer proof-of-work cryptocurrency network. BitcoinII Core is the current public reference implementation used to connect to the network, validate blocks and transactions, and optionally provide wallet and graphical-interface functionality.
 
 Current-facing MoreBC2 documentation uses BitcoinII Core `v31.1.0` as the baseline.
+
+Use the [BitcoinII wallet guide](../wallets/wallet-guide.md), [mining guide](../mining/mining-overview.md), [node and RPC guide](../nodes/node-guide.md), or [explorer resources](explorer-resources.md) for task-specific entry points. Integration engineers evaluating Tangem or another hardware wallet should use the [hardware-wallet integration notes](../wallets/hardware-wallet-integration-notes.md).
 
 ## Current identity and units
 

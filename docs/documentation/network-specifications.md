@@ -1,4 +1,7 @@
-# BitcoinII Network Specifications
+---
+description: "BitcoinII (BC2) Core v31.1.0 network specifications, including ShockWave, ports, address prefixes, replay protection, and source references."
+---
+# BitcoinII (BC2) v31.1.0 network specifications
 
 **Category:** Documentation
 **Status:** Reviewed / Source-confirmed with bounded runtime evidence
@@ -6,7 +9,7 @@
 
 ## Summary
 
-This page records BitcoinII mainnet values checked against BitcoinII Core `v31.1.0` source, current release metadata, and bounded September 2026 runtime evidence.
+This page records current BitcoinII (Bitcoin II / Bitcoin-II, ticker BC2) mainnet values checked against BitcoinII Core `v31.1.0` source, current release metadata, and bounded September 2026 runtime evidence.
 
 Release-pinned source controls protocol/network constants. Runtime observations are listed separately so a local test is not mistaken for a protocol constant.
 
