@@ -7,7 +7,7 @@ const generatedSection = (label, directory) => ({
 });
 
 export default defineConfig({
-  site: 'https://morebc2.pages.dev',
+  site: 'https://morebc2.com',
   integrations: [
     starlight({
       title: 'MoreBC2',

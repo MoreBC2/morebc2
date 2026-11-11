@@ -2,7 +2,7 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
 const distRoot = path.join(process.cwd(), 'dist');
-const siteOrigin = 'https://morebc2.pages.dev';
+const siteOrigin = 'https://morebc2.com';
 
 function toPosix(value) {
   return value.replaceAll('\\', '/');

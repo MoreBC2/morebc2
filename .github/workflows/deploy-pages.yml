@@ -97,8 +97,8 @@ jobs:
         run: |
           set -euo pipefail
 
-          robots_url='https://morebc2.pages.dev/robots.txt'
-          site_url='https://morebc2.pages.dev/'
+          robots_url='https://morebc2.com/robots.txt'
+          site_url='https://morebc2.com/'
 
           for attempt in {1..12}; do
             robots="$(curl --fail --silent --show-error "$robots_url")"

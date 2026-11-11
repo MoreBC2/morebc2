@@ -3,7 +3,9 @@ import path from 'node:path';
 
 const repoRoot = process.cwd();
 const distRoot = path.join(repoRoot, 'dist');
-const siteOrigin = 'https://morebc2.pages.dev';
+const siteOrigin = 'https://morebc2.com';
+const legacySiteHostname = 'morebc2.pages.dev';
+const previewSiteHostname = 'morebc2-preview.pages.dev';
 const legacyRoutesExpectedNoindex = new Set([
   '/verification/dashboard/',
   '/verification/historical-index/',
@@ -86,6 +88,15 @@ function canonicalHref(html) {
   return canonicals.filter(Boolean);
 }
 
+function openGraphUrls(html) {
+  const urls = [];
+  for (const match of html.matchAll(/<meta\b[^>]*>/gi)) {
+    const tag = match[0];
+    if (attribute(tag, 'property')?.toLowerCase() === 'og:url') urls.push(attribute(tag, 'content'));
+  }
+  return urls.filter(Boolean);
+}
+
 function isStaticVerificationHtml(htmlFile) {
   const relative = toPosix(path.relative(distRoot, htmlFile));
   return /^google[^/]*\.html$/i.test(relative);
@@ -119,9 +130,6 @@ for (const htmlFile of htmlFiles) {
 
   for (const href of hrefs) {
     if (!href || /^(mailto|tel|javascript|data):/i.test(href)) continue;
-    if (/^https:\/\/[^/]*morebc2-preview\.pages\.dev(?:\/|$)/i.test(href)) {
-      issues.push(`${pageUrl}: production output contains preview-host link ${href}`);
-    }
 
     let url;
     try {
@@ -129,6 +137,12 @@ for (const htmlFile of htmlFiles) {
     } catch {
       issues.push(`${pageUrl}: malformed href ${href}`);
       continue;
+    }
+    if (url.hostname === legacySiteHostname) {
+      issues.push(`${pageUrl}: production output contains legacy-host link ${href}`);
+    }
+    if (url.hostname === previewSiteHostname || url.hostname.endsWith(`.${previewSiteHostname}`)) {
+      issues.push(`${pageUrl}: production output contains preview-host link ${href}`);
     }
     if (url.origin !== siteOrigin) continue;
     internalLinks += 1;
@@ -191,6 +205,19 @@ for (const htmlFile of htmlFiles) {
       indexableCanonicalUrls.add(canonical.href);
     } catch {
       issues.push(`${pageUrl}: malformed canonical URL ${canonicals[0]}`);
+    }
+  }
+
+  const openGraph = openGraphUrls(html);
+  if (openGraph.length !== 1) {
+    issues.push(`${pageUrl}: expected exactly one og:url, found ${openGraph.length}`);
+  } else {
+    try {
+      const openGraphUrl = new URL(openGraph[0], siteOrigin);
+      if (openGraphUrl.origin !== siteOrigin) issues.push(`${pageUrl}: og:url points to unexpected origin ${openGraphUrl.href}`);
+      if (openGraphUrl.pathname !== pageUrl) issues.push(`${pageUrl}: og:url pathname ${openGraphUrl.pathname} does not match rendered route`);
+    } catch {
+      issues.push(`${pageUrl}: malformed og:url ${openGraph[0]}`);
     }
   }
 

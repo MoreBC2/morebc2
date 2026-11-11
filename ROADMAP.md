@@ -57,7 +57,7 @@ These completions are bounded by their evidence records and should not be genera
 
 ## Site and distribution priorities
 
-The documentation site is already public and indexable at `https://morebc2.pages.dev/`.
+The documentation site is already public and indexable at `https://morebc2.com/`.
 
 Future distribution decisions remain separate work, including:
 
