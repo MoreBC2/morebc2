@@ -105,7 +105,7 @@ The production deployment workflow additionally checks Windows-node documentatio
 
 The public site is currently deployed at:
 
-- https://morebc2.pages.dev/
+- https://morebc2.com/
 
 A successful deployment proves that those automated checks passed for that commit and that the site was published. It does **not** make every factual claim on the site Verified.
 

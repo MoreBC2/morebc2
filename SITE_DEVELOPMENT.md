@@ -45,25 +45,20 @@ missing anchors, and local links that still end in `.md`.
 
 The branch also includes `.github/workflows/site-check.yml` so GitHub can validate the static build without Codex usage.
 
-## Cloudflare target
+## Cloudflare production target
 
-The active review preview is deployed from the Cloudflare Pages project `morebc2-preview` at <https://morebc2-preview.pages.dev/> with these settings:
+`.github/workflows/deploy-pages.yml` deploys each push to `main` to the Cloudflare Pages project `morebc2`. The workflow:
 
-- Build command: `npm run build`
-- Output directory: `dist`
-- Production branch: `main`
+- installs the locked Node.js dependencies;
+- runs the type, content, site-adapter, Windows-documentation, and production build checks;
+- scans generated output for blocked private path variants;
+- deploys `dist` with `wrangler pages deploy --project-name=morebc2 --branch=main`;
+- verifies the live indexing policy at <https://morebc2.com/>.
 
-The older `morebc2` Pages project and <https://morebc2.pages.dev/> hostname remain separate and untouched as a fallback. They are not the canonical URL for the active review preview.
+The canonical public origin is <https://morebc2.com/>. The Pages hostname <https://morebc2.pages.dev/> is retained only as a noncanonical fallback and redirects to the custom domain through Cloudflare configuration outside this repository. The `morebc2-preview` Pages project, if retained, is separate from the production workflow and must not be treated as canonical.
 
-## Preview publication boundary
+## Publication boundary
 
-This Pages deployment is a review preview, not the public launch. It intentionally uses multiple indexing protections:
+The production site is public and indexable. `public/robots.txt` allows crawling, and `public/_headers` does not apply a site-wide `X-Robots-Tag` restriction.
 
-- `public/robots.txt` disallows crawling for all user agents;
-- Starlight adds a site-wide `robots` meta directive with `noindex, nofollow, noarchive, nosnippet`;
-- `public/_headers` adds the same intent at Cloudflare's HTTP-response layer using `X-Robots-Tag`;
-- hidden working pages are excluded from the site's Pagefind search index.
-
-These controls reduce accidental discovery but are not access control. Anyone who knows a direct preview URL can still request a generated page. Material that must be confidential should not be generated into the static site at all.
-
-The site remains a static preview. Switching production to `main`, changing canonical URLs, removing preview indexing protections, or attaching a permanent domain are separate human decisions after review and merge.
+Hidden working pages are excluded from the site's Pagefind search index and marked `noindex`; the generated sitemap filter removes those routes from the sitemap. These controls reduce accidental discovery but are not access control. Material that must be confidential should not be generated into the static site at all.
