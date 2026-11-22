@@ -142,6 +142,16 @@ This is a navigation fallback, not an independently verified second protocol sou
 
 For [BC2Market and XFR](decentralized-trading.md), including their different custody models, audit limitations, and bounded cross-chain evidence, use the [peer-to-peer trading directory](decentralized-trading.md) rather than treating marketing language as security verification.
 
+## XFR BC2 solo-mining calculator (focused check 2026-11-22)
+
+**Status:** Public estimator interface observed / Calculation inputs and returned values not independently validated  
+**Official:** Third-party tool  
+**Type:** Solo SHA-256 mining estimate  
+**URL:** https://xfr.money/mining-calculator  
+**Last checked:** 2026-11-22
+
+The calculator advertises BC2 solo block-odds and expected rewards using public network data. The page specifically excludes electricity costs and warns of solo-mining variance. MoreBC2 did not independently validate its current difficulty feed, reward estimates, rounding, refresh logic, or coverage of miner downtime and pools. Treat displayed forecasts as estimates, not assured earnings.
+
 ## Resource-quality rules
 
 Before adding or promoting a resource:
