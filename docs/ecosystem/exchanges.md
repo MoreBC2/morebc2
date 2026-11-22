@@ -12,6 +12,10 @@ Exchange data is time-sensitive. A public trading pair does not prove that depos
 
 For current confirmation-count evidence, see [Exchange confirmation evidence — 2026-09-12](../verification/exchange-confirmation-evidence-2026-09-12.md).
 
+## Non-order-book and cross-chain marketplaces — focused update 2026-11-22
+
+[BC2Market and XFR](decentralized-trading.md) now have a separate, dated technical and safety directory entry. Both advertise native BC2/USDT trading, but they are **not** automatically equivalent to a conventional exchange listing. BC2Market has operator-reconciled settlement and a bounded operator-controlled on-chain test; XFR documents two-legged HTLC swaps but no independent end-to-end verification by MoreBC2. Neither is endorsed or included in the exchange confirmation-policy comparison below.
+
 ## Current direct exchange-source observations
 
 ### CoinEx
