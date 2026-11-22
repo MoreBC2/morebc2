@@ -50,6 +50,17 @@ The published November 15, 2026 release identifies `v0.5.0` (Android versionCode
 
 The developer explicitly reports that physical Android qualification and an independent audit remain outstanding. The debug certificate is not a production signing identity; do not present the APK as a production-safe recommendation, and never enter funded recovery phrases solely to try a new wallet. This project is separate from Genesis Wallet and the Google Play wallet published by Second Chance Digital, LLC.
 
+## XFR browser wallet — focused check 2026-11-22
+
+**Status:** Public BC2/BCH2 web-wallet interface observed / Key handling, recovery, signing and transaction compatibility not tested by MoreBC2  
+**Official:** No BitcoinII-project designation established  
+**Type:** Browser wallet and interface for cross-chain HTLC swaps  
+**Wallet:** https://xfr.money/wallet  
+**Technical guide:** https://xfr.money/swap/guide  
+**Last checked:** 2026-11-22
+
+The accessible wallet page displayed a local-vault unlock screen and described BC2, BCH2 and ESF support. XFR's own documentation says browser-side signing and secret storage enable its [cross-chain trading design](decentralized-trading.md). These are operator statements, **not** an independently audited guarantee that private keys never leave the device. MoreBC2 did not create a wallet, inspect its extension/app binaries, import any seed, test v31 replay-protection signing, or execute an HTLC swap. Treat browser data loss, secret-backup deadlines, and current wallet/network compatibility as material unanswered questions.
+
 ## Genesis Wallet
 
 **Status:** Observed / Early-access third-party wallet; runtime compatibility not tested by MoreBC2  
