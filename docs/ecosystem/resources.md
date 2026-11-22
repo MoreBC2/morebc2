@@ -119,6 +119,39 @@ The current BitcoinII project website exposes links for:
 
 These are useful navigation resources. Community statements remain attribution-level evidence unless independently supported by source, runtime, or service-specific observations.
 
+## BC2 Radio — community project (focused check 2026-11-22)
+
+**Status:** Public landing page observed / playback and live data not independently tested  
+**Official:** Community resource, not the official BitcoinII site  
+**Type:** BC2 community music/resource site  
+**URL:** https://bc2radio.com/  
+**Last checked:** 2026-11-22
+
+The landing page exposed listening/tracks/links navigation and a donation address. This establishes a public BC2-branded community project, not the availability, licensing, or reliability of any stream. Avoid representing it as a network service or endorsing donations.
+
+## BitcoinII project mirror (focused check 2026-11-22)
+
+**Status:** Project-linked secondary site; content and redirect equivalence not audited  
+**Official:** Described as a mirror by the BitcoinII project community links  
+**URL:** https://thebitcoinii.org/  
+**Last checked:** 2026-11-22 for project linkage
+
+This is a navigation fallback, not an independently verified second protocol source or backend. Prefer release-pinned BitcoinII Core source for technical facts.
+
+## New trading resources
+
+For [BC2Market and XFR](decentralized-trading.md), including their different custody models, audit limitations, and bounded cross-chain evidence, use the [peer-to-peer trading directory](decentralized-trading.md) rather than treating marketing language as security verification.
+
+## XFR BC2 solo-mining calculator (focused check 2026-11-22)
+
+**Status:** Public estimator interface observed / Calculation inputs and returned values not independently validated  
+**Official:** Third-party tool  
+**Type:** Solo SHA-256 mining estimate  
+**URL:** https://xfr.money/mining-calculator  
+**Last checked:** 2026-11-22
+
+The calculator advertises BC2 solo block-odds and expected rewards using public network data. The page specifically excludes electricity costs and warns of solo-mining variance. MoreBC2 did not independently validate its current difficulty feed, reward estimates, rounding, refresh logic, or coverage of miner downtime and pools. Treat displayed forecasts as estimates, not assured earnings.
+
 ## Resource-quality rules
 
 Before adding or promoting a resource:

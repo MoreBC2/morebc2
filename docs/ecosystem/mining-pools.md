@@ -68,6 +68,18 @@ Source:
 
 - https://capspool.io/
 
+## 2nd Chance Digital — focused check 2026-11-22
+
+**Status:** Active public mining-dashboard and BC2 SOLO/PPLNS links observed; payout and stratum behavior not tested  
+**Official:** Separate third-party pool service; BitcoinII project's mining guidance describes it as run by the original developer  
+**Type:** SHA-256d BitcoinII mining pool  
+**Website:** https://2ndchancedigital.com/  
+**Project mining directory:** https://bitcoin-ii.org/mine/  
+**Fee advertised:** 1% (website display on check date)  
+**Last checked:** 2026-11-22
+
+The pool overview exposed BC2 in its network chooser, SOLO and PPLNS dashboard links, BC2 difficulty/reward display, and a posted 1% fee. The project's [mining guide](https://bitcoin-ii.org/mine/) also references 2nd Chance Digital. No authenticated miner was connected for this review; displayed block history and hashrate do not prove payout reliability, correct share accounting or independent operator redundancy. Fees, ports and availability should be rechecked before use.
+
 ## BCMonster
 
 **Status:** Active public API/documentation with explicit BC2 support  
@@ -100,6 +112,10 @@ Source:
 The BitcoinII project website currently links MiningPoolStats as the place to view available BC2 pools. MiningPoolStats is useful for discovering pool candidates and comparing public statistics.
 
 It is an aggregator, not evidence that every listed pool is reachable, synced, paying correctly, or independently operated. Pool-specific claims should be checked against the pool itself.
+
+## Further pool-discovery candidates (2026-11-22)
+
+The [BitcoinII project's mining page](https://bitcoin-ii.org/mine/) currently links or names CapsPool.io, 2nd Chance Digital, 1Miner, Letsmine, Mining-Dutch, MolePool, NitroPool, SneakAttack, SoloFury, and SoloHash. This is **project-page discovery evidence**, not direct checks of each service. Existing individually checked pool records above retain their original dated status; additional connection and payout claims should not be copied without first-party rechecks.
 
 ## Other historical/current candidates
 

@@ -19,7 +19,12 @@ Current API behavior belongs in [API documentation](../api/README.md), live serv
 - [APIs](apis.md)
 - [Mining pools](mining-pools.md)
 - [Exchanges](exchanges.md)
+- [Peer-to-peer and cross-chain trading](decentralized-trading.md)
 - [Resources](resources.md)
+
+## Focused ecosystem additions — 2026-11-22
+
+A subsequent **focused** read-only check added [BC2Market and XFR cross-chain trading records](decentralized-trading.md), the [GoldWallet testing release](wallets.md), [2nd Chance Digital pool information](mining-pools.md), and [BC2 Radio / a project mirror](resources.md). These do not replace the broader September audit of the other services or establish independent trading, wallet security, miner payouts, or uptime.
 
 ## Ecosystem audit — 2026-09-12
 

@@ -36,6 +36,31 @@ See:
 - [Windows v31.1.0 PSBT and replay-protection validation — 2026-09-11](../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
 - [BitcoinII Core v31.1.0 release assets](../releases/v31.1.0-assets.md)
 
+## GoldWallet — independent Android testing release (focused check 2026-11-22)
+
+**Status:** Public source and prerelease artifact observed / Not independently security-audited or device-tested by MoreBC2  
+**Official:** No BitcoinII-project designation established  
+**Type:** Android native BC2 wallet, testing APK  
+**Release:** https://github.com/auxl-all/GoldWallet/releases/tag/v0.5.0  
+**Source:** https://github.com/auxl-all/GoldWallet  
+**Build and checksum record:** https://bc2market.com/wallet-transparency  
+**Last checked:** 2026-11-22
+
+The published November 15, 2026 release identifies `v0.5.0` (Android versionCode 21) as a **pre-release, debug-signed testing build**. Its description covers multiple named wallets, HD receive/change discovery, account zpub export, and test/build evidence; the source page publishes a pinned commit and checksums. These are developer-published artifacts and claims, **not** independent runtime, signing, seed-recovery, replay-protection, hardware-device, or key-handling verification by MoreBC2.
+
+The developer explicitly reports that physical Android qualification and an independent audit remain outstanding. The debug certificate is not a production signing identity; do not present the APK as a production-safe recommendation, and never enter funded recovery phrases solely to try a new wallet. This project is separate from Genesis Wallet and the Google Play wallet published by Second Chance Digital, LLC.
+
+## XFR browser wallet — focused check 2026-11-22
+
+**Status:** Public BC2 web-wallet interface observed / Key handling, recovery, signing and transaction compatibility not tested by MoreBC2  
+**Official:** No BitcoinII-project designation established  
+**Type:** Browser wallet and interface for cross-chain HTLC swaps  
+**Wallet:** https://xfr.money/wallet  
+**Technical guide:** https://xfr.money/swap/guide  
+**Last checked:** 2026-11-22
+
+The accessible wallet page displayed a local-vault unlock screen and advertised BC2 support alongside other networks. This entry covers BC2 only; MoreBC2 does not catalog other coins or projects claiming succession to BitcoinII. XFR's own documentation says browser-side signing and secret storage enable its [cross-chain trading design](decentralized-trading.md). These are operator statements, **not** an independently audited guarantee that private keys never leave the device. MoreBC2 did not create a wallet, inspect its extension/app binaries, import any seed, test v31 replay-protection signing, or execute an HTLC swap. Treat browser data loss, secret-backup deadlines, and current wallet/network compatibility as material unanswered questions.
+
 ## Genesis Wallet
 
 **Status:** Observed / Early-access third-party wallet; runtime compatibility not tested by MoreBC2  
