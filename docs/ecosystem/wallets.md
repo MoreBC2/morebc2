@@ -52,14 +52,14 @@ The developer explicitly reports that physical Android qualification and an inde
 
 ## XFR browser wallet — focused check 2026-11-22
 
-**Status:** Public BC2/BCH2 web-wallet interface observed / Key handling, recovery, signing and transaction compatibility not tested by MoreBC2  
+**Status:** Public BC2 web-wallet interface observed / Key handling, recovery, signing and transaction compatibility not tested by MoreBC2  
 **Official:** No BitcoinII-project designation established  
 **Type:** Browser wallet and interface for cross-chain HTLC swaps  
 **Wallet:** https://xfr.money/wallet  
 **Technical guide:** https://xfr.money/swap/guide  
 **Last checked:** 2026-11-22
 
-The accessible wallet page displayed a local-vault unlock screen and described BC2, BCH2 and ESF support. XFR's own documentation says browser-side signing and secret storage enable its [cross-chain trading design](decentralized-trading.md). These are operator statements, **not** an independently audited guarantee that private keys never leave the device. MoreBC2 did not create a wallet, inspect its extension/app binaries, import any seed, test v31 replay-protection signing, or execute an HTLC swap. Treat browser data loss, secret-backup deadlines, and current wallet/network compatibility as material unanswered questions.
+The accessible wallet page displayed a local-vault unlock screen and advertised BC2 support alongside other networks. This entry covers BC2 only; MoreBC2 does not catalog other coins or projects claiming succession to BitcoinII. XFR's own documentation says browser-side signing and secret storage enable its [cross-chain trading design](decentralized-trading.md). These are operator statements, **not** an independently audited guarantee that private keys never leave the device. MoreBC2 did not create a wallet, inspect its extension/app binaries, import any seed, test v31 replay-protection signing, or execute an HTLC swap. Treat browser data loss, secret-backup deadlines, and current wallet/network compatibility as material unanswered questions.
 
 ## Genesis Wallet
 
