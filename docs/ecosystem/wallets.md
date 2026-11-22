@@ -36,6 +36,20 @@ See:
 - [Windows v31.1.0 PSBT and replay-protection validation — 2026-09-11](../verification/windows-v31-psbt-replay-validation-2026-09-11.md)
 - [BitcoinII Core v31.1.0 release assets](../releases/v31.1.0-assets.md)
 
+## GoldWallet — independent Android testing release (focused check 2026-11-22)
+
+**Status:** Public source and prerelease artifact observed / Not independently security-audited or device-tested by MoreBC2  
+**Official:** No BitcoinII-project designation established  
+**Type:** Android native BC2 wallet, testing APK  
+**Release:** https://github.com/auxl-all/GoldWallet/releases/tag/v0.5.0  
+**Source:** https://github.com/auxl-all/GoldWallet  
+**Build and checksum record:** https://bc2market.com/wallet-transparency  
+**Last checked:** 2026-11-22
+
+The published November 15, 2026 release identifies `v0.5.0` (Android versionCode 21) as a **pre-release, debug-signed testing build**. Its description covers multiple named wallets, HD receive/change discovery, account zpub export, and test/build evidence; the source page publishes a pinned commit and checksums. These are developer-published artifacts and claims, **not** independent runtime, signing, seed-recovery, replay-protection, hardware-device, or key-handling verification by MoreBC2.
+
+The developer explicitly reports that physical Android qualification and an independent audit remain outstanding. The debug certificate is not a production signing identity; do not present the APK as a production-safe recommendation, and never enter funded recovery phrases solely to try a new wallet. This project is separate from Genesis Wallet and the Google Play wallet published by Second Chance Digital, LLC.
+
 ## Genesis Wallet
 
 **Status:** Observed / Early-access third-party wallet; runtime compatibility not tested by MoreBC2  
